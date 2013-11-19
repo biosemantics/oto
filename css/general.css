@@ -1,0 +1,460 @@
+/*etc colors: #a8d04d - light yellow green, #279446 - green, #307137 - dark green*/
+/*my colors: green; #B0F1A0 - light green; #D6F8CD - lighter green*/
+
+/* For table rows*/
+tr.d0 td {
+	background-color: #B0F1A0;
+	color: black;
+}
+
+tr.d1 td {
+	background-color: #D6F8CD;
+	color: black;
+}
+
+/*for context and glossary*/
+#glossaryTerm {
+	visibility: hidden;
+	height: 0px;
+}
+
+#sourceFiles {
+	visibility: hidden;
+	height: 0px;
+}
+
+th.currentContext {
+	text-align: left;
+	background-color: #279446;
+	cursor: default;
+	border: 1px solid #279446;
+}
+
+th.currentContext font {
+	color: white;
+}
+
+th.backContext {
+	text-align: left;
+	background-color: white;
+	cursor: pointer;
+}
+
+th.backContext font {
+	color: black;
+}
+/* TOP NAVIGATION BAR */
+#nav {
+	width: 900px;
+	float: left;
+}
+
+#nav-menu-left {
+	background: url(../images/navbar-left.gif) no-repeat top left;
+	width: 18px;
+	height: 40px;
+	float: left;
+}
+
+#nav-menu-right {
+	background: url(../images/navbar-right.gif) no-repeat top left;
+	width: 27px;
+	height: 40px;
+	float: left;
+}
+
+#nav-menu {
+	background: url(../images/navbar-bg.gif) repeat-x top left;
+	height: 40px;
+	width: 850px;
+	float: left;
+}
+
+#nav-menu ul {
+	list-style: none;
+	height: 40px;
+}
+
+#nav-menu ul a {
+	background-image: url(../images/navbar-divider.gif);
+	background-repeat: no-repeat;
+	background-position: right;
+	padding-right: 8px;
+	padding-left: 8px;
+	padding-top: 9px;
+	/* display: block;*/
+	line-height: 2px;
+	text-decoration: none;
+	text-shadow: 1px 1px 1px #000;
+	font-family: lucida grande, tahoma, verdana, arial, sans-serif;
+	font-size: 14px;
+	color: White;
+	font-weight: 100;
+}
+
+#nav-menu ul a:hover {
+	text-decoration: underline;
+	text-shadow: 0px 0px 4px #FF0000;
+}
+
+#nav-menu li {
+	float: left;
+}
+/* END NAVIGATION BAR */
+/* footer of page */
+#footer-div {
+	background: url(../images/navbar-divider.gif) no-repeat top center;
+	width: 992px;
+	height: 1px;
+}
+
+#footer {
+	width: 992px;
+	height: 20px;
+	text-align: center;
+	padding-bottom: 25px;
+}
+
+#footer p {
+	font: 12px lucida grande, tahoma, verdana, arial, sans-serif;
+	color: #FFF;
+}
+
+#footer a {
+	font: 12px lucida grande, tahoma, verdana, arial, sans-serif;
+	color: #FFF;
+}
+/* end footer */
+.input-text {
+	border: none;
+	text-align: left;
+	background-color: transparent;
+}
+
+.bgclass2 {
+	background-image: url(../images/submit.gif);
+	color: #000000
+}
+
+.border {
+	border-width: .2em;
+	border-color: #900;
+}
+
+.font-text-style {
+	font-family: lucida grande, tahoma, verdana, arial, sans-serif;
+	font-size: 12px;
+}
+
+.font-header-style {
+	font-family: lucida grande, tahoma, verdana, arial, sans-serif;
+	font-size: 18px;
+	color: White;
+	font-weight: bold;
+}
+
+th {
+	font-family: lucida grande, tahoma, verdana, arial, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.success {
+	font-size: 12px;
+	color: white;
+	font-family: lucida grande, tahoma, verdana, arial, sans-serif;
+	font-weight: bold;
+}
+
+select {
+	border: 1px solid #bdc7d8;
+	font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+	font-size: 11px;
+	padding: 2px
+}
+
+label {
+	cursor: pointer;
+	color: #666;
+	vertical-align: middle;
+	font-size: 12px;
+	color: Red;
+	font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+}
+
+p {
+	font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+	font-size: 12px;
+	text-align: left;
+	margin: 1em 0
+}
+
+.uiButton,.uiButtonSuppressed:active,.uiButtonSuppressed:focus,.uiButtonSuppressed:hover
+	{
+	background: #eee
+		url(http://static.ak.fbcdn.net/rsrc.php/zf/r/hEY3FxDQu5L.png) repeat 0
+		0;
+	border: 1px solid #999;
+	border-bottom-color: #888;
+	box-shadow: 0 1px 0 rgba(0, 0, 0, .1);
+	-webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .1);
+	color: #333;
+	cursor: pointer;
+	display: -moz-inline-box;
+	display: inline-block;
+	font-size: 11px;
+	font-weight: bold;
+	line-height: normal !important;
+	padding: 2px 6px;
+	text-align: center;
+	text-decoration: none;
+	vertical-align: top;
+	white-space: nowrap
+}
+
+.uiButton+.uiButton {
+	margin-left: 4px
+}
+
+.uiButton:hover {
+	text-decoration: none
+}
+
+.uiButton:active,.uiButtonDepressed {
+	background: #ddd;
+	border-bottom-color: #999;
+	box-shadow: 0 1px 0 rgba(0, 0, 0, .05);
+	-webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .05)
+}
+
+.uiButton .img {
+	vertical-align: top
+}
+
+.uiButtonMedium .img {
+	margin-top: 0px
+}
+
+.uiButtonLarge .img {
+	margin-top: 4px
+}
+
+.uiButton .customimg {
+	margin-top: 0
+}
+
+.uiButton .uiButtonText,.uiButton input {
+	background: none;
+	border: 0;
+	color: #333;
+	cursor: pointer;
+	display: -moz-inline-box;
+	display: inline-block;
+	font-family: 'Lucida Grande', Tahoma, Verdana, Arial, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	margin: 0;
+	outline: none;
+	padding: 1px 0 2px;
+	white-space: nowrap
+}
+
+.uiButtonDepressed,.uiButtonDepressed input {
+	cursor: default
+}
+
+.uiButtonSpecial {
+	background-color: #69a74e;
+	background-position: 0 -96px;
+	border-color: #3b6e22 #3b6e22 #2c5115;
+	color: #fff
+}
+
+.uiButtonSpecial:active {
+	background: #609946;
+	border-bottom-color: #3b6e22
+}
+
+.uiButtonSpecial.uiButtonDisabled,.uiButtonSpecial.uiButtonDisabled:active
+	{
+	background: #69a74e;
+	border-bottom-color: #3b6e22
+}
+
+.uiButtonConfirm {
+	background-color: #5b74a8;
+	background-position: 0 -48px;
+	border-color: #29447e #29447e #1a356e;
+	color: #fff
+}
+
+.uiButtonConfirm:active {
+	background: #4f6aa3;
+	border-bottom-color: #29447e
+}
+
+.uiButtonConfirm.uiButtonDisabled,.uiButtonConfirm.uiButtonDisabled:active
+	{
+	background: #5b74a8;
+	border-bottom-color: #29447e
+}
+
+.uiButtonSpecial .uiButtonText,.uiButtonConfirm .uiButtonText,.uiButtonSpecial input,.uiButtonConfirm input
+	{
+	color: #fff
+}
+
+.uiButtonDisabled,.uiButtonDisabled:active,.uiButtonDisabled .img {
+	cursor: default;
+	opacity: .5;
+	box-shadow: none;
+	-webkit-box-shadow: none
+}
+
+.uiButtonDisabled,.uiButtonDisabled:active {
+	background: #f2f2f2
+}
+
+.uiButtonDisabled input {
+	cursor: default
+}
+
+.uiButtonDefault.uiButtonDisabled,.uiButtonDefault.uiButtonDisabled:active
+	{
+	border-color: #c8c8c8;
+	opacity: 1
+}
+
+.uiButtonDefault.uiButtonDisabled input,a.uiButtonDisabled .uiButtonText
+	{
+	color: #b8b8b8
+}
+
+.uiButtonLarge,.uiButtonLarge .uiButtonText,.uiButtonLarge input {
+	font-size: 13px
+}
+
+.uiButtonSuppressed {
+	background: none;
+	border-color: transparent;
+	box-shadow: none;
+	-webkit-box-shadow: none
+}
+
+.uiButtonNoText .img {
+	margin-left: -1px;
+	margin-right: -1px
+}
+
+.uiCloseButton {
+	cursor: pointer;
+	display: inline-block;
+	margin: 0;
+	padding: 0
+}
+
+label.uiCloseButton {
+	overflow: hidden
+}
+
+.uiCloseButton input {
+	cursor: pointer;
+	opacity: 0;
+	outline: none;
+	padding: 18px
+}
+
+.uiCloseButton {
+	background-image:
+		url(http://static.ak.fbcdn.net/rsrc.php/z5/r/Yz_2RL5XOEG.png);
+	height: 15px;
+	width: 15px
+}
+
+.uiCloseButtonSmall {
+	background-image:
+		url(http://static.ak.fbcdn.net/rsrc.php/za/r/1Be-brvKO2y.png);
+	height: 11px;
+	margin-top: 1px;
+	width: 11px
+}
+
+.uiCloseButtonSmallDeprecated {
+	background-image:
+		url(http://static.ak.fbcdn.net/rsrc.php/zb/r/fvbRNcqGJoq.gif)
+}
+
+.uiCloseButtonDark {
+	background-position: left -15px
+}
+
+.uiCloseButton:hover,.uiCloseButton:focus {
+	background-position: left -30px
+}
+
+.uiCloseButton:active {
+	background-position: left -45px
+}
+
+.uiCloseButtonSmallDark {
+	background-position: left -11px
+}
+
+.uiCloseButtonSmall:hover,.uiCloseButtonSmall:focus {
+	background-position: left -22px
+}
+
+.uiCloseButtonSmall:active {
+	background-position: left -33px
+}
+
+.UIImageBlock_Content {
+	display: table-cell;
+	vertical-align: top;
+	width: 10000px
+}
+
+.UIImageBlock_Image {
+	float: left;
+	margin-right: 5px
+}
+
+.UIImageBlock_Image .img,img.UIImageBlock_Image,i.UIImageBlock_Image {
+	display: block
+}
+
+.UIImageBlock_Ext {
+	float: right
+}
+
+.UIImageBlock_ICON_Image {
+	margin-right: 5px
+}
+
+.UIImageBlock_ICON_Content {
+	padding-top: 1px
+}
+
+.UIImageBlock_SMALL_Image {
+	margin-right: 8px
+}
+
+.UIImageBlock_MED_Image,.UIImageBlock_ENT_Image {
+	margin-right: 10px
+}
+
+.UIImageBlock_Entity .UIImageBlock_Content {
+	height: 50px;
+	vertical-align: middle
+}
+
+.UIImageBlock_Entity img.UIImageBlock_Image,.UIImageBlock_Entity i.UIImageBlock_Image,.UIImageBlock_Entity .UIImageBlock_Image .img
+	{
+	height: 50px;
+	width: 50px
+}
+
+.UIImageBlock_Entity .UIImageBlock_Ext {
+	margin-top: 14px;
+	padding-left: 8px
+}

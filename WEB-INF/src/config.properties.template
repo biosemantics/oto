@@ -1,0 +1,7 @@
+#database configuration
+databaseName=
+databaseUser=
+databasePassword=
+
+#oto configuration
+OTO_url=http://biosemantics.arizona.edu/OTO/

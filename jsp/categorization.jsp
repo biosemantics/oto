@@ -133,8 +133,8 @@
 						<tr>
 							<td width="90%">
 								<font class="font-text-style" id="dataset_info">uploadID: <b><%=uploadID%></b> ( <%=upload.getNumberTerms()%> terms, upload time: <%=upload.getUploadTime()%> )
-								<br><b>Basic instruction: </b>Expand each term block (left side), view and select (check) the terms, and  drag to categories.
-								<br>Make as many categorizations as you can with certainty and keep uncategorized terms there if you can't categorize. After categorizing terms, click "Done" button to finish.
+								<br><b>Basic instruction: </b>Expand each term block (left side), view and select (check) the terms, and  drag the green arrow button to move terms to a category.
+								Make as many categorizations as you can with certainty and leave terms if you can't categorize them. Click "Done" to finish.
 								<br><b>More instruction information</b> can be found in <a href="instruction.do" title="Instructions of completing your tasks" target="_blank">Help</a>
 								and <a href="https://sites.google.com/site/biosemanticsproject/character-annotation-discussions/term-categorization-instruction" title="Learn Term Categorization" target="_blank">Learn Term Categorization</a></font>
 							</td>

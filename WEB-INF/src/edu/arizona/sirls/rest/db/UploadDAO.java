@@ -8,6 +8,7 @@ import java.sql.Statement;
 import edu.arizona.sirls.rest.beans.Upload;
 import edu.arizona.sirls.rest.beans.UploadResult;
 import edu.arizona.sirls.util.Encrypt;
+import edu.arizona.sirls.util.Utilities;
 
 public class UploadDAO extends AbstractDAO {
 
@@ -26,6 +27,9 @@ public class UploadDAO extends AbstractDAO {
 	public UploadResult putUpload(Upload upload) throws Exception {
 		this.openConnection();				
 		
+		int glossaryId = Utilities.getGlossaryIDByName(upload.getGlossaryType());
+		
+		/*
 		String sql = "SELECT glossTypeID FROM markedupdatasets.glossarytypes WHERE UPPER(glossaryName)=UPPER('" + upload.getGlossaryType() + "')";
 		PreparedStatement statement = this.executeSQL(sql);
 		int glossaryId = -1;
@@ -38,6 +42,9 @@ public class UploadDAO extends AbstractDAO {
         }
     	resultSet.close();
     	statement.close();
+		*/
+		PreparedStatement statement;
+		String sql;
 		
 		sql = "INSERT INTO uploads (uploadTime, sentToOTO, isFinalized, prefixForOTO, readyToDelete, glossaryType, bioportalUserId, bioportalApiKey, EtcUser, source) " +
 				"VALUES (NOW(), 0, 0, ?, NULL, ?, ?, ?, ?, ?)";

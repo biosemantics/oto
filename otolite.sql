@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
   `uploadID` bigint(20) DEFAULT NULL,
   `category` varchar(50) DEFAULT NULL,
   `definition` varchar(1000) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `categories`
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `decisions` (
   `term` varchar(50) DEFAULT NULL,
   `isMainTerm` tinyint(1) DEFAULT NULL,
   `category` varchar(50) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `ontology_matches` (
   `definition` text,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ID` (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=57 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `ontology_matches`
@@ -152,7 +152,7 @@ CREATE TABLE IF NOT EXISTS `ontology_submissions` (
   `accepted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ID` (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `ontology_submissions`
@@ -176,7 +176,7 @@ CREATE TABLE IF NOT EXISTS `orders_in_order_category` (
   `orderDescription` varchar(500) DEFAULT '',
   PRIMARY KEY (`orderID`),
   UNIQUE KEY `orderID` (`orderID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `orders_in_order_category`
@@ -203,7 +203,7 @@ CREATE TABLE IF NOT EXISTS `order_categories` (
   `baseTerm` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`categoryID`),
   UNIQUE KEY `categoryID` (`categoryID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `order_categories`
@@ -230,7 +230,7 @@ CREATE TABLE IF NOT EXISTS `selected_ontology_records` (
   `recordID` bigint(20) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ID` (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=250 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `selected_ontology_records`
@@ -251,7 +251,7 @@ CREATE TABLE IF NOT EXISTS `sentences` (
   `source` varchar(500) DEFAULT NULL,
   `sentence` varchar(2000) DEFAULT NULL,
   `originalsent` varchar(2000) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `sentences`
@@ -273,7 +273,7 @@ CREATE TABLE IF NOT EXISTS `structures` (
   `userCreated` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ID` (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=74 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -282,10 +282,20 @@ CREATE TABLE IF NOT EXISTS `structures` (
 --
 
 CREATE TABLE IF NOT EXISTS `synonyms` (
-  `uploadID` bigint(20) DEFAULT NULL,
-  `mainTerm` varchar(50) DEFAULT NULL,
-  `synonym` varchar(50) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `uploadID` bigint(20) default NULL,
+  `mainTerm` varchar(50) default NULL,
+  `synonym` varchar(50) default NULL,
+  `category` varchar(50) default NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `typos` (
+  `id` bigint(20) NOT NULL auto_increment,
+  `uploadID` int(11) default NULL,
+  `originalTerm` varchar(100) default NULL,
+  `replacedBy` varchar(100) default NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -297,7 +307,7 @@ CREATE TABLE IF NOT EXISTS `terms` (
   `uploadID` bigint(20) DEFAULT NULL,
   `term` varchar(50) DEFAULT NULL,
   `type` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `terms`
@@ -320,7 +330,7 @@ CREATE TABLE IF NOT EXISTS `terms_in_order_category` (
   `termName` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`termID`),
   UNIQUE KEY `termID` (`termID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=39 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `terms_in_order_category`
@@ -382,7 +392,7 @@ CREATE TABLE IF NOT EXISTS `term_category_pair` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ID` (`ID`),
   KEY `uploadIDIndex` (`uploadID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -397,7 +407,7 @@ CREATE TABLE IF NOT EXISTS `term_position_in_order` (
   `position` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ID` (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=144 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `term_position_in_order`
@@ -439,7 +449,7 @@ CREATE TABLE IF NOT EXISTS `trees` (
   `pID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ID` (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=132 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -451,7 +461,7 @@ CREATE TABLE IF NOT EXISTS `types` (
   `typeID` int(11) NOT NULL DEFAULT '0',
   `typeName` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`typeID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `types`
@@ -483,7 +493,7 @@ CREATE TABLE IF NOT EXISTS `uploads` (
   `secret` varchar(50) DEFAULT '',
   PRIMARY KEY (`uploadID`),
   UNIQUE KEY `uploadID` (`uploadID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=156 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `uploads`

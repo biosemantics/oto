@@ -433,8 +433,8 @@ function removeTerm(obj_cross) {
 	div.setAttribute("onmouseout", "hideFixTypoIcon(this)");
 	td.appendChild(div);
 
-	div.innerHTML = "<img class='dragAfterSave' src='images/drag.jpg' width='10px;'></img> ";
-
+	//div.innerHTML = "<img class='dragAfterSave' src='images/drag.jpg' width='10px;'></img> ";
+	
 	// mark reviewed
 	markTermReviewed(term_to_remove.id);
 
@@ -491,7 +491,7 @@ function removeTermWithName(term) {
 	tr.appendChild(td);
 	termToRemove.parentNode.parentNode.parentNode.parentNode.parentNode
 			.appendChild(tr);
-
+	
 	// to do: update scrolltop
 
 	// remove term
@@ -519,7 +519,14 @@ function mouse_down_handler(e) {
 	//alert(document.getElementById("UPLOADID")); //.innerHTML = current_obj.className;
 	//document.getElementById("UPLOADID").setAttribute("test", current_obj.className);
 	//document.getElementById("UPLOADID").setAttribute("test", current_obj.parentNode.className);
-	var dragGroupTable = current_obj.className == "termLabel dragme" || current_obj.className == "decisionRemoved termLabel dragme"; /* ||
+	var dragGroupTable = current_obj.className != "checkbox" && 
+		(current_obj.className == "termsTable dragme" || 
+				current_obj.parentNode.className == "termsTable dragme" || 
+				current_obj.parentNode.parentNode.className == "termsTable dragme" ||
+				current_obj.parentNode.parentNode.parentNode.className == "termsTable dragme" ||
+				current_obj.parentNode.parentNode.parentNode.parentNode.className == "termsTable dragme");
+				
+		/*		; //|| current_obj.className == "decisionRemoved termLabel dragme"; /* ||
 		current_obj.parentNode.className == "termsTable dragme" ||
 		current_obj.parentNode.parentNode.className == "termsTable dragme" ||
 		current_obj.parentNode.parentNode.parentNode.className == "termsTable dragme" ||
@@ -531,6 +538,13 @@ function mouse_down_handler(e) {
 		current_obj.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className == "termsTable dragme"; */
 	//document.getElementById("UPLOADID").setAttribute("test", current_obj.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className);
 	//document.getElementById("UPLOADID").setAttribute("debug", dragGroupTable);
+	
+	var dragAfterSave = current_obj.className != "fixTypoIcon" && 
+		(current_obj.className == "term_row_saved" ||
+				current_obj.parentNode.className == "term_row_saved" ||
+				current_obj.parentNode.parentNode.className == "term_row_saved" || 
+				current_obj.parentNode.parentNode.parentNode.className == "term_row_saved");
+	
 	if (dragGroupTable) {
 		
 		//alert(current_obj.className);
@@ -567,7 +581,7 @@ function mouse_down_handler(e) {
 		drag_clone.style["top"] = obj_y + "px";// bug
 		drag_clone.style["left"] = obj_x + "px";
 		drag_clone.style["visibility"] = "visible";
-	} else if (current_obj.className == "dragAfterSave") {
+	} else if (dragAfterSave) {
 		// alert(current_obj.className);
 		is_makeSorE = false;// why exist?
 
@@ -658,7 +672,14 @@ function mouse_move_handler(e) {
 		// the category box
 		// old_target_category
 		// the position of old_target_category
-		if (current_obj.className == "dragAfterSave") {
+		
+		var dragAfterSave = current_obj.className != "fixTypoIcon" && 
+		(current_obj.className == "term_row_saved" ||
+				current_obj.parentNode.className == "term_row_saved" ||
+				current_obj.parentNode.parentNode.className == "term_row_saved" || 
+				current_obj.parentNode.parentNode.parentNode.className == "term_row_saved");
+		
+		if (dragAfterSave) {
 			var cursor_y = evn.clientY
 					+ document.getElementById('categories_div').scrollTop
 					+ document.getElementsByTagName('html')[0].scrollTop
@@ -689,7 +710,21 @@ function mouse_up_handler(e) {
 
 	if (is_drag) {
 		getTargetCategory(evn);
-		if (current_obj.className == "termLabel dragme" || current_obj.className == "decisionRemoved termLabel dragme") {// drag before saving
+		
+		var dragGroupTable = current_obj.className != "checkbox" && 
+		(current_obj.className == "termsTable dragme" || 
+				current_obj.parentNode.className == "termsTable dragme" || 
+				current_obj.parentNode.parentNode.className == "termsTable dragme" ||
+				current_obj.parentNode.parentNode.parentNode.className == "termsTable dragme" ||
+				current_obj.parentNode.parentNode.parentNode.parentNode.className == "termsTable dragme");
+		
+		var dragAfterSave = current_obj.className != "fixTypoIcon" && 
+		(current_obj.className == "term_row_saved" ||
+				current_obj.parentNode.className == "term_row_saved" ||
+				current_obj.parentNode.parentNode.className == "term_row_saved" || 
+				current_obj.parentNode.parentNode.parentNode.className == "term_row_saved");
+		
+		if (dragGroupTable) { //current_obj.className == "termLabel dragme" || current_obj.className == "decisionRemoved termLabel dragme") {// drag before saving
 			if (target_category != null) {// (left -> target category) or
 				// (right -> different category)
 				if (!(drag_from == "right" && target_category == old_target_category)) {
@@ -729,7 +764,9 @@ function mouse_up_handler(e) {
 				// drag from left but no target category
 				alert("To categorize terms, drag terms into the categories box.");
 			}
-		} else if (current_obj.className == "dragAfterSave") {
+			
+			
+		} else if (dragAfterSave) {
 			// drag after decision saved: change decision or make synonym
 			if (target_category != null) {
 				targetbox = target_category
@@ -973,12 +1010,12 @@ function delete_drag_clone() {
 }
 
 function generateDeletedTerm(termName, comment) {
-	var table_html = "<table><tr><td><table class='termsTable'>";
+	var table_html = "<table><tr><td><table class='termsTable dragme'>";
 	table_html += "<tr class='term_row' id='" + termName + "' " + " termName='"
 			+ termName + "' onmouseover='displayFixTypoIcon(this)' "
 			+ "onmouseout='hideFixTypoIcon(this)'>";
-	table_html += "<td class='term'><input type='checkbox'/>";
-	table_html += "<label class='decisionRemoved termLabel dragme' id='"
+	table_html += "<td class='term'><input class='checkbox' type='checkbox'/>";
+	table_html += "<label class='decisionRemoved termLabel' id='"
 			+ termName
 			+ "' comment='"
 			+ comment
@@ -1047,7 +1084,13 @@ function getTargetCategory(evn) {
 		}
 	}
 
-	if (current_obj.className == "dragAfterSave") {
+	var dragAfterSave = current_obj.className != "fixTypoIcon" && 
+	(current_obj.className == "term_row_saved" ||
+			current_obj.parentNode.className == "term_row_saved" ||
+			current_obj.parentNode.parentNode.className == "term_row_saved" || 
+			current_obj.parentNode.parentNode.parentNode.className == "term_row_saved");
+	
+	if (dragAfterSave) {
 		if (target_category != null) {
 			// target_category should be the same with current_category
 			var currentCategory = term_Chosen;

@@ -215,7 +215,7 @@
 								</tr>
 								<tr style="display: none;">
 									<td>
-										<table class="termsTable">
+										<table class="termsTable dragme">
 
 											<%
 												for (String term : terms) {
@@ -223,8 +223,8 @@
 											<tr class="term_row" id="<%=term%>" termName="<%=term%>"
 												onmouseover="displayFixTypoIcon(this)"
 												onmouseout="hideFixTypoIcon(this)">
-												<td class="term"><input type="checkbox" align="bottom" /><label
-													class="termLabel dragme"
+												<td class="term"><input class="checkbox" type="checkbox" align="bottom" /><label
+													class="termLabel"
 													style="cursor: pointer; color: black; vertical-align: baseline;"
 													onclick="setTerm_categorizing('<%=term%>')"><%=term%></label><img
 													align="bottom" class="fixTypoIcon" src="images/edit.png"
@@ -301,8 +301,8 @@
 															<td valign="middle">
 																<div onmouseover="displayFixTypoIcon(this)"
 																	class="mainTerm" onmouseout="hideFixTypoIcon(this)">
-																	<img class="dragAfterSave" src="images/drag.jpg"
-																		width="10px;"></img> <a class="termLabel"
+																	<!-- <img class="dragAfterSave" src="images/drag.jpg"
+																		width="10px;"></img>--> <a class="termLabel"
 																		style="text-decoration: none; color: black;"
 																		href="javascript:void(0)"
 																		onclick="setTerm_categorizing('<%=eachTerm.getTermName()%>')"><%=eachTerm.getTermName()%></a>

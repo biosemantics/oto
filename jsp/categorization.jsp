@@ -224,7 +224,7 @@
 												onmouseover="displayFixTypoIcon(this)"
 												onmouseout="hideFixTypoIcon(this)">
 												<td class="term"><input type="checkbox" align="bottom" /><label
-													class="termLabel"
+													class="termLabel dragme"
 													style="cursor: pointer; color: black; vertical-align: baseline;"
 													onclick="setTerm_categorizing('<%=term%>')"><%=term%></label><img
 													align="bottom" class="fixTypoIcon" src="images/edit.png"
@@ -236,8 +236,8 @@
 											%>
 										</table>
 									</td>
-									<td><img class="dragme" src="images/drag.jpg"
-										width="20px;" height="<%=(21 * terms.size())%>px"></img></td>
+									<!-- <td><img class="dragme" src="images/drag.jpg"
+										width="20px;" height="<%=(21 * terms.size())%>px"></img></td> -->
 								</tr>
 							</table>
 						</div>

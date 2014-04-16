@@ -516,8 +516,24 @@ function mouse_down_handler(e) {
 	// document.getElementById('serverMessage').innerHTML = '&nbsp;';
 	set_drag_from();
 
-	if (current_obj.className == "dragme") {
-		// alert(current_obj.className);
+	//alert(document.getElementById("UPLOADID")); //.innerHTML = current_obj.className;
+	//document.getElementById("UPLOADID").setAttribute("test", current_obj.className);
+	//document.getElementById("UPLOADID").setAttribute("test", current_obj.parentNode.className);
+	var dragGroupTable = current_obj.className == "termLabel dragme" || current_obj.className == "decisionRemoved termLabel dragme"; /* ||
+		current_obj.parentNode.className == "termsTable dragme" ||
+		current_obj.parentNode.parentNode.className == "termsTable dragme" ||
+		current_obj.parentNode.parentNode.parentNode.className == "termsTable dragme" ||
+		current_obj.parentNode.parentNode.parentNode.parentNode.className == "termsTable dragme" ||
+		current_obj.parentNode.parentNode.parentNode.parentNode.parentNode.className == "termsTable dragme" ||
+		current_obj.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className == "termsTable dragme" ||
+		current_obj.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className == "termsTable dragme" ||
+		current_obj.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className == "termsTable dragme" ||
+		current_obj.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className == "termsTable dragme"; */
+	//document.getElementById("UPLOADID").setAttribute("test", current_obj.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className);
+	//document.getElementById("UPLOADID").setAttribute("debug", dragGroupTable);
+	if (dragGroupTable) {
+		
+		//alert(current_obj.className);
 		// get group_chosen: <div class="dragGroupTable">
 		group_chosen = current_obj;
 		while (group_chosen.tagName != "HTML"
@@ -673,7 +689,7 @@ function mouse_up_handler(e) {
 
 	if (is_drag) {
 		getTargetCategory(evn);
-		if (current_obj.className == "dragme") {// drag before saving
+		if (current_obj.className == "termLabel dragme" || current_obj.className == "decisionRemoved termLabel dragme") {// drag before saving
 			if (target_category != null) {// (left -> target category) or
 				// (right -> different category)
 				if (!(drag_from == "right" && target_category == old_target_category)) {
@@ -962,7 +978,7 @@ function generateDeletedTerm(termName, comment) {
 			+ termName + "' onmouseover='displayFixTypoIcon(this)' "
 			+ "onmouseout='hideFixTypoIcon(this)'>";
 	table_html += "<td class='term'><input type='checkbox'/>";
-	table_html += "<label class='decisionRemoved termLabel' id='"
+	table_html += "<label class='decisionRemoved termLabel dragme' id='"
 			+ termName
 			+ "' comment='"
 			+ comment
@@ -971,9 +987,9 @@ function generateDeletedTerm(termName, comment) {
 			+ "class='fixTypoIcon' src='images/edit.png' "
 			+ "height='14px' title='Fix Typo' style='display: none;' "
 			+ "onclick=\"fixTypo('" + termName + "')\" />";
-	table_html += "</td></tr></table></td><td>";
+	table_html += "</td></tr></table></td>";
 
-	table_html += "<img class='dragme' src='images/drag.jpg' width='20px' height='20px'></img></td>";
+	//table_html += "<td><img class='dragme' src='images/drag.jpg' width='20px' height='20px'></img></td>";
 	table_html += "</tr></table>";
 	return table_html;
 }

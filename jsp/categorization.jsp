@@ -403,7 +403,13 @@
 				<th width="10%" class="backContext" id="glossary"
 					onclick="showGlossary()"><font>Ontology</font></th>
 				<th width="70%" align="left" bgcolor="white"
-					style="text-align: right"><font color="#279446">&nbsp;</font><img
+					style="text-align: right"><font color="#279446">&nbsp;</font>
+					<input
+										type="button" name="button" value="Search"
+										class="uiButton uiButtonSpecial uiButtonMedium"
+										style="padding: 0px 1px 1px 1px"
+										onclick="openTermLocator()"/>
+					<img
 					src="images/locator.png" onclick="openTermLocator()" height="14px"></img></th>
 			</tr>
 			<tr>

@@ -451,9 +451,27 @@ function processContext() {
 						+ sourceFileName + "</font>";
 
 				var td1 = document.createElement("td");
-				td1.innerHTML = "<font class=\"font-text-style\">"
-						+ contexts[i].childNodes[1].childNodes[0].nodeValue
+				
+				var normalizedTermName = termName.split('_').join('-');
+				td1Content = "";				
+				/*td1Content += "<font class=\"font-text-style\">"
+					+ contexts[i].childNodes[1].childNodes[0].nodeValue
+					+ "</font>";*/
+				var splitRegex = new RegExp(normalizedTermName, "i"); // -> /normalizedTermName/i
+				var splits = contexts[i].childNodes[1].childNodes[0].nodeValue.split(splitRegex);
+				console.log(splitRegex);
+				for(var j=0; j<splits.length; j++) {
+					console.log(splits[j]);
+					td1Content += "<font class=\"font-text-style\">"
+						+ splits[j]
 						+ "</font>";
+					if(j < splits.length - 1) {
+						td1Content += "<font class=\"font-text-style\" color=\"red\">"
+							+ normalizedTermName
+							+ "</font>";
+					}
+				}
+				td1.innerHTML = td1Content;
 
 				tr.appendChild(td);
 				tr.appendChild(td1);

@@ -3,6 +3,13 @@
  * page. Author: Fengqiong
  */
 
+var moveFlagToDetermineDragVsClick = 0; 
+var mouseDownPositionX = -1;
+var mouseDownPositionY = -1;
+var distanceThresholdDragClick = 10;
+var dragAfterSave = false;
+var dragGroupTable = false;
+
 var is_drag = false; // whether the obj is being dragged, be true when have
 // term selected and current_obj is the dragme icon
 var obj_x, obj_y; // position of group_chosen before dragged
@@ -503,6 +510,11 @@ function removeTermWithName(term) {
  * mouse down event handler record the old position of the obj and cursor
  */
 function mouse_down_handler(e) {
+	//console.log("mouse down");
+	moveFlagToDetermineDragVsClick = 0;
+	mouseDownPositionX = e.offsetX;
+	mouseDownPositionY = e.offsetY;
+	
 	// alert("mouse down");
 	var evn;
 	evn = e || event;
@@ -519,7 +531,7 @@ function mouse_down_handler(e) {
 	//alert(document.getElementById("UPLOADID")); //.innerHTML = current_obj.className;
 	//document.getElementById("UPLOADID").setAttribute("test", current_obj.className);
 	//document.getElementById("UPLOADID").setAttribute("test", current_obj.parentNode.className);
-	var dragGroupTable = current_obj.className != "checkbox" && 
+	dragGroupTable = current_obj.className != "checkbox" && 
 		(current_obj.className == "termsTable dragme" || 
 				current_obj.parentNode.className == "termsTable dragme" || 
 				current_obj.parentNode.parentNode.className == "termsTable dragme" ||
@@ -539,11 +551,19 @@ function mouse_down_handler(e) {
 	//document.getElementById("UPLOADID").setAttribute("test", current_obj.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className);
 	//document.getElementById("UPLOADID").setAttribute("debug", dragGroupTable);
 	
-	var dragAfterSave = current_obj.className != "fixTypoIcon" && 
+	/*console.log(current_obj.className);
+	console.log(current_obj.parentNode.className);
+	console.log(current_obj.parentNode.parentNode.className);
+	console.log(current_obj.parentNode.parentNode.parentNode.className);
+	console.log(current_obj.parentNode.parentNode.parentNode.parentNode.className);
+	*/
+	dragAfterSave = current_obj.className != "fixTypoIcon" && 
 		(current_obj.className == "term_row_saved" ||
 				current_obj.parentNode.className == "term_row_saved" ||
 				current_obj.parentNode.parentNode.className == "term_row_saved" || 
 				current_obj.parentNode.parentNode.parentNode.className == "term_row_saved");
+	
+	//console.log(dragAfterSave);
 	
 	if (dragGroupTable) {
 		
@@ -560,28 +580,9 @@ function mouse_down_handler(e) {
 		// is dragme and has term selected
 		is_drag = true;
 
-		getGroupClone();// get dragging clone content
-
-		// set drag_clone position and visibility
-		obj_x = group_chosen.offsetLeft;
-		obj_y = group_chosen.offsetTop;
-		var temp = group_chosen;
-		while (temp.offsetParent) {
-			temp = temp.offsetParent;
-			obj_x = obj_x + temp.offsetLeft;
-			obj_y = obj_y + temp.offsetTop;
-		}
-
-		/*
-		 * if (drag_from == "left") { obj_y = obj_y -
-		 * group_chosen.parentNode.scrollTop; } else { obj_y = obj_y -
-		 * group_chosen.parentNode.parentNode.scrollTop; }
-		 */
-		obj_y = obj_y - group_chosen.parentNode.scrollTop;
-		drag_clone.style["top"] = obj_y + "px";// bug
-		drag_clone.style["left"] = obj_x + "px";
-		drag_clone.style["visibility"] = "visible";
 	} else if (dragAfterSave) {
+		//console.log("drag after save");
+		
 		// alert(current_obj.className);
 		is_makeSorE = false;// why exist?
 
@@ -590,9 +591,12 @@ function mouse_down_handler(e) {
 				&& term_Chosen.className != "term_row_saved") {
 			term_Chosen = term_Chosen.parentNode;
 		}
+		
+		//console.log(term_Chosen);
 
 		if (term_Chosen.className == "term_row_saved") {
 			is_drag = true;
+			//console.log("is_drag " + is_drag);
 
 			/*
 			 * var label = term_Chosen.getElementsByTagName('label'); if
@@ -604,35 +608,12 @@ function mouse_down_handler(e) {
 			 * (newrelation.length > 0) { return false; // if is the host of a
 			 * new relationship, cannot // be dragged }
 			 */
-
-			// is_makeSorE = true;
-			getTermClone();
-
-			// get category_from and its top & bottom
-			get_category_from(evn);
-
-			// set drag_clone position and visibility
-			obj_x = term_Chosen.offsetLeft;
-			obj_y = term_Chosen.offsetTop;
-			var temp = term_Chosen;
-			while (temp.offsetParent) {
-				temp = temp.offsetParent;
-				obj_x = obj_x + temp.offsetLeft;
-				obj_y = obj_y + temp.offsetTop;
-			}
-
-			// alert(term_Chosen.parentNode.parentNode.parentNode.scrollTop);
-			obj_y = obj_y
-					- term_Chosen.parentNode.parentNode.parentNode.scrollTop;
-
-			drag_clone.style["top"] = obj_y + "px";// bug when scroll
-			drag_clone.style["left"] = obj_x + "px";
-			drag_clone.style["visibility"] = "visible";
 		}
 	} else {
 		// alert("else");
 	}
 
+	//console.log("end mouse down");
 	return false;
 }
 
@@ -640,64 +621,133 @@ function mouse_down_handler(e) {
  * mouse move event handler update position of the dragged obj
  */
 function mouse_move_handler(e) {
-	var evn;
-	evn = e || event;
-
-	if (is_drag) {
-		drag_clone.style["visibility"] = "visible";
-		var y = evn.clientY
-				+ document.getElementsByTagName('html')[0].scrollTop;
-
-		var browser = navigator.userAgent.toLowerCase();
-		if (window.chrome != null || browser.indexOf('safari') > -1) {
-			// if chrome or safari, add window's scrollTop()
-			y = y + $(window).scrollTop();
-		}
-
-		// document.getElementById("dataset_info").innerHTML = "y:" + y
-		// + " html:"
-		// + document.getElementsByTagName('html')[0].scrollTop
-		// + " body:"
-		// + document.getElementsByTagName('body')[0].scrollTop
-		// + "window: "
-		// + $(window).scrollTop()
-		// + "document: "
-		// + $(document).scrollTop();
-
-		// group_chosen.style["visibility"] = "hidden";
-		drag_clone.style["top"] = (y - 2) + "px";
-		drag_clone.style["left"] = (evn.clientX - 2) + "px";
-
-		// if cursor position is out of category box, automatically scroll
-		// the category box
-		// old_target_category
-		// the position of old_target_category
+	var posX = e.offsetX;
+	var posY = e.offsetY;
+	
+	//console.log("mouse move");
+	
+	//console.log(mouseDownPositionX);
+	//console.log(mouseDownPositionY);
+	
+	if(mouseDownPositionX != -1 && mouseDownPositionY != -1 && (Math.abs(mouseDownPositionX - posX) + Math.abs(mouseDownPositionY - posY) > distanceThresholdDragClick)) {
+		//alert("here");
 		
-		var dragAfterSave = current_obj.className != "fixTypoIcon" && 
-		(current_obj.className == "term_row_saved" ||
-				current_obj.parentNode.className == "term_row_saved" ||
-				current_obj.parentNode.parentNode.className == "term_row_saved" || 
-				current_obj.parentNode.parentNode.parentNode.className == "term_row_saved");
+		//console.log("moveFlag = 1");
+		moveFlagToDetermineDragVsClick = 1;
 		
-		if (dragAfterSave) {
-			var cursor_y = evn.clientY
-					+ document.getElementById('categories_div').scrollTop
-					+ document.getElementsByTagName('html')[0].scrollTop
-					+ document.getElementById("dragging_part").scrollTop;
+		var evn;
+		evn = e || event;
 
-			// if cursor is beyond box, decrease scrollTop to 0
-			if (cursor_y < category_from_top && category_from.scrollTop > 0) {
-				category_from.scrollTop = category_from.scrollTop - 5;
-			} else if (cursor_y > category_from_bottom) {
-				category_from.scrollTop = category_from.scrollTop + 5;
+		if (is_drag) {
+			
+			if(dragGroupTable) {
+				//console.log("dragGroupTable " + dragGroupTable);
+				
+				getGroupClone();// get dragging clone content
+
+				// set drag_clone position and visibility
+				obj_x = group_chosen.offsetLeft;
+				obj_y = group_chosen.offsetTop;
+				var temp = group_chosen;
+				while (temp.offsetParent) {
+					temp = temp.offsetParent;
+					obj_x = obj_x + temp.offsetLeft;
+					obj_y = obj_y + temp.offsetTop;
+				}
+
+				/*
+				 * if (drag_from == "left") { obj_y = obj_y -
+				 * group_chosen.parentNode.scrollTop; } else { obj_y = obj_y -
+				 * group_chosen.parentNode.parentNode.scrollTop; }
+				 */
+				obj_y = obj_y - group_chosen.parentNode.scrollTop;
+				drag_clone.style["top"] = obj_y + "px";// bug
+				drag_clone.style["left"] = obj_x + "px";
+				drag_clone.style["visibility"] = "visible";
+			} else if(dragAfterSave) {
+				
+				//console.log("dragAfterSave " + dragAfterSave);
+				
+				// is_makeSorE = true;
+				getTermClone();
+
+				// get category_from and its top & bottom
+				get_category_from(evn);
+
+				// set drag_clone position and visibility
+				obj_x = term_Chosen.offsetLeft;
+				obj_y = term_Chosen.offsetTop;
+				var temp = term_Chosen;
+				while (temp.offsetParent) {
+					temp = temp.offsetParent;
+					obj_x = obj_x + temp.offsetLeft;
+					obj_y = obj_y + temp.offsetTop;
+				}
+
+				// alert(term_Chosen.parentNode.parentNode.parentNode.scrollTop);
+				obj_y = obj_y
+						- term_Chosen.parentNode.parentNode.parentNode.scrollTop;
+
+				drag_clone.style["top"] = obj_y + "px";// bug when scroll
+				drag_clone.style["left"] = obj_x + "px";
+				drag_clone.style["visibility"] = "visible";
 			}
 
-			// document.getElementById("dataset_info").innerHTML += "
-			// scrollTop:" + category_from.scrollTop;
-		}
-	}
+			drag_clone.style["visibility"] = "visible";
+			var y = evn.clientY
+					+ document.getElementsByTagName('html')[0].scrollTop;
 
-	return false;
+			var browser = navigator.userAgent.toLowerCase();
+			if (window.chrome != null || browser.indexOf('safari') > -1) {
+				// if chrome or safari, add window's scrollTop()
+				y = y + $(window).scrollTop();
+			}
+
+			// document.getElementById("dataset_info").innerHTML = "y:" + y
+			// + " html:"
+			// + document.getElementsByTagName('html')[0].scrollTop
+			// + " body:"
+			// + document.getElementsByTagName('body')[0].scrollTop
+			// + "window: "
+			// + $(window).scrollTop()
+			// + "document: "
+			// + $(document).scrollTop();
+
+			// group_chosen.style["visibility"] = "hidden";
+			drag_clone.style["top"] = (y - 2) + "px";
+			drag_clone.style["left"] = (evn.clientX - 2) + "px";
+
+			// if cursor position is out of category box, automatically scroll
+			// the category box
+			// old_target_category
+			// the position of old_target_category
+			
+			dragAfterSave = current_obj.className != "fixTypoIcon" && 
+			(current_obj.className == "term_row_saved" ||
+					current_obj.parentNode.className == "term_row_saved" ||
+					current_obj.parentNode.parentNode.className == "term_row_saved" || 
+					current_obj.parentNode.parentNode.parentNode.className == "term_row_saved");
+			
+			if (dragAfterSave) {
+				var cursor_y = evn.clientY
+						+ document.getElementById('categories_div').scrollTop
+						+ document.getElementsByTagName('html')[0].scrollTop
+						+ document.getElementById("dragging_part").scrollTop;
+
+				// if cursor is beyond box, decrease scrollTop to 0
+				if (cursor_y < category_from_top && category_from.scrollTop > 0) {
+					category_from.scrollTop = category_from.scrollTop - 5;
+				} else if (cursor_y > category_from_bottom) {
+					category_from.scrollTop = category_from.scrollTop + 5;
+				}
+
+				// document.getElementById("dataset_info").innerHTML += "
+				// scrollTop:" + category_from.scrollTop;
+			}
+		}
+
+		return false;
+	}	
 }
 
 /**
@@ -705,231 +755,242 @@ function mouse_move_handler(e) {
  * the destination is inside the table range
  */
 function mouse_up_handler(e) {
-	var evn;
-	evn = e || event;
+	//console.log("mouse up");
+	
+	mouseDownPositionX = -1;
+	mouseDownPositionX = -1;
+	
+	if(moveFlagToDetermineDragVsClick == 0) {
+		//click only
+		return false;
+	} else if (moveFlagToDetermineDragVsClick == 1) {
+		//drag
+		var evn;
+		evn = e || event;
 
-	if (is_drag) {
-		getTargetCategory(evn);
-		
-		var dragGroupTable = current_obj.className != "checkbox" && 
-		(current_obj.className == "termsTable dragme" || 
-				current_obj.parentNode.className == "termsTable dragme" || 
-				current_obj.parentNode.parentNode.className == "termsTable dragme" ||
-				current_obj.parentNode.parentNode.parentNode.className == "termsTable dragme" ||
-				current_obj.parentNode.parentNode.parentNode.parentNode.className == "termsTable dragme");
-		
-		var dragAfterSave = current_obj.className != "fixTypoIcon" && 
-		(current_obj.className == "term_row_saved" ||
-				current_obj.parentNode.className == "term_row_saved" ||
-				current_obj.parentNode.parentNode.className == "term_row_saved" || 
-				current_obj.parentNode.parentNode.parentNode.className == "term_row_saved");
-		
-		if (dragGroupTable) { //current_obj.className == "termLabel dragme" || current_obj.className == "decisionRemoved termLabel dragme") {// drag before saving
-			if (target_category != null) {// (left -> target category) or
-				// (right -> different category)
-				if (!(drag_from == "right" && target_category == old_target_category)) {
-					var i;
-					// find div newDecisions for category
-					targetbox = target_category
-							.getElementsByClassName("newDecisions")[0];
-					// drop the terms_chosen
-					if (targetbox != null) {
-						// append clone content
-						clearCheckboxBeforeDrop();
-						drag_clone_content.parentNode
-								.removeChild(drag_clone_content);
-						append_selected_terms(targetbox);
-						setDragMeSign("drag-back");
-						expandRow();
-						old_target_category = target_category;
-						// update group_chosen
-						update_group_chosen();
-					}
-				}
-			} else if (drag_from == "right") {// drag from right back to left
-				clearCheckboxBeforeDrop();
-				drag_clone_content.parentNode.removeChild(drag_clone_content);
-
-				// append selected terms
-				append_selected_terms(document.getElementById("availableTerms"));
-				setDragMeSign("drag");
-
-				// redo the mouse down event handler
-				var element_list = drag_clone_content.childNodes;
-				for (i = 0; i < element_list.length; i++) {
-					element_list[i].onmousedown = mouse_down_handler;
-				}
-				update_group_chosen();
-			} else {
-				// drag from left but no target category
-				alert("To categorize terms, drag terms into the categories box.");
-			}
+		if (is_drag) {
+			getTargetCategory(evn);
 			
+			dragGroupTable = current_obj.className != "checkbox" && 
+			(current_obj.className == "termsTable dragme" || 
+					current_obj.parentNode.className == "termsTable dragme" || 
+					current_obj.parentNode.parentNode.className == "termsTable dragme" ||
+					current_obj.parentNode.parentNode.parentNode.className == "termsTable dragme" ||
+					current_obj.parentNode.parentNode.parentNode.parentNode.className == "termsTable dragme");
 			
-		} else if (dragAfterSave) {
-			// drag after decision saved: change decision or make synonym
-			if (target_category != null) {
-				targetbox = target_category
-						.getElementsByClassName("changedDecision")[0];
-				if (is_changeDecision) {
-					if (targetbox != null) {
-						if (!isSingleTerm(term_Chosen) && ctrlKeyPressed(e)) {
-							alert("Only single term can be copied. Please click 'x' to break synonyms first. ");
-						} else {
+			dragAfterSave = current_obj.className != "fixTypoIcon" && 
+			(current_obj.className == "term_row_saved" ||
+					current_obj.parentNode.className == "term_row_saved" ||
+					current_obj.parentNode.parentNode.className == "term_row_saved" || 
+					current_obj.parentNode.parentNode.parentNode.className == "term_row_saved");
+			
+			if (dragGroupTable) { //current_obj.className == "termLabel dragme" || current_obj.className == "decisionRemoved termLabel dragme") {// drag before saving
+				if (target_category != null) {// (left -> target category) or
+					// (right -> different category)
+					if (!(drag_from == "right" && target_category == old_target_category)) {
+						var i;
+						// find div newDecisions for category
+						targetbox = target_category
+								.getElementsByClassName("newDecisions")[0];
+						// drop the terms_chosen
+						if (targetbox != null) {
+							// append clone content
+							clearCheckboxBeforeDrop();
 							drag_clone_content.parentNode
 									.removeChild(drag_clone_content);
-							// can copy here
-							var obj_to_append = term_Chosen;
-							if (ctrlKeyPressed(e)) {
-								// get a new name
-								var newName = getNewName(term_Chosen.id);
-								if (newName == "null") {
-									alert("There are too many copies of term '"
-											+ term_Chosen.id
-											+ "'. Please work on existing copies.");
-								} else {
-									obj_to_append = copiedTerm(term_Chosen,
-											newName);
-									markTermReviewed(newName);
-								}
-							}
-							markTermReviewed(term_Chosen.id);
-
-							obj_to_append.getElementsByTagName("a")[0].style["color"] = "red";
-							setRed(obj_to_append);
-							targetbox.appendChild(obj_to_append);
-							updateLocations(term_Chosen.id);
+							append_selected_terms(targetbox);
+							setDragMeSign("drag-back");
 							expandRow();
 							old_target_category = target_category;
-							// set scrolltop
-							targetbox.parentNode.scrollTop = targetbox.offsetTop
-									+ term_Chosen.offsetTop;
+							// update group_chosen
+							update_group_chosen();
 						}
 					}
-				} else if (is_makeSorE) {
-					var term_chosen_name = term_Chosen.id;
-					if (target_term != null && target_term != term_Chosen) {
-						if (!isSingleTerm(term_Chosen)) {
-							alert("Only single terms can be dragged to make synonym. Please click 'x' to break synonyms first. ");
-						} else {
-							var confirmed = confirm("Do you want to make the two terms synonyms? ");
-							if (confirmed) {
-								var isToMerge = hasDuplicate(target_term,
-										term_chosen_name);
-								if (isToMerge) {
-									alert("Duplicated terms have been merged.");
-								} else {
-									var term_td = target_term
-											.getElementsByTagName("td")[0];
-									// check has duplicate or not
-									target_term.getElementsByTagName("a")[0].style["color"] = "red";
-									// generate syn
-									var new_syn_div = document
-											.createElement("div");
-									new_syn_div.setAttribute("onmouseover",
-											"displayFixTypoIcon(this)");
-									new_syn_div.setAttribute("onmouseout",
-											"hideFixTypoIcon(this)");
+				} else if (drag_from == "right") {// drag from right back to left
+					clearCheckboxBeforeDrop();
+					drag_clone_content.parentNode.removeChild(drag_clone_content);
 
-									var new_syn = document
-											.createElement("label");
-									new_syn_div.appendChild(new_syn);
-									new_syn.className = "syn";
-									new_syn.id = term_chosen_name;
-									new_syn.setAttribute("termName",
-											term_chosen_name);
-									new_syn.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
-									// append term and view sign
-									var objs_a = term_Chosen
-											.getElementsByTagName("a");
-									var term = objs_a[0].cloneNode(true);
-									term.style["color"] = "red";
-									new_syn.appendChild(term);
-									new_syn.innerHTML += " ";
+					// append selected terms
+					append_selected_terms(document.getElementById("availableTerms"));
+					setDragMeSign("drag");
 
-									// append fix typo img
-									var objs_img = term_Chosen
-											.getElementsByClassName("fixTypoIcon");
-									if (objs_img.length > 0) {
-										var img = objs_img[0].cloneNode(true);
-										new_syn.appendChild(img);
-									}
-
-									// add a cross
-									new_syn.innerHTML += " <label onclick='removeTerm(this)' class='delete_cross'><font color='blue'>x</font></label>";
-									term_td.appendChild(new_syn_div);
-									markTermReviewed(term_chosen_name);
-									markTermReviewed(target_term.id);
-								}
-								// any changed decision goes into the
-								// changed_decisions list
-								targetbox.appendChild(target_term);
-								setRed(target_term);
-								targetbox.parentNode.scrollTop = targetbox.offsetTop
-										+ target_term.offsetTop;
-								term_Chosen.parentNode.removeChild(term_Chosen);
-							}
-
-							is_makeSorE = false;
-						}
+					// redo the mouse down event handler
+					var element_list = drag_clone_content.childNodes;
+					for (i = 0; i < element_list.length; i++) {
+						element_list[i].onmousedown = mouse_down_handler;
 					}
-					drag_clone_content.parentNode
-							.removeChild(drag_clone_content);
-					delete_drag_clone();
-					drag_clone.style["visibility"] = "hidden";
-				}
-			} else {
-				if (!isSingleTerm(term_Chosen)) {
-					alert("Only single term can be removed from category box. Please remove synonyms first.");
+					update_group_chosen();
 				} else {
-					// delete saved decision: will return to left side
-					// var confirmed = confirm("Are you sure you want to remove
-					// this term from current category?");
+					// drag from left but no target category
+					alert("To categorize terms, drag terms into the categories box.");
+				}
+				
+				
+			} else if (dragAfterSave) {
+				// drag after decision saved: change decision or make synonym
+				if (target_category != null) {
+					targetbox = target_category
+							.getElementsByClassName("changedDecision")[0];
+					if (is_changeDecision) {
+						if (targetbox != null) {
+							if (!isSingleTerm(term_Chosen) && ctrlKeyPressed(e)) {
+								alert("Only single term can be copied. Please click 'x' to break synonyms first. ");
+							} else {
+								drag_clone_content.parentNode
+										.removeChild(drag_clone_content);
+								// can copy here
+								var obj_to_append = term_Chosen;
+								if (ctrlKeyPressed(e)) {
+									// get a new name
+									var newName = getNewName(term_Chosen.id);
+									if (newName == "null") {
+										alert("There are too many copies of term '"
+												+ term_Chosen.id
+												+ "'. Please work on existing copies.");
+									} else {
+										obj_to_append = copiedTerm(term_Chosen,
+												newName);
+										markTermReviewed(newName);
+									}
+								}
+								markTermReviewed(term_Chosen.id);
 
-					// todo: force comments
-					// var comment = prompt("Please explain why you need to
-					// uncategorize this term (CANNOT be empty): ", "");
-					if (true) {
-						var comment = "";
-						var deleted_term = document.createElement("div");
-						deleted_term.className = "dragGroupTable";
-						deleted_term.id = "0";
-						markTermReviewed(term_Chosen.id);
+								obj_to_append.getElementsByTagName("a")[0].style["color"] = "red";
+								setRed(obj_to_append);
+								targetbox.appendChild(obj_to_append);
+								updateLocations(term_Chosen.id);
+								expandRow();
+								old_target_category = target_category;
+								// set scrolltop
+								targetbox.parentNode.scrollTop = targetbox.offsetTop
+										+ term_Chosen.offsetTop;
+							}
+						}
+					} else if (is_makeSorE) {
+						var term_chosen_name = term_Chosen.id;
+						if (target_term != null && target_term != term_Chosen) {
+							if (!isSingleTerm(term_Chosen)) {
+								alert("Only single terms can be dragged to make synonym. Please click 'x' to break synonyms first. ");
+							} else {
+								var confirmed = confirm("Do you want to make the two terms synonyms? ");
+								if (confirmed) {
+									var isToMerge = hasDuplicate(target_term,
+											term_chosen_name);
+									if (isToMerge) {
+										alert("Duplicated terms have been merged.");
+									} else {
+										var term_td = target_term
+												.getElementsByTagName("td")[0];
+										// check has duplicate or not
+										target_term.getElementsByTagName("a")[0].style["color"] = "red";
+										// generate syn
+										var new_syn_div = document
+												.createElement("div");
+										new_syn_div.setAttribute("onmouseover",
+												"displayFixTypoIcon(this)");
+										new_syn_div.setAttribute("onmouseout",
+												"hideFixTypoIcon(this)");
 
-						// set comment with the term
-						deleted_term.innerHTML = generateDeletedTerm(
-								term_Chosen.id, comment);
-						var left_column = document
-								.getElementById('availableTerms');
-						left_column.appendChild(deleted_term);
-						left_column.scrollTop = deleted_term.offsetTop;
-						term_Chosen.parentNode.removeChild(term_Chosen);
+										var new_syn = document
+												.createElement("label");
+										new_syn_div.appendChild(new_syn);
+										new_syn.className = "syn";
+										new_syn.id = term_chosen_name;
+										new_syn.setAttribute("termName",
+												term_chosen_name);
+										new_syn.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;";
+										// append term and view sign
+										var objs_a = term_Chosen
+												.getElementsByTagName("a");
+										var term = objs_a[0].cloneNode(true);
+										term.style["color"] = "red";
+										new_syn.appendChild(term);
+										new_syn.innerHTML += " ";
+
+										// append fix typo img
+										var objs_img = term_Chosen
+												.getElementsByClassName("fixTypoIcon");
+										if (objs_img.length > 0) {
+											var img = objs_img[0].cloneNode(true);
+											new_syn.appendChild(img);
+										}
+
+										// add a cross
+										new_syn.innerHTML += " <label onclick='removeTerm(this)' class='delete_cross'><font color='blue'>x</font></label>";
+										term_td.appendChild(new_syn_div);
+										markTermReviewed(term_chosen_name);
+										markTermReviewed(target_term.id);
+									}
+									// any changed decision goes into the
+									// changed_decisions list
+									targetbox.appendChild(target_term);
+									setRed(target_term);
+									targetbox.parentNode.scrollTop = targetbox.offsetTop
+											+ target_term.offsetTop;
+									term_Chosen.parentNode.removeChild(term_Chosen);
+								}
+
+								is_makeSorE = false;
+							}
+						}
+						drag_clone_content.parentNode
+								.removeChild(drag_clone_content);
+						delete_drag_clone();
+						drag_clone.style["visibility"] = "hidden";
+					}
+				} else {
+					if (!isSingleTerm(term_Chosen)) {
+						alert("Only single term can be removed from category box. Please remove synonyms first.");
+					} else {
+						// delete saved decision: will return to left side
+						// var confirmed = confirm("Are you sure you want to remove
+						// this term from current category?");
+
+						// todo: force comments
+						// var comment = prompt("Please explain why you need to
+						// uncategorize this term (CANNOT be empty): ", "");
+						if (true) {
+							var comment = "";
+							var deleted_term = document.createElement("div");
+							deleted_term.className = "dragGroupTable";
+							deleted_term.id = "0";
+							markTermReviewed(term_Chosen.id);
+
+							// set comment with the term
+							deleted_term.innerHTML = generateDeletedTerm(
+									term_Chosen.id, comment);
+							var left_column = document
+									.getElementById('availableTerms');
+							left_column.appendChild(deleted_term);
+							left_column.scrollTop = deleted_term.offsetTop;
+							term_Chosen.parentNode.removeChild(term_Chosen);
+						}
 					}
 				}
+
 			}
-
+		} else {
+			// not dragging draggable items, do nothing
 		}
-	} else {
-		// not dragging draggable items, do nothing
-	}
 
-	// no matter what, clean everything in memory
-	if (group_chosen != null) {
-		group_chosen.style.cursor = 'auto';
-	}
-	if (term_Chosen != null) {
-		term_Chosen.style.cursor = 'auto';
-	}
-	is_drag = false;
-	is_makeSorE = false;
-	is_changeDecision = false;
-	target_category = null;
-	target_term = null;
-	term_Chosen = null;
-	delete_drag_clone();
-	group_chosen = null;
+		// no matter what, clean everything in memory
+		if (group_chosen != null) {
+			group_chosen.style.cursor = 'auto';
+		}
+		if (term_Chosen != null) {
+			term_Chosen.style.cursor = 'auto';
+		}
+		is_drag = false;
+		is_makeSorE = false;
+		is_changeDecision = false;
+		target_category = null;
+		target_term = null;
+		term_Chosen = null;
+		delete_drag_clone();
+		group_chosen = null;
 
-	return false;
+		return false;
+	}	
 }
 
 function setDragMeSign(picName) {
@@ -1084,7 +1145,7 @@ function getTargetCategory(evn) {
 		}
 	}
 
-	var dragAfterSave = current_obj.className != "fixTypoIcon" && 
+	dragAfterSave = current_obj.className != "fixTypoIcon" && 
 	(current_obj.className == "term_row_saved" ||
 			current_obj.parentNode.className == "term_row_saved" ||
 			current_obj.parentNode.parentNode.className == "term_row_saved" || 

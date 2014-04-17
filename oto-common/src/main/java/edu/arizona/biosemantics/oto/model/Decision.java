@@ -1,4 +1,4 @@
-package edu.arizona.sirls.rest.beans;
+package edu.arizona.biosemantics.oto.model;
 
 public class Decision {
 

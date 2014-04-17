@@ -1,4 +1,4 @@
-package edu.arizona.sirls.rest.beans;
+package edu.arizona.biosemantics.oto.model;
 
 import java.util.LinkedList;
 import java.util.List;

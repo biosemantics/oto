@@ -1,4 +1,4 @@
-package edu.arizona.sirls.rest.beans;
+package edu.arizona.biosemantics.oto.model;
 
 import java.util.List;
 
@@ -38,6 +38,7 @@ public class Download {
 		this.synonyms = synonyms;
 	}
 	
+	@Override
 	public String toString() {
 		return decisions.toString() + " " + synonyms.toString();
 	}

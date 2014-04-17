@@ -1,4 +1,4 @@
-package edu.arizona.biosemantics.oto.model;
+package edu.arizona.biosemantics.oto.model.lite;
 
 public class Term {
 

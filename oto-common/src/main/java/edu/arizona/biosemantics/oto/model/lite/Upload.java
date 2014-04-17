@@ -1,4 +1,4 @@
-package edu.arizona.biosemantics.oto.model;
+package edu.arizona.biosemantics.oto.model.lite;
 
 import java.util.LinkedList;
 import java.util.List;

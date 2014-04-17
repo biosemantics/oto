@@ -2,13 +2,17 @@ package edu.arizona.sirls.rest.beans;
 
 public class Synonym {
 
+	private String id;
 	private String term;
+	private String category;
 	private String synonym;
 	
 	public Synonym() { }
 
-	public Synonym(String term, String synonym) {
+	public Synonym(String id, String term, String category, String synonym) {
+		this.id = id;
 		this.term = term;
+		this.category = category;
 		this.synonym = synonym;
 	}
 
@@ -27,4 +31,23 @@ public class Synonym {
 	public void setSynonym(String synonym) {
 		this.synonym = synonym;
 	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	
+	
 }
+

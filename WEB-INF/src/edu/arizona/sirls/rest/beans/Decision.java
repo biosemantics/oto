@@ -1,18 +1,20 @@
 package edu.arizona.sirls.rest.beans;
 
 public class Decision {
-	
+
+	private String id;
 	private String term;
-	private boolean isMainTerm;
 	private String category;
+	private boolean hasSynonym;
 	
 	public Decision() { }
 
-	public Decision(String term, boolean isMainTerm, String category) {
+	public Decision(String id, String term, String category, boolean hasSynonym) {
 		super();
+		this.id = id;
 		this.term = term;
-		this.isMainTerm = isMainTerm;
 		this.category = category;
+		this.hasSynonym = hasSynonym;
 	}
 
 	public String getTerm() {
@@ -30,13 +32,21 @@ public class Decision {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-
-	public boolean isMainTerm() {
-		return isMainTerm;
+	
+	public boolean isHasSynonym() {
+		return hasSynonym;
 	}
 
-	public void setMainTerm(boolean isMainTerm) {
-		this.isMainTerm = isMainTerm;
+	public void setHasSynonym(boolean hasSynonym) {
+		this.hasSynonym = hasSynonym;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 }

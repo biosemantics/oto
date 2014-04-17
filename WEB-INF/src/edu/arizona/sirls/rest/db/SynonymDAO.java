@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.arizona.sirls.rest.beans.Decision;
 import edu.arizona.sirls.rest.beans.Synonym;
 
 public class SynonymDAO extends AbstractDAO {
@@ -26,13 +27,37 @@ public class SynonymDAO extends AbstractDAO {
 		List<Synonym> result = new ArrayList<Synonym>();
 		this.openConnection();
 		
-		String sql = "SELECT * FROM synonyms WHERE uploadID=" + uploadId;
+		String sql = "SELECT * FROM decisions WHERE uploadID=" + uploadId;
 		PreparedStatement preparedStatement = this.executeSQL(sql);
 		ResultSet resultSet = preparedStatement.getResultSet();
-		while (resultSet.next())
-			result.add(new Synonym(resultSet.getString("mainTerm"), resultSet.getString("synonym")));
-		
+		int i=0; 
+		while (resultSet.next()) {
+			boolean isMainTerm = resultSet.getBoolean("isMainTerm");
+			String mainTerm = resultSet.getString("term");
+			String category = resultSet.getString("category");
+			if(isMainTerm) {
+				boolean hasSynonym = false;
+				String hasSynonymSQL = "SELECT * FROM synonyms WHERE uploadID=" + uploadId + " AND mainTerm='" + mainTerm + "' AND category='" + category + "'";
+				PreparedStatement statement = this.executeSQL(hasSynonymSQL);
+				ResultSet hasSynonymResult = statement.getResultSet();
+				
+				while(hasSynonymResult.next()) {
+					String synonym = hasSynonymResult.getString("synonym");
+					result.add(new Synonym(String.valueOf(i), normalizeTerm(mainTerm), category, synonym));
+				}
+				i++;
+				hasSynonymResult.close();
+				statement.close();
+			}
+		}
 		this.closeConnection();
 		return result;
+	}
+	
+	private String normalizeTerm(String term) {
+		if(term.matches(".*_\\d")) {
+			return term.substring(0, term.lastIndexOf("_"));
+		}
+		return term;
 	}
 }

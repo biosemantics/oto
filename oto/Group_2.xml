@@ -1,0 +1,26 @@
+<!-- has error in the content. plus this file won't be use anymore. 
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<graphml xmlns='http://graphml.graphdrawing.org/xmlns'
+	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+	xsi:schemaLocation='http://graphml.graphdrawing.org/xmlns 
+http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd'>
+	<graph edgedefault='undirected' id='graph'>
+		<key attr.name='name' attr.type='string' for='node' id='name' />
+		<key attr.name='type' attr.type='string' for='all' id='type' />
+		<key attr.name='weight' attr.type='float' for='edge' id='weight' />
+
+		<node id='1'>
+			<data key='name'>entire</data>
+		</node>
+		<node id='2'>
+			<data key='name'>lobed</data>
+		</node>
+		<edge source='1' target='2' weight ='1.0' />
+		<node id='3'>
+			<data key='name'>spiny</data>
+		</node>
+		<edge source='1' target='3' weight='1.0' />
+	</graph>
+</graphml>
+
+ -->

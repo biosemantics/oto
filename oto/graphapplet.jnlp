@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase="http://localhost:8080/ParserSVN/"  href="">
+    <information>
+        <title>Graph ML</title>
+        <vendor>Dynamic Team</vendor>
+    </information>
+    <resources>
+        <!-- Application Resources -->
+        <j2se version="1.6+"
+              href="http://java.sun.com/products/autodl/j2se" />
+        <jar href="http://localhost:8080/ParserSVN/graphapplet.jar" main="true" />
+    </resources>
+    <applet-desc 
+         name="Graph Applet"
+         main-class="edu.arizona.sirls.graph.GraphApplet"
+         width="300"
+         height="300">
+     </applet-desc>
+     <update check="background"/>
+</jnlp>

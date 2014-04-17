@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+
+<struts-config>
+	<!-- ========== Form Bean Definitions =================================== -->   
+	<form-beans>
+    	
+    	<!-- ======BEGIN==== Form Bean Definitions============================ -->
+    	    	<form-bean  name="generalForm"
+    	            type="edu.arizona.sirls.form.GeneralForm"/>
+    	        <form-bean  name="registrationForm"
+    	            type="edu.arizona.sirls.form.RegistrationForm"/>    	            
+    	        <form-bean  name="loginForm"
+    	            type="edu.arizona.sirls.form.UserLoginForm"/>
+    	        <form-bean  name="bioportalForm"
+    	            type="edu.arizona.sirls.form.BioportalForm"/>
+    	<!-- =======END===== Form Bean Definitions=================================== -->
+   	
+    		
+	</form-beans>
+	<global-forwards>
+		<forward name="logon" path="/jsp/login.jsp" />
+		<forward name="error" path="/jsp/error.jsp" />
+	</global-forwards>
+        
+	<!-- ========== Action Mapping Definitions ============================== -->   
+	<action-mappings>     
+    	
+      	<action path="/gotoWelcomepage"
+      	        type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/index.jsp" >
+        </action>
+        
+        <action path="/popup"
+              	type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/popup.jsp" >
+        </action>
+        
+        <action path="/userSpecificReport"
+              	type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/report.jsp" >
+        </action>
+        
+       <action path="/admin"
+              	type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/management.jsp" >
+        </action>
+        
+        <action path="/manageUsers"
+              	type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/manageUsers.jsp" >
+        </action>
+        
+        <action path="/mergeDatasets"
+              	type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/mergeDatasets.jsp" >
+        </action>
+        
+        <action path="/mergeIntoSystem"
+              	type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/mergeIntoSystem.jsp" >
+        </action>
+        
+        <action path="/manageCategory"
+              	type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/manageCategory.jsp" >
+        </action>
+        
+        <action path="/managPath"
+              	type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/manageHierarchy.jsp" >
+        </action>
+        
+        <action path="/manageOrder"
+              	type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/manageOrder.jsp" >
+        </action>
+        
+       <action path="/account"
+              	type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/account.jsp" >
+        </action>
+        <action path="/intro"
+              	type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/instruction.jsp" >
+        </action>
+        
+        <action path="/webService"
+              	type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/webservice.jsp" >
+        </action>
+        
+        <action path="/gotoDownload"
+              	type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/download.jsp" >
+        </action>
+               <action path="/gotoLogin"
+              	type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/login.jsp" >
+        </action>
+        
+        <action path="/ontologyLookup"
+              	type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/bioportal_init.jsp" >
+        </action>
+        
+        <action path="/ontologyTerm"
+              	type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/bioportal_term.jsp" >
+        </action>
+        
+        <action path="/ontologySubmissions"
+              	type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/bioportal_submission.jsp" >
+        </action>
+        
+        <action path="/deletedSubmissions"
+              	type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/bioportal_deletedSubmissions.jsp" >
+        </action>
+
+  <!-- ==================BEGIN=========Action Mapping Definition for Login================== -->
+    		<action	path="/validateLogin"
+               	type="edu.arizona.sirls.action.UserLoginAction"
+               	name="loginForm"
+				scope="request"
+              	input="/login.jsp"
+              	validate="true">
+			   <forward name="reload" path="/jsp/login.jsp"/>  			  
+  			   <forward name="home" path="/jsp/index.jsp"/>
+  			</action>
+  <!-- ==================END========Action Mapping Definition for Login===================== --> 
+  			
+  	        <action path="/groupTerms"
+      	        type="edu.arizona.sirls.action.DataSetAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+                <forward name="home" path="/jsp/categorize.jsp"/>
+                <forward name="reload" path="/jsp/index.jsp"/> 
+        	</action>
+        	
+        	<action path="/getPass"
+      	        type="edu.arizona.sirls.action.UserResetPasswordAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+                <forward name="home" path="/jsp/login.jsp"/> 
+        	</action>
+        	
+        	<action path="/updatePasswordToEncrypted"
+      	        type="edu.arizona.sirls.action.UserUpdatePasswordToEncrypted"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+                <forward name="home" path="/jsp/login.jsp"/> 
+        	</action>
+
+        	<action path="/manageDataset"
+              	type="org.apache.struts.actions.ForwardAction"
+                parameter="/jsp/manageDataset.jsp" >
+        	</action>
+        	
+        	<action path="/test"
+      	        type="edu.arizona.sirls.action.DataSetAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+                <forward name="home" path="/jsp/test.jsp"/>
+                <forward name="reload" path="/jsp/index.jsp"/> 
+        	</action>
+        	
+        	<action path="/hierarchy"
+        		type="edu.arizona.sirls.action.DataSetAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+                <forward name="home" path="/jsp/hierarchy.jsp"/>
+                <forward name="reload" path="/jsp/index.jsp"/> 
+        	</action>
+        	
+        	<action path="/download"
+        		type="edu.arizona.sirls.action.DownloadAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+                <forward name="home" path="/jsp/login.jsp"/>
+                <forward name="reload" path="/jsp/login.jsp"/> 
+        	</action>
+        	
+        	<action path="/order"
+        		type="edu.arizona.sirls.action.DataSetAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+                <forward name="home" path="/jsp/order.jsp"/>
+                <forward name="reload" path="/jsp/index.jsp"/> 
+        	</action>
+
+  	        <action path="/context"
+      	        type="edu.arizona.sirls.action.GetContextAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+        	</action>
+        	
+        	<action path="/glossary"
+      	        type="edu.arizona.sirls.action.GetGlossaryAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+        	</action>
+        	
+        	<action path="/getUserReport"
+      	        type="edu.arizona.sirls.action.GetUserReportAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+        	</action>
+        	  
+  	        <action path="/file"
+      	        type="edu.arizona.sirls.action.FileAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+        	</action>
+        	
+        	 <action path="/finishConfirming"
+      	        type="edu.arizona.sirls.action.FinishConfirmingAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+      	        <forward name="reload" path="/jsp/manageCategory.jsp"/>
+        	</action>
+        	
+        	<action path="/mergingDatasets"
+      	        type="edu.arizona.sirls.action.MergeDatasetsAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+      	        <forward name="reload" path="/jsp/manageCategory.jsp"/>
+        	</action>
+        	
+        	<action path="/reopenDataset"
+      	        type="edu.arizona.sirls.action.ReopenDatasetAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+      	        <forward name="reload" path="/jsp/manageCategory.jsp"/>
+        	</action>
+        	
+        	<action path="/deleteDataset"
+      	        type="edu.arizona.sirls.action.DeleteDatasetAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+      	        <forward name="reload" path="/jsp/management.jsp"/>
+        	</action>
+        	
+        	<action path="/saveGroup"
+      	        type="edu.arizona.sirls.action.SaveGroupAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+      	        <forward name="reload" path="/jsp/categorize.jsp"/>
+      	        <forward name="home" path="/jsp/index.jsp"/>
+        	</action> 
+        	
+        	<action path="/saveTree"
+      	        type="edu.arizona.sirls.action.SaveTreeAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+      	        <forward name="reload" path="/jsp/hierarchy.jsp"/>
+      	        <forward name="home" path="/jsp/index.jsp"/>
+        	</action> 
+        	
+        	<action path="/saveOrder"
+      	        type="edu.arizona.sirls.action.SaveOrderAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+        	</action> 
+        	
+        	<action path="/saveDecisionByManager"
+      	        type="edu.arizona.sirls.action.saveDecisionByManager"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+        	</action> 
+        	         	 			
+        	<action path="/checkDataSet"
+      	        type="edu.arizona.sirls.action.CheckParsingAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+        	</action>
+
+        	<action path="/comment"
+      	        type="edu.arizona.sirls.action.InsertCommentAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+      	     <forward name="reload" path="/jsp/popup.jsp"/>
+        	</action>
+        	
+        	<action path="/demo"
+      	        type="edu.arizona.sirls.action.ShowDemoAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="false">
+      	     <forward name="reload" path="/jsp/demo.jsp"/>
+        	</action>
+        	
+        	<action path="/viewDecision"
+      	        type="edu.arizona.sirls.action.InsertCommentAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+      	     <forward name="reload" path="/jsp/popup.jsp"/>
+        	</action>
+        	
+        	<action path="/logout"
+      	        type="edu.arizona.sirls.action.UserLogoutAction"
+      	        scope="request"
+      	        validate="true">
+        	</action>
+        	
+        	<action path="/register"
+      	        type="edu.arizona.sirls.action.UserRegistrationAction"
+      	        name="registrationForm"
+      	        scope="request"
+      	        validate="true">
+      	      <forward name="reload" path="/jsp/login.jsp"/> 
+      	      <forward name="success" path="/jsp/regsuccess.jsp"/> 
+        	</action>
+        	
+        	<action path="/checkEmail"
+      	        type="edu.arizona.sirls.action.CheckDuplicateEmailAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+        	</action> 
+        	
+        	<action path="/approveRevoke"
+      	        type="edu.arizona.sirls.action.ApproveRevokeAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+        	</action>
+        	<action path="/editsettings"
+      	        type="edu.arizona.sirls.action.EditSettingsAction"
+      	        name="registrationForm"
+      	        scope="request"
+      	        validate="true">
+      	      <forward name="reload" path="/jsp/account.jsp"/> 
+        	</action>    
+        	        	
+        	<action path="/bioportalMoveTerm"
+      	        type="edu.arizona.sirls.action.BioportalMoveTermAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+                <forward name="home" path="/jsp/login.jsp"/> 
+        	</action>
+        	        	
+        	<action path="/submitToBioportal"
+      	        type="edu.arizona.sirls.action.BioportalSubmitAction"
+      	        name="bioportalForm"
+      	        scope="request"
+      	        validate="true">
+      	      <forward name="reload" path="/jsp/bioportal_term.jsp"/>
+      	      <forward name="success" path="/jsp/bioportal_submission.jsp"/> 
+              <forward name="home" path="/jsp/login.jsp"/>
+              <forward name="error" path="/jsp/error.jsp"/>
+        	</action>    
+        	
+        	<action path="/checkApprovedterms"
+      	        type="edu.arizona.sirls.action.BioportalCheckApprovedtermsAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">      	      
+              <forward name="home" path="/jsp/login.jsp"/>
+        	</action>  	        	
+        	
+        	<action path="/checkDatasetExistence"
+      	        type="edu.arizona.sirls.action.CheckDatasetExistenceAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">      	      
+              <forward name="home" path="/jsp/index.jsp"/>
+        	</action>
+        	
+        	<action path="/copyAcceptedCategorizations"
+      	        type="edu.arizona.sirls.action.CopyAcceptedCategorizationsAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">      	      
+              <forward name="home" path="/jsp/index.jsp"/>
+        	</action>  
+        	
+        	<action path="/createDataset"
+      	        type="edu.arizona.sirls.action.CreateDatasetAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">      	      
+              <forward name="home" path="/jsp/index.jsp"/>
+        	</action> 
+        	
+        	<action path="/backupDB"
+      	        type="edu.arizona.sirls.action.BackupDBAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">      	      
+              <forward name="home" path="/jsp/index.jsp"/>
+        	</action>
+        	
+        	<action path="/copySystemDecisions"
+      	        type="edu.arizona.sirls.action.CopySystemDecisionsAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">      	      
+              <forward name="home" path="/jsp/index.jsp"/>
+        	</action>
+        	
+        	<action path="/updateServerDatabase"
+      	        type="edu.arizona.sirls.action.UpdateServerDatabaseAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">      	      
+              <forward name="home" path="/jsp/index.jsp"/>
+        	</action>  
+        	
+        	<action path="/checkMergeStatus"
+      	        type="edu.arizona.sirls.action.GetMergeStatusAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">      	      
+              <forward name="home" path="/jsp/index.jsp"/>
+        	</action>  
+	</action-mappings> 
+ 
+
+ 	<!-- ========== Message Resources Definitions =========================== -->
+  	<message-resources	null="false"
+    					parameter="ApplicationResources"/>
+    
+</struts-config>

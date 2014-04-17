@@ -1,0 +1,60 @@
+#availableTags {
+	height: 420px;
+	overflow: auto;
+	width: 190px;
+	text-align: left;
+}
+
+table.tagsTable {
+	background-color: #D6F8CD;
+	border: 1px solid green;
+	margin-bottom: 1px;
+	width: 173px;
+	height: 400px;
+}
+
+.structure label {
+	color: black;
+}
+
+.dTreeNode label{
+	color: black;
+}
+
+td.tag {
+	width: 130px;
+	font-family: lucida grande,tahoma,verdana,arial,sans-serif;
+	font-size: 11px;
+	background-color: white;
+	vertical-align: middle;
+}
+
+label.entropy {
+	color: black;
+}
+
+font.cross {
+	color: blue;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+td.dragme {
+	width: 10px;
+	float: right;
+	vertical-align: middle;
+}
+
+#dragging_mask {
+	width: 150px;
+	height: 10px;
+	opacity: 0.6;
+	filter: progid : DXImageTransform.Microsoft.Alpha ( opacity = 80 );
+	position: absolute;
+	visibility: hidden;
+	top: 20px;
+	left: 20px;
+	z-index: 10;
+}

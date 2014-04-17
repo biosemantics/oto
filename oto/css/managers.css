@@ -1,0 +1,84 @@
+td {
+	padding: 1px;
+}
+
+.accepted_term {
+	font-family: lucida grande;
+	font-size: 12px;
+}
+
+div {
+	font-family: lucida grande, tahoma, verdana, arial, sans-serif;
+	font-size: 12px;
+}
+
+div a {
+	text-decoration: underline;
+	color: blue;
+}
+
+.current_a {
+	text-decoration: underline;
+	color: purple;
+	font-size: larger;
+	font-weight: bold;
+}
+
+div a hov:HOVER {
+	text-decoration: underline;
+}
+
+th.currentTab {
+	text-align: left;
+	background-color: green;
+	cursor: default;
+	color: white;
+	padding-left: 5px;
+	padding-right: 5px;	
+}
+
+th.backTab {
+	text-align: left;
+	background-color: white;
+	cursor: pointer;
+	color: black;	padding-left: 5px;
+	padding-right: 5px;
+}
+
+th.backTab a {
+	color: black;
+	text-decoration: none;
+}
+
+li {
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+li.title {
+	font-weight: bold;
+	font-size: 13px;
+	padding-top: 5px;
+}
+
+li.subTitle {
+	list-style: none;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 4px;
+	
+}
+
+li.simpleText {
+	list-style: none;
+	padding-left: 20px;
+}
+
+font.number {
+	color: green;
+	font-weight: bold;
+}
+
+font.name {
+	font-weight: bold;
+}

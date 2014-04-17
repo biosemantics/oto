@@ -1,0 +1,70 @@
+#Database
+databaseName=
+databaseUser=
+databasePassword=
+
+#Bioportal related
+bioportalUrl=http://rest.bioontology.org/bioportal/
+bioportalUserId=
+bioportalApiKey=
+
+#Glossary on Git related
+gitUser=
+gitPassword=
+gitAuthorName=
+gitAuthorEmail=
+gitCommitterName=
+gitCommitterEmail=
+gitRepository=https://github.com/biosemantics/glossaries.git
+gitLocalPath=
+
+#where to store glossary files before commit to github
+GLOSSARY_FILE_PATH=
+
+#recipient of new glossary commit notification: email address
+GLOSSARY_COMMIT_RECIPIENT=
+
+#the folder to store source files
+SOURCE_FILE_PATH=
+
+#the file to backup all users: for old CharaParser authentication
+USER_FILE_PATH=
+
+#the url of OTO: 
+URL=http://biosemantics.arizona.edu/OTO/
+
+#recipient of new registration notification: email address
+NEW_REGISTRATION_RECIPIENT=
+
+#whether to print out running time or not. For evaluation only: yes or no
+TO_PRINT_TIME=no
+
+#how many rows to be displayed in manage categorization/synonyms page: default 200
+ROW_PER_PAGE=200
+
+#the absolute path of mysqldump, will be used in db backup
+MYSQLDUMP_LOCATION=
+
+#when to store the db backup files, will be used in db backup
+BACKUP_FILE_PATH=
+
+#the url of downloading files
+DOWNLOAD_URL=http://biosemantics.arizona.edu/OTO/downloadFiles/
+
+#the os of server: linux or windows or mac
+OS=linux
+
+#OTO email username
+OTO_EMAIL_USER=
+
+#OTO email password
+OTO_EMAIL_PASSWORD=
+
+#OTO email display address
+OTO_EMAIL_DISPLAY_ADDRESS=
+
+#OTO email SMTP
+OTO_EMAIL_SMTP=
+
+#OTO email show name
+OTO_EMAIL_SHOWNAME=

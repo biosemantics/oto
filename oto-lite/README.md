@@ -1,2 +1,2 @@
-otoLite
+oto-lite
 =======

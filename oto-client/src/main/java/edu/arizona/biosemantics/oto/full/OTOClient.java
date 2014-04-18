@@ -5,8 +5,6 @@ import java.util.List;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
-
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.sun.jersey.api.client.Client;
@@ -14,14 +12,12 @@ import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.client.filter.LoggingFilter;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 
-import edu.arizona.biosemantics.oto.full.beans.Category;
-import edu.arizona.biosemantics.oto.full.beans.GlossaryDictionaryEntry;
-import edu.arizona.biosemantics.oto.full.beans.GlossaryDownload;
-import edu.arizona.biosemantics.oto.lite.beans.Download;
+import edu.arizona.biosemantics.oto.model.Category;
+import edu.arizona.biosemantics.oto.model.GlossaryDictionaryEntry;
+import edu.arizona.biosemantics.oto.model.GlossaryDownload;
 
 
 

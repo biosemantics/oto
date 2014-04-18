@@ -1,13 +1,7 @@
 package edu.arizona.biosemantics.oto.lite;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import edu.arizona.biosemantics.oto.lite.beans.Download;
-import edu.arizona.biosemantics.oto.lite.beans.Sentence;
-import edu.arizona.biosemantics.oto.lite.beans.Term;
-import edu.arizona.biosemantics.oto.lite.beans.Upload;
-import edu.arizona.biosemantics.oto.lite.beans.UploadResult;
+import edu.arizona.biosemantics.oto.model.lite.Download;
+import edu.arizona.biosemantics.oto.model.lite.UploadResult;
 
 
 

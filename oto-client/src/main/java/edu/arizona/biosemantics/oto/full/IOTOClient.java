@@ -1,13 +1,9 @@
 package edu.arizona.biosemantics.oto.full;
 import java.util.List;
 
-import com.sun.jersey.api.client.WebResource;
-
-import edu.arizona.biosemantics.oto.full.beans.Category;
-import edu.arizona.biosemantics.oto.full.beans.GlossaryDictionaryEntry;
-import edu.arizona.biosemantics.oto.full.beans.GlossaryDownload;
-import edu.arizona.biosemantics.oto.lite.beans.Download;
-import edu.arizona.biosemantics.oto.lite.beans.Upload;
+import edu.arizona.biosemantics.oto.model.Category;
+import edu.arizona.biosemantics.oto.model.GlossaryDictionaryEntry;
+import edu.arizona.biosemantics.oto.model.GlossaryDownload;
 
 
 

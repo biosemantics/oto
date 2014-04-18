@@ -4,20 +4,20 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import edu.arizona.biosemantics.oto.beans.LocalGlossary;
-import edu.arizona.biosemantics.oto.beans.TermCategory;
-import edu.arizona.biosemantics.oto.beans.TermSynonym;
-import edu.arizona.biosemantics.oto.beans.WordRole;
 import edu.arizona.biosemantics.oto.full.OTOClient;
-import edu.arizona.biosemantics.oto.full.beans.GlossaryDownload;
 import edu.arizona.biosemantics.oto.lite.OTOLiteClient;
-import edu.arizona.biosemantics.oto.lite.beans.Decision;
-import edu.arizona.biosemantics.oto.lite.beans.Download;
-import edu.arizona.biosemantics.oto.lite.beans.Sentence;
-import edu.arizona.biosemantics.oto.lite.beans.Synonym;
-import edu.arizona.biosemantics.oto.lite.beans.Term;
-import edu.arizona.biosemantics.oto.lite.beans.Upload;
-import edu.arizona.biosemantics.oto.lite.beans.UploadResult;
+import edu.arizona.biosemantics.oto.model.GlossaryDownload;
+import edu.arizona.biosemantics.oto.model.LocalGlossary;
+import edu.arizona.biosemantics.oto.model.TermCategory;
+import edu.arizona.biosemantics.oto.model.TermSynonym;
+import edu.arizona.biosemantics.oto.model.WordRole;
+import edu.arizona.biosemantics.oto.model.lite.Decision;
+import edu.arizona.biosemantics.oto.model.lite.Download;
+import edu.arizona.biosemantics.oto.model.lite.Sentence;
+import edu.arizona.biosemantics.oto.model.lite.Synonym;
+import edu.arizona.biosemantics.oto.model.lite.Term;
+import edu.arizona.biosemantics.oto.model.lite.Upload;
+import edu.arizona.biosemantics.oto.model.lite.UploadResult;
 
 
 public class Main {

@@ -3,21 +3,18 @@ package edu.arizona.biosemantics.oto.lite;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.client.filter.LoggingFilter;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 
-import edu.arizona.biosemantics.oto.lite.beans.Download;
-import edu.arizona.biosemantics.oto.lite.beans.Upload;
-import edu.arizona.biosemantics.oto.lite.beans.UploadResult;
-
+import edu.arizona.biosemantics.oto.model.lite.Download;
+import edu.arizona.biosemantics.oto.model.lite.Upload;
+import edu.arizona.biosemantics.oto.model.lite.UploadResult;
 
 public class OTOLiteClient implements IOTOLiteClient {
 

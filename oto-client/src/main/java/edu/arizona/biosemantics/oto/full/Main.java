@@ -1,11 +1,5 @@
 package edu.arizona.biosemantics.oto.full;
 
-import java.util.List;
-
-import edu.arizona.biosemantics.oto.beans.TermCategory;
-import edu.arizona.biosemantics.oto.full.beans.Category;
-import edu.arizona.biosemantics.oto.full.beans.GlossaryDictionaryEntry;
-import edu.arizona.biosemantics.oto.full.beans.GlossaryDownload;
 
 
 

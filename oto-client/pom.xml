@@ -10,6 +10,17 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
+	<repositories>
+		<repository>
+			<id>playground-releases</id>
+			<url>http://128.196.105.149:8081/nexus/content/repositories/releases/</url>
+		</repository>
+		<repository>
+			<id>playground-snapshots</id>
+			<url>http://128.196.105.149:8081/nexus/content/repositories/snapshots/</url>
+		</repository>
+	</repositories>
+	
 	<dependencies>
 		<dependency>
 			<groupId>com.google.inject</groupId>
@@ -30,6 +41,11 @@
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-json</artifactId>
 			<version>1.17.1</version>
+		</dependency>
+		<dependency>
+		  <groupId>edu.arizona.biosemantics.oto</groupId>
+		  <artifactId>oto-common</artifactId>
+		  <version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	

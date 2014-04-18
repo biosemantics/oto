@@ -1,13 +1,13 @@
-<%@page import="edu.arizona.sirls.beans.SynBean"%>
+<%@page import="edu.arizona.biosemantics.beans.SynBean"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@ page import="edu.arizona.sirls.util.SpecificReport"%>
-<%@ page import="edu.arizona.sirls.beans.SessionDataManager"%>
-<%@ page import="edu.arizona.sirls.beans.SpecificReportBean"%>
-<%@ page import="edu.arizona.sirls.beans.User"%>
-<%@ page import="edu.arizona.sirls.beans.Term"%>
-<%@ page import="edu.arizona.sirls.beans.DecisionBean"%>
-<%@ page import="edu.arizona.sirls.beans.CommentBean"%>
+<%@ page import="edu.arizona.biosemantics.util.SpecificReport"%>
+<%@ page import="edu.arizona.biosemantics.beans.SessionDataManager"%>
+<%@ page import="edu.arizona.biosemantics.beans.SpecificReportBean"%>
+<%@ page import="edu.arizona.biosemantics.beans.User"%>
+<%@ page import="edu.arizona.biosemantics.beans.Term"%>
+<%@ page import="edu.arizona.biosemantics.beans.DecisionBean"%>
+<%@ page import="edu.arizona.biosemantics.beans.CommentBean"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.text.SimpleDateFormat"%>
 <html>

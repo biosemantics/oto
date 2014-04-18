@@ -1,5 +1,5 @@
-<%@ page import="edu.arizona.sirls.beans.SessionDataManager"%>
-<%@ page import="edu.arizona.sirls.beans.User"%>
+<%@ page import="edu.arizona.biosemantics.beans.SessionDataManager"%>
+<%@ page import="edu.arizona.biosemantics.beans.User"%>
 <%
 	User user = ((SessionDataManager) session
 			.getAttribute("sessionDataMgr")).getUser();

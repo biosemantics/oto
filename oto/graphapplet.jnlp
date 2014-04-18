@@ -12,7 +12,7 @@
     </resources>
     <applet-desc 
          name="Graph Applet"
-         main-class="edu.arizona.sirls.graph.GraphApplet"
+         main-class="edu.arizona.biosemantics.graph.GraphApplet"
          width="300"
          height="300">
      </applet-desc>

@@ -2,8 +2,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.ArrayList"%>
-<%@ page import="edu.arizona.sirls.beans.SessionDataManager"%>
-<%@ page import="edu.arizona.sirls.beans.User"%>
+<%@ page import="edu.arizona.biosemantics.beans.SessionDataManager"%>
+<%@ page import="edu.arizona.biosemantics.beans.User"%>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>

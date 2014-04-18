@@ -1,14 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<%@page import="edu.arizona.sirls.db.CharacterDBAccess"%>
-<%@page import="edu.arizona.sirls.beans.TermDecision"%>
+<%@page import="edu.arizona.biosemantics.db.CharacterDBAccess"%>
+<%@page import="edu.arizona.biosemantics.beans.TermDecision"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.HashMap"%>
-<%@ page import="edu.arizona.sirls.beans.SessionDataManager"%>
-<%@ page import="edu.arizona.sirls.beans.GlossaryNameMapper"%>
-<%@ page import="edu.arizona.sirls.beans.User"%>
-<%@ page import="edu.arizona.sirls.util.Utilities"%>
+<%@ page import="edu.arizona.biosemantics.beans.SessionDataManager"%>
+<%@ page import="edu.arizona.biosemantics.beans.GlossaryNameMapper"%>
+<%@ page import="edu.arizona.biosemantics.beans.User"%>
+<%@ page import="edu.arizona.biosemantics.util.Utilities"%>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>

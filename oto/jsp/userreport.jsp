@@ -4,9 +4,9 @@
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.HashMap"%>
 <%@ page import="java.util.Set"%>
-<%@ page import="edu.arizona.sirls.beans.SessionDataManager"%>
-<%@ page import="edu.arizona.sirls.beans.User"%>
-<%@ page import="edu.arizona.sirls.beans.DecisionBean"%>
+<%@ page import="edu.arizona.biosemantics.beans.SessionDataManager"%>
+<%@ page import="edu.arizona.biosemantics.beans.User"%>
+<%@ page import="edu.arizona.biosemantics.beans.DecisionBean"%>
 <%@ page import="java.text.SimpleDateFormat"%>
 <%@ page import="java.util.Random"%>
 

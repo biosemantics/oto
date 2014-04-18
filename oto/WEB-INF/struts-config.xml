@@ -11,13 +11,13 @@
     	
     	<!-- ======BEGIN==== Form Bean Definitions============================ -->
     	    	<form-bean  name="generalForm"
-    	            type="edu.arizona.sirls.form.GeneralForm"/>
+    	            type="edu.arizona.biosemantics.form.GeneralForm"/>
     	        <form-bean  name="registrationForm"
-    	            type="edu.arizona.sirls.form.RegistrationForm"/>    	            
+    	            type="edu.arizona.biosemantics.form.RegistrationForm"/>    	            
     	        <form-bean  name="loginForm"
-    	            type="edu.arizona.sirls.form.UserLoginForm"/>
+    	            type="edu.arizona.biosemantics.form.UserLoginForm"/>
     	        <form-bean  name="bioportalForm"
-    	            type="edu.arizona.sirls.form.BioportalForm"/>
+    	            type="edu.arizona.biosemantics.form.BioportalForm"/>
     	<!-- =======END===== Form Bean Definitions=================================== -->
    	
     		
@@ -125,7 +125,7 @@
 
   <!-- ==================BEGIN=========Action Mapping Definition for Login================== -->
     		<action	path="/validateLogin"
-               	type="edu.arizona.sirls.action.UserLoginAction"
+               	type="edu.arizona.biosemantics.action.UserLoginAction"
                	name="loginForm"
 				scope="request"
               	input="/login.jsp"
@@ -136,7 +136,7 @@
   <!-- ==================END========Action Mapping Definition for Login===================== --> 
   			
   	        <action path="/groupTerms"
-      	        type="edu.arizona.sirls.action.DataSetAction"
+      	        type="edu.arizona.biosemantics.action.DataSetAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -145,7 +145,7 @@
         	</action>
         	
         	<action path="/getPass"
-      	        type="edu.arizona.sirls.action.UserResetPasswordAction"
+      	        type="edu.arizona.biosemantics.action.UserResetPasswordAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -153,7 +153,7 @@
         	</action>
         	
         	<action path="/updatePasswordToEncrypted"
-      	        type="edu.arizona.sirls.action.UserUpdatePasswordToEncrypted"
+      	        type="edu.arizona.biosemantics.action.UserUpdatePasswordToEncrypted"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -166,7 +166,7 @@
         	</action>
         	
         	<action path="/test"
-      	        type="edu.arizona.sirls.action.DataSetAction"
+      	        type="edu.arizona.biosemantics.action.DataSetAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -175,7 +175,7 @@
         	</action>
         	
         	<action path="/hierarchy"
-        		type="edu.arizona.sirls.action.DataSetAction"
+        		type="edu.arizona.biosemantics.action.DataSetAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -184,7 +184,7 @@
         	</action>
         	
         	<action path="/download"
-        		type="edu.arizona.sirls.action.DownloadAction"
+        		type="edu.arizona.biosemantics.action.DownloadAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -193,7 +193,7 @@
         	</action>
         	
         	<action path="/order"
-        		type="edu.arizona.sirls.action.DataSetAction"
+        		type="edu.arizona.biosemantics.action.DataSetAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -202,35 +202,35 @@
         	</action>
 
   	        <action path="/context"
-      	        type="edu.arizona.sirls.action.GetContextAction"
+      	        type="edu.arizona.biosemantics.action.GetContextAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
         	</action>
         	
         	<action path="/glossary"
-      	        type="edu.arizona.sirls.action.GetGlossaryAction"
+      	        type="edu.arizona.biosemantics.action.GetGlossaryAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
         	</action>
         	
         	<action path="/getUserReport"
-      	        type="edu.arizona.sirls.action.GetUserReportAction"
+      	        type="edu.arizona.biosemantics.action.GetUserReportAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
         	</action>
         	  
   	        <action path="/file"
-      	        type="edu.arizona.sirls.action.FileAction"
+      	        type="edu.arizona.biosemantics.action.FileAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
         	</action>
         	
         	 <action path="/finishConfirming"
-      	        type="edu.arizona.sirls.action.FinishConfirmingAction"
+      	        type="edu.arizona.biosemantics.action.FinishConfirmingAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -238,7 +238,7 @@
         	</action>
         	
         	<action path="/mergingDatasets"
-      	        type="edu.arizona.sirls.action.MergeDatasetsAction"
+      	        type="edu.arizona.biosemantics.action.MergeDatasetsAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -246,7 +246,7 @@
         	</action>
         	
         	<action path="/reopenDataset"
-      	        type="edu.arizona.sirls.action.ReopenDatasetAction"
+      	        type="edu.arizona.biosemantics.action.ReopenDatasetAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -254,7 +254,7 @@
         	</action>
         	
         	<action path="/deleteDataset"
-      	        type="edu.arizona.sirls.action.DeleteDatasetAction"
+      	        type="edu.arizona.biosemantics.action.DeleteDatasetAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -262,7 +262,7 @@
         	</action>
         	
         	<action path="/saveGroup"
-      	        type="edu.arizona.sirls.action.SaveGroupAction"
+      	        type="edu.arizona.biosemantics.action.SaveGroupAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -271,7 +271,7 @@
         	</action> 
         	
         	<action path="/saveTree"
-      	        type="edu.arizona.sirls.action.SaveTreeAction"
+      	        type="edu.arizona.biosemantics.action.SaveTreeAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -280,28 +280,28 @@
         	</action> 
         	
         	<action path="/saveOrder"
-      	        type="edu.arizona.sirls.action.SaveOrderAction"
+      	        type="edu.arizona.biosemantics.action.SaveOrderAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
         	</action> 
         	
         	<action path="/saveDecisionByManager"
-      	        type="edu.arizona.sirls.action.saveDecisionByManager"
+      	        type="edu.arizona.biosemantics.action.saveDecisionByManager"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
         	</action> 
         	         	 			
         	<action path="/checkDataSet"
-      	        type="edu.arizona.sirls.action.CheckParsingAction"
+      	        type="edu.arizona.biosemantics.action.CheckParsingAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
         	</action>
 
         	<action path="/comment"
-      	        type="edu.arizona.sirls.action.InsertCommentAction"
+      	        type="edu.arizona.biosemantics.action.InsertCommentAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -309,7 +309,7 @@
         	</action>
         	
         	<action path="/demo"
-      	        type="edu.arizona.sirls.action.ShowDemoAction"
+      	        type="edu.arizona.biosemantics.action.ShowDemoAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="false">
@@ -317,7 +317,7 @@
         	</action>
         	
         	<action path="/viewDecision"
-      	        type="edu.arizona.sirls.action.InsertCommentAction"
+      	        type="edu.arizona.biosemantics.action.InsertCommentAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -325,13 +325,13 @@
         	</action>
         	
         	<action path="/logout"
-      	        type="edu.arizona.sirls.action.UserLogoutAction"
+      	        type="edu.arizona.biosemantics.action.UserLogoutAction"
       	        scope="request"
       	        validate="true">
         	</action>
         	
         	<action path="/register"
-      	        type="edu.arizona.sirls.action.UserRegistrationAction"
+      	        type="edu.arizona.biosemantics.action.UserRegistrationAction"
       	        name="registrationForm"
       	        scope="request"
       	        validate="true">
@@ -340,20 +340,20 @@
         	</action>
         	
         	<action path="/checkEmail"
-      	        type="edu.arizona.sirls.action.CheckDuplicateEmailAction"
+      	        type="edu.arizona.biosemantics.action.CheckDuplicateEmailAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
         	</action> 
         	
         	<action path="/approveRevoke"
-      	        type="edu.arizona.sirls.action.ApproveRevokeAction"
+      	        type="edu.arizona.biosemantics.action.ApproveRevokeAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
         	</action>
         	<action path="/editsettings"
-      	        type="edu.arizona.sirls.action.EditSettingsAction"
+      	        type="edu.arizona.biosemantics.action.EditSettingsAction"
       	        name="registrationForm"
       	        scope="request"
       	        validate="true">
@@ -361,7 +361,7 @@
         	</action>    
         	        	
         	<action path="/bioportalMoveTerm"
-      	        type="edu.arizona.sirls.action.BioportalMoveTermAction"
+      	        type="edu.arizona.biosemantics.action.BioportalMoveTermAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -369,7 +369,7 @@
         	</action>
         	        	
         	<action path="/submitToBioportal"
-      	        type="edu.arizona.sirls.action.BioportalSubmitAction"
+      	        type="edu.arizona.biosemantics.action.BioportalSubmitAction"
       	        name="bioportalForm"
       	        scope="request"
       	        validate="true">
@@ -380,7 +380,7 @@
         	</action>    
         	
         	<action path="/checkApprovedterms"
-      	        type="edu.arizona.sirls.action.BioportalCheckApprovedtermsAction"
+      	        type="edu.arizona.biosemantics.action.BioportalCheckApprovedtermsAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">      	      
@@ -388,7 +388,7 @@
         	</action>  	        	
         	
         	<action path="/checkDatasetExistence"
-      	        type="edu.arizona.sirls.action.CheckDatasetExistenceAction"
+      	        type="edu.arizona.biosemantics.action.CheckDatasetExistenceAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">      	      
@@ -396,7 +396,7 @@
         	</action>
         	
         	<action path="/copyAcceptedCategorizations"
-      	        type="edu.arizona.sirls.action.CopyAcceptedCategorizationsAction"
+      	        type="edu.arizona.biosemantics.action.CopyAcceptedCategorizationsAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">      	      
@@ -404,7 +404,7 @@
         	</action>  
         	
         	<action path="/createDataset"
-      	        type="edu.arizona.sirls.action.CreateDatasetAction"
+      	        type="edu.arizona.biosemantics.action.CreateDatasetAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">      	      
@@ -412,7 +412,7 @@
         	</action> 
         	
         	<action path="/backupDB"
-      	        type="edu.arizona.sirls.action.BackupDBAction"
+      	        type="edu.arizona.biosemantics.action.BackupDBAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">      	      
@@ -420,7 +420,7 @@
         	</action>
         	
         	<action path="/copySystemDecisions"
-      	        type="edu.arizona.sirls.action.CopySystemDecisionsAction"
+      	        type="edu.arizona.biosemantics.action.CopySystemDecisionsAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">      	      
@@ -428,7 +428,7 @@
         	</action>
         	
         	<action path="/updateServerDatabase"
-      	        type="edu.arizona.sirls.action.UpdateServerDatabaseAction"
+      	        type="edu.arizona.biosemantics.action.UpdateServerDatabaseAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">      	      
@@ -436,7 +436,7 @@
         	</action>  
         	
         	<action path="/checkMergeStatus"
-      	        type="edu.arizona.sirls.action.GetMergeStatusAction"
+      	        type="edu.arizona.biosemantics.action.GetMergeStatusAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">      	      

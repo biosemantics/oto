@@ -3,7 +3,7 @@ package edu.arizona.sirls.rest.db;
 import java.sql.SQLException;
 import java.util.List;
 
-import edu.arizona.sirls.rest.beans.Term;
+import edu.arizona.biosemantics.oto.model.lite.Term;
 
 public class TermDAO extends AbstractDAO {
 

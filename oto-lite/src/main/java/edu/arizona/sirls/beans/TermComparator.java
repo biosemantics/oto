@@ -1,6 +1,6 @@
 package edu.arizona.sirls.beans;
 
-import java.util.*;
+import java.util.Comparator;
 
 public class TermComparator implements Comparator<Term>{
 

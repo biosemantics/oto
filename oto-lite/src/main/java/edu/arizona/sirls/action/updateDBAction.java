@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+
 import edu.arizona.sirls.db.UpdateDBAccess;
 
 public class updateDBAction extends ParserAction {

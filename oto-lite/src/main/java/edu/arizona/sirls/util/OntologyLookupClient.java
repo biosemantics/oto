@@ -1,8 +1,9 @@
 package edu.arizona.sirls.util;
 
+import javax.xml.namespace.QName;
+
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
-import javax.xml.namespace.QName;
 
 public class OntologyLookupClient {
 	public void test() {

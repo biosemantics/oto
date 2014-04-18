@@ -5,8 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import edu.arizona.sirls.rest.beans.Upload;
-import edu.arizona.sirls.rest.beans.UploadResult;
+import edu.arizona.biosemantics.oto.model.lite.Upload;
+import edu.arizona.biosemantics.oto.model.lite.UploadResult;
 import edu.arizona.sirls.util.Encrypt;
 import edu.arizona.sirls.util.Utilities;
 

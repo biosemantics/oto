@@ -14,9 +14,9 @@ import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.arizona.sirls.rest.beans.Download;
-import edu.arizona.sirls.rest.beans.Upload;
-import edu.arizona.sirls.rest.beans.UploadResult;
+import edu.arizona.biosemantics.oto.model.lite.Download;
+import edu.arizona.biosemantics.oto.model.lite.Upload;
+import edu.arizona.biosemantics.oto.model.lite.UploadResult;
 import edu.arizona.sirls.rest.db.DownloadDAO;
 import edu.arizona.sirls.rest.db.UploadDAO;
 

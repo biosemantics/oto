@@ -1,6 +1,6 @@
 package edu.arizona.sirls.rest.db;
 
-import edu.arizona.sirls.rest.beans.Download;
+import edu.arizona.biosemantics.oto.model.lite.Download;
 
 public class DownloadDAO extends AbstractDAO {
 

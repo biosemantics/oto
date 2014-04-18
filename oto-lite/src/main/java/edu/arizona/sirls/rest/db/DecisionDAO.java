@@ -2,29 +2,27 @@ package edu.arizona.sirls.rest.db;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.arizona.sirls.rest.beans.Decision;
-import edu.arizona.sirls.rest.beans.Synonym;
+import edu.arizona.biosemantics.oto.model.lite.Decision;
 
-public class SynonymDAO extends AbstractDAO {
-
-	private SynonymDAO() throws Exception {
+public class DecisionDAO extends AbstractDAO {
+	
+	private DecisionDAO() throws Exception {
 		super();
 	}
 
-	private static SynonymDAO instance;
+	private static DecisionDAO instance;
 	
-	public static SynonymDAO getInstance() throws Exception {
+	public static DecisionDAO getInstance() throws Exception {
 		if(instance == null)
-			instance = new SynonymDAO();
+			instance = new DecisionDAO();
 		return instance;
 	}
 
-	public List<Synonym> getSynonyms(int uploadId) throws SQLException {
-		List<Synonym> result = new ArrayList<Synonym>();
+	public List<Decision> getDecisions(int uploadId) throws Exception {
+		List<Decision> result = new ArrayList<Decision>();
 		this.openConnection();
 		
 		String sql = "SELECT * FROM decisions WHERE uploadID=" + uploadId;
@@ -37,27 +35,25 @@ public class SynonymDAO extends AbstractDAO {
 			String category = resultSet.getString("category");
 			if(isMainTerm) {
 				boolean hasSynonym = false;
-				String hasSynonymSQL = "SELECT * FROM synonyms WHERE uploadID=" + uploadId + " AND mainTerm='" + mainTerm + "' AND category='" + category + "'";
+				String hasSynonymSQL = "SELECT * FROM synonyms WHERE uploadID=" + uploadId + " AND mainTerm='" + mainTerm + "' AND category='" + category +"'";
 				PreparedStatement statement = this.executeSQL(hasSynonymSQL);
 				ResultSet hasSynonymResult = statement.getResultSet();
-				
-				while(hasSynonymResult.next()) {
-					String synonym = hasSynonymResult.getString("synonym");
-					result.add(new Synonym(String.valueOf(i), normalizeTerm(mainTerm), category, synonym));
-				}
-				i++;
+				hasSynonym = hasSynonymResult.next();
 				hasSynonymResult.close();
 				statement.close();
+			
+				result.add(new Decision(String.valueOf(i++), normalizeTerm(mainTerm), category, hasSynonym));
 			}
 		}
 		this.closeConnection();
 		return result;
 	}
-	
+
 	private String normalizeTerm(String term) {
 		if(term.matches(".*_\\d")) {
 			return term.substring(0, term.lastIndexOf("_"));
 		}
 		return term;
 	}
+
 }

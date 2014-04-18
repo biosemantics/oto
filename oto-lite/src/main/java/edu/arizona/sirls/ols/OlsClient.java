@@ -1,10 +1,10 @@
 package edu.arizona.sirls.ols;
 
-import edu.arizona.sirls.ols.Query;
-import edu.arizona.sirls.ols.QueryServiceLocator;
-import javax.xml.rpc.ServiceException;
 import java.rmi.RemoteException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+
+import javax.xml.rpc.ServiceException;
 /**
  * This class will call the ontology lookup webservice and get the parent term and definition 
  * for specific term in specific ontology

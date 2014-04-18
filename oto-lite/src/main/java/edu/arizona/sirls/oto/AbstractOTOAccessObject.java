@@ -3,7 +3,7 @@ package edu.arizona.sirls.oto;
 import java.io.IOException;
 import java.util.Properties;
 
-import oto.full.OTOClient;
+import edu.arizona.biosemantics.oto.full.OTOClient;
 
 public abstract class AbstractOTOAccessObject {
 	protected String OTO_url;

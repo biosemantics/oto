@@ -10,7 +10,7 @@
 	<form-beans>
 
 		<!-- ======BEGIN==== Form Bean Definitions============================ -->
-		<form-bean name="generalForm" type="edu.arizona.sirls.form.GeneralForm" />
+		<form-bean name="generalForm" type="edu.arizona.biosemantics.oto.lite.form.GeneralForm" />
 		<!-- =======END===== Form Bean Definitions=================================== -->
 
 
@@ -21,34 +21,34 @@
 
 	<!-- ========== Action Mapping Definitions ============================== -->
 	<action-mappings>
-		<action path="/context" type="edu.arizona.sirls.action.GetContextAction"
+		<action path="/context" type="edu.arizona.biosemantics.oto.lite.action.GetContextAction"
 			name="generalForm" scope="request" validate="true">
 		</action>
 
-		<action path="/glossary" type="edu.arizona.sirls.action.GetGlossaryAction"
+		<action path="/glossary" type="edu.arizona.biosemantics.oto.lite.action.GetGlossaryAction"
 			name="generalForm" scope="request" validate="true">
 		</action>
 
-		<action path="/saveGroup" type="edu.arizona.sirls.action.SaveGroupAction"
+		<action path="/saveGroup" type="edu.arizona.biosemantics.oto.lite.action.SaveGroupAction"
 			name="generalForm" scope="request" validate="true">
 			<forward name="reload" path="/jsp/categorization.jsp" />
 			<forward name="home" path="/jsp/categorization.jsp" />
 		</action>
 
-		<action path="/deleteCategory" type="edu.arizona.sirls.action.DeleteCategoryAction"
+		<action path="/deleteCategory" type="edu.arizona.biosemantics.oto.lite.action.DeleteCategoryAction"
 			name="generalForm" scope="request" validate="true">
 		</action>
 
-		<action path="/fixTypo" type="edu.arizona.sirls.action.FixTypoAction"
+		<action path="/fixTypo" type="edu.arizona.biosemantics.oto.lite.action.FixTypoAction"
 			name="generalForm" scope="request" validate="true">
 		</action>
 		
-		<action path="/updateDB" type="edu.arizona.sirls.action.updateDBAction"
+		<action path="/updateDB" type="edu.arizona.biosemantics.oto.lite.action.updateDBAction"
 	name="generalForm" scope="request" validate="true">
 		</action>
 
 		<action path="/finishCategorization"
-			type="edu.arizona.sirls.action.FinishCategorizationAction" name="generalForm"
+			type="edu.arizona.biosemantics.oto.lite.action.FinishCategorizationAction" name="generalForm"
 			scope="request" validate="true">
 		</action>
 

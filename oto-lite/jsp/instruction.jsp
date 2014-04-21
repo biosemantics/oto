@@ -1,14 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<%@page import="edu.arizona.sirls.db.GeneralDBAccess"%>
+<%@page import="edu.arizona.biosemantics.oto.lite.db.GeneralDBAccess"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.HashMap"%>
-<%@ page import="edu.arizona.sirls.db.CategorizationDBAccess"%>
-<%@ page import="edu.arizona.sirls.beans.Upload"%>
-<%@ page import="edu.arizona.sirls.beans.Group"%>
-<%@ page import="edu.arizona.sirls.beans.SavedTerm"%>
-<%@ page import="edu.arizona.sirls.beans.Category"%>
+<%@ page import="edu.arizona.biosemantics.oto.lite.db.CategorizationDBAccess"%>
+<%@ page import="edu.arizona.biosemantics.oto.lite.beans.Upload"%>
+<%@ page import="edu.arizona.biosemantics.oto.lite.beans.Group"%>
+<%@ page import="edu.arizona.biosemantics.oto.lite.beans.SavedTerm"%>
+<%@ page import="edu.arizona.biosemantics.oto.lite.beans.Category"%>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
 	style="height:100%;">

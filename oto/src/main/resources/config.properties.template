@@ -36,6 +36,9 @@ URL=http://biosemantics.arizona.edu/OTO/
 #recipient of new registration notification: email address
 NEW_REGISTRATION_RECIPIENT=
 
+#minimum password length
+MIN_PASSWORD_LENGTH=6
+
 #whether to print out running time or not. For evaluation only: yes or no
 TO_PRINT_TIME=no
 

@@ -1,11 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <%@ page import="java.util.ArrayList"%>
-<%@ page import="edu.arizona.biosemantics.beans.SessionDataManager"%>
-<%@ page import="edu.arizona.biosemantics.db.CharacterDBAccess"%>
-<%@ page import="edu.arizona.biosemantics.beans.TermForBioportalBean"%>
-<%@ page import="edu.arizona.biosemantics.beans.TermsForBioportalBean"%>
-<%@ page import="edu.arizona.biosemantics.beans.DatasetBean"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.TermForBioportalBean"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.TermsForBioportalBean"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.DatasetBean"%>
 
 <%
 	SessionDataManager sessionDataManager = (SessionDataManager) (session

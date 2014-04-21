@@ -1,16 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@page import="edu.arizona.biosemantics.beans.TagBean"%>
-<%@page import="edu.arizona.biosemantics.beans.StructureNodeBean"%>
+<%@page import="edu.arizona.biosemantics.oto.oto.beans.TagBean"%>
+<%@page import="edu.arizona.biosemantics.oto.oto.beans.StructureNodeBean"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.HashMap"%>
-<%@ page import="edu.arizona.biosemantics.util.Utilities"%>
-<%@ page import="edu.arizona.biosemantics.beans.Order"%>
-<%@ page import="edu.arizona.biosemantics.beans.Character"%>
-<%@ page import="edu.arizona.biosemantics.beans.SessionDataManager"%>
-<%@ page import="edu.arizona.biosemantics.beans.User"%>
-<%@ page import="edu.arizona.biosemantics.db.CharacterDBAccess"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.Order"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.Character"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess"%>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>

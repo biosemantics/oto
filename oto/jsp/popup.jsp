@@ -1,13 +1,13 @@
-<%@page import="edu.arizona.biosemantics.beans.SynBean"%>
+<%@page import="edu.arizona.biosemantics.oto.oto.beans.SynBean"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@ page import="edu.arizona.biosemantics.util.SpecificReport"%>
-<%@ page import="edu.arizona.biosemantics.beans.SessionDataManager"%>
-<%@ page import="edu.arizona.biosemantics.beans.SpecificReportBean"%>
-<%@ page import="edu.arizona.biosemantics.beans.User"%>
-<%@ page import="edu.arizona.biosemantics.beans.Term"%>
-<%@ page import="edu.arizona.biosemantics.beans.DecisionBean"%>
-<%@ page import="edu.arizona.biosemantics.beans.CommentBean"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.db.SpecificReport"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.SpecificReportBean"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.Term"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.DecisionBean"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.CommentBean"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.text.SimpleDateFormat"%>
 <html>

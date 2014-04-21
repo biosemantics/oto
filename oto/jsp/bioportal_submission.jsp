@@ -2,13 +2,13 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.ArrayList"%>
-<%@ page import="edu.arizona.biosemantics.beans.SessionDataManager"%>
-<%@ page import="edu.arizona.biosemantics.db.CharacterDBAccess"%>
-<%@ page import="edu.arizona.biosemantics.beans.TermForBioportalBean"%>
-<%@ page import="edu.arizona.biosemantics.beans.BioportalSubmissionBean"%>
-<%@ page import="edu.arizona.biosemantics.beans.BioportalSubmissionsHolderBean"%>
-<%@ page import="edu.arizona.biosemantics.beans.User"%>
-<%@ page import="edu.arizona.biosemantics.beans.DatasetBean"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.TermForBioportalBean"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.BioportalSubmissionBean"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.BioportalSubmissionsHolderBean"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.DatasetBean"%>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>

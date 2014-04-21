@@ -3,11 +3,10 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.Date"%>
-<%@ page import="edu.arizona.biosemantics.util.Utilities"%>
-<%@ page import="edu.arizona.biosemantics.db.CharacterDBAccess"%>
-<%@ page import="edu.arizona.biosemantics.beans.SessionDataManager"%>
-<%@ page import="edu.arizona.biosemantics.beans.User"%>
-<%@ page import="edu.arizona.biosemantics.beans.GlossaryNameMapper"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.GlossaryNameMapper"%>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>OTO</title>

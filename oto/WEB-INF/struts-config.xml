@@ -11,13 +11,13 @@
     	
     	<!-- ======BEGIN==== Form Bean Definitions============================ -->
     	    	<form-bean  name="generalForm"
-    	            type="edu.arizona.biosemantics.form.GeneralForm"/>
+    	            type="edu.arizona.biosemantics.oto.oto.form.GeneralForm"/>
     	        <form-bean  name="registrationForm"
-    	            type="edu.arizona.biosemantics.form.RegistrationForm"/>    	            
+    	            type="edu.arizona.biosemantics.oto.oto.form.RegistrationForm"/>    	            
     	        <form-bean  name="loginForm"
-    	            type="edu.arizona.biosemantics.form.UserLoginForm"/>
+    	            type="edu.arizona.biosemantics.oto.oto.form.UserLoginForm"/>
     	        <form-bean  name="bioportalForm"
-    	            type="edu.arizona.biosemantics.form.BioportalForm"/>
+    	            type="edu.arizona.biosemantics.oto.oto.form.BioportalForm"/>
     	<!-- =======END===== Form Bean Definitions=================================== -->
    	
     		
@@ -125,7 +125,7 @@
 
   <!-- ==================BEGIN=========Action Mapping Definition for Login================== -->
     		<action	path="/validateLogin"
-               	type="edu.arizona.biosemantics.action.UserLoginAction"
+               	type="edu.arizona.biosemantics.oto.oto.action.UserLoginAction"
                	name="loginForm"
 				scope="request"
               	input="/login.jsp"
@@ -136,7 +136,7 @@
   <!-- ==================END========Action Mapping Definition for Login===================== --> 
   			
   	        <action path="/groupTerms"
-      	        type="edu.arizona.biosemantics.action.DataSetAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.DataSetAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -145,7 +145,7 @@
         	</action>
         	
         	<action path="/getPass"
-      	        type="edu.arizona.biosemantics.action.UserResetPasswordAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.UserResetPasswordAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -153,7 +153,7 @@
         	</action>
         	
         	<action path="/updatePasswordToEncrypted"
-      	        type="edu.arizona.biosemantics.action.UserUpdatePasswordToEncrypted"
+      	        type="edu.arizona.biosemantics.oto.oto.action.UserUpdatePasswordToEncrypted"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -166,7 +166,7 @@
         	</action>
         	
         	<action path="/test"
-      	        type="edu.arizona.biosemantics.action.DataSetAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.DataSetAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -175,7 +175,7 @@
         	</action>
         	
         	<action path="/hierarchy"
-        		type="edu.arizona.biosemantics.action.DataSetAction"
+        		type="edu.arizona.biosemantics.oto.oto.action.DataSetAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -184,7 +184,7 @@
         	</action>
         	
         	<action path="/download"
-        		type="edu.arizona.biosemantics.action.DownloadAction"
+        		type="edu.arizona.biosemantics.oto.oto.action.DownloadAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -193,7 +193,7 @@
         	</action>
         	
         	<action path="/order"
-        		type="edu.arizona.biosemantics.action.DataSetAction"
+        		type="edu.arizona.biosemantics.oto.oto.action.DataSetAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -202,35 +202,35 @@
         	</action>
 
   	        <action path="/context"
-      	        type="edu.arizona.biosemantics.action.GetContextAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.GetContextAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
         	</action>
         	
         	<action path="/glossary"
-      	        type="edu.arizona.biosemantics.action.GetGlossaryAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.GetGlossaryAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
         	</action>
         	
         	<action path="/getUserReport"
-      	        type="edu.arizona.biosemantics.action.GetUserReportAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.GetUserReportAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
         	</action>
         	  
   	        <action path="/file"
-      	        type="edu.arizona.biosemantics.action.FileAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.FileAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
         	</action>
         	
         	 <action path="/finishConfirming"
-      	        type="edu.arizona.biosemantics.action.FinishConfirmingAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.FinishConfirmingAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -238,7 +238,7 @@
         	</action>
         	
         	<action path="/mergingDatasets"
-      	        type="edu.arizona.biosemantics.action.MergeDatasetsAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.MergeDatasetsAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -246,7 +246,7 @@
         	</action>
         	
         	<action path="/reopenDataset"
-      	        type="edu.arizona.biosemantics.action.ReopenDatasetAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.ReopenDatasetAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -254,7 +254,7 @@
         	</action>
         	
         	<action path="/deleteDataset"
-      	        type="edu.arizona.biosemantics.action.DeleteDatasetAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.DeleteDatasetAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -262,7 +262,7 @@
         	</action>
         	
         	<action path="/saveGroup"
-      	        type="edu.arizona.biosemantics.action.SaveGroupAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.SaveGroupAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -271,7 +271,7 @@
         	</action> 
         	
         	<action path="/saveTree"
-      	        type="edu.arizona.biosemantics.action.SaveTreeAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.SaveTreeAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -280,28 +280,28 @@
         	</action> 
         	
         	<action path="/saveOrder"
-      	        type="edu.arizona.biosemantics.action.SaveOrderAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.SaveOrderAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
         	</action> 
         	
         	<action path="/saveDecisionByManager"
-      	        type="edu.arizona.biosemantics.action.saveDecisionByManager"
+      	        type="edu.arizona.biosemantics.oto.oto.action.saveDecisionByManager"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
         	</action> 
         	         	 			
         	<action path="/checkDataSet"
-      	        type="edu.arizona.biosemantics.action.CheckParsingAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.CheckParsingAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
         	</action>
 
         	<action path="/comment"
-      	        type="edu.arizona.biosemantics.action.InsertCommentAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.InsertCommentAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -309,7 +309,7 @@
         	</action>
         	
         	<action path="/demo"
-      	        type="edu.arizona.biosemantics.action.ShowDemoAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.ShowDemoAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="false">
@@ -317,7 +317,7 @@
         	</action>
         	
         	<action path="/viewDecision"
-      	        type="edu.arizona.biosemantics.action.InsertCommentAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.InsertCommentAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -325,13 +325,13 @@
         	</action>
         	
         	<action path="/logout"
-      	        type="edu.arizona.biosemantics.action.UserLogoutAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.UserLogoutAction"
       	        scope="request"
       	        validate="true">
         	</action>
         	
         	<action path="/register"
-      	        type="edu.arizona.biosemantics.action.UserRegistrationAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.UserRegistrationAction"
       	        name="registrationForm"
       	        scope="request"
       	        validate="true">
@@ -340,20 +340,20 @@
         	</action>
         	
         	<action path="/checkEmail"
-      	        type="edu.arizona.biosemantics.action.CheckDuplicateEmailAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.CheckDuplicateEmailAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
         	</action> 
         	
         	<action path="/approveRevoke"
-      	        type="edu.arizona.biosemantics.action.ApproveRevokeAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.ApproveRevokeAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
         	</action>
         	<action path="/editsettings"
-      	        type="edu.arizona.biosemantics.action.EditSettingsAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.EditSettingsAction"
       	        name="registrationForm"
       	        scope="request"
       	        validate="true">
@@ -361,7 +361,7 @@
         	</action>    
         	        	
         	<action path="/bioportalMoveTerm"
-      	        type="edu.arizona.biosemantics.action.BioportalMoveTermAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.BioportalMoveTermAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">
@@ -369,7 +369,7 @@
         	</action>
         	        	
         	<action path="/submitToBioportal"
-      	        type="edu.arizona.biosemantics.action.BioportalSubmitAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.BioportalSubmitAction"
       	        name="bioportalForm"
       	        scope="request"
       	        validate="true">
@@ -380,7 +380,7 @@
         	</action>    
         	
         	<action path="/checkApprovedterms"
-      	        type="edu.arizona.biosemantics.action.BioportalCheckApprovedtermsAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.BioportalCheckApprovedtermsAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">      	      
@@ -388,7 +388,7 @@
         	</action>  	        	
         	
         	<action path="/checkDatasetExistence"
-      	        type="edu.arizona.biosemantics.action.CheckDatasetExistenceAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.CheckDatasetExistenceAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">      	      
@@ -396,7 +396,7 @@
         	</action>
         	
         	<action path="/copyAcceptedCategorizations"
-      	        type="edu.arizona.biosemantics.action.CopyAcceptedCategorizationsAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.CopyAcceptedCategorizationsAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">      	      
@@ -404,7 +404,7 @@
         	</action>  
         	
         	<action path="/createDataset"
-      	        type="edu.arizona.biosemantics.action.CreateDatasetAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.CreateDatasetAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">      	      
@@ -412,7 +412,7 @@
         	</action> 
         	
         	<action path="/backupDB"
-      	        type="edu.arizona.biosemantics.action.BackupDBAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.BackupDBAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">      	      
@@ -420,7 +420,7 @@
         	</action>
         	
         	<action path="/copySystemDecisions"
-      	        type="edu.arizona.biosemantics.action.CopySystemDecisionsAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.CopySystemDecisionsAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">      	      
@@ -428,7 +428,7 @@
         	</action>
         	
         	<action path="/updateServerDatabase"
-      	        type="edu.arizona.biosemantics.action.UpdateServerDatabaseAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.UpdateServerDatabaseAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">      	      
@@ -436,7 +436,7 @@
         	</action>  
         	
         	<action path="/checkMergeStatus"
-      	        type="edu.arizona.biosemantics.action.GetMergeStatusAction"
+      	        type="edu.arizona.biosemantics.oto.oto.action.GetMergeStatusAction"
       	        name="generalForm"
       	        scope="request"
       	        validate="true">      	      

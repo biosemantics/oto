@@ -2,9 +2,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.ArrayList"%>
-<%@ page import="edu.arizona.biosemantics.beans.SessionDataManager"%>
-<%@ page import="edu.arizona.biosemantics.beans.User"%>
-<%@ page import="edu.arizona.biosemantics.util.Utilities"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.db.UserDataAccess"%>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -36,8 +36,8 @@
 	if (manager.getRole().equals("A")  || manager.getRole().equals("O")
 			 || manager.getRole().equals("S")) {
 
-			ArrayList<User> users = (ArrayList<User>) Utilities
-					.getAllUsers();
+		UserDataAccess userDataAccess = new UserDataAccess();
+		ArrayList<User> users = (ArrayList<User>) userDataAccess.getAllUsers();
 %>
 <table width="100%" style="border-top: 1px solid green">
 	<tr>

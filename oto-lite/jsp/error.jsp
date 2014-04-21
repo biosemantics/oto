@@ -24,7 +24,7 @@
 	%>
 	<font class="font-text-style"><%=message%></font>
 	<br></br>
-	<font class="font-text-style">Technical details of the error : <%=exception.toString()%>
+	<font class="font-text-style"><% exception.printStackTrace(); %>Technical details of the error : <%=exception.toString()%>
 	</font>
 	<jsp:include page="footer.jsp" />
 </body>

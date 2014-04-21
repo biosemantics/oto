@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-import edu.arizona.biosemantics.oto.lite.util.Encrypt;
+import edu.arizona.biosemantics.oto.common.security.Encryptor;
 
 public class UpdateDBAccess extends AbstractDBAccess {
 	private static final Logger LOGGER = Logger
@@ -55,7 +55,7 @@ public class UpdateDBAccess extends AbstractDBAccess {
 				}
 
 				for (String uploadId : uploads) {
-					String secret = Encrypt.getInstance().encrypt(uploadId);
+					String secret = Encryptor.getInstance().encrypt(uploadId);
 					sql = "update uploads set secret = '" + secret
 							+ "' where uploadID = " + uploadId;
 					stmt.executeUpdate(sql);

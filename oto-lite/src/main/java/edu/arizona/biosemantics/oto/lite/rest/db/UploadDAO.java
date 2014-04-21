@@ -7,8 +7,8 @@ import java.sql.Statement;
 
 import edu.arizona.biosemantics.oto.common.model.lite.Upload;
 import edu.arizona.biosemantics.oto.common.model.lite.UploadResult;
-import edu.arizona.biosemantics.oto.lite.util.Encrypt;
-import edu.arizona.biosemantics.oto.lite.util.Utilities;
+import edu.arizona.biosemantics.oto.common.security.Encryptor;
+import edu.arizona.biosemantics.oto.lite.db.GlossaryIDConverter;
 
 public class UploadDAO extends AbstractDAO {
 
@@ -27,7 +27,7 @@ public class UploadDAO extends AbstractDAO {
 	public UploadResult putUpload(Upload upload) throws Exception {
 		this.openConnection();				
 		
-		int glossaryId = Utilities.getGlossaryIDByName(upload.getGlossaryType());
+		int glossaryId = GlossaryIDConverter.getGlossaryIDByName(upload.getGlossaryType());
 		
 		/*
 		String sql = "SELECT glossTypeID FROM markedupdatasets.glossarytypes WHERE UPPER(glossaryName)=UPPER('" + upload.getGlossaryType() + "')";
@@ -67,7 +67,7 @@ public class UploadDAO extends AbstractDAO {
 		statement.close();
 		
 		//set secret
-		String secret = Encrypt.getInstance().encrypt(Integer.toString(uploadId));
+		String secret = Encryptor.getInstance().encrypt(Integer.toString(uploadId));
 		sql = "update uploads set secret = '" + secret +
 				"' where uploadID = " + uploadId;
 		statement = this.executeSQL(sql);

@@ -5,7 +5,10 @@ package edu.arizona.biosemantics.oto.lite.action;
  * @author Fengqiong
  */
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,14 +18,26 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.arizona.biosemantics.oto.client.oto.OTOClient;
+import edu.arizona.biosemantics.oto.common.model.GlossaryDictionaryEntry;
 import edu.arizona.biosemantics.oto.lite.beans.TermGlossaryBean;
 import edu.arizona.biosemantics.oto.lite.db.GeneralDBAccess;
+import edu.arizona.biosemantics.oto.lite.db.GlossaryIDConverter;
 import edu.arizona.biosemantics.oto.lite.db.OntologyDBAccess;
 import edu.arizona.biosemantics.oto.lite.form.GeneralForm;
-import edu.arizona.biosemantics.oto.lite.oto.QueryOTO;
-import edu.arizona.biosemantics.oto.lite.util.Utilities;
 
 public class GetGlossaryAction extends ParserAction {
+	
+	private OTOClient otoClient;
+
+	public GetGlossaryAction() throws IOException {
+		ClassLoader loader = Thread.currentThread().getContextClassLoader();
+		Properties properties = new Properties();
+		properties.load(loader.getResourceAsStream("config.properties"));
+		String url = properties.getProperty("OTO_url");
+		otoClient = new OTOClient(url);
+	}
+	
 	/** Getting the instance of logger. */
 	private static final Logger LOGGER = Logger
 			.getLogger(GetGlossaryAction.class);
@@ -56,9 +71,15 @@ public class GetGlossaryAction extends ParserAction {
 			// }
 
 			// get from OTO
-			ArrayList<TermGlossaryBean> glosses = QueryOTO.getInstance()
-					.getGlossaryInfo(term,
-							Utilities.getGlossaryNameByID(glossaryType));
+			ArrayList<TermGlossaryBean> glosses = new ArrayList<TermGlossaryBean>();
+			List<GlossaryDictionaryEntry> entryList = otoClient.getGlossaryDictionaryEntries(GlossaryIDConverter.getGlossaryNameByID(glossaryType),
+					term);
+			for (GlossaryDictionaryEntry entry : entryList) {
+				TermGlossaryBean glossary = new TermGlossaryBean(entry.getTermID(), entry.getCategory(),
+						entry.getDefinition());
+				glosses.add(glossary);
+			}
+			
 			for (TermGlossaryBean gloss : glosses) {
 				responseString.append("<glossary>");
 				responseString

@@ -12,13 +12,13 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
+import edu.arizona.biosemantics.oto.common.io.ExecCommmand;
 import edu.arizona.biosemantics.oto.lite.beans.Category;
 import edu.arizona.biosemantics.oto.lite.beans.ContextBean;
 import edu.arizona.biosemantics.oto.lite.beans.Group;
 import edu.arizona.biosemantics.oto.lite.beans.SavedTerm;
 import edu.arizona.biosemantics.oto.lite.beans.Term;
 import edu.arizona.biosemantics.oto.lite.beans.Upload;
-import edu.arizona.biosemantics.oto.lite.util.ExecCommmand;
 
 /**
  * This class is for all database access pertaining to the Character Marker

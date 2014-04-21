@@ -36,7 +36,7 @@ License
 
 Project Page
 ----------
-More information is available on the <a href="https://sites.google.com/site/biosemanticsproject/">Fine Grained Semantic Markup/a> and <a href="http://www.etc-project.org">Explorer of Taxon Concepts</a> project pages.
+More information is available on the <a href="https://sites.google.com/site/biosemanticsproject/">Fine Grained Semantic Markup</a> and <a href="http://www.etc-project.org">Explorer of Taxon Concepts</a> project pages.
 
 Modules
 ---------

@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.arizona.biosemantics.oto.client.oto.OTOClient;
 import edu.arizona.biosemantics.oto.common.model.GlossaryDictionaryEntry;
+import edu.arizona.biosemantics.oto.lite.Configuration;
 import edu.arizona.biosemantics.oto.lite.beans.TermGlossaryBean;
 import edu.arizona.biosemantics.oto.lite.db.GeneralDBAccess;
 import edu.arizona.biosemantics.oto.lite.db.GlossaryIDConverter;
@@ -31,11 +32,8 @@ public class GetGlossaryAction extends ParserAction {
 	private OTOClient otoClient;
 
 	public GetGlossaryAction() throws IOException {
-		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		Properties properties = new Properties();
-		properties.load(loader.getResourceAsStream("config.properties"));
-		String url = properties.getProperty("OTO_url");
-		otoClient = new OTOClient(url);
+		Configuration configuration = Configuration.getInstance();
+		otoClient = new OTOClient(configuration.getOtoUrl());
 	}
 	
 	/** Getting the instance of logger. */

@@ -9,9 +9,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Properties;
 
 import org.apache.log4j.Logger;
+
+import edu.arizona.biosemantics.oto.lite.Configuration;
 
 /**
  * This class is the base class for database access. All classes for accessing the database should extend this class
@@ -30,11 +31,11 @@ public abstract class AbstractDBAccess {
 	 */
 	static {
 		try {
-			ClassLoader loader = Thread.currentThread().getContextClassLoader();
-			Properties properties = new Properties(); 
-			properties.load(loader.getResourceAsStream("config.properties"));
-			dbUrl = "jdbc:mysql://localhost/" + properties.getProperty("databaseName") + "?user=" + properties.getProperty("databaseUser") + "" +
-					"&password=" + properties.getProperty("databasePassword");
+			Configuration configuration = Configuration.getInstance();
+			String databaseName = configuration.getDatabaseName();
+			String databaseUser = configuration.getDatabaseUser();
+			String databasePassword = configuration.getDatabasePassword();
+			dbUrl = "jdbc:mysql://localhost/" + databaseName + "?user=" + databaseUser + "" + "&password=" + databasePassword;
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			LOGGER.error("Couldn't find Class in DatabaseAccess" + e);

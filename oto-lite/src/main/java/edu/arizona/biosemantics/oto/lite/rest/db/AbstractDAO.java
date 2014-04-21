@@ -4,7 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Properties;
+
+import edu.arizona.biosemantics.oto.lite.Configuration;
 
 public abstract class AbstractDAO {
 
@@ -14,12 +15,10 @@ public abstract class AbstractDAO {
 	protected Connection connection;
 
 	public AbstractDAO() throws Exception {
-		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		Properties properties = new Properties(); 
-		properties.load(loader.getResourceAsStream("config.properties"));
-		this.databaseName = properties.getProperty("databaseName");
-		this.databaseUser = properties.getProperty("databaseUser");
-		this.databasePassword = properties.getProperty("databasePassword");
+		Configuration configuration = Configuration.getInstance();
+		this.databaseName = configuration.getDatabaseName();
+		this.databaseUser = configuration.getDatabaseUser();
+		this.databasePassword = configuration.getDatabasePassword();
 		Class.forName("com.mysql.jdbc.Driver");
 	}
 	

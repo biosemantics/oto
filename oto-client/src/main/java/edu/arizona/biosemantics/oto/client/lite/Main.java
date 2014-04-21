@@ -1,9 +1,7 @@
-package edu.arizona.biosemantics.oto.lite;
+package edu.arizona.biosemantics.oto.client.lite;
 
-import edu.arizona.biosemantics.oto.model.lite.Download;
-import edu.arizona.biosemantics.oto.model.lite.UploadResult;
-
-
+import edu.arizona.biosemantics.oto.common.model.lite.Download;
+import edu.arizona.biosemantics.oto.common.model.lite.UploadResult;
 
 public class Main {
 

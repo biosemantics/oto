@@ -1,9 +1,10 @@
-package edu.arizona.biosemantics.oto.full;
+package edu.arizona.biosemantics.oto.client.oto;
+
 import java.util.List;
 
-import edu.arizona.biosemantics.oto.model.Category;
-import edu.arizona.biosemantics.oto.model.GlossaryDictionaryEntry;
-import edu.arizona.biosemantics.oto.model.GlossaryDownload;
+import edu.arizona.biosemantics.oto.common.model.Category;
+import edu.arizona.biosemantics.oto.common.model.GlossaryDictionaryEntry;
+import edu.arizona.biosemantics.oto.common.model.GlossaryDownload;
 
 
 

@@ -1,4 +1,4 @@
-package edu.arizona.biosemantics.oto.full;
+package edu.arizona.biosemantics.oto.client.oto;
 
 import java.util.List;
 
@@ -15,11 +15,9 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 
-import edu.arizona.biosemantics.oto.model.Category;
-import edu.arizona.biosemantics.oto.model.GlossaryDictionaryEntry;
-import edu.arizona.biosemantics.oto.model.GlossaryDownload;
-
-
+import edu.arizona.biosemantics.oto.common.model.Category;
+import edu.arizona.biosemantics.oto.common.model.GlossaryDictionaryEntry;
+import edu.arizona.biosemantics.oto.common.model.GlossaryDownload;
 
 public class OTOClient implements IOTOClient {
 

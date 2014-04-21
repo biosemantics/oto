@@ -1,4 +1,4 @@
-package edu.arizona.biosemantics.oto.full;
+package edu.arizona.biosemantics.oto.client.oto;
 
 
 

@@ -9,7 +9,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.arizona.biosemantics.oto.lite.db.UpdateDBAccess;
 
-public class updateDBAction extends ParserAction {
+public class UpdateDBAction extends ParserAction {
 
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,

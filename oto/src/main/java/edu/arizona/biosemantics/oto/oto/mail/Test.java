@@ -3,7 +3,7 @@ package edu.arizona.biosemantics.oto.oto.mail;
 import java.util.ArrayList;
 
 
-public class test {
+public class Test {
 
 	/**
 	 * @param args

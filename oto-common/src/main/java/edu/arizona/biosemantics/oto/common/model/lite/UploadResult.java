@@ -1,4 +1,4 @@
-package edu.arizona.biosemantics.oto.model.lite;
+package edu.arizona.biosemantics.oto.common.model.lite;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

@@ -1,58 +1,48 @@
-package edu.arizona.biosemantics.oto.model;
+package edu.arizona.biosemantics.oto.common.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
+public class GlossaryDownload {
 
-public class LocalGlossary {
-
+	private String version;
 	private List<TermCategory> termCategories = new ArrayList<TermCategory>();
 	private List<TermSynonym> termSynonyms = new ArrayList<TermSynonym>();
-	private List<WordRole> wordRoles = new ArrayList<WordRole>();
 	
-	public LocalGlossary() { };
+	public GlossaryDownload() { }
 	
-	public LocalGlossary(List<TermCategory> termCategories,
-			List<TermSynonym> termSynonyms, List<WordRole> wordRoles) {
+	public GlossaryDownload(List<TermCategory> termCategories,
+			List<TermSynonym> termSynonyms, String version) {
 		super();
+		this.version = version;
 		this.termCategories = termCategories;
 		this.termSynonyms = termSynonyms;
-		this.wordRoles = wordRoles;
 	}
-
 
 	public List<TermCategory> getTermCategories() {
 		return termCategories;
 	}
 
-
 	public void setTermCategories(List<TermCategory> termCategories) {
 		this.termCategories = termCategories;
 	}
-
 
 	public List<TermSynonym> getTermSynonyms() {
 		return termSynonyms;
 	}
 
-
 	public void setTermSynonyms(List<TermSynonym> termSynonyms) {
 		this.termSynonyms = termSynonyms;
 	}
 
-
-	public List<WordRole> getWordRoles() {
-		return wordRoles;
+	public String getVersion() {
+		return version;
 	}
 
-
-	public void setWordRoles(List<WordRole> wordRoles) {
-		this.wordRoles = wordRoles;
+	public void setVersion(String version) {
+		this.version = version;
 	}
-	
-	public String toString() {
-		return termCategories.toString() + " " + termSynonyms.toString() + " " + wordRoles.toString();
-	}
-	
 }

@@ -1,12 +1,12 @@
-package edu.arizona.biosemantics.oto.model;
+package edu.arizona.biosemantics.oto.common.model.iplant;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import edu.arizona.biosemantics.oto.model.TermCategory;
-import edu.arizona.biosemantics.oto.model.TermSynonym;
+import edu.arizona.biosemantics.oto.common.model.iplant.TermCategory;
+import edu.arizona.biosemantics.oto.common.model.iplant.TermSynonym;
 
 
 @XmlRootElement

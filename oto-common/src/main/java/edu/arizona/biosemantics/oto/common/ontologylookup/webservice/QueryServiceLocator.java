@@ -1,4 +1,4 @@
-package edu.arizona.biosemantics.oto.common.ontologylookup;
+package edu.arizona.biosemantics.oto.common.ontologylookup.webservice;
 
 /**
  * provided by the ontology lookup webservice

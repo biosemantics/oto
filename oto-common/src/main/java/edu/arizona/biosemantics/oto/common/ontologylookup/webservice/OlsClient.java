@@ -1,4 +1,4 @@
-package edu.arizona.biosemantics.oto.common.ontologylookup;
+package edu.arizona.biosemantics.oto.common.ontologylookup.webservice;
 
 import java.rmi.RemoteException;
 import java.util.HashMap;

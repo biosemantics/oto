@@ -61,7 +61,6 @@
 		</font></td>
 	</tr>
 <%
-	Utilities util = new Utilities();
 	if (!cdba.isConfirmed(dataset, 3)) {			
  %>
 	<tr>

@@ -25,10 +25,19 @@ public class DecisionDAO extends AbstractDAO {
 		List<Decision> result = new ArrayList<Decision>();
 		this.openConnection();
 		
-		String sql = "SELECT * FROM decisions WHERE uploadID=" + uploadId;
+		String sourceDataset = "";
+		String sql = "SELECT * FROM uploads WHERE uploadID=" + uploadId;
 		PreparedStatement preparedStatement = this.executeSQL(sql);
 		ResultSet resultSet = preparedStatement.getResultSet();
-		int i=0; 
+		if(resultSet.next()) 
+			sourceDataset = resultSet.getString("source");
+		resultSet.close();
+		preparedStatement.close();
+		
+		sql = "SELECT * FROM decisions WHERE uploadID=" + uploadId;
+		preparedStatement = this.executeSQL(sql);
+		resultSet = preparedStatement.getResultSet();
+		int i=0; 		
 		while (resultSet.next()) {
 			boolean isMainTerm = resultSet.getBoolean("isMainTerm");
 			String mainTerm = resultSet.getString("term");
@@ -42,9 +51,11 @@ public class DecisionDAO extends AbstractDAO {
 				hasSynonymResult.close();
 				statement.close();
 			
-				result.add(new Decision(String.valueOf(i++), normalizeTerm(mainTerm), category, hasSynonym));
+				result.add(new Decision(String.valueOf(i++), normalizeTerm(mainTerm), category, hasSynonym, sourceDataset));
 			}
 		}
+		resultSet.close();
+		preparedStatement.close();
 		this.closeConnection();
 		return result;
 	}

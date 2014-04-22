@@ -6,15 +6,17 @@ public class Decision {
 	private String term;
 	private String category;
 	private boolean hasSynonym;
+	private String sourceDataset;
 	
 	public Decision() { }
 
-	public Decision(String id, String term, String category, boolean hasSynonym) {
+	public Decision(String id, String term, String category, boolean hasSynonym, String sourceDataset) {
 		super();
 		this.id = id;
 		this.term = term;
 		this.category = category;
 		this.hasSynonym = hasSynonym;
+		this.sourceDataset = sourceDataset;
 	}
 
 	public String getTerm() {
@@ -47,6 +49,14 @@ public class Decision {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getSourceDataset() {
+		return sourceDataset;
+	}
+
+	public void setSourceDataset(String sourceDataset) {
+		this.sourceDataset = sourceDataset;
 	}
 
 }

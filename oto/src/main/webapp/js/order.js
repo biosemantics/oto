@@ -1,12 +1,12 @@
 /**
  * This file contains all the dragging and saving functions for terms order
  * page. Author: Fengqiong
- 
+ * 
  * todo:
  * 
- 1. instructions 
-
- 	
+ * 1. instructions
+ * 
+ * 
  * 
  */
 
@@ -192,11 +192,11 @@ function mouse_up_handler(e) {
 					// remove the term
 					var order_tr = term_chosen.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
 					var td = term_chosen.parentNode;
-					
+
 					// set this order changed
 					var order_table = term_chosen.parentNode.parentNode.parentNode.parentNode;
 					order_table.className = "changed";
-					
+
 					td.removeChild(term_chosen);
 					clearSavingMsg();
 					if (td.getElementsByTagName('div').length == 0) {
@@ -222,7 +222,7 @@ function mouse_up_handler(e) {
 	// alert("cleared");
 	delete_drag_clone();
 	drag_clone.style["visibility"] = "hidden";
-// term_chosen.style.cursor = 'auto';
+	// term_chosen.style.cursor = 'auto';
 	is_drag = false;
 	target_cell = null;
 	term_chosen = null;
@@ -350,7 +350,7 @@ function showSelectedTerms(obj) {
 		order_group = order_group.parentNode;
 	}
 	clearAllTermsBGColor(order_group);
-	
+
 	// then highlight the terms in the base: compare one by one in the base, if
 	// contains >termName<, highlight
 	var term_bases = order_group.getElementsByClassName('term_base');
@@ -374,7 +374,7 @@ function save_order(btn) {
 	if (!hasDataToSave(baseOrder)) {
 		alert("You did not make any change in this order.");
 		return;
-	}	
+	}
 	// alert(baseOrder.innerHTML);
 
 	// the saving processing image visible
@@ -382,11 +382,10 @@ function save_order(btn) {
 	document.getElementById(orderID + "_processingSaveImage").style.visibility = 'visible';
 	var termsBoxes, i, j, k, position = 0;
 	var request = '<?xml version="1.0" encoding="UTF-8"?><orders>';
-	
-	
+
 	// base order id of this group
 	request += "<baseOrderID>" + baseOrder.id + "</baseOrderID>";
-	
+
 	// new_terms
 	var base_terms = baseOrder.getElementsByClassName('term_base');
 	for (i = 0; i < base_terms.length; i++) {
@@ -394,9 +393,9 @@ function save_order(btn) {
 			request += "<new_term>" + base_terms[i].innerHTML + "</new_term>";
 		}
 	}
-	
+
 	orders = baseOrder.getElementsByClassName('tr_order');
-	
+
 	for (k = 0; k < orders.length; k++) {
 		var order = orders[k];
 		if (hasDataToSave(order)) {
@@ -405,7 +404,7 @@ function save_order(btn) {
 			request += "<order>";
 			request += "<orderID>" + order.id + "</orderID>";
 			request += "<orderName>" + orderName + "</orderName>";
-			
+
 			// new order has explanation
 			if (order.id == null || order.id == "") {
 				var labels = order.getElementsByTagName('label');
@@ -420,25 +419,27 @@ function save_order(btn) {
 				var terms = termsBoxes[i].getElementsByTagName('div');
 				if (terms.length > 0) {
 					for (j = 0; j < terms.length; j++) {
-						request += "<term><name>" + terms[j].id + "</name><position>" + position + "</position></term>"; 
+						request += "<term><name>" + terms[j].id
+								+ "</name><position>" + position
+								+ "</position></term>";
 					}
-					position++;	
+					position++;
 				}
 			}
 			request += "</order>";
 		}
 	}
-	
+
 	request += "</orders>";
-	//alert(request);
+	// alert(request);
 
+	/*
+	 * var confirmed = confirm("NOTE: This order CANNOT be changed after saved.
+	 * Are you sure to save this order?"); if (!confirmed) {
+	 * document.getElementById(orderID +
+	 * "_processingSaveImage").style.visibility = 'hidden'; return; }
+	 */
 
-/*	var confirmed = confirm("NOTE: This order CANNOT be changed after saved. Are you sure to save this order?");
-	if (!confirmed) {
-		document.getElementById(orderID + "_processingSaveImage").style.visibility = 'hidden';
-		return;
-	}*/
-	
 	var xmlhttp;
 	if (window.XMLHttpRequest) {
 		// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -451,13 +452,13 @@ function save_order(btn) {
 		if (xmlhttp.readyState == 4) {
 			if (xmlhttp.status == 200) {
 				document.getElementById(orderID + "_processingSaveImage").style.visibility = 'hidden';
-				
+
 				// all changed set to be "" for color changing
 				var changed = baseOrder.getElementsByClassName('changed');
-				for (i = changed.length - 1; i >=0 ; i--) {
+				for (i = changed.length - 1; i >= 0; i--) {
 					changed[i].className = "";
 				}
-				//set all new_terms to be black
+				// set all new_terms to be black
 				var baseTerms = baseOrder.getElementsByClassName("term_base");
 				for (i = baseTerms.length - 1; i >= 0; i--) {
 					if (baseTerms[i].style["color"] == "red") {
@@ -466,34 +467,34 @@ function save_order(btn) {
 						break;
 					}
 				}
-				
-				//give saving message
+
+				// give saving message
 				document.getElementById(orderID + "_savingMsg").innerHTML = "Data saved successfully. ";
-				
+
 				// set hasconflict sign
 				var resultXML = xmlhttp.responseXML;
 				var returned_orders = resultXML.getElementsByTagName("orderID");
 				for (i = 0; i < returned_orders.length; i++) {
 					var returnID = returned_orders.item(i).firstChild.nodeValue;
 					for (j = 0; j < orders.length; j++) {
-						 if (returnID == orders[j].id) {
-							 var hasConflict = returned_orders.item(i).nextSibling.firstChild.nodeValue;
-							 if (hasConflict == 'true') {
-								 orders[j].getElementsByTagName("a")[0].innerHTML = "<img border='0px' style='vertical-align: middle;'"
-									+ "src='images/down.jpg' width='12px'></img>";
-							 } else {
-								 orders[j].getElementsByTagName("a")[0].innerHTML = "<img border='0px' style='vertical-align: middle;'"
+						if (returnID == orders[j].id) {
+							var hasConflict = returned_orders.item(i).nextSibling.firstChild.nodeValue;
+							if (hasConflict == 'true') {
+								orders[j].getElementsByTagName("a")[0].innerHTML = "<img border='0px' style='vertical-align: middle;'"
+										+ "src='images/down.jpg' width='12px'></img>";
+							} else {
+								orders[j].getElementsByTagName("a")[0].innerHTML = "<img border='0px' style='vertical-align: middle;'"
 										+ "src='images/view.gif' width='12px'></img>";
-							 }
-						 }
+							}
+						}
 					}
 				}
 			} else {
 				// document.getElementById(orderName + "_message").innerHTML =
 				// '<label>The server encountered an internal error while
 				// processing your request. '
-					// + 'The response returned by the server is: '
-						// + xmlhttp.statusText + "</label>";
+				// + 'The response returned by the server is: '
+				// + xmlhttp.statusText + "</label>";
 				alert("The server encountered an internal error. Please try again.");
 			}
 		}
@@ -526,7 +527,7 @@ function newTerm(btn) {
 		td.onmousedown = mouse_down_handler;
 		tr_terms.insertBefore(td, btn.parentNode);
 		tr_terms.className = "changed";
-		
+
 		var parent = tr_terms.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
 		var orders = parent.getElementsByClassName('terms_tr');
 		var i;
@@ -548,7 +549,7 @@ function newOrder(btn) {
 	if (name != null && name != '') {
 		var tr_btn = btn.parentNode.parentNode;
 		var baseOrder = tr_btn.parentNode.parentNode.parentNode.parentNode.parentNode;
-		var baseOrderID = tr_btn.parentNode.parentNode.parentNode.id;
+		var baseOrderID = baseOrder.parentNode.parentNode.id;
 		var orders_existed = baseOrder.getElementsByClassName('order');
 		var i;
 		for (i = 0; i < orders_existed.length; i++) {
@@ -559,29 +560,36 @@ function newOrder(btn) {
 		}
 
 		var explanation = prompt("Please explain the function of the order '"
-				+ name
-				+ "' you just created : \n\n *Required!");
+				+ name + "' you just created : \n\n *Required!");
 		if (!explanation || explanation == '') {
-			//alert("Please specify functin of order to create a new order. ");
+			// alert("Please specify functin of order to create a new order. ");
 			return;
 		}
 
-		
 		var tr = document.createElement('tr');
 		tr.className = "tr_order";
 
-		// <label style="color: black" title=""
-		// onclick="showSelectedTerms(this)"><%=order.getName()%></label>
-
 		var innerHTML = "<td width='15%' class='order' id='"
 				+ name
-				+ "'>"
+				+ "' "
+				+ "onmouseover='displayEditBtn(this)' onmouseout='hideEditBtn(this)' "
+				+ "orderName='"
+				+ name
+				+ "' orderID=''>"
 				+ "<label style='color: black' title = '"
 				+ explanation
 				+ "' "
 				+ "onclick='showSelectedTerms(this)'>"
 				+ name
-				+ ":</label></td>"
+				+ "</label>"
+				+ "<img align='bottom' class='editOrderName' src='images/edit.png' "
+				+ "height='14px' title='Edit Order Name' style='display: none;'"
+				+ "onclick=\"editOrderName('"
+				+ baseOrderID
+				+ "', '"
+				+ name
+				+ "')\" />"
+				+ "</td>"
 				+ "<td class='terms_order' width='85%'><table><tr class='terms_tr'>";
 		var count = tr_btn.parentNode.getElementsByClassName('term_base').length;
 		// alert(count);
@@ -644,8 +652,6 @@ function highlightThisTerm(cell) {
 	}
 }
 
-
-
 /**
  * clear all the background color for specific order group do this before
  * highlight the next term
@@ -684,4 +690,91 @@ window.onbeforeunload = function() {
 	if (hasDataToSave(document)) {
 		return ("You have unsaved changes.");
 	}
+}
+
+/* when hover on order name, display edit order name button */
+function displayEditBtn(td) {
+	var imgs = td.getElementsByClassName("editOrderName");
+	if (imgs.length > 0) {
+		var img = imgs[0];
+		img.style.display = "inline";
+	}
+}
+
+/* when mouse out order name cell, hide edit order name button */
+function hideEditBtn(td) {
+	var imgs = td.getElementsByClassName("editOrderName");
+	if (imgs.length > 0) {
+		var img = imgs[0];
+		img.style.display = "none";
+	}
+}
+
+/* change order name in selected order group */
+function editOrderName(groupID, oldName) {
+	// user input: replacement of the original term
+	var replacement = prompt("Please input new order name of order '" + oldName
+			+ "':", "");
+	if (!replacement) {
+		return;
+	}
+
+	if (replacement == oldName) {
+		return;
+	}
+
+	// check duplication
+	if ($("#group_" + groupID).find("[orderName='" + replacement + "']").length > 0) {
+		alert("Order name '" + replacement
+				+ "' already exists in this order group. ");
+		return;
+	}
+
+	// send to server
+	var XHR = createXHR();
+	if (XHR) {
+		XHR.onreadystatechange = function() {
+			if (XHR.readyState == 4) {
+				if (XHR.status == 200) {
+					if (XHR.responseText == "success") {
+						updateOrderName(groupID, oldName, replacement);
+					} else {
+						alert("Edit order name from '" + oldName + "' to '"
+								+ replacement
+								+ "' failed. Please try again later. ");
+					}
+				} else {
+					alert("Edit order name from '" + oldName + "' to '"
+							+ replacement
+							+ "' failed. Please try again later. ");
+				}
+			}
+		};
+		XHR.open("POST", 'editOrderName.do', true);
+		XHR.setRequestHeader("Content-Type",
+				"application/x-www-form-urlencoded; charset=UTF-8");
+		var x = 'value=' + groupID + ";" + oldName + ";" + replacement;
+		XHR.send(x);
+	}
+}
+
+/* update order name after successfully updated server side */
+function updateOrderName(groupID, oldName, replacement) {
+	// find the cell
+	var cell = $("#group_" + groupID).find("[orderName='" + oldName + "']")
+			.first();
+
+	// cell id, orderName, inner html of label, edit b
+	cell.attr("id", replacement);
+	cell.attr("orderName", replacement);
+	cell.find("label").first().html(replacement);
+	cell.find(".editOrderName").first().attr("onclick",
+			"editOrderName('" + groupID + "', '" + replacement + "')");
+
+	// view report link: title, onclick function
+	var viewReportLink = cell.find("a").first();
+	viewReportLink.attr("title", "View specific order report for "
+			+ replacement);
+	viewReportLink.attr("onclick", "showReport('" + cell.attr("orderID") + ":"
+			+ replacement + "')");
 }

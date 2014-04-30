@@ -22,12 +22,10 @@
 <meta http-equiv="cache-control" content="no-cache"></meta>
 <meta http-equiv="expires" content="0"></meta>
 <meta http-equiv="pragma" content="no-cache"></meta>
+<script language="javascript" src="js/jquery-1.8.3.js"></script>
 <script language="javascript" src="js/context.js"></script>
 <script language="javascript" src="js/order.js"></script>
 <script language="javascript" src="js/download.js"></script>
-<script language="javascript">
-	
-</script>
 </head>
 
 <body onload="order_init()">
@@ -75,7 +73,7 @@
 						int termsNumber = baseOrder.getTermsNumber();
 		%>
 		<div id="<%=baseOrder.getID()%>" class="order_group">
-		<table width="100%">
+		<table width="100%" id="group_<%=baseOrder.getID()%>">
 			<tr>
 				<th width="15%" class="order_base"><%=baseOrder.getName()%>:&nbsp;&nbsp;</th>
 				<th class="terms_base" width="85%">
@@ -120,9 +118,15 @@
 				for (Order order : orders) {
 			%>
 			<tr class="tr_order" id=<%=order.getID()%>>
-				<td class="order" id="<%=order.getName()%>" width="15%"><label
+				<td class="order" id="<%=order.getName()%>" width="15%"
+					onmouseover="displayEditBtn(this)"
+					onmouseout="hideEditBtn(this)" 
+					orderName="<%=order.getName()%>" orderID="<%=order.getID()%>"><label
 					style="color: black" title="<%=order.getExplanation()%>"
-					onclick="showSelectedTerms(this)"><%=order.getName()%>: </label><a
+					onclick="showSelectedTerms(this)"><%=order.getName()%></label><img
+													align="bottom" class="editOrderName" src="images/edit.png"
+													height="14px" title="Edit Order Name" style="display: none;"
+													onclick="editOrderName('<%=baseOrder.getID()%>', '<%=order.getName()%>')" />&nbsp;<a
 					href="javascript:void(0)"
 					title="View specific order report for <%=order.getName()%>"
 					onclick="showReport('<%=order.getID() + ":" + order.getName()%>')"><img border="0px"

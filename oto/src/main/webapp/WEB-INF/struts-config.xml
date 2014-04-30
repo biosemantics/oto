@@ -442,6 +442,14 @@
       	        validate="true">      	      
               <forward name="home" path="/jsp/index.jsp"/>
         	</action>  
+        	
+        	<action path="/editOrderName"
+      	        type="edu.arizona.biosemantics.oto.oto.action.EditOrderNameAction"
+      	        name="generalForm"
+      	        scope="request"
+      	        validate="true">
+        	</action>  
+        	
 	</action-mappings> 
  
 

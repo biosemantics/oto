@@ -25,7 +25,6 @@
 <meta http-equiv="cache-control" content="no-cache"></meta>
 <meta http-equiv="expires" content="0"></meta>
 <meta http-equiv="pragma" content="no-cache"></meta>
-<script language="javascript" src="js/jquery-1.8.3.js"></script>
 <script language="javascript" src="js/greyout.js"></script>
 <script language="javascript" src="js/context.js"></script>
 <script language="javascript" src="js/fader.js"></script>

@@ -1,5 +1,8 @@
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
+<%@ page
+	import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
+<script language="javascript" src="js/jquery-1.8.3.js"></script>
+<script language="javascript" src="js/menu.js"></script>
 <%
 	User user = ((SessionDataManager) session
 			.getAttribute("sessionDataMgr")).getUser();
@@ -8,7 +11,8 @@
 	System.out.println("--" + user.getLastName());
 	System.out.println("--" + user.getRole());
 	boolean showAdminPage = false;
-	if (user.getRole().equals("S") || user.getRole().equals("A") || user.getRole().equals("O")) {
+	if (user.getRole().equals("S") || user.getRole().equals("A")
+			|| user.getRole().equals("O")) {
 		showAdminPage = true;
 	}
 %>
@@ -19,7 +23,7 @@
 				<div id="nav-menu-left"></div>
 				<div id="nav-menu">
 					<!-- start of navigation -->
-					<ul style="padding-left: 5px">
+					<ul style="padding-left: 5px" class="dropdown">
 						<li><a href="gotoWelcomepage.do">Home</a></li>
 						<%
 							String dataset = ((SessionDataManager) session
@@ -47,7 +51,12 @@
 						%>
 						<li><a href="userSpecificReport.do"
 							title="This report shows all the terms you have assigned a decision">Reports</a></li>
-						<li><a href="account.do" title="Account Settings">Settings</a></li>
+						<li><a href="#">Account</a>
+							<ul class="sub_menu" id="sub_menu_accounts">
+								<li><a href="account.do"  title="Account Settings">Settings</a></li>
+								<li><a href="manageDatasets.do"  title="Manage your datasets">Manage Datasets</a></li>
+
+							</ul></li>
 						<li><a href="webService.do"
 							title="Download finalized terms sets">Web Service</a></li>
 						<%

@@ -41,7 +41,7 @@
 	%>
 	<!-- Session Validity check header End -->
 	<jsp:include page="header.jsp" />
-	<table width="100%" height="100%" border="1">
+	<table width="100%" border="1">
 		<tr>
 			<td>
 				<table align="center" width="100%" height="90%">

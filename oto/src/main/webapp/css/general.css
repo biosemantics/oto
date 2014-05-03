@@ -493,3 +493,42 @@ label.uiCloseButton {
 	margin-top: 14px;
 	padding-left: 8px
 }
+
+/*for the drop down menu*/
+ul.dropdown li.hover,ul.dropdown li:hover {
+	position: relative;
+}
+
+ul.dropdown ul {
+	width: 180px;
+	visibility: hidden;
+	position: absolute;
+	top: 100%;
+	left: 0;
+}
+
+ul.dropdown ul li {
+	font-weight: normal;
+	background: #5c9408;
+	border-bottom: 1px solid #ccc;
+}
+
+/* IE 6 & 7 Needs Inline Block */
+ul.dropdown ul li a {
+	border-right: none;
+	width: 100%;
+	display: inline-block;
+}
+
+/*vertical drop down menu*/
+#sub_menu_accounts li {
+	float: none;
+}
+
+#sub_menu_accounts {
+	padding-left: 25px;
+}
+
+#sub_menu_accounts li a {
+	background-image: none;
+}

@@ -4,9 +4,11 @@
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.Date"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
+<%@ page
+	import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.GlossaryNameMapper"%>
+<%@ page
+	import="edu.arizona.biosemantics.oto.oto.beans.GlossaryNameMapper"%>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>OTO</title>
@@ -84,7 +86,7 @@
 							<hr></hr>
 							<p>Please select a dataset prefix to start working:</p> <%
  	CharacterDBAccess cdba = new CharacterDBAccess();
- 		ArrayList<String> datasets = cdba.getUnfinishedDataSets();
+ 		ArrayList<String> datasets = cdba.getSelectableDatasets(user.getUserId());
  %>
 
 							<form id="generalForm" name="generalForm" action="groupTerms.do"
@@ -122,8 +124,20 @@
 						</td>
 						<td>&nbsp;</td>
 					</tr>
+					<tr>
+						<td style="padding-left: 100px"><font class="font-text-style">or</font></td>
+					</tr>
+					<tr>
+						<td></td>
+					</tr>
+					<tr>
+						<td style="padding-left: 80px"><input type="button"
+							name="button" value="Import"
+							class="uiButton uiButtonSpecial uiButtonMedium"
+							onclick="window.location.href='manageDatasets.do'" /></td>
+					</tr>
 
-				</table> <br></br> <br></br> <br></br>
+				</table> <br /> <br /> <br />
 			</td>
 		</tr>
 	</table>

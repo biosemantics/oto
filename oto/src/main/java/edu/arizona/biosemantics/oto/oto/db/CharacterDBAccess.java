@@ -89,8 +89,8 @@ public class CharacterDBAccess extends DatabaseAccess {
 	public CharacterDBAccess() throws Exception {
 		super();
 		configuration = Configuration.getInstance();
-		evaluateExecutionTime = configuration.getToPrintTime().equals(
-				"yes") ? true : false;
+		evaluateExecutionTime = configuration.getToPrintTime().equals("yes") ? true
+				: false;
 		row_per_page = Integer.parseInt(configuration.getRowPerPage());
 	}
 
@@ -2297,12 +2297,59 @@ public class CharacterDBAccess extends DatabaseAccess {
 	}
 
 	/**
+	 * on home page, when list selectable datasets for a user:
+	 * 
+	 * 1. dataset is not finalized
+	 * 
+	 * 2. dataset is either public or owned by given user
+	 * 
+	 * @param userID
+	 * @return
+	 * @throws Exception
+	 */
+	public ArrayList<String> getSelectableDatasets(int userID) throws Exception {
+		ArrayList<String> datasets = new ArrayList<String>();
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+
+		try {
+			conn = getConnection();
+			String query = "select prefix from datasetprefix where "
+					+ "(isPrivate = false or "
+					+ "(prefix in (select distinct dataset from dataset_owner where ownerID = ?))) "
+					+ "and "
+					+ "(grouptermsdownloadable = false or structurehierarchydownloadable = false "
+					+ "or termorderdownloadable = false) "
+					+ "order by time_last_accessed desc";
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, userID);
+			// pstmt.setString(1, schema);
+			rset = pstmt.executeQuery();
+			while (rset.next()) {
+				datasets.add(rset.getString("prefix"));
+			}
+
+		} catch (SQLException exe) {
+			exe.printStackTrace();
+			LOGGER.error("Exception in DatabaseAccess: getSelectableDatasets"
+					+ exe);
+		} finally {
+			closeConnection(pstmt, rset, conn);
+		}
+
+		return datasets;
+	}
+
+	/**
+	 * 
 	 * This method returns all the datasets that have grouped terms table
 	 * associated with them.
 	 * 
 	 * @return
 	 * @throws Exception
 	 */
+	@Deprecated
 	public ArrayList<String> getUnfinishedDataSets() throws Exception {
 
 		ArrayList<String> datasets = new ArrayList<String>();
@@ -7527,8 +7574,7 @@ public class CharacterDBAccess extends DatabaseAccess {
 			pstmt = conn.prepareStatement(reserveSpaceSQL + sql);
 			pstmt.executeQuery();
 
-			insertMetaDataIntoCsvFile(tmpFilePath + file_syns,
-					metaDataLines);
+			insertMetaDataIntoCsvFile(tmpFilePath + file_syns, metaDataLines);
 
 			if (toMoveFile) {
 				String mvCommand = "mv " + tmpFilePath + file_syns + " "
@@ -7548,8 +7594,8 @@ public class CharacterDBAccess extends DatabaseAccess {
 				pstmt = conn.prepareStatement(reserveSpaceSQL + sql);
 				pstmt.executeQuery();
 
-				insertMetaDataIntoCsvFile(
-						filePath + file_withVersion_syns, metaDataLines);
+				insertMetaDataIntoCsvFile(filePath + file_withVersion_syns,
+						metaDataLines);
 			} else {
 				// copy file to withVersion
 				String cpCommad = "cp " + filePath + file_syns + " " + filePath
@@ -7573,7 +7619,8 @@ public class CharacterDBAccess extends DatabaseAccess {
 							.isGlossaryReservedDataset(dataset)) {
 						rv = new NotifyEmail()
 								.sendNewGlossaryCommitNotification(
-										configuration.getGlossaryCommitRecipient(),
+										configuration
+												.getGlossaryCommitRecipient(),
 										dataset, files);
 					}
 				}
@@ -7676,9 +7723,9 @@ public class CharacterDBAccess extends DatabaseAccess {
 		branches.add("master");
 		branches.add("development");
 
-		GitClient gitClient = new GitClient(gitRepository, branches, gitLocalPath,
-				gitUser, gitPassword, gitAuthorName, gitAuthorEmail,
-				gitCommitterName, gitCommitterEmail);
+		GitClient gitClient = new GitClient(gitRepository, branches,
+				gitLocalPath, gitUser, gitPassword, gitAuthorName,
+				gitAuthorEmail, gitCommitterName, gitCommitterEmail);
 		if (!termCategoryFileName.equals("")) {
 			try {
 				AddResult commitResult = gitClient.addFile(glossaryFilePath
@@ -7698,8 +7745,7 @@ public class CharacterDBAccess extends DatabaseAccess {
 		if (!synFileName.equals("")) {
 			try {
 				AddResult commitResult = gitClient.addFile(glossaryFilePath
-						+ synFileName, synFileName,
-						"development",
+						+ synFileName, synFileName, "development",
 						"Regular finalize commit from OTO on termset "
 								+ dataset);
 				if (!commitResult.getDiffEntries().isEmpty()) {

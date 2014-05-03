@@ -192,9 +192,9 @@ VALUES
 ('density','The amount per unit area.'),
 ('width',''),
 ('vernation','Disposition of leaves in the bud.'),
-('variability','An entityÕs disposition to vary or change.'),
+('variability','An entityï¿½s disposition to vary or change.'),
 ('venation','Configuration of laminar vasculature as to its hierarchical organization and the dispositions of component orders.'),
-('structure','Organization of the organÕs various parts and the pattern underlying its form.');
+('structure','Organization of the organï¿½s various parts and the pattern underlying its form.');
 
 /*2012-01-14 Fengqiong*/
 alter table fna_gloss_user_terms_decisions add isActive Boolean default true;
@@ -964,3 +964,6 @@ update hymenoptera_glossary_syns_cleaned set category = 'life_stage'
 where term = 'old';
 update hymenoptera_glossary_syns_cleaned set category = 'behavior'
 where term = 'fight';
+
+/*add field: isPrivate, default false*/
+alter table datasetprefix add isPrivate Boolean default false;

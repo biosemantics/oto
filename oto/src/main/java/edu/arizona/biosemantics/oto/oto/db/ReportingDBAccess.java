@@ -584,7 +584,7 @@ public class ReportingDBAccess extends DatabaseAccess {
 
 				// get the Acceptance Status
 				String sqlAcceptance = "select term, category from " + dataset + "_confirmed_category where term = ? "
-						+ "and category = ? and accepted = ?";
+						+ "and category = ? and categoryApproved = ?";
 				pstmtTemp = conn.prepareStatement(sqlAcceptance);
 				pstmtTemp.setString(1, term);
 				pstmtTemp.setString(2, decision);
@@ -597,7 +597,7 @@ public class ReportingDBAccess extends DatabaseAccess {
 					// returnHTML += "<td></td>";
 				} else {
 					// either pending or not Accepted
-					sqlAcceptance = "select term, category from " + dataset + "_confirmed_category where term = ? and category <> ? and accepted = ?";
+					sqlAcceptance = "select term, category from " + dataset + "_confirmed_category where term = ? and category <> ? and categoryApproved = ?";
 					pstmt = conn.prepareStatement(sqlAcceptance);
 					pstmt.setString(1, term);
 					pstmt.setString(2, decision);

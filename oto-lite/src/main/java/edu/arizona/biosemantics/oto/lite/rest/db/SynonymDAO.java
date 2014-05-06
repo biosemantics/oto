@@ -42,7 +42,7 @@ public class SynonymDAO extends AbstractDAO {
 				
 				while(hasSynonymResult.next()) {
 					String synonym = hasSynonymResult.getString("synonym");
-					result.add(new Synonym(String.valueOf(i), normalizeTerm(mainTerm), category, synonym));
+					result.add(new Synonym(String.valueOf(i), normalizeTerm(mainTerm), category, normalizeTerm(synonym)));
 				}
 				i++;
 				hasSynonymResult.close();

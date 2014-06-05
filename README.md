@@ -1,10 +1,10 @@
 OTO: Ontology Term Organizer
 ---------------------
-Ontology term organizer collects grouping and relationship opinions from biologists to support consensus decisions. Besides is_a and part_of relations (the most frequently used relations in biology domains), OTO can be used to sort out ordered values in any domain. 
+Ontology term organizer collects grouping and relationship opinions from biologists to support consensus decisions. Besides `is_a` and `part_of` relations (the most frequently used relations in biology domains), OTO can be used to sort out ordered values in any domain. 
 
 Demo
 ---------------------
-A demo dataset OTO_demo has been set up at http://biosemantics.arizona.edu/OTO. Use username OTOdemo and password OTOdemopass to login
+A demo dataset OTO_demo has been set up at http://biosemantics.arizona.edu/OTO. Use username `OTOdemo` and password `OTOdemopass` to login
 
 Relevant Publications 
 ---------------------

@@ -52,6 +52,10 @@ In Eclipse you can therefore use:
 * m2e - Maven Integration for Eclipse (e.g. for Juno version: http://download.eclipse.org/releases/juno)
 * Run-jetty-run (e.g. http://run-jetty-run.googlecode.com/svn/trunk/updatesite)
 
+Please [configure your git](http://git-scm.com/book/en/Customizing-Git-Git-Configuration) for this repository as:
+* `core.autocrlf` true if you are on Windows 
+* or `core.autocrlf input` if you are on a Unix-type OS
+
 JavaDoc
 ----------
 

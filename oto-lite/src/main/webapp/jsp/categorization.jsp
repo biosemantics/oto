@@ -126,19 +126,30 @@
 	%>
 
 	<!-- upload info part -->
-	<div style="width: 100%; height: 77px; border: 1px solid #279446;">
+	<div style="width: 100%; height: 25px; border: 1px solid #279446;">
 		<table style="width: 100%">
 			<tr style="width: 100%">
 				<td width="100%"><table width="100%">
 						<tr>
 							<td width="90%">
+								<font class="font-text-style" id="dataset_info">
+								<!-- uploadID: <b><%=uploadID%></b> ( <%=upload.getNumberTerms()%> terms, upload time: <%=upload.getUploadTime()%> ) -->
+								For help, see
+								<a href="instruction.do" title="Basic instruction: Expand each term block (left side), view and select (check) the terms, and  drag the green arrow button to move terms to a category. Make as many categorizations as you can with certainty and leave terms if you can't categorize them.">Instructions</a>
+								and 
+								<a href="https://sites.google.com/site/biosemanticsproject/character-annotation-discussions/term-categorization-instruction" title="Learn Term Categorization" target="_blank">Learn Term Categorization</a></font>
+								</font>
+								
+								<!-- old header
 								<font class="font-text-style" id="dataset_info">uploadID: <b><%=uploadID%></b> ( <%=upload.getNumberTerms()%> terms, upload time: <%=upload.getUploadTime()%> )
 								<br><b>Basic instruction: </b>Expand each term block (left side), view and select (check) the terms, and  drag the green arrow button to move terms to a category.
 								Make as many categorizations as you can with certainty and leave terms if you can't categorize them. Click "Done" to finish.
 								<br><b>More instruction information</b> can be found in <a href="instruction.do" title="Instructions of completing your tasks" target="_blank">Help</a>
 								and <a href="https://sites.google.com/site/biosemanticsproject/character-annotation-discussions/term-categorization-instruction" title="Learn Term Categorization" target="_blank">Learn Term Categorization</a></font>
+								-->
+								
 							</td>
-							<%
+							<!-- Done button <%
 								if (!upload.isFinalized()) {
 							%>
 							<td width="10%" align="right"><input type="button"
@@ -148,6 +159,7 @@
 							<%
 								}
 							%>
+							-->
 						</tr>
 					</table></td>
 			</tr>

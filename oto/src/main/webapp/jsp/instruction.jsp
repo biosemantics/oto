@@ -677,6 +677,10 @@
 				<ul>
 					<li style="padding-bottom: 10px;"><font
 						class="font-text-style"><b style="color: green">Updates
+								on June 8, 2014</b><br /> 1. Make order name editable<br />
+							2. Allow user to create their own datasets and import terms. <br /></font></li>
+					<li style="padding-bottom: 10px;"><font
+						class="font-text-style"><b style="color: green">Updates
 								on September 24, 2013</b><br /> 1. Auto-scroll in categories<br />
 							2. Only super user can modify system-reserved datasets. <br />
 							3. Show "discarded" for uncategorization decisions in admin page</font></li>

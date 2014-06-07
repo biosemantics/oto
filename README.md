@@ -1,10 +1,10 @@
 OTO: Ontology Term Organizer
 ---------------------
-Ontology term organizer collects grouping and relationship opinions from biologists to support consensus decisions. Besides is_a and part_of relations (the most frequently used relations in biology domains), OTO can be used to sort out ordered values in any domain. 
+Ontology term organizer collects grouping and relationship opinions from biologists to support consensus decisions. Besides `is_a` and `part_of` relations (the most frequently used relations in biology domains), OTO can be used to sort out ordered values in any domain. 
 
 Demo
 ---------------------
-A demo dataset OTO_demo has been set up at http://biosemantics.arizona.edu/OTO. Use username OTOdemo and password OTOdemopass to login
+A demo dataset OTO_demo has been set up at http://biosemantics.arizona.edu/OTO. Use username `OTOdemo` and password `OTOdemopass` to login
 
 Relevant Publications 
 ---------------------
@@ -51,6 +51,10 @@ If you want to contribute, the source is built using Maven
 In Eclipse you can therefore use:
 * m2e - Maven Integration for Eclipse (e.g. for Juno version: http://download.eclipse.org/releases/juno)
 * Run-jetty-run (e.g. http://run-jetty-run.googlecode.com/svn/trunk/updatesite)
+
+Please [configure your git](http://git-scm.com/book/en/Customizing-Git-Git-Configuration) for this repository as:
+* `core.autocrlf` true if you are on Windows 
+* or `core.autocrlf input` if you are on a Unix-type OS
 
 JavaDoc
 ----------

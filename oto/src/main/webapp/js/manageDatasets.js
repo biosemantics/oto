@@ -64,6 +64,14 @@ function create_dataset() {
 		return;
 	}
 
+	// validate input: start with letters, can contain letters, numbers,
+	// underscore
+	var regex = /^[a-zA-Z][a-zA-Z\d_]+$/;
+	if (!regex.test(prefix)) {
+		alert("A valid dataset name must starts with letter and can only contain letters, numbers and underscore. \n\nPlease input a valid order name!");
+		return;
+	}
+
 	// send to server
 	$
 			.ajax({

@@ -509,7 +509,17 @@ function save_order(btn) {
 }
 
 function newTerm(btn) {
-	var name = prompt("Please input term name: ", "");
+	var name = prompt(
+			"Please input term name (Term name can only contain letters, numbers, space and underscore. ): ",
+			"");
+
+	// validate input
+	var regex = /^[a-zA-Z\s\d_]+$/;
+	if (!regex.test(name)) {
+		alert("A valid term name can only contain letters, numbers, space and underscore. Please input a valid term name!");
+		return;
+	}
+
 	if (name) {
 		// name cannot be existed:term_base
 		var tr_terms = btn.parentNode.parentNode;
@@ -547,7 +557,17 @@ function newTerm(btn) {
 }
 
 function newOrder(btn) {
-	var name = prompt("Please input the name of order: ", "");
+	var name = prompt(
+			"Please input the name of order (A valid order name can only contain letters, numbers, space, underscore, ( and ).): ",
+			"");
+
+	// validate input: only allow letters, numbers, space, underscore and ( )
+	var regex = /^[a-zA-Z\s\d_\(\)]+$/;
+	if (!regex.test(name)) {
+		alert("A valid order name can only contain letters, numbers, space, underscore, ( and ). Please input a valid order name!");
+		return;
+	}
+
 	if (name != null && name != '') {
 		var tr_btn = btn.parentNode.parentNode;
 		var baseOrder = tr_btn.parentNode.parentNode.parentNode.parentNode.parentNode;
@@ -715,8 +735,11 @@ function hideEditBtn(td) {
 /* change order name in selected order group */
 function editOrderName(groupID, oldName) {
 	// user input: replacement of the original term
-	var replacement = prompt("Please input new order name of order '" + oldName
-			+ "':", "");
+	var replacement = prompt(
+			"Please input new order name of order '"
+					+ oldName
+					+ "' (A valid order name can only contain letters, numbers, space, underscore, ( and ).): ",
+			"");
 	if (!replacement) {
 		return;
 	}
@@ -724,9 +747,13 @@ function editOrderName(groupID, oldName) {
 	if (replacement == oldName) {
 		return;
 	}
-	
-	//validate input: only allow letters, numbers, space and underscore
-	
+
+	// validate input: only allow letters, numbers, space, underscore and ( )
+	var regex = /^[a-zA-Z\s\d_\(\)]+$/;
+	if (!regex.test(replacement)) {
+		alert("A valid order name can only contain letters, numbers, space, underscore, ( and ). Please input a valid order name!");
+		return;
+	}
 
 	// check duplication
 	if ($("#group_" + groupID).find("[orderName='" + replacement + "']").length > 0) {

@@ -1,0 +1,77 @@
+ul.datasets {
+	padding-top: 0px;
+	margin-top: 0px;
+	font-weight: bold;
+}
+
+ul.datasets li {
+	padding: 7px;
+}
+
+ul.datasets li img {
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+ul.tasks {
+	display: none;
+	font-size: small;
+	font-weight: normal;
+}
+
+ul.tasks li {
+	vertical-align: baseline;
+}
+
+input.actionbuttons {
+	/*visibility: hidden;*/
+	display: none;
+	padding: 1px 2px 1px 2px;
+}
+
+label.datasetName {
+	font-size: 13px;
+	padding: 5px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+label.taskName {
+	padding-right: 5px;
+	font-weight: bold;
+	color: black;
+}
+
+label.statistics {
+	color: black;
+}
+
+label.systemReserved {
+	font-weight: normal;
+}
+
+input.createDataset {
+	padding: 2px 3px 2px 3px
+}
+
+tr.titleline {
+	background-color: green;
+	color: white;
+	text-align: left;
+}
+
+tr.titleline th {
+	height: 20px
+}
+
+.processingSign {
+	height: 15px;
+}
+
+.uploadForm {
+	display: none;
+	padding-left: 30px;
+	padding-top: 10px;
+}
+
+	

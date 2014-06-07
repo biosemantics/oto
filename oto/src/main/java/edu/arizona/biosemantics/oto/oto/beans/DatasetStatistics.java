@@ -3,6 +3,8 @@ package edu.arizona.biosemantics.oto.oto.beans;
 import java.util.ArrayList;
 
 public class DatasetStatistics {
+	private String datasetName;
+	private boolean isPrivate = false;
 
 	/**
 	 * page 1: categorization
@@ -15,6 +17,9 @@ public class DatasetStatistics {
 	// reviews statistics
 	private int numReviews;
 	private ArrayList<UserStatisticsBean> userStatsInCategorizationWithReview;
+	// boolean values
+	private boolean hasTerm = false;
+	private boolean hasCategorizationDecision = false;
 
 	/**
 	 * page 2: hierarchy
@@ -24,6 +29,9 @@ public class DatasetStatistics {
 	// decision statistics
 	private int numDecisionsInHierarchy;
 	private ArrayList<UserStatisticsBean> userStatsInHierarchy;
+	// boolean values
+	private boolean hasStructure = false;
+	private boolean hasTreeDecision = false;
 
 	/**
 	 * page 3: order
@@ -33,10 +41,13 @@ public class DatasetStatistics {
 	// decision statistics
 	private int numDecisionsInOrders;
 	private ArrayList<UserStatisticsBean> userStatsInOrders;
-	
+	// boolean values
+	private boolean hasOrder = false;
+	private boolean hasOrderDecision = false;
+
 	// comments statistics
-		private int numComments;
-		private ArrayList<UserStatisticsBean> userStatsInComments;
+	private int numComments;
+	private ArrayList<UserStatisticsBean> userStatsInComments;
 
 	public int getNumDecisions() {
 		return numDecisions;
@@ -44,6 +55,9 @@ public class DatasetStatistics {
 
 	public void setNumDecisions(int numDecisions) {
 		this.numDecisions = numDecisions;
+		if (numDecisions > 0) {
+			setHasCategorizationDecision(true);
+		}
 	}
 
 	public int getNumComments() {
@@ -53,7 +67,7 @@ public class DatasetStatistics {
 	public void setNumComments(int numComments) {
 		this.numComments = numComments;
 	}
-	
+
 	public int getNumReviews() {
 		return numReviews;
 	}
@@ -68,6 +82,9 @@ public class DatasetStatistics {
 
 	public void setNumTotalTerms(int numTotalTerms) {
 		this.numTotalTerms = numTotalTerms;
+		if (numTotalTerms > 0) {
+			setHasTerm(true);
+		}
 	}
 
 	public int getNumUnCategorizedTerms() {
@@ -84,6 +101,9 @@ public class DatasetStatistics {
 
 	public void setNumTotalTags(int numTotalTags) {
 		this.numTotalTags = numTotalTags;
+		if (numTotalTags > 0) {
+			setHasStructure(true);
+		}
 	}
 
 	public int getNumUnTouchedTags() {
@@ -100,6 +120,9 @@ public class DatasetStatistics {
 
 	public void setNumDecisionsInHierarchy(int numDecisionsInHierarchy) {
 		this.numDecisionsInHierarchy = numDecisionsInHierarchy;
+		if (numDecisionsInHierarchy > 0) {
+			setHasTreeDecision(true);
+		}
 	}
 
 	public int getNumTotalOrders() {
@@ -108,6 +131,9 @@ public class DatasetStatistics {
 
 	public void setNumTotalOrders(int numTotalOrders) {
 		this.numTotalOrders = numTotalOrders;
+		if (numTotalOrders > 0) {
+			setHasOrder(true);
+		}
 	}
 
 	public int getNumTotalTermsInOrders() {
@@ -124,8 +150,11 @@ public class DatasetStatistics {
 
 	public void setNumDecisionsInOrders(int numDecisionsInOrders) {
 		this.numDecisionsInOrders = numDecisionsInOrders;
+		if (numDecisionsInOrders > 0) {
+			setHasOrderDecision(true);
+		}
 	}
-	
+
 	public ArrayList<UserStatisticsBean> getUserStatsInHierarchy() {
 		return userStatsInHierarchy;
 	}
@@ -168,6 +197,70 @@ public class DatasetStatistics {
 
 	public void setNumUnTouchedTerms(int numUnTouchedTerms) {
 		this.numUnTouchedTerms = numUnTouchedTerms;
+	}
+
+	public boolean isHasTerm() {
+		return hasTerm;
+	}
+
+	public void setHasTerm(boolean hasTerm) {
+		this.hasTerm = hasTerm;
+	}
+
+	public boolean isHasCategorizationDecision() {
+		return hasCategorizationDecision;
+	}
+
+	public void setHasCategorizationDecision(boolean hasCategorizationDecision) {
+		this.hasCategorizationDecision = hasCategorizationDecision;
+	}
+
+	public boolean isHasStructure() {
+		return hasStructure;
+	}
+
+	public void setHasStructure(boolean hasStructure) {
+		this.hasStructure = hasStructure;
+	}
+
+	public boolean isHasTreeDecision() {
+		return hasTreeDecision;
+	}
+
+	public void setHasTreeDecision(boolean hasTreeDecision) {
+		this.hasTreeDecision = hasTreeDecision;
+	}
+
+	public boolean isHasOrder() {
+		return hasOrder;
+	}
+
+	public void setHasOrder(boolean hasOrder) {
+		this.hasOrder = hasOrder;
+	}
+
+	public boolean isHasOrderDecision() {
+		return hasOrderDecision;
+	}
+
+	public void setHasOrderDecision(boolean hasOrderDecision) {
+		this.hasOrderDecision = hasOrderDecision;
+	}
+
+	public String getDatasetName() {
+		return datasetName;
+	}
+
+	public void setDatasetName(String datasetName) {
+		this.datasetName = datasetName;
+	}
+
+	public boolean isPrivate() {
+		return isPrivate;
+	}
+
+	public void setPrivate(boolean isPrivate) {
+		this.isPrivate = isPrivate;
 	}
 
 }

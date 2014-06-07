@@ -6,455 +6,378 @@
 
 
 <struts-config>
-	<!-- ========== Form Bean Definitions =================================== -->   
+	<!-- ========== Form Bean Definitions =================================== -->
 	<form-beans>
-    	
-    	<!-- ======BEGIN==== Form Bean Definitions============================ -->
-    	    	<form-bean  name="generalForm"
-    	            type="edu.arizona.biosemantics.oto.oto.form.GeneralForm"/>
-    	        <form-bean  name="registrationForm"
-    	            type="edu.arizona.biosemantics.oto.oto.form.RegistrationForm"/>    	            
-    	        <form-bean  name="loginForm"
-    	            type="edu.arizona.biosemantics.oto.oto.form.UserLoginForm"/>
-    	        <form-bean  name="bioportalForm"
-    	            type="edu.arizona.biosemantics.oto.oto.form.BioportalForm"/>
-    	<!-- =======END===== Form Bean Definitions=================================== -->
-   	
-    		
+
+		<!-- ======BEGIN==== Form Bean Definitions============================ -->
+		<form-bean name="generalForm"
+			type="edu.arizona.biosemantics.oto.oto.form.GeneralForm" />
+		<form-bean name="registrationForm"
+			type="edu.arizona.biosemantics.oto.oto.form.RegistrationForm" />
+		<form-bean name="loginForm"
+			type="edu.arizona.biosemantics.oto.oto.form.UserLoginForm" />
+		<form-bean name="bioportalForm"
+			type="edu.arizona.biosemantics.oto.oto.form.BioportalForm" />
+		<form-bean name="importForm"
+			type="edu.arizona.biosemantics.oto.oto.form.ImportForm" />
+		<!-- =======END===== Form Bean Definitions=================================== -->
+
+
 	</form-beans>
 	<global-forwards>
 		<forward name="logon" path="/jsp/login.jsp" />
 		<forward name="error" path="/jsp/error.jsp" />
 	</global-forwards>
-        
-	<!-- ========== Action Mapping Definitions ============================== -->   
-	<action-mappings>     
-    	
-      	<action path="/gotoWelcomepage"
-      	        type="org.apache.struts.actions.ForwardAction"
-                parameter="/jsp/index.jsp" >
-        </action>
-        
-        <action path="/popup"
-              	type="org.apache.struts.actions.ForwardAction"
-                parameter="/jsp/popup.jsp" >
-        </action>
-        
-        <action path="/userSpecificReport"
-              	type="org.apache.struts.actions.ForwardAction"
-                parameter="/jsp/report.jsp" >
-        </action>
-        
-       <action path="/admin"
-              	type="org.apache.struts.actions.ForwardAction"
-                parameter="/jsp/management.jsp" >
-        </action>
-        
-        <action path="/manageUsers"
-              	type="org.apache.struts.actions.ForwardAction"
-                parameter="/jsp/manageUsers.jsp" >
-        </action>
-        
-        <action path="/mergeDatasets"
-              	type="org.apache.struts.actions.ForwardAction"
-                parameter="/jsp/mergeDatasets.jsp" >
-        </action>
-        
-        <action path="/mergeIntoSystem"
-              	type="org.apache.struts.actions.ForwardAction"
-                parameter="/jsp/mergeIntoSystem.jsp" >
-        </action>
-        
-        <action path="/manageCategory"
-              	type="org.apache.struts.actions.ForwardAction"
-                parameter="/jsp/manageCategory.jsp" >
-        </action>
-        
-        <action path="/managPath"
-              	type="org.apache.struts.actions.ForwardAction"
-                parameter="/jsp/manageHierarchy.jsp" >
-        </action>
-        
-        <action path="/manageOrder"
-              	type="org.apache.struts.actions.ForwardAction"
-                parameter="/jsp/manageOrder.jsp" >
-        </action>
-        
-       <action path="/account"
-              	type="org.apache.struts.actions.ForwardAction"
-                parameter="/jsp/account.jsp" >
-        </action>
-        <action path="/intro"
-              	type="org.apache.struts.actions.ForwardAction"
-                parameter="/jsp/instruction.jsp" >
-        </action>
-        
-        <action path="/webService"
-              	type="org.apache.struts.actions.ForwardAction"
-                parameter="/jsp/webservice.jsp" >
-        </action>
-        
-        <action path="/gotoDownload"
-              	type="org.apache.struts.actions.ForwardAction"
-                parameter="/jsp/download.jsp" >
-        </action>
-               <action path="/gotoLogin"
-              	type="org.apache.struts.actions.ForwardAction"
-                parameter="/jsp/login.jsp" >
-        </action>
-        
-        <action path="/ontologyLookup"
-              	type="org.apache.struts.actions.ForwardAction"
-                parameter="/jsp/bioportal_init.jsp" >
-        </action>
-        
-        <action path="/ontologyTerm"
-              	type="org.apache.struts.actions.ForwardAction"
-                parameter="/jsp/bioportal_term.jsp" >
-        </action>
-        
-        <action path="/ontologySubmissions"
-              	type="org.apache.struts.actions.ForwardAction"
-                parameter="/jsp/bioportal_submission.jsp" >
-        </action>
-        
-        <action path="/deletedSubmissions"
-              	type="org.apache.struts.actions.ForwardAction"
-                parameter="/jsp/bioportal_deletedSubmissions.jsp" >
-        </action>
 
-  <!-- ==================BEGIN=========Action Mapping Definition for Login================== -->
-    		<action	path="/validateLogin"
-               	type="edu.arizona.biosemantics.oto.oto.action.UserLoginAction"
-               	name="loginForm"
-				scope="request"
-              	input="/login.jsp"
-              	validate="true">
-			   <forward name="reload" path="/jsp/login.jsp"/>  			  
-  			   <forward name="home" path="/jsp/index.jsp"/>
-  			</action>
-  <!-- ==================END========Action Mapping Definition for Login===================== --> 
-  			
-  	        <action path="/groupTerms"
-      	        type="edu.arizona.biosemantics.oto.oto.action.DataSetAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-                <forward name="home" path="/jsp/categorize.jsp"/>
-                <forward name="reload" path="/jsp/index.jsp"/> 
-        	</action>
-        	
-        	<action path="/getPass"
-      	        type="edu.arizona.biosemantics.oto.oto.action.UserResetPasswordAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-                <forward name="home" path="/jsp/login.jsp"/> 
-        	</action>
-        	
-        	<action path="/updatePasswordToEncrypted"
-      	        type="edu.arizona.biosemantics.oto.oto.action.UserUpdatePasswordToEncrypted"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-                <forward name="home" path="/jsp/login.jsp"/> 
-        	</action>
+	<!-- ========== Action Mapping Definitions ============================== -->
+	<action-mappings>
 
-        	<action path="/manageDataset"
-              	type="org.apache.struts.actions.ForwardAction"
-                parameter="/jsp/manageDataset.jsp" >
-        	</action>
-        	
-        	<action path="/test"
-      	        type="edu.arizona.biosemantics.oto.oto.action.DataSetAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-                <forward name="home" path="/jsp/test.jsp"/>
-                <forward name="reload" path="/jsp/index.jsp"/> 
-        	</action>
-        	
-        	<action path="/hierarchy"
-        		type="edu.arizona.biosemantics.oto.oto.action.DataSetAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-                <forward name="home" path="/jsp/hierarchy.jsp"/>
-                <forward name="reload" path="/jsp/index.jsp"/> 
-        	</action>
-        	
-        	<action path="/download"
-        		type="edu.arizona.biosemantics.oto.oto.action.DownloadAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-                <forward name="home" path="/jsp/login.jsp"/>
-                <forward name="reload" path="/jsp/login.jsp"/> 
-        	</action>
-        	
-        	<action path="/order"
-        		type="edu.arizona.biosemantics.oto.oto.action.DataSetAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-                <forward name="home" path="/jsp/order.jsp"/>
-                <forward name="reload" path="/jsp/index.jsp"/> 
-        	</action>
+		<action path="/gotoWelcomepage" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/index.jsp">
+		</action>
 
-  	        <action path="/context"
-      	        type="edu.arizona.biosemantics.oto.oto.action.GetContextAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-        	</action>
-        	
-        	<action path="/glossary"
-      	        type="edu.arizona.biosemantics.oto.oto.action.GetGlossaryAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-        	</action>
-        	
-        	<action path="/getUserReport"
-      	        type="edu.arizona.biosemantics.oto.oto.action.GetUserReportAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-        	</action>
-        	  
-  	        <action path="/file"
-      	        type="edu.arizona.biosemantics.oto.oto.action.FileAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-        	</action>
-        	
-        	 <action path="/finishConfirming"
-      	        type="edu.arizona.biosemantics.oto.oto.action.FinishConfirmingAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-      	        <forward name="reload" path="/jsp/manageCategory.jsp"/>
-        	</action>
-        	
-        	<action path="/mergingDatasets"
-      	        type="edu.arizona.biosemantics.oto.oto.action.MergeDatasetsAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-      	        <forward name="reload" path="/jsp/manageCategory.jsp"/>
-        	</action>
-        	
-        	<action path="/reopenDataset"
-      	        type="edu.arizona.biosemantics.oto.oto.action.ReopenDatasetAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-      	        <forward name="reload" path="/jsp/manageCategory.jsp"/>
-        	</action>
-        	
-        	<action path="/deleteDataset"
-      	        type="edu.arizona.biosemantics.oto.oto.action.DeleteDatasetAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-      	        <forward name="reload" path="/jsp/management.jsp"/>
-        	</action>
-        	
-        	<action path="/saveGroup"
-      	        type="edu.arizona.biosemantics.oto.oto.action.SaveGroupAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-      	        <forward name="reload" path="/jsp/categorize.jsp"/>
-      	        <forward name="home" path="/jsp/index.jsp"/>
-        	</action> 
-        	
-        	<action path="/saveTree"
-      	        type="edu.arizona.biosemantics.oto.oto.action.SaveTreeAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-      	        <forward name="reload" path="/jsp/hierarchy.jsp"/>
-      	        <forward name="home" path="/jsp/index.jsp"/>
-        	</action> 
-        	
-        	<action path="/saveOrder"
-      	        type="edu.arizona.biosemantics.oto.oto.action.SaveOrderAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-        	</action> 
-        	
-        	<action path="/saveDecisionByManager"
-      	        type="edu.arizona.biosemantics.oto.oto.action.saveDecisionByManager"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-        	</action> 
-        	         	 			
-        	<action path="/checkDataSet"
-      	        type="edu.arizona.biosemantics.oto.oto.action.CheckParsingAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-        	</action>
+		<action path="/popup" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/popup.jsp">
+		</action>
 
-        	<action path="/comment"
-      	        type="edu.arizona.biosemantics.oto.oto.action.InsertCommentAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-      	     <forward name="reload" path="/jsp/popup.jsp"/>
-        	</action>
-        	
-        	<action path="/demo"
-      	        type="edu.arizona.biosemantics.oto.oto.action.ShowDemoAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="false">
-      	     <forward name="reload" path="/jsp/demo.jsp"/>
-        	</action>
-        	
-        	<action path="/viewDecision"
-      	        type="edu.arizona.biosemantics.oto.oto.action.InsertCommentAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-      	     <forward name="reload" path="/jsp/popup.jsp"/>
-        	</action>
-        	
-        	<action path="/logout"
-      	        type="edu.arizona.biosemantics.oto.oto.action.UserLogoutAction"
-      	        scope="request"
-      	        validate="true">
-        	</action>
-        	
-        	<action path="/register"
-      	        type="edu.arizona.biosemantics.oto.oto.action.UserRegistrationAction"
-      	        name="registrationForm"
-      	        scope="request"
-      	        validate="true">
-      	      <forward name="reload" path="/jsp/login.jsp"/> 
-      	      <forward name="success" path="/jsp/regsuccess.jsp"/> 
-        	</action>
-        	
-        	<action path="/checkEmail"
-      	        type="edu.arizona.biosemantics.oto.oto.action.CheckDuplicateEmailAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-        	</action> 
-        	
-        	<action path="/approveRevoke"
-      	        type="edu.arizona.biosemantics.oto.oto.action.ApproveRevokeAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-        	</action>
-        	<action path="/editsettings"
-      	        type="edu.arizona.biosemantics.oto.oto.action.EditSettingsAction"
-      	        name="registrationForm"
-      	        scope="request"
-      	        validate="true">
-      	      <forward name="reload" path="/jsp/account.jsp"/> 
-        	</action>    
-        	        	
-        	<action path="/bioportalMoveTerm"
-      	        type="edu.arizona.biosemantics.oto.oto.action.BioportalMoveTermAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-                <forward name="home" path="/jsp/login.jsp"/> 
-        	</action>
-        	        	
-        	<action path="/submitToBioportal"
-      	        type="edu.arizona.biosemantics.oto.oto.action.BioportalSubmitAction"
-      	        name="bioportalForm"
-      	        scope="request"
-      	        validate="true">
-      	      <forward name="reload" path="/jsp/bioportal_term.jsp"/>
-      	      <forward name="success" path="/jsp/bioportal_submission.jsp"/> 
-              <forward name="home" path="/jsp/login.jsp"/>
-              <forward name="error" path="/jsp/error.jsp"/>
-        	</action>    
-        	
-        	<action path="/checkApprovedterms"
-      	        type="edu.arizona.biosemantics.oto.oto.action.BioportalCheckApprovedtermsAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">      	      
-              <forward name="home" path="/jsp/login.jsp"/>
-        	</action>  	        	
-        	
-        	<action path="/checkDatasetExistence"
-      	        type="edu.arizona.biosemantics.oto.oto.action.CheckDatasetExistenceAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">      	      
-              <forward name="home" path="/jsp/index.jsp"/>
-        	</action>
-        	
-        	<action path="/copyAcceptedCategorizations"
-      	        type="edu.arizona.biosemantics.oto.oto.action.CopyAcceptedCategorizationsAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">      	      
-              <forward name="home" path="/jsp/index.jsp"/>
-        	</action>  
-        	
-        	<action path="/createDataset"
-      	        type="edu.arizona.biosemantics.oto.oto.action.CreateDatasetAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">      	      
-              <forward name="home" path="/jsp/index.jsp"/>
-        	</action> 
-        	
-        	<action path="/backupDB"
-      	        type="edu.arizona.biosemantics.oto.oto.action.BackupDBAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">      	      
-              <forward name="home" path="/jsp/index.jsp"/>
-        	</action>
-        	
-        	<action path="/copySystemDecisions"
-      	        type="edu.arizona.biosemantics.oto.oto.action.CopySystemDecisionsAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">      	      
-              <forward name="home" path="/jsp/index.jsp"/>
-        	</action>
-        	
-        	<action path="/updateServerDatabase"
-      	        type="edu.arizona.biosemantics.oto.oto.action.UpdateServerDatabaseAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">      	      
-              <forward name="home" path="/jsp/index.jsp"/>
-        	</action>  
-        	
-        	<action path="/checkMergeStatus"
-      	        type="edu.arizona.biosemantics.oto.oto.action.GetMergeStatusAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">      	      
-              <forward name="home" path="/jsp/index.jsp"/>
-        	</action>  
-        	
-        	<action path="/editOrderName"
-      	        type="edu.arizona.biosemantics.oto.oto.action.EditOrderNameAction"
-      	        name="generalForm"
-      	        scope="request"
-      	        validate="true">
-        	</action>  
-        	
-	</action-mappings> 
- 
+		<action path="/userSpecificReport" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/report.jsp">
+		</action>
 
- 	<!-- ========== Message Resources Definitions =========================== -->
-  	<message-resources	null="false"
-    					parameter="ApplicationResources"/>
-    
+		<action path="/admin" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/management.jsp">
+		</action>
+
+		<action path="/manageUsers" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/manageUsers.jsp">
+		</action>
+
+		<action path="/mergeDatasets" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/mergeDatasets.jsp">
+		</action>
+
+		<action path="/mergeIntoSystem" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/mergeIntoSystem.jsp">
+		</action>
+
+		<action path="/manageCategory" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/manageCategory.jsp">
+		</action>
+
+		<action path="/managPath" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/manageHierarchy.jsp">
+		</action>
+
+		<action path="/manageOrder" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/manageOrder.jsp">
+		</action>
+
+		<action path="/account" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/account.jsp">
+		</action>
+		<action path="/intro" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/instruction.jsp">
+		</action>
+
+		<action path="/webService" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/webservice.jsp">
+		</action>
+
+		<action path="/gotoDownload" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/download.jsp">
+		</action>
+		<action path="/gotoLogin" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/login.jsp">
+		</action>
+
+		<action path="/ontologyLookup" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/bioportal_init.jsp">
+		</action>
+
+		<action path="/ontologyTerm" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/bioportal_term.jsp">
+		</action>
+
+		<action path="/ontologySubmissions" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/bioportal_submission.jsp">
+		</action>
+
+		<action path="/deletedSubmissions" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/bioportal_deletedSubmissions.jsp">
+		</action>
+
+		<action path="/manageDatasets" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/manageDatasets.jsp">
+		</action>
+
+		<!-- ==================BEGIN=========Action Mapping Definition for Login================== -->
+		<action path="/validateLogin"
+			type="edu.arizona.biosemantics.oto.oto.action.UserLoginAction" name="loginForm"
+			scope="request" input="/login.jsp" validate="true">
+			<forward name="reload" path="/jsp/login.jsp" />
+			<forward name="home" path="/jsp/index.jsp" />
+		</action>
+		<!-- ==================END========Action Mapping Definition for Login===================== -->
+
+		<action path="/groupTerms"
+			type="edu.arizona.biosemantics.oto.oto.action.DataSetAction" name="generalForm"
+			scope="request" validate="true">
+			<forward name="home" path="/jsp/categorize.jsp" />
+			<forward name="reload" path="/jsp/index.jsp" />
+		</action>
+
+		<action path="/getPass"
+			type="edu.arizona.biosemantics.oto.oto.action.UserResetPasswordAction"
+			name="generalForm" scope="request" validate="true">
+			<forward name="home" path="/jsp/login.jsp" />
+		</action>
+
+		<action path="/updatePasswordToEncrypted"
+			type="edu.arizona.biosemantics.oto.oto.action.UserUpdatePasswordToEncrypted"
+			name="generalForm" scope="request" validate="true">
+			<forward name="home" path="/jsp/login.jsp" />
+		</action>
+
+		<action path="/manageDataset" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/manageDataset.jsp">
+		</action>
+
+		<action path="/test"
+			type="edu.arizona.biosemantics.oto.oto.action.DataSetAction" name="generalForm"
+			scope="request" validate="true">
+			<forward name="home" path="/jsp/test.jsp" />
+			<forward name="reload" path="/jsp/index.jsp" />
+		</action>
+
+		<action path="/hierarchy"
+			type="edu.arizona.biosemantics.oto.oto.action.DataSetAction" name="generalForm"
+			scope="request" validate="true">
+			<forward name="home" path="/jsp/hierarchy.jsp" />
+			<forward name="reload" path="/jsp/index.jsp" />
+		</action>
+
+		<action path="/download"
+			type="edu.arizona.biosemantics.oto.oto.action.DownloadAction" name="generalForm"
+			scope="request" validate="true">
+			<forward name="home" path="/jsp/login.jsp" />
+			<forward name="reload" path="/jsp/login.jsp" />
+		</action>
+
+		<action path="/order"
+			type="edu.arizona.biosemantics.oto.oto.action.DataSetAction" name="generalForm"
+			scope="request" validate="true">
+			<forward name="home" path="/jsp/order.jsp" />
+			<forward name="reload" path="/jsp/index.jsp" />
+		</action>
+
+		<action path="/context"
+			type="edu.arizona.biosemantics.oto.oto.action.GetContextAction" name="generalForm"
+			scope="request" validate="true">
+		</action>
+
+		<action path="/glossary"
+			type="edu.arizona.biosemantics.oto.oto.action.GetGlossaryAction"
+			name="generalForm" scope="request" validate="true">
+		</action>
+
+		<action path="/getUserReport"
+			type="edu.arizona.biosemantics.oto.oto.action.GetUserReportAction"
+			name="generalForm" scope="request" validate="true">
+		</action>
+
+		<action path="/file"
+			type="edu.arizona.biosemantics.oto.oto.action.FileAction" name="generalForm"
+			scope="request" validate="true">
+		</action>
+
+		<action path="/finishConfirming"
+			type="edu.arizona.biosemantics.oto.oto.action.FinishConfirmingAction"
+			name="generalForm" scope="request" validate="true">
+			<forward name="reload" path="/jsp/manageCategory.jsp" />
+		</action>
+
+		<action path="/mergingDatasets"
+			type="edu.arizona.biosemantics.oto.oto.action.MergeDatasetsAction"
+			name="generalForm" scope="request" validate="true">
+			<forward name="reload" path="/jsp/manageCategory.jsp" />
+		</action>
+
+		<action path="/reopenDataset"
+			type="edu.arizona.biosemantics.oto.oto.action.ReopenDatasetAction"
+			name="generalForm" scope="request" validate="true">
+			<forward name="reload" path="/jsp/manageCategory.jsp" />
+		</action>
+
+		<action path="/deleteDataset"
+			type="edu.arizona.biosemantics.oto.oto.action.DeleteDatasetAction"
+			name="generalForm" scope="request" validate="true">
+			<forward name="reload" path="/jsp/management.jsp" />
+		</action>
+
+		<action path="/saveGroup"
+			type="edu.arizona.biosemantics.oto.oto.action.SaveGroupAction" name="generalForm"
+			scope="request" validate="true">
+			<forward name="reload" path="/jsp/categorize.jsp" />
+			<forward name="home" path="/jsp/index.jsp" />
+		</action>
+
+		<action path="/saveTree"
+			type="edu.arizona.biosemantics.oto.oto.action.SaveTreeAction" name="generalForm"
+			scope="request" validate="true">
+			<forward name="reload" path="/jsp/hierarchy.jsp" />
+			<forward name="home" path="/jsp/index.jsp" />
+		</action>
+
+		<action path="/saveOrder"
+			type="edu.arizona.biosemantics.oto.oto.action.SaveOrderAction" name="generalForm"
+			scope="request" validate="true">
+		</action>
+
+		<action path="/saveDecisionByManager"
+			type="edu.arizona.biosemantics.oto.oto.action.saveDecisionByManager"
+			name="generalForm" scope="request" validate="true">
+		</action>
+
+		<action path="/checkDataSet"
+			type="edu.arizona.biosemantics.oto.oto.action.CheckParsingAction"
+			name="generalForm" scope="request" validate="true">
+		</action>
+
+		<action path="/comment"
+			type="edu.arizona.biosemantics.oto.oto.action.InsertCommentAction"
+			name="generalForm" scope="request" validate="true">
+			<forward name="reload" path="/jsp/popup.jsp" />
+		</action>
+
+		<action path="/demo"
+			type="edu.arizona.biosemantics.oto.oto.action.ShowDemoAction" name="generalForm"
+			scope="request" validate="false">
+			<forward name="reload" path="/jsp/demo.jsp" />
+		</action>
+
+		<action path="/viewDecision"
+			type="edu.arizona.biosemantics.oto.oto.action.InsertCommentAction"
+			name="generalForm" scope="request" validate="true">
+			<forward name="reload" path="/jsp/popup.jsp" />
+		</action>
+
+		<action path="/logout"
+			type="edu.arizona.biosemantics.oto.oto.action.UserLogoutAction"
+			scope="request" validate="true">
+		</action>
+
+		<action path="/register"
+			type="edu.arizona.biosemantics.oto.oto.action.UserRegistrationAction"
+			name="registrationForm" scope="request" validate="true">
+			<forward name="reload" path="/jsp/login.jsp" />
+			<forward name="success" path="/jsp/regsuccess.jsp" />
+		</action>
+
+		<action path="/checkEmail"
+			type="edu.arizona.biosemantics.oto.oto.action.CheckDuplicateEmailAction"
+			name="generalForm" scope="request" validate="true">
+		</action>
+
+		<action path="/approveRevoke"
+			type="edu.arizona.biosemantics.oto.oto.action.ApproveRevokeAction"
+			name="generalForm" scope="request" validate="true">
+		</action>
+		<action path="/editsettings"
+			type="edu.arizona.biosemantics.oto.oto.action.EditSettingsAction"
+			name="registrationForm" scope="request" validate="true">
+			<forward name="reload" path="/jsp/account.jsp" />
+		</action>
+
+		<action path="/bioportalMoveTerm"
+			type="edu.arizona.biosemantics.oto.oto.action.BioportalMoveTermAction"
+			name="generalForm" scope="request" validate="true">
+			<forward name="home" path="/jsp/login.jsp" />
+		</action>
+
+		<action path="/submitToBioportal"
+			type="edu.arizona.biosemantics.oto.oto.action.BioportalSubmitAction"
+			name="bioportalForm" scope="request" validate="true">
+			<forward name="reload" path="/jsp/bioportal_term.jsp" />
+			<forward name="success" path="/jsp/bioportal_submission.jsp" />
+			<forward name="home" path="/jsp/login.jsp" />
+			<forward name="error" path="/jsp/error.jsp" />
+		</action>
+
+		<action path="/checkApprovedterms"
+			type="edu.arizona.biosemantics.oto.oto.action.BioportalCheckApprovedtermsAction"
+			name="generalForm" scope="request" validate="true">
+			<forward name="home" path="/jsp/login.jsp" />
+		</action>
+
+		<action path="/checkDatasetExistence"
+			type="edu.arizona.biosemantics.oto.oto.action.CheckDatasetExistenceAction"
+			name="generalForm" scope="request" validate="true">
+			<forward name="home" path="/jsp/index.jsp" />
+		</action>
+
+		<action path="/copyAcceptedCategorizations"
+			type="edu.arizona.biosemantics.oto.oto.action.CopyAcceptedCategorizationsAction"
+			name="generalForm" scope="request" validate="true">
+			<forward name="home" path="/jsp/index.jsp" />
+		</action>
+
+		<action path="/createDataset"
+			type="edu.arizona.biosemantics.oto.oto.action.CreateDatasetAction"
+			name="generalForm" scope="request" validate="true">
+			<forward name="home" path="/jsp/index.jsp" />
+		</action>
+
+		<action path="/backupDB"
+			type="edu.arizona.biosemantics.oto.oto.action.BackupDBAction" name="generalForm"
+			scope="request" validate="true">
+			<forward name="home" path="/jsp/index.jsp" />
+		</action>
+
+		<action path="/copySystemDecisions"
+			type="edu.arizona.biosemantics.oto.oto.action.CopySystemDecisionsAction"
+			name="generalForm" scope="request" validate="true">
+			<forward name="home" path="/jsp/index.jsp" />
+		</action>
+
+		<action path="/updateServerDatabase"
+			type="edu.arizona.biosemantics.oto.oto.action.UpdateServerDatabaseAction"
+			name="generalForm" scope="request" validate="true">
+			<forward name="home" path="/jsp/index.jsp" />
+		</action>
+
+		<action path="/checkMergeStatus"
+			type="edu.arizona.biosemantics.oto.oto.action.GetMergeStatusAction"
+			name="generalForm" scope="request" validate="true">
+			<forward name="home" path="/jsp/index.jsp" />
+		</action>
+
+		<action path="/editOrderName"
+			type="edu.arizona.biosemantics.oto.oto.action.EditOrderNameAction"
+			name="generalForm" scope="request" validate="true">
+		</action>
+
+
+		<action path="/createDatasetForUser"
+			type="edu.arizona.biosemantics.oto.oto.action.CreateDatasetForUserAction"
+			name="generalForm" scope="request" validate="true">
+		</action>
+
+		<action path="/setDatasetPrivacy"
+			type="edu.arizona.biosemantics.oto.oto.action.SetDatasetPrivacyAction"
+			name="generalForm" scope="request" validate="true">
+		</action>
+
+		<action path="/import"
+			type="edu.arizona.biosemantics.oto.oto.action.ImportAction" name="importForm"
+			scope="request" validate="true">
+			<forward name="home" path="/jsp/index.jsp" />
+			<forward name="reload" path="/jsp/manageDatasets.jsp" />
+		</action>
+
+	</action-mappings>
+
+
+	<!-- ========== Message Resources Definitions =========================== -->
+	<message-resources null="false" parameter="ApplicationResources" />
+
 </struts-config>

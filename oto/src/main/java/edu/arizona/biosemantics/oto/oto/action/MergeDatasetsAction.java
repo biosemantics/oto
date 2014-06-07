@@ -28,6 +28,7 @@ public class MergeDatasetsAction extends ParserAction {
 			throws Exception {
 		if (checkSessionValidity(request)) {
 			try {
+				SessionDataManager sessionDataMgr = getSessionManager(request);
 				GeneralForm gform = (GeneralForm) form;
 				String responseText = "";
 				String value = gform.getValue();
@@ -38,14 +39,25 @@ public class MergeDatasetsAction extends ParserAction {
 						: false;
 				int glossaryID = Integer.parseInt(dss[1]);
 				String new_name = dss[2];
+
+				boolean needsToClearSelectedDataset = false;
+				String currentDS = sessionDataMgr.getDataset();
+				boolean hasCurrentDS = false;
+				if (currentDS != null && !currentDS.equals("")) {
+					hasCurrentDS = true;
+				}
+
 				if (!new_name.equals("")) {
 					ArrayList<String> datasets = new ArrayList<String>();
 					for (int i = 3; i < dss.length; i++) {
 						datasets.add(dss[i]);
+						if (!needsToClearSelectedDataset && hasCurrentDS
+								&& currentDS.equals(dss[i])) {
+							needsToClearSelectedDataset = true;
+						}
 					}
 
 					CharacterDBAccess cdba = new CharacterDBAccess();
-					SessionDataManager sessionDataMgr = getSessionManager(request);
 					User user = sessionDataMgr.getUser();
 
 					HttpSession session = request.getSession();
@@ -53,9 +65,12 @@ public class MergeDatasetsAction extends ParserAction {
 					boolean success = cdba.mergeDatasets(datasets, new_name,
 							user, glossaryID, isSystemMerge);
 
-					if (success)
+					if (success) {
 						responseText = "success";
-					else {
+						if (needsToClearSelectedDataset) {
+							sessionDataMgr.setDataset("");
+						}
+					} else {
 						responseText = "Merge datasets failed. Please try again later. ";
 					}
 					session.setAttribute("mergeStatus", responseText);

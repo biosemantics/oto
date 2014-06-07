@@ -117,7 +117,7 @@
 										tdClass = (flag) ? "d0" : "d1";
 										flag = (flag) ? false : true;
 					%>
-					<tr>
+					<tr style="display: block;">
 						<td class="tag" >
 						<div class="structure" id=<%=tag.getID()%>><img
 							style="vertical-align: middle;" class="dragme"

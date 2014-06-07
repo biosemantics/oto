@@ -456,8 +456,7 @@ function doDeleteDataset(dataset, fromMerge) {
 		if (xmlhttp.readyState == 4) {
 			if (xmlhttp.status == 200) {
 				// alert(xmlhttp.responseText);
-				var response = xmlhttp.responseXML
-						.getElementsByTagName("response")[0].childNodes[0].nodeValue;
+				var response = xmlhttp.responseText;
 				if (fromMerge) {
 					$("#serverMessage").toggleClass("info");
 					document.getElementById('serverMessage').innerHTML = "The newly created dataset '"

@@ -1,6 +1,8 @@
 /**
  * This file contains all the dragging and saving functions for terms order
- * page. Author: Fengqiong
+ * page.
+ * 
+ * Author: Fengqiong
  * 
  * todo:
  * 
@@ -722,6 +724,9 @@ function editOrderName(groupID, oldName) {
 	if (replacement == oldName) {
 		return;
 	}
+	
+	//validate input: only allow letters, numbers, space and underscore
+	
 
 	// check duplication
 	if ($("#group_" + groupID).find("[orderName='" + replacement + "']").length > 0) {

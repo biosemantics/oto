@@ -2,7 +2,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.ArrayList"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
+<%@ page
+	import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
 <%@page import="edu.arizona.biosemantics.oto.oto.beans.CategoryBean"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess"%>
@@ -47,6 +48,11 @@
 			<li
 				style="padding-bottom: 10px; font-family: lucida grande; font-size: 13px"><a
 				href="#admin">Instructions for <b>"Admin"</b> page
+			</a></li>
+			<li
+				style="padding-bottom: 10px; font-family: lucida grande; font-size: 13px"><a
+				href="#manageDatasets">Instructions for <b>"Manage Datasets"</b>
+					page
 			</a></li>
 			<li
 				style="padding-bottom: 10px; font-family: lucida grande; font-size: 13px"><a
@@ -379,6 +385,13 @@
 							of all decisions you've made. <a
 							href="jsp/video.jsp?v=report_order&h=View your report">watch
 								video</a><br /></font></li>
+					<li style="padding-bottom: 10px;"><font
+						class="font-text-style"><b style="color: green">Change
+								order name</b><br />Mouse over the order name, you should be able
+							to see the edit sign <img src="images/edit.png" height="13px" />
+							next to the order name. Click on the edit sign, you can change
+							the order name as needed. <br />Note: Order name should be
+							unique in each order group.<br /></font></li>
 				</ul>
 			</td>
 		</tr>
@@ -397,11 +410,11 @@
 					<li style="padding-bottom: 10px;"><font
 						class="font-text-style"><b style="color: green">What
 								can be done in Admin page? </b><br /> User (must be administrator
-							of OTO or owner of a dataset) to be able to access admin page. <br />Allowed
-							operations are: <br />1. To approve a user's decision<br />2.
-							To revoke a user's decision<br />3. To finalize a dataset<br />4.
-							To reopen a dataset<br />5. To approve all system decisions <br />6.
-							To merge datasets</font></li>
+							of OTO or owner of a dataset) to be able to access admin page. <br />
+							<br />1. To approve a user's decision<br />2. To revoke a
+							user's decision<br />3. To finalize a dataset<br />4. To reopen
+							a dataset<br />5. To approve all system decisions <br />6. To
+							merge datasets</font></li>
 					<li style="padding-bottom: 10px;"><font
 						class="font-text-style"><b style="color: green">Approve
 								a decision</b><br /> All candicate decisions are listed in 'Other
@@ -457,6 +470,167 @@
 		</tr>
 	</table>
 
+
+	<a name="manageDatasets"></a>
+	<table style="border-top: 1px solid green" width="100%">
+		<tr>
+			<th align="left" style="padding-left: 5px;">Instructions of <font
+				color="purple">Manage Datasets</font> page
+			</th>
+		</tr>
+		<tr>
+			<td>
+				<ul>
+					<li style="padding-bottom: 10px;"><font
+						class="font-text-style"><b style="color: green">What
+								can be done in Manage Datasets page? </b><br /> <br />1. Create
+							dataset<br />2. Set the privacy level of a dataset <br /> 3.
+							Delete your dataset <br /> 4. Import your own
+							terms/structures/orders tasks</font></li>
+					<li style="padding-bottom: 10px;"><font
+						class="font-text-style"><b style="color: green">Create
+								Datasets </b><br />You can create your own dataset by giving a
+							dataset name prefix and selecting a glossary to which your
+							dataset belongs. Curently OTO only support 5 glossaries: Plant,
+							Hymenoptera, Porifera, Algea and Fossil. <br /> The name of
+							newly created dataset will be a combination of your given name
+							prefix, your first name, your last name and the timestamp when
+							this dataset is created, all parts connected by underscore (_). <br />The
+							newly created dataset is empty with no data in it. You can see
+							the dataset listed on the right side of this page after
+							successful creation and you may import your own data there. <br /></font></li>
+					<li style="padding-bottom: 10px;"><font
+						class="font-text-style"><b style="color: green">Set
+								privacy level of a dataset </b><br /> There are two privacy level
+							in OTO: public and private. Public datasets can be selected and
+							viewed by all registered users of OTO and any registered user of
+							OTO can express their opinions in those datasets. Private
+							datasets can only be selected and viewed by the owner/creater and
+							only the owner/creater can express his/her opinions in them. <br />
+							<br />The public datasets are indicated with sign <img
+							src="images/public.png" height="13px"
+							style="vertical-align: middle;" /> and private datasets have
+							sign <img src="images/private.png" height="13px"
+							style="vertical-align: middle;" /> before it. <br /> To change
+							the privacy level of a dataset, click on the dataset name and you
+							should be able to see the buttons next to the dataset name. Click
+							on button <input type="button" value="Make Public"
+							style="vertical-align: middle;"
+							class="uiButton uiButtonSpecial uiButtonMedium actionbuttons" />
+							or <input type="button" value="Make Private"
+							style="vertical-align: middle;"
+							class="uiButton uiButtonSpecial uiButtonMedium actionbuttons" />
+							to change the privacy level.<br /></font></li>
+					<li style="padding-bottom: 10px; vertical-align: bottom;"><font
+						class="font-text-style"><b style="color: green">Delete
+								your dataset </b><br />Click on the dataset name and you should be
+							able to see the buttons next to the dataset name. Click on button
+							<input type="button" value="Delete dataset"
+							style="vertical-align: middle;"
+							class="uiButton uiButtonSpecial uiButtonMedium actionbuttons" />
+							to delete the dataset. <br /> Note: this action can not be
+							recovered. Be sure you are deleting the correct dataset before
+							you confirm the deleting. System reserved datasets can not be
+							deleted. <br /></font></li>
+					<li style="padding-bottom: 10px;"><font
+						class="font-text-style"><b style="color: green">Import
+								terms for categorization </b><br /> Click on the dataset name, you
+							should be able to see three tasks listed below the dataset:
+							Categorization, Hierarchy and Orders. Click on the <input
+							type="button" value='Import' class="uiButton uiButtonMedium"
+							style="vertical-align: middle;" /> button next to
+							Categorization, or <input type="button" value='Re-import'
+							class="uiButton uiButtonMedium" style="vertical-align: middle;" />
+							button if there are existing term in this dataset, to import
+							terms for categorization. Currently OTO only support importing
+							data from .CSV files.<br /> <br />Note:<br /> 1. Re-importing
+							terms will remove all existing terms first. <br />2. If
+							decisions have been made on existing terms, import function will
+							be disabled. <br /> <br /> <a name="csvFormat_Terms" />Importing
+							Format of 'Group Terms': <br /> <br />1. Only .CSV files can be
+							imported. <br />2. The first column of the .CSV file is term
+							name. The second column is the context sentence of the term. The
+							sentence column can be empty. <br />3. The .CSV file should have
+							no column name row. If you have a column name row, delete it
+							before importing or the column name will be imported as a term. <br />4.
+							No comma allowed in term's name. If comma exists, only the part
+							before the comma will be imported as a term. The rest will be
+							imported as part of the context sentence. <br />5. The .CSV file
+							should look like this if opened as text. <br /> <img
+							style="padding-left: 18px"
+							src="images/screenshots/termsInText.png" /><br />6. The .CSV
+							file should look like this if opened as spreadsheet. <br /> <img
+							style="padding-left: 18px"
+							src="images/screenshots/termsInExcel.png" /><br /></font></li>
+					<li style="padding-bottom: 10px;"><font
+						class="font-text-style"><b style="color: green">Import
+								structures for hierarchical relations </b><br /> Click on the
+							dataset name, you should be able to see three tasks listed below
+							the dataset: Categorization, Hierarchy and Orders. Click on the <input
+							type="button" value='Import' class="uiButton uiButtonMedium"
+							style="vertical-align: middle;" /> button next to Hierarchy, or
+							<input type="button" value='Re-import'
+							class="uiButton uiButtonMedium" style="vertical-align: middle;" />
+							button if there are existing structures in this dataset, to
+							import structures for hierarchical relations. Currently OTO only
+							support importing data from .CSV files.<br /> <br />Note:<br />
+							1. Re-importing structures will remove all existing structures
+							first. <br />2. If decisions have been made on existing
+							structures, import function will be disabled. <br /> <br /> <a
+							name="csvFormat_Structures" />Importing Format of 'Structure
+							Hierarchy': <br /> <br />1. Only .CSV files can be imported. <br />2.
+							The first column of the .CSV file is structure name. The second
+							column is the context sentence of the structure. The sentence
+							column can be empty. <br />3. The .CSV file should have no
+							column name row. If you have a column name row, delete it before
+							importing or the column name will be imported as a structure. <br />4.
+							No comma allowed in structure's name. If comma exists in
+							structure's name, only the part before the comma will be imported
+							as a structure. The rest will be imported as part of the context
+							sentence. <br />5. The .CSV file should look like this if opened
+							as text. <br /> <img style="padding-left: 18px"
+							src="images/screenshots/structuresInText.png" /><br />6. The
+							.CSV file should look like this if opened as spreadsheet. <br />
+							<img style="padding-left: 18px"
+							src="images/screenshots/structuresInExcel.png" /><br /></font></li>
+					<li style="padding-bottom: 10px;"><font
+						class="font-text-style"><b style="color: green">Import
+								orders </b><br /> Click on the dataset name, you should be able to
+							see three tasks listed below the dataset: Categorization,
+							Hierarchy and Orders. Click on the <input type="button"
+							value='Import' class="uiButton uiButtonMedium"
+							style="vertical-align: middle;" /> button next to Orders, or <input
+							type="button" value='Re-import' class="uiButton uiButtonMedium"
+							style="vertical-align: middle;" /> button if there are existing
+							orders in this dataset, to import orders tasks. Currently OTO
+							only support importing data from .CSV files.<br /> <br />Note:<br />
+							1. Re-importing orders will remove all existing orders first. <br />2.
+							If decisions have been made on existing orders, import function
+							will be disabled. <br /> <br /> <a name="csvFormat_Orders" />Importing
+							Format of 'Term Order': <br /> <br />1. Only .CSV files can be
+							imported. <br />2. Each row in the .CSV file will be imported as
+							one order group. The first column will be imported as the order
+							group name and all the other columns will be imported as terms in
+							this order group. You are able to add orders or terms under this
+							order group in Orders page after importing.<br />3. The .CSV
+							file should have no column name row. If you have a column name
+							row, delete it before importing or the column name will be
+							imported as a order group. <br />4. No comma allowed in order
+							group name and in term name. If comma exists, the column with
+							comma in it will be imported as two separate columns. <br />5.
+							The .CSV file should look like this if opened as text. <br /> <img
+							style="padding-left: 18px"
+							src="images/screenshots/ordersInText.png" /><br />6. The .CSV
+							file should look like this if opened as spreadsheet. <br /> <img
+							style="padding-left: 18px"
+							src="images/screenshots/ordersInExcel.png" /><br /></font></li>
+				</ul>
+			</td>
+		</tr>
+	</table>
+
+
+
 	<a name="catDef"></a>
 	<table style="border-top: 1px solid green" width="100%">
 		<tr>
@@ -504,8 +678,8 @@
 					<li style="padding-bottom: 10px;"><font
 						class="font-text-style"><b style="color: green">Updates
 								on September 24, 2013</b><br /> 1. Auto-scroll in categories<br />
-							2. Only super user can modify system-reserved datasets. <br /> 3.
-							Show "discarded" for uncategorization decisions in admin page</font></li>
+							2. Only super user can modify system-reserved datasets. <br />
+							3. Show "discarded" for uncategorization decisions in admin page</font></li>
 					<li style="padding-bottom: 10px;"><font
 						class="font-text-style"><b style="color: green">Updates
 								on July 29, 2013</b><br /> 1. Download page replaced by Web Service<br />

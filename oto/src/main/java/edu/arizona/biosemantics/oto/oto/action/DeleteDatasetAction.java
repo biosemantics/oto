@@ -51,16 +51,16 @@ public class DeleteDatasetAction  extends ParserAction {
 					responseText = "Error in deleting dataset '" + value + "', please try again later!";
 				}
 								
-				response.setContentType("text/xml");
-		    	response.getWriter().write("<response>" + responseText + "</response>");
+				response.setContentType("text");
+		    	response.getWriter().write(responseText);
 		    	
 			} catch (Exception exe) {
 				exe.printStackTrace();
 				LOGGER.error("Error in deleting dataset", exe);
 				request.setAttribute(Forwardable.ERROR, exe.getCause());
-				response.setContentType("text/xml");
-            	response.getWriter().write("<response>Problem encountered in getting the report : " 
-    				+ exe.getMessage()+ "</response>");
+				response.setContentType("text");
+            	response.getWriter().write("Error: Problem encountered in getting the report : " 
+    				+ exe.getMessage());
 			}			
 			return null;
 		} else {

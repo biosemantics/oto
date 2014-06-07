@@ -38,6 +38,30 @@ public class GlossaryNameMapper {
 		return glossaryName;
 	}
 
+	public int getGlossaryIDByName(String glossaryName) {
+
+		if (glossaryName.equals("Plant")) {
+			return 1;
+		}
+
+		if (glossaryName.equals("Hymenoptera")) {
+			return 2;
+		}
+
+		if (glossaryName.equals("Algea")) {
+			return 3;
+		}
+
+		if (glossaryName.equals("Porifera")) {
+			return 4;
+		}
+
+		if (glossaryName.equals("Fossil")) {
+			return 5;
+		}
+		return 0;
+	}
+
 	/**
 	 * get all glossaries as an array list: no need to access database since
 	 * this is pretty stable
@@ -68,10 +92,11 @@ public class GlossaryNameMapper {
 				|| dataset.toLowerCase().equals("porifera_glossary")
 				|| dataset.toLowerCase().equals("fossil_glossary");
 	}
-	
+
 	/**
 	 * check if this dataset is for glossary download (usually the biggest one)
 	 * will be used when insert glossary version
+	 * 
 	 * @param dataset
 	 * @return
 	 */

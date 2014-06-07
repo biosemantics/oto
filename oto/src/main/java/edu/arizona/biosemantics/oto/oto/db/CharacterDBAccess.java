@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -6352,6 +6353,7 @@ public class CharacterDBAccess extends DatabaseAccess {
 			LOGGER.error("Couldn't create dataset  " + datasetName
 					+ " in CharacterDBAccess: createDatasetTables: ", exe);
 			exe.printStackTrace();
+			throw exe;
 		} finally {
 			closeConnection(pstmt, rset, conn);
 		}
@@ -6422,10 +6424,12 @@ public class CharacterDBAccess extends DatabaseAccess {
 		boolean success = false;
 		Connection conn = null;
 		Statement st = null, st2 = null;
+		PreparedStatement pstmt = null;
 		ResultSet rset = null, rset2 = null;
 		int userID = user.getUserId();
 		ArrayList<String> toDelete = new ArrayList<String>();
 		ArrayList<String> cannotDelete = new ArrayList<String>();
+		Hashtable<String, Boolean> hash_sentences = new Hashtable<String, Boolean>();
 		String sql = "";
 
 		// remove target_ds from datasets list
@@ -6453,6 +6457,13 @@ public class CharacterDBAccess extends DatabaseAccess {
 			st = conn.createStatement();
 			st2 = conn.createStatement();
 			conn.setAutoCommit(false);
+
+			// read in target sentences to avoid inserting duplicate sentence
+			rset = st.executeQuery("select originalSent from " + target_ds
+					+ "_sentence");
+			while (rset.next()) {
+				hash_sentences.put(rset.getString(1), true);
+			}
 
 			// update target note
 			rset = st
@@ -6528,11 +6539,34 @@ public class CharacterDBAccess extends DatabaseAccess {
 				}
 
 				// sentence
-				st.executeUpdate("insert into "
-						+ target_ds
-						+ "_sentence (sentid, source, sentence, originalsent, status, tag) "
-						+ "select sentid, source, sentence, originalsent, status, tag from "
-						+ source_ds + "_sentence");
+				rset = st2
+						.executeQuery("select source, sentence, originalsent, status, tag from "
+								+ source_ds + "_sentence");
+				while (rset.next()) {
+					if (hash_sentences.get(rset.getString("originalSent")) == null) {
+						pstmt = conn
+								.prepareStatement("insert into "
+										+ target_ds
+										+ "_sentence (sentid, source, sentence, originalsent, status, tag) "
+										+ "values (?, ?, ?, ?, ?, ?)");
+						pstmt.setInt(1, 0);
+						pstmt.setString(2, rset.getString("source"));
+						pstmt.setString(3, rset.getString("sentence"));
+						pstmt.setString(4, rset.getString("originalsent"));
+						pstmt.setString(5, rset.getString("status"));
+						pstmt.setString(6, rset.getString("tag"));
+						pstmt.executeUpdate();
+						hash_sentences
+								.put(rset.getString("originalSent"), true);
+					}
+				}
+				// st.executeUpdate("insert into "
+				// + target_ds
+				// +
+				// "_sentence (sentid, source, sentence, originalsent, status, tag) "
+				// +
+				// "select sentid, source, sentence, originalsent, status, tag from "
+				// + source_ds + "_sentence");
 
 				if (evaluateExecutionTime) {
 					System.out.println("\t* _sentence: "
@@ -7034,6 +7068,9 @@ public class CharacterDBAccess extends DatabaseAccess {
 			}
 			if (st2 != null) {
 				st2.close();
+			}
+			if (pstmt != null) {
+				pstmt.close();
 			}
 		}
 

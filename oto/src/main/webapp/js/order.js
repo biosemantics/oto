@@ -724,9 +724,13 @@ function editOrderName(groupID, oldName) {
 	if (replacement == oldName) {
 		return;
 	}
-	
-	//validate input: only allow letters, numbers, space and underscore
-	
+
+	// validate input: only allow letters, numbers, space, underscore and ( )
+	var regex = /^[a-zA-Z\s\d_\(\)]+$/;
+	if (!regex.test(replacement)) {
+		alert("A valid order name can only contain letters, space, underscore, ( and ). Please input a valid order name!");
+		return;
+	}
 
 	// check duplication
 	if ($("#group_" + groupID).find("[orderName='" + replacement + "']").length > 0) {

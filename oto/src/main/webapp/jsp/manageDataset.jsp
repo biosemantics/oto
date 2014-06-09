@@ -1,16 +1,21 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<%@page import="edu.arizona.biosemantics.oto.oto.beans.UserStatisticsBean"%>
+<%@page
+	import="edu.arizona.biosemantics.oto.oto.beans.UserStatisticsBean"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.HashMap"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
+<%@ page
+	import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.TermDecision"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.GlossaryNameMapper"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.DatasetStatistics"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.UserStatisticsBean"%>
+<%@ page
+	import="edu.arizona.biosemantics.oto.oto.beans.GlossaryNameMapper"%>
+<%@ page
+	import="edu.arizona.biosemantics.oto.oto.beans.DatasetStatistics"%>
+<%@ page
+	import="edu.arizona.biosemantics.oto.oto.beans.UserStatisticsBean"%>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -67,10 +72,8 @@ function checkDeleteNow() {
 				//get info of this dataset: how may decisions, how many terms in each page
 				DatasetStatistics stat = cdba.getDataSetStatistics(manager,
 						selectedDataset);
-				//ArrayList<Integer> numbers = cdba.getDataSetInfo(manager,
-				//		selectedDataset);
 
-				boolean isSystemReserved = new GlossaryNameMapper()
+				boolean isSystemReserved = GlossaryNameMapper.getInstance()
 						.isSystemReservedDataset(selectedDataset);
 	%>
 
@@ -134,7 +137,7 @@ function checkDeleteNow() {
 									: "Cannot delete this dataset because it has finalized data. ")%>')"
 									<%}%> /><img src="images/green_rot.gif" id="processImg"
 									style="visibility: hidden" width="15px;" />
-							</form>&nbsp;<label id="serverMessage"></label><br/>
+							</form>&nbsp;<label id="serverMessage"></label><br />
 						</td>
 					</tr>
 					<tr>

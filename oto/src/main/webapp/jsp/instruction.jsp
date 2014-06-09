@@ -677,8 +677,9 @@
 				<ul>
 					<li style="padding-bottom: 10px;"><font
 						class="font-text-style"><b style="color: green">Updates
-								on June 8, 2014</b><br /> 1. Make order name editable<br />
-							2. Allow user to create their own datasets and import terms. <br /></font></li>
+								on June 8, 2014</b><br /> 1. Make order name editable<br /> 2.
+							Allow user to create their own datasets and import terms. <br />
+							3. Dataset can be private or public.<br /></font></li>
 					<li style="padding-bottom: 10px;"><font
 						class="font-text-style"><b style="color: green">Updates
 								on September 24, 2013</b><br /> 1. Auto-scroll in categories<br />

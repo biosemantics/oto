@@ -117,7 +117,7 @@ public class CharacterDBAccess extends DatabaseAccess {
 			pstmt.setString(1, dataset);
 			rset = pstmt.executeQuery();
 			if (rset.next()) {
-				String glossaryName = new GlossaryNameMapper()
+				String glossaryName = GlossaryNameMapper.getInstance()
 						.getGlossaryName(rset.getInt(1));
 				if (!glossaryName.equals("")) {
 					String fromDataset = glossaryName + "_glossary";
@@ -370,7 +370,7 @@ public class CharacterDBAccess extends DatabaseAccess {
 			pstmt.setString(1, toDataset);
 			rset = pstmt.executeQuery();
 			if (rset.next()) {
-				String glossaryName = new GlossaryNameMapper()
+				String glossaryName = GlossaryNameMapper.getInstance()
 						.getGlossaryName(rset.getInt(1));
 				if (!glossaryName.equals("")) {
 					String fromDataset = glossaryName + "_glossary";
@@ -2492,8 +2492,8 @@ public class CharacterDBAccess extends DatabaseAccess {
 			boolean finalized) throws SQLException {
 		GlossaryGroupBean ggb = new GlossaryGroupBean();
 		ggb.setGlossaryID(glossaryType);
-		GlossaryNameMapper nameMapper = new GlossaryNameMapper();
-		ggb.setGlossaryName(nameMapper.getGlossaryName(glossaryType));
+		ggb.setGlossaryName(GlossaryNameMapper.getInstance().getGlossaryName(
+				glossaryType));
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
@@ -2527,7 +2527,8 @@ public class CharacterDBAccess extends DatabaseAccess {
 			// do not list system reserved datasets
 			while (rset.next()) {
 				String name = rset.getString("prefix");
-				if (!nameMapper.isSystemReservedDataset(name)) {
+				if (!GlossaryNameMapper.getInstance().isSystemReservedDataset(
+						name)) {
 					DatasetBean ds = new DatasetBean();
 					ds.setName(name);
 					ds.setCategorizationFinalized(finalized);
@@ -6557,7 +6558,7 @@ public class CharacterDBAccess extends DatabaseAccess {
 						pstmt.setString(6, rset.getString("tag"));
 						pstmt.executeUpdate();
 						hash_sentences
-								.put(rset.getString("originalSent"), true);
+								.put(rset.getString("originalSent").trim(), true);
 					}
 				}
 				// st.executeUpdate("insert into "
@@ -7671,8 +7672,8 @@ public class CharacterDBAccess extends DatabaseAccess {
 					pstmt.executeUpdate();
 
 					// store latest version to db
-					boolean isForGlossaryDownload = new GlossaryNameMapper()
-							.isGlossaryReservedDataset(dataset);
+					boolean isForGlossaryDownload = GlossaryNameMapper
+							.getInstance().isGlossaryReservedDataset(dataset);
 					sql = "insert into glossary_versions(dataset, glossaryType, filename, primaryVersion, "
 							+ "secondaryVersion, svnLink, isLatest, isForGlossaryDownload, dateCreated) values "
 							+ "(?, ?, ?, ?, ?, ?, ?, ?, now())";

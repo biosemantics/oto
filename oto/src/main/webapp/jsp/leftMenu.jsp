@@ -7,7 +7,6 @@
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.GlossaryGroupBean"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.GlossaryNameMapper"%>
 
 <script language="javascript" src="js/managerSave.js"></script>
 <%
@@ -23,7 +22,6 @@
 	}
 
 	CharacterDBAccess cdba = new CharacterDBAccess();
-	GlossaryNameMapper glossMapper = new GlossaryNameMapper();
 	User user = sessionDataManager.getUser();
 %>
 

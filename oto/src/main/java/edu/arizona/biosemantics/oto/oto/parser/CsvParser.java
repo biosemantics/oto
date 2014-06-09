@@ -52,7 +52,7 @@ public class CsvParser {
 				sentence = sentence.substring(0, sentence.indexOf("\""));
 			}
 		} else {// sentence has no comma inside
-			sentence = sentence.replaceAll(",", "");
+			sentence = sentence.trim().replaceAll(",", "");
 		}
 
 		if (!sentence.equals("")) {
@@ -74,7 +74,8 @@ public class CsvParser {
 			String[] terms = line.split(splitBy);
 			if (terms.length > 0) {
 				// get term
-				String term = terms[0].toLowerCase().replaceAll("\"", "");
+				String term = terms[0].trim().toLowerCase()
+						.replaceAll("\"", "");
 				if (!term.equals("")) {
 					termList.add(term);
 				}
@@ -107,7 +108,8 @@ public class CsvParser {
 		while ((line = br.readLine()) != null) {
 			String[] terms = line.split(splitBy);
 			if (terms.length > 0) {
-				String term = terms[0].toLowerCase().replaceAll("\"", "");
+				String term = terms[0].trim().toLowerCase()
+						.replaceAll("\"", "");
 				if (!term.equals("")) {
 					map.put(term, "");
 				}
@@ -150,15 +152,15 @@ public class CsvParser {
 				 * read in the order group name, order group name can be
 				 * duplicates
 				 */
-				SimpleOrderBean order = new SimpleOrderBean(
-						words[0].replaceAll("\"", ""));
+				SimpleOrderBean order = new SimpleOrderBean(words[0].trim()
+						.replaceAll("\"", ""));
 				if (words.length > 1) {
 					// read in the terms in this order group
 					ArrayList<String> terms = new ArrayList<String>();
 
 					for (int i = 1; i < words.length; i++) {
-						String term = words[i].toLowerCase().replaceAll("\"",
-								"");
+						String term = words[i].trim().toLowerCase()
+								.replaceAll("\"", "");
 						if (!term.equals("")) {
 							terms.add(term);
 						}

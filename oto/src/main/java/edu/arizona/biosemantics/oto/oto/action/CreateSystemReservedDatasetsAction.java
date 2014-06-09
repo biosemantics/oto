@@ -19,7 +19,7 @@ public class CreateSystemReservedDatasetsAction  extends ParserAction{
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		CharacterDBAccess cdba = new CharacterDBAccess();
-		ArrayList<String> glosses = new GlossaryNameMapper().getGlossaryNames();
+		ArrayList<String> glosses = GlossaryNameMapper.getInstance().getGlossaryNames();
 		for (int i = 0; i < glosses.size(); i++) {
 			cdba.createDatasetIfNotExist(glosses.get(i) + "_glossary", "", 23, i + 1);
 		}

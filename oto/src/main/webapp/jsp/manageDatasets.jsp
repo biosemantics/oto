@@ -72,12 +72,13 @@
 											<option value="" style="font-weight: bold;">- Select
 												-</option>
 											<%
-												GlossaryNameMapper gmapper = new GlossaryNameMapper();
-													ArrayList<String> glosses = gmapper.getGlossaryNames();
-													GlossaryNameMapper nameMapper = new GlossaryNameMapper();
+												ArrayList<String> glosses = GlossaryNameMapper.getInstance()
+															.getGlossaryNames();
 													for (String gloss : glosses) {
 											%>
-											<option value="<%=gmapper.getGlossaryIDByName(gloss)%>"><%=gloss%></option>
+											<option
+												value="<%=GlossaryNameMapper.getInstance()
+							.getGlossaryIDByName(gloss)%>"><%=gloss%></option>
 
 											<%
 												}
@@ -125,7 +126,7 @@
 										title="This is a <%=(dataset.isPrivate() ? "private" : "public")%> dataset"
 										height="14px" /><label class="datasetName"><%=dataset.getDatasetName()%></label>
 										<%
-											if (!nameMapper.isSystemReservedDataset(dataset
+											if (!GlossaryNameMapper.getInstance().isSystemReservedDataset(dataset
 																.getDatasetName())) {
 										%> <input type="button"
 										value="Make <%=(dataset.isPrivate() ? "Public"
@@ -159,8 +160,8 @@
  %> <input type="button" onclick="selectFile(this) "
 												<%=(dataset.getNumTotalTerms() > 0 ? "value='Re-import' title='Re-import from a .csv file. This will delete all existing terms.'"
 									: "value='import' title='Import terms from .csv file.'")%>
-												class="uiButton uiButtonMedium"></input> <a target="_blank" href="intro.do#csvFormat_Terms">View
-													Import Format</a>
+												class="uiButton uiButtonMedium"></input> <a target="_blank"
+												href="intro.do#csvFormat_Terms">View Import Format</a>
 
 												<form class="uploadForm" action="import.do" method="post"
 													enctype="multipart/form-data">
@@ -185,8 +186,8 @@
  %> <input type="button" onclick="selectFile(this)"
 												<%=(dataset.getNumTotalTags() > 0 ? "value='Re-import' title='Re-import from a .csv file. This will delete all existing terms.'"
 									: "value='import' title='Import terms from .csv file.'")%>
-												class="uiButton uiButtonMedium"></input> <a target="_blank" href="intro.do#csvFormat_Structures">View
-													Import Format</a>
+												class="uiButton uiButtonMedium"></input> <a target="_blank"
+												href="intro.do#csvFormat_Structures">View Import Format</a>
 
 												<form class="uploadForm" action="import.do" method="post"
 													enctype="multipart/form-data">
@@ -210,8 +211,8 @@
  %> <input type="button" onclick="selectFile(this)"
 												<%=(dataset.getNumTotalOrders() > 0 ? "value='Re-import' title='Re-import from a .csv file. This will delete all existing terms.'"
 									: "value='import' title='Import terms from .csv file.'")%>
-												class="uiButton uiButtonMedium"></input> <a target="_blank" href="intro.do#csvFormat_Orders">View
-													Import Format</a>
+												class="uiButton uiButtonMedium"></input> <a target="_blank"
+												href="intro.do#csvFormat_Orders">View Import Format</a>
 
 												<form class="uploadForm" action="import.do" method="post"
 													enctype="multipart/form-data">

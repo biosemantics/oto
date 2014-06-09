@@ -1,14 +1,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@page import="edu.arizona.biosemantics.oto.oto.beans.DatasetBean"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.Date"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.db.GeneralDBAccess"%>
 <%@ page
 	import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
-<%@ page
-	import="edu.arizona.biosemantics.oto.oto.beans.GlossaryNameMapper"%>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>OTO</title>
@@ -85,8 +84,8 @@
 						<td>
 							<hr></hr>
 							<p>Please select a dataset prefix to start working:</p> <%
- 	CharacterDBAccess cdba = new CharacterDBAccess();
- 		ArrayList<String> datasets = cdba.getSelectableDatasets(user.getUserId());
+ 	ArrayList<DatasetBean> datasets = GeneralDBAccess.getInstance()
+ 				.getSelectableDatasets(user.getUserId());
  %>
 
 							<form id="generalForm" name="generalForm" action="groupTerms.do"
@@ -94,21 +93,21 @@
 								<select name="value" id="value" onchange="checkDataset(this)">
 									<option value="select" style="font-weight: bold;">Select</option>
 									<%
-										GlossaryNameMapper nameMapper = new GlossaryNameMapper();
-											for (String prefix : datasets) {
-												boolean isSystemReserved = nameMapper
-														.isGlossaryReservedDataset(prefix);
+										for (DatasetBean dataset : datasets) {
+												String prefix = dataset.getName();
+												String style = dataset.isSystemReserved() ? "color: green"
+														: "";
+												String tag = dataset.isSystemReserved() ? " [System Reserved]"
+														: (dataset.isPrivate() ? " [Private]" : (prefix
+																.equals("OTO_Demo") ? " [Demo]" : ""));
 												if (currentDateset.equals(prefix)) {
 									%>
 									<option value="<%=prefix%>" selected="selected"
-										style="<%=isSystemReserved ? "color: green" : ""%>"><%=isSystemReserved ? prefix
-								+ " [System Reserved]" : prefix%></option>
+										style="<%=style%>"><%=prefix + tag%></option>
 									<%
 										} else {
 									%>
-									<option value="<%=prefix%>"
-										style="<%=isSystemReserved ? "color: green" : ""%>"><%=isSystemReserved ? prefix
-								+ " [System Reserved]" : prefix%></option>
+									<option value="<%=prefix%>" style="<%=style%>"><%=prefix + tag%></option>
 									<%
 										}
 											}

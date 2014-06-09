@@ -9,7 +9,6 @@
 <%@page import="edu.arizona.biosemantics.oto.oto.beans.TermDecision"%>
 <%@page import="edu.arizona.biosemantics.oto.oto.beans.DatasetBean"%>
 <%@page import="edu.arizona.biosemantics.oto.oto.beans.GlossaryGroupBean"%>
-<%@page import="edu.arizona.biosemantics.oto.oto.beans.GlossaryNameMapper"%>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -54,7 +53,6 @@
 				<div style="width: 100%; padding: 20px;">
 					<b>Select an area to work on:</b>
 					<%
-						GlossaryNameMapper nameMapper = new GlossaryNameMapper();
 							for (int i = 1; i < 6; i++) {
 					%>
 					<a style="padding-left: 30px" href="mergeDatasets.do?gloss=<%=i%>"

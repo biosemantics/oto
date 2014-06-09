@@ -11,7 +11,9 @@ import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
+import edu.arizona.biosemantics.oto.oto.beans.DatasetBean;
 import edu.arizona.biosemantics.oto.oto.beans.DatasetStatistics;
+import edu.arizona.biosemantics.oto.oto.beans.GlossaryNameMapper;
 import edu.arizona.biosemantics.oto.oto.beans.User;
 
 public class GeneralDBAccess extends DatabaseAccess {
@@ -204,33 +206,34 @@ public class GeneralDBAccess extends DatabaseAccess {
 	 * @param sentences
 	 * @throws SQLException
 	 */
-	public void importSentences(Connection conn, Statement stmt,
+	public void importSentences(Connection conn, PreparedStatement pstmt,
 			String dataset, String fileName, ArrayList<String> sentences)
 			throws SQLException {
-		if (stmt == null) {
-			stmt = conn.createStatement();
-		}
 		ResultSet rset = null;
 		HashMap<String, Boolean> map = new HashMap<String, Boolean>();
 		try {
 			conn = getConnection();
 			conn.setAutoCommit(false);
-			stmt = conn.createStatement();
 
 			// read out existing sentences for duplication check
-			rset = stmt.executeQuery("select originalSent from " + dataset
+			pstmt = conn.prepareStatement("select originalSent from " + dataset
 					+ "_sentence");
+			rset = pstmt.executeQuery();
 			while (rset.next()) {
-				map.put(rset.getString(1), true);
+				map.put(rset.getString(1).trim(), true);
 			}
 
 			// insert if does not exist
 			for (String sentence : sentences) {
 				if (map.get(sentence) == null) {
-					stmt.executeUpdate("insert into " + dataset + "_sentence "
-							+ "(sentid, source, sentence, originalSent) values (0, '"
-							+ fileName + "', '" + sentence + "', '" + sentence
-							+ "')");
+					pstmt = conn.prepareStatement("insert into " + dataset
+							+ "_sentence "
+							+ "(sentid, source, sentence, originalSent) values"
+							+ " (0, ?, ?, ?)");
+					pstmt.setString(1, fileName);
+					pstmt.setString(2, sentence);
+					pstmt.setString(3, sentence);
+					pstmt.executeUpdate();
 					map.put(sentence, true);
 				}
 			}
@@ -246,15 +249,49 @@ public class GeneralDBAccess extends DatabaseAccess {
 			if (rset != null) {
 				rset.close();
 			}
-
-			if (stmt != null) {
-				stmt.close();
-			}
-
-			if (conn != null) {
-				conn.close();
-			}
 		}
+	}
+
+	public ArrayList<DatasetBean> getSelectableDatasets(int userID)
+			throws Exception {
+		ArrayList<DatasetBean> datasets = new ArrayList<DatasetBean>();
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+
+		try {
+			conn = getConnection();
+			String query = "select prefix, isPrivate from datasetprefix where "
+					+ "(isPrivate = false or "
+					+ "(prefix in (select distinct dataset from dataset_owner where ownerID = ?))) "
+					+ "and "
+					+ "(grouptermsdownloadable = false or structurehierarchydownloadable = false "
+					+ "or termorderdownloadable = false) "
+					+ "order by time_last_accessed desc";
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, userID);
+			rset = pstmt.executeQuery();
+			while (rset.next()) {
+				String name = rset.getString(1);
+				DatasetBean ds = new DatasetBean(name);
+				if (GlossaryNameMapper.getInstance().isGlossaryReservedDataset(
+						name)) {
+					ds.setSystemReserved(true);
+				}
+				ds.setPrivate(rset.getBoolean(2));
+
+				datasets.add(ds);
+			}
+
+		} catch (SQLException exe) {
+			exe.printStackTrace();
+			LOGGER.error("Exception in GlossaryNameMapper.getInstance(): getSelectableDatasets"
+					+ exe);
+		} finally {
+			closeConnection(pstmt, rset, conn);
+		}
+
+		return datasets;
 	}
 
 }

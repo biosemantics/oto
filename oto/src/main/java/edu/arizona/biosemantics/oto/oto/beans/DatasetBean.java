@@ -23,7 +23,8 @@ public class DatasetBean implements Serializable {
 	private String mergedInto;
 	private int numTermsInCategorizePage;
 	private int numTemrsReviewedInCategorizePage;
-	private boolean isSystemReserved;
+	private boolean isSystemReserved = false;
+	private boolean isPrivate = false;
 
 	public DatasetBean() {
 
@@ -96,8 +97,8 @@ public class DatasetBean implements Serializable {
 
 	public void setGlossaryID(int glossaryID) {
 		this.glossaryID = glossaryID;
-		this.glossaryName = new GlossaryNameMapper()
-				.getGlossaryName(glossaryID);
+		this.glossaryName = GlossaryNameMapper.getInstance().getGlossaryName(
+				glossaryID);
 	}
 
 	public String getGlossaryName() {
@@ -114,6 +115,14 @@ public class DatasetBean implements Serializable {
 
 	public void setSystemReserved(boolean isSystemReserved) {
 		this.isSystemReserved = isSystemReserved;
+	}
+
+	public boolean isPrivate() {
+		return isPrivate;
+	}
+
+	public void setPrivate(boolean isPrivate) {
+		this.isPrivate = isPrivate;
 	}
 
 }

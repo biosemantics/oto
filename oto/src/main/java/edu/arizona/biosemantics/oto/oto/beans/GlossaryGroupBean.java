@@ -19,7 +19,7 @@ public class GlossaryGroupBean implements Serializable {
 
 	public void setGlossaryID(int glossaryID) {
 		this.glossaryID = glossaryID;
-		this.glossaryName = new GlossaryNameMapper().getGlossaryName(glossaryID);
+		this.glossaryName = GlossaryNameMapper.getInstance().getGlossaryName(glossaryID);
 	}
 
 	public String getGlossaryName() {

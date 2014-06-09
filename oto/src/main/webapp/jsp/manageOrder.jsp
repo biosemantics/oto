@@ -9,7 +9,6 @@
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.Order"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.GlossaryNameMapper"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.Character"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.db.UserDataAccess"%>
 
@@ -66,7 +65,6 @@
 							"selectedDataset").toString();
 				}
 
-				GlossaryNameMapper mapper = new GlossaryNameMapper();
 				boolean canModify = true;
 				if (!manager.getRole().equals("S")
 						&& mapper

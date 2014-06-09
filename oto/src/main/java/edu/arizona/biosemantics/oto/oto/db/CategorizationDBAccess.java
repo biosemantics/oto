@@ -2,6 +2,7 @@ package edu.arizona.biosemantics.oto.oto.db;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class CategorizationDBAccess extends DatabaseAccess {
 			IOException {
 		Connection conn = null;
 		Statement stmt = null;
-
+		PreparedStatement pstmt = null;
 		try {
 			conn = getConnection();
 			conn.setAutoCommit(false);
@@ -51,7 +52,7 @@ public class CategorizationDBAccess extends DatabaseAccess {
 			}
 
 			// import sentences
-			GeneralDBAccess.getInstance().importSentences(conn, stmt, dataset,
+			GeneralDBAccess.getInstance().importSentences(conn, pstmt, dataset,
 					fileName, sentences);
 
 			conn.commit();
@@ -69,6 +70,8 @@ public class CategorizationDBAccess extends DatabaseAccess {
 		} finally {
 			if (stmt != null)
 				stmt.close();
+			if (pstmt != null)
+				pstmt.close();
 			if (conn != null)
 				conn.close();
 		}

@@ -7,6 +7,14 @@ package edu.arizona.biosemantics.oto.oto.beans;
 import java.util.ArrayList;
 
 public class GlossaryNameMapper {
+	private static GlossaryNameMapper instance;
+
+	public static GlossaryNameMapper getInstance() {
+		if (instance == null) {
+			instance = new GlossaryNameMapper();
+		}
+		return instance;
+	}
 
 	/**
 	 * map glossary id to glossary name

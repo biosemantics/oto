@@ -512,8 +512,10 @@ function removeTermWithName(term) {
 function mouse_down_handler(e) {
 	//console.log("mouse down");
 	moveFlagToDetermineDragVsClick = 0;
-	mouseDownPositionX = e.offsetX;
-	mouseDownPositionY = e.offsetY;
+	
+	//firefox uses layerX/Y instead
+	mouseDownPositionX = e.offsetX==undefined?e.layerX:e.offsetX;
+	mouseDownPositionY = e.offsetY==undefined?e.layerY:e.offsetY;
 	
 	// alert("mouse down");
 	var evn;
@@ -557,13 +559,15 @@ function mouse_down_handler(e) {
 	console.log(current_obj.parentNode.parentNode.parentNode.className);
 	console.log(current_obj.parentNode.parentNode.parentNode.parentNode.className);
 	*/
+	
 	dragAfterSave = current_obj.className != "fixTypoIcon" && 
 		(current_obj.className == "term_row_saved" ||
 				current_obj.parentNode.className == "term_row_saved" ||
 				current_obj.parentNode.parentNode.className == "term_row_saved" || 
 				current_obj.parentNode.parentNode.parentNode.className == "term_row_saved");
 	
-	//console.log(dragAfterSave);
+	//console.log("dragAfterSave " + dragAfterSave);
+	//console.log("dragGroupTable " + dragGroupTable);
 	
 	if (dragGroupTable) {
 		
@@ -613,7 +617,7 @@ function mouse_down_handler(e) {
 		// alert("else");
 	}
 
-	//console.log("end mouse down");
+	//console.log("end mouse down " + is_drag);
 	return false;
 }
 
@@ -621,13 +625,19 @@ function mouse_down_handler(e) {
  * mouse move event handler update position of the dragged obj
  */
 function mouse_move_handler(e) {
-	var posX = e.offsetX;
-	var posY = e.offsetY;
+	//firefox uses layerX/Y instead
+	var posX = e.offsetX==undefined?e.layerX:e.offsetX;
+	var posY = e.offsetY==undefined?e.layerY:e.offsetY;
+		
+	//console.log("mouse move "  + e);
 	
-	//console.log("mouse move");
-	
-	//console.log(mouseDownPositionX);
-	//console.log(mouseDownPositionY);
+	/*if(is_drag) {
+		console.log(posX);
+		console.log(posY);
+		console.log(distanceThresholdDragClick);
+		console.log(mouseDownPositionX);
+		console.log(mouseDownPositionY);
+	}*/
 	
 	if(mouseDownPositionX != -1 && mouseDownPositionY != -1 && (Math.abs(mouseDownPositionX - posX) + Math.abs(mouseDownPositionY - posY) > distanceThresholdDragClick)) {
 		//alert("here");

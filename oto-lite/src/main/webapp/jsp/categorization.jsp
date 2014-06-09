@@ -171,7 +171,7 @@
 		if (!upload.isFinalized()) {
 	%>
 	<div id="dragging_part"
-		style="width: 100%; height: 75%; border: 1px solid #279446; overflow: auto">
+		style="width: 100%; height: 70%; border: 1px solid #279446; overflow: auto">
 		<table style="width: 100%; height: 100%;">
 			<tr bgcolor="#279446" style="height: 28px; width: 100%">
 				<th align="left" width="15%"><font color="white">Terms:</font></th>
@@ -405,7 +405,7 @@
 
 	<!-- context part -->
 	<div
-		style="width: 100%; height: 20%; overflow: auto; border: 1px solid #279446;">
+		style="width: 100%; height: 30%; overflow: auto; border: 1px solid #279446;">
 		<table width="100%" cellspacing="0px">
 			<tr>
 				<th width="10%" class="currentContext" id="termLocations"

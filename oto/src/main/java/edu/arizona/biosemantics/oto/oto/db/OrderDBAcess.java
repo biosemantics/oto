@@ -66,10 +66,10 @@ public class OrderDBAcess extends DatabaseAccess {
 	 * 
 	 * @param dataset
 	 * @param orders
-	 * @throws SQLException
+	 * @throws Exception 
 	 */
 	public void importOrders(String dataset, ArrayList<SimpleOrderBean> orders)
-			throws SQLException {
+			throws Exception {
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rset = null;

@@ -31,12 +31,10 @@ public class HierarchyDBAccess extends DatabaseAccess {
 	 * @param termList
 	 * @param fileName
 	 * @param sentences
-	 * @throws SQLException
-	 * @throws IOException
+	 * @throws Exception 
 	 */
 	public void importStructures(String dataset, ArrayList<String> termList,
-			String fileName, ArrayList<String> sentences) throws SQLException,
-			IOException {
+			String fileName, ArrayList<String> sentences) throws Exception {
 		Connection conn = null;
 		Statement stmt = null;
 		PreparedStatement pstmt = null;

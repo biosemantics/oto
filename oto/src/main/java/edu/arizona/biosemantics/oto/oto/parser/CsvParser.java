@@ -71,6 +71,8 @@ public class CsvParser {
 
 		br = new BufferedReader(new InputStreamReader(fileStream));
 		while ((line = br.readLine()) != null) {
+//			byte[] utf8Bytes = line.getBytes("UTF-8");
+//			String test = new String(utf8Bytes, "UTF-8");
 			String[] terms = line.split(splitBy);
 			if (terms.length > 0) {
 				// get term

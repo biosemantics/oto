@@ -204,11 +204,11 @@ public class GeneralDBAccess extends DatabaseAccess {
 	 * @param dataset
 	 * @param fileName
 	 * @param sentences
-	 * @throws SQLException
+	 * @throws Exception 
 	 */
 	public void importSentences(Connection conn, PreparedStatement pstmt,
 			String dataset, String fileName, ArrayList<String> sentences)
-			throws SQLException {
+			throws Exception {
 		ResultSet rset = null;
 		HashMap<String, Boolean> map = new HashMap<String, Boolean>();
 		try {

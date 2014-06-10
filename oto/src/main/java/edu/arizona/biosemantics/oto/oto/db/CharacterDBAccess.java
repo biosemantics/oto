@@ -6288,10 +6288,10 @@ public class CharacterDBAccess extends DatabaseAccess {
 	 * @param createrID
 	 *            : the owner of this newly created dataset
 	 * @param glossaryID
-	 * @throws SQLException
+	 * @throws Exception 
 	 */
 	public boolean createDatasetIfNotExist(String datasetName, String note,
-			int createrID, int glossaryID) throws SQLException {
+			int createrID, int glossaryID) throws Exception {
 		boolean rv = false;
 		Connection conn = null;
 		PreparedStatement pstmt = null;

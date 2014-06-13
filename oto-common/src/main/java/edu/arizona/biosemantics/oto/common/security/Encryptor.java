@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import sun.misc.BASE64Encoder;
+import javax.xml.bind.DatatypeConverter;
 
 public final class Encryptor {
 	private static Encryptor instance;
@@ -33,7 +33,7 @@ public final class Encryptor {
 		}
 
 		byte raw[] = md.digest();
-		String hash = (new BASE64Encoder()).encode(raw);
+		String hash = DatatypeConverter.printBase64Binary(raw);
 
 		// since this key will be used in URL, cannot have special characters
 		// replace special characters with 0

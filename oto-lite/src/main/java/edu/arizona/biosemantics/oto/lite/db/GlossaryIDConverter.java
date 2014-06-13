@@ -33,19 +33,16 @@ public class GlossaryIDConverter {
 	 * @return
 	 */
 	public static int getGlossaryIDByName(String glossaryName) {
-		switch (glossaryName) {
-		case "Plant":
+		if(glossaryName.equals("Plant"))
 			return 1;
-		case "Hymenoptera":
+		if(glossaryName.equals("Hymenoptera"))
 			return 2;
-		case "Algea":
+		if(glossaryName.equals("Algea"))
 			return 3;
-		case "Porifera":
+		if(glossaryName.equals("Porifera"))
 			return 4;
-		case "Fossil":
+		if(glossaryName.equals("Fossil"))
 			return 5;
-		default:
-			return 1;
-		}
+		return 1;
 	}
 }

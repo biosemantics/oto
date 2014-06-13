@@ -33,18 +33,16 @@ public class GlossaryIDConverter {
 	 * @return
 	 */
 	public static int getGlossaryIDByName(String glossaryName) {
-		if (glossaryName.equals("Plant")) {
+		if (glossaryName.equals("Plant"))
 			return 1;
-		} else if (glossaryName.equals("Hymenoptera")) {
+		if (glossaryName.equals("Hymenoptera"))
 			return 2;
-		} else if (glossaryName.equals("Algea")) {
+		if (glossaryName.equals("Algea"))
 			return 3;
-		} else if (glossaryName.equals("Porifera")) {
+		if (glossaryName.equals("Porifera"))
 			return 4;
-		} else if (glossaryName.equals("Fossil")) {
+		if (glossaryName.equals("Fossil"))
 			return 5;
-		} else {
-			return 1;
-		}
+		return 1;
 	}
 }

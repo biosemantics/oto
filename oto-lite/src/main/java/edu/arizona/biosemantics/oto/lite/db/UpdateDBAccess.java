@@ -56,6 +56,9 @@ public class UpdateDBAccess extends AbstractDBAccess {
 
 				for (String uploadId : uploads) {
 					String secret = Encryptor.getInstance().encrypt(uploadId);
+					// since this key will be used in URL, cannot have special characters
+					// replace special characters with 0
+					secret = secret.replaceAll("[^0-9A-Za-z]", "0");
 					sql = "update uploads set secret = '" + secret
 							+ "' where uploadID = " + uploadId;
 					stmt.executeUpdate(sql);

@@ -12,6 +12,7 @@ import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.api.client.filter.LoggingFilter;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 
@@ -33,14 +34,13 @@ public class OTOClient implements IOTOClient {
 		ClientConfig clientConfig = new DefaultClientConfig();
 		clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
 		client = Client.create(clientConfig);
-		//client.addFilter(new LoggingFilter(System.out));
+		client.addFilter(new LoggingFilter(System.out));
 	}
 
 	public GlossaryDownload download(String glossaryType, String version) {
-		String url = this.url + "rest/glossary/download";
+		String url = this.url + "rest/glossaries/" + glossaryType;
 	    WebResource webResource = client.resource(url);
 	    MultivaluedMap<String, String> queryParams = new MultivaluedMapImpl();
-	    queryParams.add("glossaryType", glossaryType);
 	    queryParams.add("version", version);
 	    try {
 		    GlossaryDownload download = webResource.queryParams(queryParams).get(GlossaryDownload.class);
@@ -52,10 +52,9 @@ public class OTOClient implements IOTOClient {
 	}
 	
 	public GlossaryDownload download(String glossaryType) {
-		String url = this.url + "rest/glossary/download";
+		String url = this.url + "rest/glossaries/" + glossaryType;
 	    WebResource webResource = client.resource(url);
 	    MultivaluedMap<String, String> queryParams = new MultivaluedMapImpl();
-	    queryParams.add("glossaryType", glossaryType);
 	    try {
 		    GlossaryDownload download = webResource.queryParams(queryParams).get(GlossaryDownload.class);
 			return download;
@@ -66,7 +65,7 @@ public class OTOClient implements IOTOClient {
 	}
 	
 	public List<Category> getCategories() {
-		String url = this.url + "rest/glossary/categories";
+		String url = this.url + "rest/categories";
 		WebResource webResource = client.resource(url);
 		try {
 			List<Category> categories = webResource.get(new GenericType<List<Category>>() {});

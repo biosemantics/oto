@@ -3,6 +3,7 @@ package edu.arizona.biosemantics.oto.common.security;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import sun.misc.BASE64Encoder;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -17,6 +18,11 @@ public final class Encryptor {
 	}
 
 	private Encryptor() {
+	}
+	
+	public static void main(String[] args) {
+		Encryptor enc = new Encryptor();
+		enc.encrypt("OTOdemopass");
 	}
 
 	public synchronized String encrypt(String plaintext) {
@@ -33,11 +39,8 @@ public final class Encryptor {
 		}
 
 		byte raw[] = md.digest();
+		
 		String hash = DatatypeConverter.printBase64Binary(raw);
-
-		// since this key will be used in URL, cannot have special characters
-		// replace special characters with 0
-		hash = hash.replaceAll("[^0-9A-Za-z]", "0");
 		return hash;
 	}
 }

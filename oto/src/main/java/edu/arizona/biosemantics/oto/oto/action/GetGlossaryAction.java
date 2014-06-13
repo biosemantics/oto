@@ -15,7 +15,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.arizona.biosemantics.oto.common.ontologylookup.OlsClient;
+import edu.arizona.biosemantics.oto.common.ontologylookup.webservice.OlsClient;
 import edu.arizona.biosemantics.oto.oto.beans.SessionDataManager;
 import edu.arizona.biosemantics.oto.oto.beans.TermGlossaryBean;
 import edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess;

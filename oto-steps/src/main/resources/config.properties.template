@@ -1,0 +1,18 @@
+#Database configuration
+otolite_databaseName=
+otolite_databaseUser=
+otolite_databasePassword=
+
+#bioportal configuration
+bioportalUrl=http://rest.bioontology.org/bioportal/
+
+#OTO configuration
+OTO_url=http://biosemantics.arizona.edu/OTO/
+
+#ontology lookup configuration
+ontology_dir=C:/OntologyOwlFiles/
+dict_dir=C:/wordnet/wn31/dict/
+
+#source files location configuration
+src_file_dir=C:/git/oto-steps/srcfiles/
+

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+              http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5"
+         xmlns="http://java.sun.com/xml/ns/javaee">
+	<display-name>otosteps</display-name>
+
+	<!-- Servlets -->
+	<!-- http://www.gwtproject.org/doc/latest/DevGuideServerCommunication.html#DevGuideImplementingServices
+	       -> Common pitfalls: for url-pattern help -->
+
+
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+	
+	
+	<servlet>
+		<servlet-name>GeneralServiceIml</servlet-name>
+		<servlet-class>edu.arizona.biosemantics.oto.steps.server.rpc.GeneralServiceIml</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>GeneralServiceIml</servlet-name>
+		<url-pattern>/otosteps/general</url-pattern>
+	</servlet-mapping>
+
+
+	<servlet>
+		<servlet-name>TermInfoServiceIml</servlet-name>
+		<servlet-class>edu.arizona.biosemantics.oto.steps.server.rpc.TermInfoServiceIml</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>TermInfoServiceIml</servlet-name>
+		<url-pattern>/otosteps/termInfo</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ToOntologiesServiceImpl</servlet-name>
+		<servlet-class>edu.arizona.biosemantics.oto.steps.server.rpc.ToOntologiesServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ToOntologiesServiceImpl</servlet-name>
+		<url-pattern>/otosteps/toOntologies</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>HierarchyServiceImpl</servlet-name>
+		<servlet-class>edu.arizona.biosemantics.oto.steps.server.rpc.HierarchyServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>HierarchyServiceImpl</servlet-name>
+		<url-pattern>/otosteps/hierarchy</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>OrderServiceImpl</servlet-name>
+		<servlet-class>edu.arizona.biosemantics.oto.steps.server.rpc.OrderServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>OrderServiceImpl</servlet-name>
+		<url-pattern>/otosteps/orders</url-pattern>
+	</servlet-mapping>
+
+</web-app>

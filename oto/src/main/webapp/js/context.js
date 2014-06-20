@@ -356,65 +356,84 @@ function unhide(object){
 	   } 
 	}
 
- function processContext() {
-   
-  if (XHR.readyState == 4) {
-	  	
-        // only if "OK"
-        if (XHR.status == 200) {
-			var div = document.getElementById("contextSentences");
-			var tab = document.getElementById("contextTable");
-			if (tab != null) {
-			 	div.removeChild(tab);
-			 }
-			
-			var termName = document.getElementById("glossaryTerm").innerHTML;
-        	termName = getOriginalTermName(termName);
-			document.getElementById("th_context_1").innerHTML = "Source (of " + termName + ")";
-			document.getElementById("th_context_2").innerHTML = "Detail Sentence";
-			
-			var tab1 = document.createElement("table");
-			tab1.setAttribute("width", "100%");
-			tab1.setAttribute("id", "contextTable");
-			div.appendChild(tab1);
-	        // process the response here!
-			//alert(XHR.responseText);
-	  		var response = XHR.responseXML;
-	  		var contexts = response.getElementsByTagName("context");
-	  		 //alert(XHR.responseText);
-  		    var flag = true;
-	  		for(var i = 0 ; i < contexts.length; i++) {
-	  			var tr = document.createElement("tr");
-	  			var td = document.createElement("td");
+  function processContext() {
+	   
+	  if (XHR.readyState == 4) {
+		  	
+	        // only if "OK"
+	        if (XHR.status == 200) {
+				var div = document.getElementById("contextSentences");
+				var tab = document.getElementById("contextTable");
+				if (tab != null) {
+				 	div.removeChild(tab);
+				 }
+				
+				var termName = document.getElementById("glossaryTerm").innerHTML;
+	        	termName = getOriginalTermName(termName);
+				document.getElementById("th_context_1").innerHTML = "Source (of " + termName + ")";
+				document.getElementById("th_context_2").innerHTML = "Detail Sentence";
+				
+				var tab1 = document.createElement("table");
+				tab1.setAttribute("width", "100%");
+				tab1.setAttribute("id", "contextTable");
+				div.appendChild(tab1);
+		        // process the response here!
+				//alert(XHR.responseText);
+		  		var response = XHR.responseXML;
+		  		var contexts = response.getElementsByTagName("context");
+		  		 //alert(XHR.responseText);
+	  		    var flag = true;
+		  		for(var i = 0 ; i < contexts.length; i++) {
+		  			var tr = document.createElement("tr");
+		  			var td = document.createElement("td");
+		  			
+		  			if(flag) {
+		  				tr.setAttribute("class", "d0");
+		  				flag = false;
+		  			} else {
+		  			   tr.setAttribute("class", "d1");
+		  			   flag = true;
+		  			}
+		  			
+		  			td.setAttribute("width", "15%");
+		  			var sourceFileName = contexts[i].childNodes[0].childNodes[0].nodeValue;
+		  			td.innerHTML = "<font class=\"font-text-style\"><a href=\"#\" onClick=\"showFile('"+sourceFileName+"')\">" 
+		  			+ sourceFileName + "</a></font>";
 	  			
-	  			if(flag) {
-	  				tr.setAttribute("class", "d0");
-	  				flag = false;
-	  			} else {
-	  			   tr.setAttribute("class", "d1");
-	  			   flag = true;
-	  			}
-	  			
-	  			td.setAttribute("width", "15%");
-	  			var sourceFileName = contexts[i].childNodes[0].childNodes[0].nodeValue;
-	  			td.innerHTML = "<font class=\"font-text-style\"><a href=\"#\" onClick=\"showFile('"+sourceFileName+"')\">" 
-	  			+ sourceFileName + "</a></font>";
-  			
-	  			var td1 = document.createElement("td");
-	  			td1.innerHTML = "<font class=\"font-text-style\">" + contexts[i].childNodes[1].childNodes[0].nodeValue + "</font>";
-	  			
-	  			tr.appendChild(td);
-	  			tr.appendChild(td1);
-	  			tab1.appendChild(tr);	  		
-	  		}
-	  		
-        } else {
-	        document.getElementById("serverMessage").innerHTML='<label>The server encountered an internal error while processing your request. '+
-	        'The response returned by the server is: ' +req.statusText +"</label>";
-        }
-   
-   } 
-}
+		  			var td1 = document.createElement("td");
+		  			var normalizedTermName = termName.split('_').join('-');
+					td1Content = "";				
+					/*td1Content += "<font class=\"font-text-style\">"
+						+ contexts[i].childNodes[1].childNodes[0].nodeValue
+						+ "</font>";*/
+					var splitRegex = new RegExp(normalizedTermName, "i"); // -> /normalizedTermName/i
+					var splits = contexts[i].childNodes[1].childNodes[0].nodeValue.split(splitRegex);
+					console.log(splitRegex);
+					for(var j=0; j<splits.length; j++) {
+						console.log(splits[j]);
+						td1Content += "<font class=\"font-text-style\">"
+							+ splits[j]
+							+ "</font>";
+						if(j < splits.length - 1) {
+							td1Content += "<font class=\"font-text-style\" color=\"red\">"
+								+ normalizedTermName
+								+ "</font>";
+						}
+					}
+					td1.innerHTML = td1Content;
+		  			
+		  			tr.appendChild(td);
+		  			tr.appendChild(td1);
+		  			tab1.appendChild(tr);	  		
+		  		}
+		  		
+	        } else {
+		        document.getElementById("serverMessage").innerHTML='<label>The server encountered an internal error while processing your request. '+
+		        'The response returned by the server is: ' +req.statusText +"</label>";
+	        }
+	   
+	   } 
+	}
 
 function showFile(fileName) {
   XHR = createXHR();

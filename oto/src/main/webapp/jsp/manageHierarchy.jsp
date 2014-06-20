@@ -1,11 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@page
+	import="edu.arizona.biosemantics.oto.oto.beans.GlossaryNameMapper"%>
 <%@page import="edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess"%>
 <%@page import="edu.arizona.biosemantics.oto.oto.beans.TermDecision"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.HashMap"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
+<%@ page
+	import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.db.UserDataAccess"%>
 
@@ -47,7 +50,8 @@
 						request.getParameter("s"));
 			}
 			UserDataAccess userDataAccess = new UserDataAccess();
-			ArrayList<User> users = (ArrayList<User>) userDataAccess.getAllUsers();
+			ArrayList<User> users = (ArrayList<User>) userDataAccess
+					.getAllUsers();
 	%>
 	<!-- Session Validity check header End -->
 	<jsp:include page="header.jsp" />
@@ -64,7 +68,7 @@
 
 				boolean canModify = true;
 				if (!manager.getRole().equals("S")
-						&& mapper
+						&& GlossaryNameMapper.getInstance()
 								.isGlossaryReservedDataset(selectedDataset)) {
 					canModify = false;
 				}
@@ -98,11 +102,10 @@
 												decisions will be pending before being finalized.<br>
 										</b> </font> <%
  	} else {
- %> <font class="font-text-style" id="datasetinfo"><b>The
-												<font color="purple">Structure Hierarchy</font> page of this
+ %> <font class="font-text-style" id="datasetinfo"><b>The <font
+												color="purple">Structure Hierarchy</font> page of this
 												dataset has been finalized. The finalized results are
-												showing below. <br>
-										</b></font> <%
+												showing below. <br></b></font> <%
  	}
  %> <label id="serverMessage"></label>
 									</td>

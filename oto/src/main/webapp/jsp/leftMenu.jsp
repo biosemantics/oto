@@ -7,6 +7,7 @@
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.GlossaryGroupBean"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.beans.GlossaryNameMapper" %>
 
 <script language="javascript" src="js/managerSave.js"></script>
 <%
@@ -112,12 +113,12 @@
 					style="font-size: 13px; font-weight: bolder; background-color: #B0F1A0;">
 					<a href="manageDataset.do?s=<%=dataset%>"
 					title="Click to view dataset information."
-					<%=isCurrent ? "style='color: purple'" : ""%>><%=glossMapper.isGlossaryReservedDataset(dataset) ? dataset
+					<%=isCurrent ? "style='color: purple'" : ""%>><%=GlossaryNameMapper.getInstance().isGlossaryReservedDataset(dataset) ? dataset
 						+ " [System Reserved]"
 						: dataset%></a>
 					<%
 						if (!cdba.isConfirmed(dataset, 4)
-									&& !glossMapper.isSystemReservedDataset(dataset)) {
+									&& !GlossaryNameMapper.getInstance().isSystemReservedDataset(dataset)) {
 					%> <a href="manageDataset.do?s=<%=dataset%>&action=delete"
 					style="text-decoration: underline; margin-left: 2px; color: blue">x</a>
 					<%

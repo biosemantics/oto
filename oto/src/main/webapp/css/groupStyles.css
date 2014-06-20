@@ -81,13 +81,8 @@ div .categoryTerms a {
 	color: black;
 	}
 
-td.dragme {
-	width: 10px;
-	float: right;
-	vertical-align: middle;
-}
 td.term {
-	width: 145px;
+	width: 155px;
 	font-family: lucida grande,tahoma,verdana,arial,sans-serif;
 	font-size: 10px;
 	background-color: white;

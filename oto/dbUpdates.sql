@@ -967,3 +967,16 @@ where term = 'fight';
 
 /*add field: isPrivate, default false*/
 alter table datasetprefix add isPrivate Boolean default false;
+
+/*rest oto_demo data to initial status (no decisions)*/
+delete from oto_demo_comments;
+delete from oto_demo_confirmed_category;
+delete from oto_demo_confirmed_orders;
+delete from oto_demo_confirmed_paths;
+delete from oto_demo_review_history;
+delete from oto_demo_syns;
+delete from oto_demo_term_category;
+delete from oto_demo_user_orders_decisions;
+delete from oto_demo_user_tags_decisions where tagID > 7;
+delete from oto_demo_user_terms_decisions;
+delete from oto_demo_user_terms_relations;

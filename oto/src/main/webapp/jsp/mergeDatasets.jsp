@@ -1,14 +1,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@page
+	import="edu.arizona.biosemantics.oto.oto.beans.GlossaryNameMapper"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.HashMap"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
+<%@ page
+	import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
 <%@page import="edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess"%>
 <%@page import="edu.arizona.biosemantics.oto.oto.beans.TermDecision"%>
 <%@page import="edu.arizona.biosemantics.oto.oto.beans.DatasetBean"%>
-<%@page import="edu.arizona.biosemantics.oto.oto.beans.GlossaryGroupBean"%>
+<%@page
+	import="edu.arizona.biosemantics.oto.oto.beans.GlossaryGroupBean"%>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -53,10 +57,11 @@
 				<div style="width: 100%; padding: 20px;">
 					<b>Select an area to work on:</b>
 					<%
-							for (int i = 1; i < 6; i++) {
+						for (int i = 1; i < 6; i++) {
 					%>
 					<a style="padding-left: 30px" href="mergeDatasets.do?gloss=<%=i%>"
-						class="<%=glossType == i ? "current_a" : ""%>"> <%=nameMapper.getGlossaryName(i)%></a>
+						class="<%=glossType == i ? "current_a" : ""%>"> <%=GlossaryNameMapper.getInstance().getGlossaryName(
+							i)%></a>
 					<%
 						}
 					%>

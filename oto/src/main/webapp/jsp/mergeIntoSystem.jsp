@@ -3,12 +3,16 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.HashMap"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
+<%@ page
+	import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
 <%@page import="edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess"%>
 <%@page import="edu.arizona.biosemantics.oto.oto.beans.TermDecision"%>
 <%@page import="edu.arizona.biosemantics.oto.oto.beans.DatasetBean"%>
-<%@page import="edu.arizona.biosemantics.oto.oto.beans.GlossaryGroupBean"%>
+<%@page
+	import="edu.arizona.biosemantics.oto.oto.beans.GlossaryGroupBean"%>
+<%@page
+	import="edu.arizona.biosemantics.oto.oto.beans.GlossaryNameMapper"%>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -53,10 +57,12 @@
 				<div style="width: 100%; padding: 20px;">
 					<b>Select an area to work on:</b>
 					<%
-							for (int i = 1; i < 6; i++) {
+						for (int i = 1; i < 6; i++) {
 					%>
-					<a style="padding-left: 30px" href="mergeIntoSystem.do?gloss=<%=i%>"
-						class="<%=glossType == i ? "current_a" : ""%>"> <%=nameMapper.getGlossaryName(i)%></a>
+					<a style="padding-left: 30px"
+						href="mergeIntoSystem.do?gloss=<%=i%>"
+						class="<%=glossType == i ? "current_a" : ""%>"> <%=GlossaryNameMapper.getInstance().getGlossaryName(
+							i)%></a>
 					<%
 						}
 					%>
@@ -111,8 +117,7 @@
 								<%
 									}
 								%>
-							</ul>
-							<%
+							</ul> <%
  	if (user.getRole().equals("S")) {
  %>
 							<div style="padding-left: 50px">

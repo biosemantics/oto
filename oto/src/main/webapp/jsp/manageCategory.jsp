@@ -1,14 +1,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@page
+	import="edu.arizona.biosemantics.oto.oto.beans.GlossaryNameMapper"%>
 <%@page import="edu.arizona.biosemantics.oto.oto.beans.DatasetBean"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.HashMap"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
+<%@ page
+	import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.TermDecision"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.AdminDecisionBean"%>
+<%@ page
+	import="edu.arizona.biosemantics.oto.oto.beans.AdminDecisionBean"%>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -73,7 +77,7 @@
 
 				boolean canModify = true;
 				if (!user.getRole().equals("S")
-						&& mapper
+						&& GlossaryNameMapper.getInstance()
 								.isGlossaryReservedDataset(selectedDataset)) {
 					canModify = false;
 				}
@@ -152,7 +156,7 @@
 								onclick="reopenDataset('<%=selectedDataset%>', '1')" /></td>
 							<%
 								} else {
-													if (!(mapper
+													if (!(GlossaryNameMapper.getInstance()
 															.isGlossaryReservedDataset(selectedDataset))) {
 							%>
 							<td align="right" valign="middle" width="10%"
@@ -320,7 +324,7 @@
 															//ArrayList<String> unConfirmedList = td.getUnconfirmedDecisions();
 															for (AdminDecisionBean decision : unconfirmedDecisions) {
 								%>
-								<tr  class="decision_tr">
+								<tr class="decision_tr">
 									<td style="padding: 0px">
 										<table id="<%=td.getTermName()%>" term="<%=td.getTermName()%>"
 											dataset="<%=selectedDataset%>"

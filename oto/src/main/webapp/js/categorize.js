@@ -495,7 +495,6 @@ function mouse_down_handler(e) {
 	clearTimeout(resumeTimeout);
 	category_to_resume = null;
 
-	// alert("mouse down");
 	var evn;
 	evn = e || event;
 	event = evn;
@@ -509,8 +508,7 @@ function mouse_down_handler(e) {
 
 	set_drag_from();
 
-	if (current_obj.className == "dragme") {
-		// alert(current_obj.className);
+	if (current_obj.className.indexOf("dragme") > -1) {
 		// get group_chosen: <div class="dragGroupTable">
 		group_chosen = current_obj;
 		while (group_chosen.tagName != "HTML"
@@ -683,10 +681,21 @@ function mouse_up_handler(e) {
 	var evn;
 	evn = e || event;
 
+	var up_obj = evn.target || evn.srcElement;
+	// console.log("up_obj: " + up_obj.className + "; down_obj: " +
+	// down_obj.className);
+	if (up_obj.className.indexOf("dragme") > -1
+			&& up_obj.innerHTML == current_obj.innerHTML) {
+		clearDragTrack();
+		setTerm_categorizing(up_obj.innerHTML);
+		return;
+	}
+
 	if (is_drag) {
 		clearTimeout(resumeTimeout);
 		getTargetCategory(evn);
-		if (current_obj.className == "dragme") {// drag before saving
+		if (current_obj.className.indexOf("dragme") > -1) {// drag before
+															// saving
 			if (target_category != null) {// (left -> target category) or
 				// (right -> different category)
 				if (!(drag_from == "right" && target_category == old_target_category)) {
@@ -869,6 +878,12 @@ function mouse_up_handler(e) {
 	if (term_Chosen != null) {
 		term_Chosen.style.cursor = 'auto';
 	}
+
+	clearDragTrack();
+	return false;
+}
+
+function clearDragTrack() {
 	is_drag = false;
 	is_makeSorE = false;
 	is_changeDecision = false;
@@ -877,8 +892,6 @@ function mouse_up_handler(e) {
 	term_Chosen = null;
 	delete_drag_clone();
 	group_chosen = null;
-
-	return false;
 }
 
 function setDragMeSign(picName) {
@@ -963,7 +976,7 @@ function generateDeletedTerm(termName, comment) {
 	var table_html = "<table><tr><td><table class='termsTable'>";
 	table_html += "<tr class='term_row' id='" + termName + "'>";
 	table_html += "<td class='term'><input type='checkbox'/>";
-	table_html += "<label class='decisionRemoved' id='"
+	table_html += "<label class='decisionRemoved dragme' id='"
 			+ termName
 			+ "' comment='"
 			+ comment
@@ -972,9 +985,7 @@ function generateDeletedTerm(termName, comment) {
 	table_html += "<label><a href='javascript:void(0)' title='View term specific report for "
 			+ termName + "' onclick=showTermsReport('" + termName + "')>";
 	table_html += "<img src='images/view.gif' height='11px'></img></a></label>";
-	table_html += "</td></tr></table></td><td>";
-
-	table_html += "<img class='dragme' src='images/drag.jpg' width='20px' height='20px'></img></td>";
+	table_html += "</td></tr></table></td>";
 	table_html += "</tr></table>";
 	return table_html;
 }

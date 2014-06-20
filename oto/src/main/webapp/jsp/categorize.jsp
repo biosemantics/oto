@@ -6,8 +6,10 @@
 <%@ page import="java.util.HashMap"%>
 <%@page import="edu.arizona.biosemantics.oto.oto.beans.CategoryBean"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.TermsGroup"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.CharacterGroupBean"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
+<%@ page
+	import="edu.arizona.biosemantics.oto.oto.beans.CharacterGroupBean"%>
+<%@ page
+	import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.Term"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.DatasetBean"%>
@@ -191,6 +193,7 @@
 													%>
 													<tr class="term_row" id="<%=term.getTerm()%>">
 														<td class="term"><input type="checkbox" /><label
+															class="dragme"
 															style="cursor: pointer; color: <%=(term.isReviewed() ? "grey"
 											: "black")%>"
 															onclick="setTerm_categorizing('<%=term.getTerm()%>')"><%=term.getTerm()%></label>
@@ -209,8 +212,9 @@
 													%>
 												</table>
 											</td>
-											<td><img class="dragme" src="images/drag.jpg"
+											<!-- <td><img class="dragme" src="images/drag.jpg"
 												width="20px;" height="<%=(21 * terms.size())%>px"></img></td>
+												 -->
 										</tr>
 									</table>
 								</div>
@@ -366,7 +370,10 @@
 							<th width="10%" class="backContext" id="glossary"
 								onclick="showGlossary()"><font>Glossaries</font></th>
 							<th width="70%" align="left" bgcolor="white"
-								style="text-align: right"><font color="green">&nbsp;</font><img
+								style="text-align: right"><font color="green">&nbsp;</font><input
+								type="button" name="button" value="Search"
+								class="uiButton uiButtonSpecial uiButtonMedium"
+								style="padding: 0px 1px 1px 1px" onclick="openTermLocator()" /><img
 								src="images/locator.png" onclick="openTermLocator()"
 								height="14px"></img></th>
 						</tr>

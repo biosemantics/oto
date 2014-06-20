@@ -1,0 +1,162 @@
+/*only use color a8d04d - light green, 279446 - green, 307137 - dark green*/
+/*our own tab header*/
+.oto-tab-header {
+	height: 25px;
+	background-color: #C0C0C0;
+	width: 100%;
+	text-align: left;
+	padding: 0px;
+}
+
+.oto-tab-card {
+	height: 18px;
+	color: white;
+	cursor: pointer;
+	background-color: #909090;
+	margin-top: 5px;
+	margin-left: 8px;
+	margin-bottom: 0px;
+	padding: 4px 10px 0px 10px; /*top, right, bottom, left*/
+	vertical-align: bottom;
+}
+
+.oto-tab-content-panel {
+	overflow: auto;
+}
+
+.tablayout_test {
+	
+}
+
+.oto-current-tab {
+	background-color: white;
+	color: black;
+	font-weight: bolder;
+}
+
+.gwt-TabPanel {
+	
+}
+
+.gwt-TabPanelBottom {
+	height: 100%;
+}
+
+.gwt-TabBar {
+	
+}
+
+.gwt-TabBarItem {
+	cursor: pointer;
+	margin-right: 2px;
+}
+
+.gwt-TabBarItem-selected {
+	font-weight: bold;
+	cursor: default;
+}
+
+.contentPanel {
+	overflow: auto;
+}
+
+.main_tab_panel tr {
+	
+}
+
+.main_tab_panel tr:first-child {
+	
+}
+
+.right_container {
+	position: relative;
+}
+
+.right {
+	position: absolute;
+	right: 20px;
+}
+
+.left_container {
+	position: relative;
+}
+
+.left {
+	
+}
+
+.gwt-DisclosurePanel {
+	
+}
+
+.gwt-DisclosurePanel-open {
+	padding-left: 3px;
+	padding-top: 3px;
+}
+
+.gwt-DisclosurePanel-closed {
+	padding-left: 3px;
+	padding-top: 3px;
+}
+
+.gwt-DisclosurePanel .header,.gwt-DisclosurePanel .header a,.gwt-DisclosurePanel .header td
+	{
+	text-decoration: none; /* Remove underline from header */
+	color: black;
+	cursor: pointer;
+	cursor: hand;
+	font-weight: bold;
+	background-color: #D6F8CD;
+}
+
+.gwt-DisclosurePanel .content {
+	border-left: 3px solid #D6F8CD;
+	padding: 4px 0px 4px 8px;
+	margin-left: 6px;
+}
+
+.img_btn {
+	cursor: pointer;
+}
+
+.clickable {
+	cursor: pointer;
+}
+
+.tbl_field_label {
+	text-align: right;
+	font-weight: bold;
+}
+
+.required {
+	color: red;
+}
+
+.accepted {
+	color: #307137;
+}
+
+.tbl_title {
+	text-align: center;
+	font-size: large;
+	background-color: #307137;
+	font-weight: bold;
+	color: white;
+}
+
+.tbl_btn_row {
+	background-color: #a8d04d;
+}
+
+.btn_in_row_padding {
+	margin-left: 10px;
+}
+
+.to_save {
+	color: red;
+}
+
+.Clickable-context-filename {
+	text-decoration: underline;
+	cursor: pointer;
+}

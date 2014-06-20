@@ -1,0 +1,53 @@
+.TO_ONTOLOGY_title {
+	background-color: #307137;
+	color: white;
+	height: 25px;
+	width: 100%;
+	font-size: 18px;
+	font-weight: bold;
+	vertical-align: middle;
+	padding-top: 2px;
+}
+
+.TO_ONTOLOGY_subtitle {
+	background-color: #279446;
+	height: 25px;
+	width: 100%;
+	font-size: 17px;
+	font-weight: bold;
+	vertical-align: baseline;
+	padding-top: 3px;
+	padding-left: 3px;
+	margin-top: 2px;
+}
+
+.TO_ONTOLOGY_mapped_to_match {
+	color: #279446;
+}
+
+.TO_ONTOLOGY_mapped_to_submission {
+	color: #a8d04d;
+}
+
+.TO_ONTOLOGY_not_mapped {
+	color: red;
+}
+
+.TO_ONTOLOGY_currentPair {
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+.To_ONTOLOGY_radioColumn {
+	width: 25px;
+}
+
+.TO_ONTOLOGY_hint {
+	font-size: 11px;
+	color: gray;
+}
+
+.TO_ONTOLOGY_content_title {
+	font-size: 15px;
+	font-weight: bold;
+}

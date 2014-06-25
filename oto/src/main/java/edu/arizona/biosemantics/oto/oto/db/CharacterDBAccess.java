@@ -6089,8 +6089,10 @@ public class CharacterDBAccess extends DatabaseAccess {
 			}
 		} else if (type.equals("2")) {
 			fieldName = "structurehierarchydownloadable";
+			success = true;
 		} else if (type.equals("3")) {
 			fieldName = "termorderdownloadable";
+			success = true;
 		}
 
 		if (success) {

@@ -144,6 +144,7 @@ function acceptCategory(btn) {
 
 	// save
 	save_categorize(request, decision, true);
+
 }
 
 function revokeCategory(btn) {
@@ -1134,14 +1135,13 @@ function save_synonym(requestXML, decision) {
 		}
 	}
 
-	xmlhttp.open("POST", 'saveDecisionByManager.do', true);
+	xmlhttp.open("POST", 'saveManagerDecision.do', true);
 	xmlhttp.setRequestHeader("Content-Type",
 			"application/x-www-form-urlencoded; charset=UTF-8")
 	xmlhttp.send('value=' + requestXML);
 }
 
 function save_categorize(requestXML, decision, isAccept) {
-	// alert(requestXML);
 	var xmlhttp;
 	if (window.XMLHttpRequest) {
 		// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -1185,7 +1185,7 @@ function save_categorize(requestXML, decision, isAccept) {
 		}
 	}
 
-	xmlhttp.open("POST", 'saveDecisionByManager.do', true);
+	xmlhttp.open("POST", 'saveManagerDecision.do', true);
 	xmlhttp.setRequestHeader("Content-Type",
 			"application/x-www-form-urlencoded; charset=UTF-8")
 	xmlhttp.send('value=' + requestXML);
@@ -1259,7 +1259,7 @@ function save_path(requestXML, decision) {
 		}
 	}
 
-	xmlhttp.open("POST", 'saveDecisionByManager.do', true);
+	xmlhttp.open("POST", 'saveManagerDecision.do', true);
 	xmlhttp.setRequestHeader("Content-Type",
 			"application/x-www-form-urlencoded; charset=UTF-8")
 	xmlhttp.send('value=' + requestXML);
@@ -1293,7 +1293,7 @@ function save_termOfOrder(requestXML, decision) {
 		}
 	}
 
-	xmlhttp.open("POST", 'saveDecisionByManager.do', true);
+	xmlhttp.open("POST", 'saveManagerDecision.do', true);
 	xmlhttp.setRequestHeader("Content-Type",
 			"application/x-www-form-urlencoded; charset=UTF-8")
 	xmlhttp.send('value=' + requestXML);
@@ -1343,7 +1343,7 @@ function save(requestXML, decision) {
 		}
 	}
 
-	xmlhttp.open("POST", 'saveDecisionByManager.do', true);
+	xmlhttp.open("POST", 'saveManagerDecision.do', true);
 	xmlhttp.setRequestHeader("Content-Type",
 			"application/x-www-form-urlencoded; charset=UTF-8")
 	xmlhttp.send('value=' + requestXML);

@@ -232,10 +232,10 @@
 			type="edu.arizona.biosemantics.oto.oto.action.SaveOrderAction" name="generalForm"
 			scope="request" validate="true">
 		</action>
-
-		<action path="/saveDecisionByManager"
-			type="edu.arizona.biosemantics.oto.oto.action.saveDecisionByManager"
-			name="generalForm" scope="request" validate="true">
+		
+		<action path="/saveManagerDecision"
+			type="edu.arizona.biosemantics.oto.oto.action.SaveManagerDecisionAction" name="generalForm"
+			scope="request" validate="true">
 		</action>
 
 		<action path="/checkDataSet"
@@ -251,7 +251,7 @@
 
 		<action path="/demo"
 			type="edu.arizona.biosemantics.oto.oto.action.ShowDemoAction" name="generalForm"
-			scope="request" validate="false">
+			scope="request" validate="true">
 			<forward name="reload" path="/jsp/demo.jsp" />
 		</action>
 
@@ -282,6 +282,7 @@
 			type="edu.arizona.biosemantics.oto.oto.action.ApproveRevokeAction"
 			name="generalForm" scope="request" validate="true">
 		</action>
+
 		<action path="/editsettings"
 			type="edu.arizona.biosemantics.oto.oto.action.EditSettingsAction"
 			name="registrationForm" scope="request" validate="true">
@@ -372,6 +373,12 @@
 			scope="request" validate="true">
 			<forward name="home" path="/jsp/index.jsp" />
 			<forward name="reload" path="/jsp/manageDatasets.jsp" />
+		</action>
+
+		<action path="/resetOTODemo"
+			type="edu.arizona.biosemantics.oto.oto.action.ResetOTODemoAction"
+			name="generalForm" scope="request" validate="true">
+			<forward name="home" path="/jsp/index.jsp" />
 		</action>
 
 	</action-mappings>

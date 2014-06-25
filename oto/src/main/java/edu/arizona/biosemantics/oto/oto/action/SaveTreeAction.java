@@ -43,13 +43,16 @@ public class SaveTreeAction extends ParserAction {
 			User user = sessionDataMgr.getUser();
 			try {
 				//parse requestXML and save to db
-				ArrayList<StructureNodeBean> nodes = parseTreeXML(requestXML);
-				CharacterDBAccess cdba = new CharacterDBAccess();
-				
-				boolean isResend = cdba.isResendingTree(dataPrefix, user, nodes);
-				if (!isResend) {
-					cdba.saveHierarchyTree(nodes, dataPrefix, user);
+				if (requestXML != null) {
+					ArrayList<StructureNodeBean> nodes = parseTreeXML(requestXML);
+					CharacterDBAccess cdba = new CharacterDBAccess();
+					
+					boolean isResend = cdba.isResendingTree(dataPrefix, user, nodes);
+					if (!isResend) {
+						cdba.saveHierarchyTree(nodes, dataPrefix, user);
+					}	
 				}
+				
 				request.setAttribute("message", "Data saved successfully!");
 
 			} catch (Exception exe) {

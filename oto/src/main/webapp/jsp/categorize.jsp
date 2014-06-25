@@ -32,6 +32,7 @@
 <script language="javascript" src="js/fader.js"></script>
 <script language="javascript" src="js/categorize.js"></script>
 <script language="javascript" src="js/download.js"></script>
+<script language="javascript" src="js/reset.js"></script>
 </head>
 
 <body onload="drag_init()">
@@ -79,7 +80,15 @@
 					Dataset: <b><%=dataset%></b> ( <%=datasetInfo.getNumTermsInCategorizePage()%>
 					terms, <%=datasetInfo.getNumTemrsReviewedInCategorizePage()%>
 					reviewed by you)
-			</font></td>
+			</font> <%
+ 	if (dataset.equals("OTO_Demo")) {
+ %> <input type="button" class="uiButton uiButtonMedium"
+				style="margin-left: 10px"
+				title="Reset OTO_Demo dataset by clearing all decisions. Any user can reset this dataset, 
+				therefore your decisions in OTO_Demo dataset may be deleted by other users. "
+				value="Reset to initial status" onclick="resetOTODemo(1)"></input> <%
+ 	}
+ %></td>
 		</tr>
 		<%
 			if (datasetInfo.isCategorizationFinalized()) {

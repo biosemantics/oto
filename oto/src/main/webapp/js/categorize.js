@@ -698,7 +698,8 @@ function mouse_up_handler(e) {
 															// saving
 			if (target_category != null) {// (left -> target category) or
 				// (right -> different category)
-				if (!(drag_from == "right" && target_category == old_target_category)) {
+				if (!(drag_from == "right" && target_category == old_target_category 
+						&& category_from == target_category)) {
 					var i;
 					// find div newDecisions for category
 					targetbox = target_category

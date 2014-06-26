@@ -263,7 +263,9 @@
 										<table width="100%"
 											style="border-collapse: collapse; border: 1px solid #B0F1A0;">
 											<tr bgcolor="<%=(isStructure ? "#66CC33" : "#B0F1A0")%>">
-												<th title="<%=category.getDef()%>"
+												<th
+													title="<%=category.getDef().replaceAll(">", "&gt;")
+								.replaceAll("<", "&lt;").replaceAll("\"", "'")%>"
 													style="color: <%=(ch == null || ch.isFinishedReviewing() ? "grey"
 								: "black")%>"><%=(isStructure ? "STRUCTURE" : category
 								.getName())%></th>

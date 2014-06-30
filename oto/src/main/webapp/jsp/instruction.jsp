@@ -486,7 +486,7 @@
 								can be done in Manage Datasets page? </b><br /> <br />1. Create
 							dataset<br />2. Set the privacy level of a dataset <br /> 3.
 							Delete your dataset <br /> 4. Import your own
-							terms/structures/orders tasks</font></li>
+							terms/structures/orders tasks </font></li>
 					<li style="padding-bottom: 10px;"><font
 						class="font-text-style"><b style="color: green">Create
 								Datasets </b><br />You can create your own dataset by giving a
@@ -680,7 +680,8 @@
 								on June 30, 2014</b><br /> 1. Make order name editable<br /> 2.
 							Allow user to create their own datasets and import terms and
 							context sentences. <br /> 3. Dataset can be private or public.<br />4.
-							Remove dragging arrow in categorization page. </font></li>
+							Remove dragging arrow in categorization page. <br /> 5. Allow
+							users to reset OTO_Demo to initial status. </font></li>
 					<li style="padding-bottom: 10px;"><font
 						class="font-text-style"><b style="color: green">Updates
 								on September 24, 2013</b><br /> 1. Auto-scroll in categories<br />

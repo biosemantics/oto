@@ -84,8 +84,7 @@
  	if (dataset.equals("OTO_Demo")) {
  %> <input type="button" class="uiButton uiButtonMedium"
 				style="margin-left: 10px"
-				title="Reset OTO_Demo dataset by clearing all decisions. Any user can reset this dataset, 
-				therefore your decisions in OTO_Demo dataset may be deleted by other users. "
+				title="Reset OTO_Demo dataset by clearing all decisions. Any user can reset this dataset, therefore your decisions in OTO_Demo dataset may be deleted by other users. "
 				value="Reset to initial status" onclick="resetOTODemo(1)"></input> <%
  	}
  %></td>

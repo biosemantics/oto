@@ -55,12 +55,12 @@ function create_dataset() {
 	var glossaryID = $("#glossaryID").val();
 
 	if (prefix == "") {
-		alert("Please input a dataset name prefix. ");
+		alert("Please input a dataset name. ");
 		return;
 	}
 
 	if (glossaryID == "") {
-		alert("Please select a glossary.");
+		alert("Please select a taxon group.");
 		return;
 	}
 

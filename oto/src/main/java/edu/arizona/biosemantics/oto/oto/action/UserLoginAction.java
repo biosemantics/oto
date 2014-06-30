@@ -45,7 +45,6 @@ public class UserLoginAction extends ParserAction{
     	UserDataAccess uaccess = new UserDataAccess();
     	try {
         	if(uaccess.validateUser(user)) {
-            	
         		session = request.getSession(true);
         		/*Initiate the SessionDataManager*/
             	SessionDataManager sessionDataMgr = new SessionDataManager(user);
@@ -54,7 +53,7 @@ public class UserLoginAction extends ParserAction{
             	//session.setAttribute(SessionVariables.BIOPORTAL_USER_ID.toString(), user.getBioportalUserId());
 				//session.setAttribute(SessionVariables.BIOPORTAL_API_KEY.toString(), user.getBioportalApiKey());
             	forwardString = Forwardable.HOME;
-        	} else {        		
+        	} else { 
         		forwardString = Forwardable.RELOAD;
         		/* This hard coded values can be placed on the ApplicationProperties file later*/
         		request.setAttribute("message", "Invalid email or password! Please try again");

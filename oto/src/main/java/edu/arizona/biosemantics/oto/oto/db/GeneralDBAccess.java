@@ -253,7 +253,7 @@ public class GeneralDBAccess extends DatabaseAccess {
 	}
 
 	/**
-	 * reset oto_demo dataset to initial status for a give page
+	 * reset OTO_Demo dataset to initial status for a give page
 	 * 
 	 * @param pageIndex
 	 *            : 1-categorization, 2-hierarchy, 3-orders
@@ -268,39 +268,39 @@ public class GeneralDBAccess extends DatabaseAccess {
 		try {
 			conn = getConnection();
 			stmt = conn.createStatement();
-			stmt.executeUpdate("delete from oto_demo_comments;");
+			stmt.executeUpdate("delete from OTO_Demo_comments;");
 
 			if (pageIndex.equals("1")) {
 				// categorization page
-				stmt.executeUpdate("delete from oto_demo_confirmed_category;");
-				stmt.executeUpdate("delete from oto_demo_review_history;");
-				stmt.executeUpdate("delete from oto_demo_syns;");
-				stmt.executeUpdate("delete from oto_demo_term_category;");
-				stmt.executeUpdate("delete from oto_demo_user_terms_decisions;");
+				stmt.executeUpdate("delete from OTO_Demo_confirmed_category;");
+				stmt.executeUpdate("delete from OTO_Demo_review_history;");
+				stmt.executeUpdate("delete from OTO_Demo_syns;");
+				stmt.executeUpdate("delete from OTO_Demo_term_category;");
+				stmt.executeUpdate("delete from OTO_Demo_user_terms_decisions;");
 				// set finalized to be false
 				stmt.executeUpdate("update datasetprefix set grouptermsdownloadable = false "
 						+ "where prefix = 'OTO_Demo'");
 			} else if (pageIndex.equals("2")) {
 				// hierarchy page
-				stmt.executeUpdate("delete from oto_demo_confirmed_paths;");
-				stmt.executeUpdate("delete from oto_demo_user_tags_decisions where tagID > 7;");
+				stmt.executeUpdate("delete from OTO_Demo_confirmed_paths;");
+				stmt.executeUpdate("delete from OTO_Demo_user_tags_decisions where tagID > 7;");
 				stmt.executeUpdate("update datasetprefix set structurehierarchydownloadable = false "
 						+ "where prefix = 'OTO_Demo'");
 			} else if (pageIndex.equals("3")) {
 				// order page
-				stmt.executeUpdate("delete from oto_demo_confirmed_orders;");
-				stmt.executeUpdate("delete from oto_demo_user_orders_decisions;");
+				stmt.executeUpdate("delete from OTO_Demo_confirmed_orders;");
+				stmt.executeUpdate("delete from OTO_Demo_user_orders_decisions;");
 				stmt.executeUpdate("update datasetprefix set termorderdownloadable = false "
 						+ "where prefix = 'OTO_Demo'");
 				
 				//delete user created terms and orders (3 orders)
-				stmt.executeUpdate("delete from oto_demo_web_orders_terms where id > 29;");
-				stmt.executeUpdate("delete from oto_demo_web_orders where id > 6;");
+				stmt.executeUpdate("delete from OTO_Demo_web_orders_terms where id > 29;");
+				stmt.executeUpdate("delete from OTO_Demo_web_orders where id > 6;");
 				
 				//reset order name to initial name (3 orders)
-				stmt.executeUpdate("update oto_demo_web_orders set name = 'Pubescence Order' where id = 2;");
-				stmt.executeUpdate("update oto_demo_web_orders set name = 'Shape Order' where id = 4;");
-				stmt.executeUpdate("update oto_demo_web_orders set name = 'Orientation Order' where id = 6;");
+				stmt.executeUpdate("update OTO_Demo_web_orders set name = 'Pubescence Order' where id = 2;");
+				stmt.executeUpdate("update OTO_Demo_web_orders set name = 'Shape Order' where id = 4;");
+				stmt.executeUpdate("update OTO_Demo_web_orders set name = 'Orientation Order' where id = 6;");
 			}
 
 			rv = true;

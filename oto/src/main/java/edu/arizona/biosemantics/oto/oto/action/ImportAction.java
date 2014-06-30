@@ -29,6 +29,9 @@ public class ImportAction extends ParserAction {
 		// get form
 		ImportForm importForm = (ImportForm) form;
 		FormFile file = importForm.getFile();
+		if (file == null) {
+			return mapping.findForward(Forwardable.RELOAD);
+		}
 		String taskIndex = importForm.getTaskIndex();
 		InputStream fileStream = file.getInputStream();
 		ArrayList<String> termList = null;

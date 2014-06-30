@@ -49,6 +49,10 @@ public class ImportForm extends ActionForm {
 
 		ActionErrors errors = new ActionErrors();
 
+		if (getFile() == null) {
+			return errors;
+		}
+
 		if (getFile().getFileSize() == 0) {
 			errors.add("common.file.err", new ActionMessage(
 					"error.common.file.required"));

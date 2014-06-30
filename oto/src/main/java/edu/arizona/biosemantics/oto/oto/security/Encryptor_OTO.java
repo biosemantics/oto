@@ -9,12 +9,9 @@ public final class Encryptor_OTO {
 	private static Encryptor_OTO instance;
 
 	public static Encryptor_OTO getInstance() {
-		System.out.println("TEST: instance 1");
 		if (instance == null) {
-			System.out.println("TEST: instance 2");
 			instance = new Encryptor_OTO();
 		}
-		System.out.println("TEST: instance 3");
 		return instance;
 	}
 

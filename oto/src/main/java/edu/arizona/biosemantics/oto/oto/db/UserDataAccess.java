@@ -15,10 +15,10 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 import edu.arizona.biosemantics.oto.common.io.ExecCommmand;
-import edu.arizona.biosemantics.oto.common.security.Encryptor;
 import edu.arizona.biosemantics.oto.oto.Configuration;
 import edu.arizona.biosemantics.oto.oto.beans.User;
 import edu.arizona.biosemantics.oto.oto.mail.NotifyEmail;
+import edu.arizona.biosemantics.oto.oto.security.Encryptor_OTO;
 import edu.arizona.biosemantics.oto.oto.security.PasswordGenerator;
 
 /**
@@ -45,19 +45,16 @@ public class UserDataAccess extends DatabaseAccess {
 	 * @throws SQLException
 	 * @throws NoSuchAlgorithmException
 	 */
-	@SuppressWarnings("finally")
 	public boolean validateUser(User user) throws SQLException,
 			NoSuchAlgorithmException {
-
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		ResultSet rset_role = null;
-		Encryptor enc = Encryptor.getInstance();
-		String password = enc.encrypt(user.getPassword());
+		String password = Encryptor_OTO.getInstance().encrypt(user.getPassword());
 		String userEmail = user.getUserEmail();
 		boolean returnFlag = false;
-
+		
 		try {
 			conn = getConnection();
 			pstmt = conn
@@ -76,7 +73,6 @@ public class UserDataAccess extends DatabaseAccess {
 				user.setRole(rset.getString("role"));
 				user.setBioportalUserId(rset.getString("bioportalUserId"));
 				user.setBioportalApiKey(rset.getString("bioportalApiKey"));
-
 				if (user.getRole().equals("U")) {
 					// check if the user is a owner of any dataset
 					pstmt = conn
@@ -92,22 +88,19 @@ public class UserDataAccess extends DatabaseAccess {
 				if (status.equals("Y")) {
 					user.setActive(true);
 				}
-
 				returnFlag = true;
 			}
 
 		} catch (SQLException exe) {
 			LOGGER.error("Unable to validate user", exe);
 			exe.printStackTrace();
-			throw exe;
 		} finally {
 			closeConnection(pstmt, rset, conn);
 			if (rset_role != null) {
 				rset_role.close();
 			}
-			return returnFlag;
 		}
-
+		return returnFlag;
 	}
 
 	/**
@@ -153,8 +146,7 @@ public class UserDataAccess extends DatabaseAccess {
 		Connection conn = null;
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
-		Encryptor enc = Encryptor.getInstance();
-
+		
 		try {
 			conn = getConnection();
 			// get first name
@@ -166,7 +158,7 @@ public class UserDataAccess extends DatabaseAccess {
 				int userid = rs.getInt("userid");
 
 				if (password.length() < 20 || !password.endsWith("=")) {
-					String encryptedPass = enc.encrypt(password);
+					String encryptedPass = Encryptor_OTO.getInstance().encrypt(password);
 					sql = "update users set password = ? where userid = ?";
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, encryptedPass);
@@ -202,9 +194,8 @@ public class UserDataAccess extends DatabaseAccess {
 		Connection conn = null;
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
-		Encryptor enc = Encryptor.getInstance();
 		String password = new PasswordGenerator().generatePassword();
-		String encryptedPass = enc.encrypt(password);
+		String encryptedPass = Encryptor_OTO.getInstance().encrypt(password);
 		String sql = "update users set password = ? where email = ?";
 		try {
 			conn = getConnection();
@@ -255,9 +246,7 @@ public class UserDataAccess extends DatabaseAccess {
 		String sql = "insert into users(email, password, firstname, lastname, affiliation) "
 				+ "values (?,?,?,?,?)";
 		boolean returnValue = false;
-		Encryptor enc = Encryptor.getInstance();
-		;
-		String password = enc.encrypt(user.getPassword());
+		String password = Encryptor_OTO.getInstance().encrypt(user.getPassword());
 		try {
 			conn = getConnection();
 			pstmt = conn.prepareStatement(sql);
@@ -441,8 +430,7 @@ public class UserDataAccess extends DatabaseAccess {
 		boolean returnValue = false;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		Encryptor enc = Encryptor.getInstance();
-		String password = enc.encrypt(user.getPassword());
+		String password = Encryptor_OTO.getInstance().encrypt(user.getPassword());
 		String sql = "update users set firstname = ?, lastname=?, affiliation=?, "
 				+ "password = ?, email = ?, bioportalUserId = ?, "
 				+ "bioportalApiKey = ? where userid = ?";

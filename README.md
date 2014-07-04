@@ -56,6 +56,8 @@ Please [configure your git](http://git-scm.com/book/en/Customizing-Git-Git-Confi
 * `core.autocrlf` true if you are on Windows 
 * or `core.autocrlf input` if you are on a Unix-type OS
 
+The target platform is Java 6.
+
 JavaDoc
 ----------
 

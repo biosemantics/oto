@@ -15,11 +15,11 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 import edu.arizona.biosemantics.oto.common.io.ExecCommmand;
+import edu.arizona.biosemantics.oto.common.security.Encryptor;
+import edu.arizona.biosemantics.oto.common.security.PasswordGenerator;
 import edu.arizona.biosemantics.oto.oto.Configuration;
 import edu.arizona.biosemantics.oto.oto.beans.User;
 import edu.arizona.biosemantics.oto.oto.mail.NotifyEmail;
-import edu.arizona.biosemantics.oto.oto.security.Encryptor_OTO;
-import edu.arizona.biosemantics.oto.oto.security.PasswordGenerator;
 
 /**
  * This class will handle all user specific database queries
@@ -51,7 +51,7 @@ public class UserDataAccess extends DatabaseAccess {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		ResultSet rset_role = null;
-		String password = Encryptor_OTO.getInstance().encrypt(user.getPassword());
+		String password = Encryptor.getInstance().encrypt(user.getPassword());
 		String userEmail = user.getUserEmail();
 		boolean returnFlag = false;
 		
@@ -158,7 +158,7 @@ public class UserDataAccess extends DatabaseAccess {
 				int userid = rs.getInt("userid");
 
 				if (password.length() < 20 || !password.endsWith("=")) {
-					String encryptedPass = Encryptor_OTO.getInstance().encrypt(password);
+					String encryptedPass = Encryptor.getInstance().encrypt(password);
 					sql = "update users set password = ? where userid = ?";
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, encryptedPass);
@@ -195,7 +195,7 @@ public class UserDataAccess extends DatabaseAccess {
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
 		String password = new PasswordGenerator().generatePassword();
-		String encryptedPass = Encryptor_OTO.getInstance().encrypt(password);
+		String encryptedPass = Encryptor.getInstance().encrypt(password);
 		String sql = "update users set password = ? where email = ?";
 		try {
 			conn = getConnection();
@@ -246,7 +246,7 @@ public class UserDataAccess extends DatabaseAccess {
 		String sql = "insert into users(email, password, firstname, lastname, affiliation) "
 				+ "values (?,?,?,?,?)";
 		boolean returnValue = false;
-		String password = Encryptor_OTO.getInstance().encrypt(user.getPassword());
+		String password = Encryptor.getInstance().encrypt(user.getPassword());
 		try {
 			conn = getConnection();
 			pstmt = conn.prepareStatement(sql);
@@ -430,7 +430,7 @@ public class UserDataAccess extends DatabaseAccess {
 		boolean returnValue = false;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		String password = Encryptor_OTO.getInstance().encrypt(user.getPassword());
+		String password = Encryptor.getInstance().encrypt(user.getPassword());
 		String sql = "update users set firstname = ?, lastname=?, affiliation=?, "
 				+ "password = ?, email = ?, bioportalUserId = ?, "
 				+ "bioportalApiKey = ? where userid = ?";

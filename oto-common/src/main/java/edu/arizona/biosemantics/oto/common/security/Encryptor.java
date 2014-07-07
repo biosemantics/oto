@@ -10,7 +10,7 @@ import javax.xml.bind.DatatypeConverter;
 public final class Encryptor {
 	private static Encryptor instance;
 
-	public static synchronized Encryptor getInstance() {
+	public static Encryptor getInstance() {
 		if (instance == null) {
 			instance = new Encryptor();
 		}
@@ -25,7 +25,7 @@ public final class Encryptor {
 		enc.encrypt("OTOdemopass");
 	}
 
-	public synchronized String encrypt(String plaintext) {
+	public String encrypt(String plaintext) {
 		MessageDigest md = null;
 		try {
 			md = MessageDigest.getInstance("SHA");

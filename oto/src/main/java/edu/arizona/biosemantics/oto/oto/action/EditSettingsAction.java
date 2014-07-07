@@ -11,12 +11,12 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.arizona.biosemantics.oto.common.action.Forwardable;
+import edu.arizona.biosemantics.oto.common.security.Encryptor;
 import edu.arizona.biosemantics.oto.oto.Configuration;
 import edu.arizona.biosemantics.oto.oto.beans.SessionDataManager;
 import edu.arizona.biosemantics.oto.oto.beans.User;
 import edu.arizona.biosemantics.oto.oto.db.UserDataAccess;
 import edu.arizona.biosemantics.oto.oto.form.RegistrationForm;
-import edu.arizona.biosemantics.oto.oto.security.Encryptor_OTO;
 
 public class EditSettingsAction extends ParserAction {
 
@@ -37,7 +37,7 @@ public class EditSettingsAction extends ParserAction {
 			RegistrationForm regForm = (RegistrationForm) form;
 			SessionDataManager sessionDataMgr = getSessionManager(request);
 			User user = sessionDataMgr.getUser();
-			String oldPass = Encryptor_OTO.getInstance().encrypt(regForm.getRegPassword());
+			String oldPass = Encryptor.getInstance().encrypt(regForm.getRegPassword());
 			
 			//validate old password
 			if(!oldPass.equals(user.getPassword())) {
@@ -117,7 +117,7 @@ public class EditSettingsAction extends ParserAction {
 					user.setFirstName(updatedUser.getFirstName());
 					user.setLastName(updatedUser.getLastName());
 					if (passChanged) {
-						user.setPassword(Encryptor_OTO.getInstance().encrypt(newPassword));	
+						user.setPassword(Encryptor.getInstance().encrypt(newPassword));	
 					}
 					user.setUserEmail(updatedUser.getUserEmail());
 					user.setBioportalUserId(updatedUser.getBioportalUserId());

@@ -1,4 +1,4 @@
-package edu.arizona.biosemantics.oto.oto.security;
+package edu.arizona.biosemantics.oto.common.security;
 
 public class PasswordGenerator {
 	public static final int MIN_LENGTH = 10;

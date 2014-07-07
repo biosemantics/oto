@@ -56,7 +56,7 @@ Please [configure your git](http://git-scm.com/book/en/Customizing-Git-Git-Confi
 * `core.autocrlf` true if you are on Windows 
 * or `core.autocrlf input` if you are on a Unix-type OS
 
-The target platform is Java 6.
+The target container is Tomcat 5.5.28 for a platform of Java 6.
 
 JavaDoc
 ----------

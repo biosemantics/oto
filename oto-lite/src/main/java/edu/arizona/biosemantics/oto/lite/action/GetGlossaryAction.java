@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.Future;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,16 +30,10 @@ import edu.arizona.biosemantics.oto.lite.form.GeneralForm;
 
 public class GetGlossaryAction extends ParserAction {
 	
-	private OTOClient otoClient;
-
-	public GetGlossaryAction() throws IOException {
-		Configuration configuration = Configuration.getInstance();
-		otoClient = new OTOClient(configuration.getOtoUrl());
-	}
-	
 	/** Getting the instance of logger. */
 	private static final Logger LOGGER = Logger
 			.getLogger(GetGlossaryAction.class);
+	private OTOClient otoClient;
 
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -69,14 +64,17 @@ public class GetGlossaryAction extends ParserAction {
 			// }
 
 			// get from OTO
+			otoClient = new OTOClient(Configuration.getInstance().getOtoUrl());
+			otoClient.open();
 			ArrayList<TermGlossaryBean> glosses = new ArrayList<TermGlossaryBean>();
-			List<GlossaryDictionaryEntry> entryList = otoClient.getGlossaryDictionaryEntries(GlossaryIDConverter.getGlossaryNameByID(glossaryType),
+			Future<List<GlossaryDictionaryEntry>> entryList = otoClient.getGlossaryDictionaryEntries(GlossaryIDConverter.getGlossaryNameByID(glossaryType),
 					term);
-			for (GlossaryDictionaryEntry entry : entryList) {
+			for (GlossaryDictionaryEntry entry : entryList.get()) {
 				TermGlossaryBean glossary = new TermGlossaryBean(entry.getTermID(), entry.getCategory(),
 						entry.getDefinition());
 				glosses.add(glossary);
 			}
+			otoClient.close();
 			
 			for (TermGlossaryBean gloss : glosses) {
 				responseString.append("<glossary>");
@@ -108,6 +106,8 @@ public class GetGlossaryAction extends ParserAction {
 		} catch (Exception exe) {
 			LOGGER.error("unable to get glossaries for term", exe);
 			exe.printStackTrace();
+		} finally {
+			otoClient.close();
 		}
 		return null;
 	}

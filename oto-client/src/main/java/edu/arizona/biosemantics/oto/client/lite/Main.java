@@ -1,5 +1,8 @@
 package edu.arizona.biosemantics.oto.client.lite;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
 import edu.arizona.biosemantics.oto.common.model.lite.Download;
 import edu.arizona.biosemantics.oto.common.model.lite.UploadResult;
 
@@ -10,9 +13,17 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		OTOLiteClient otoLiteClient = new OTOLiteClient("http://biosemantics.arizona.edu/OTOLite/");
-		Download download = otoLiteClient.download(new UploadResult(392, "secret"));
-		System.out.println(download.isFinalized());
-		System.out.println(download.toString());
+		otoLiteClient.open();
+		Future<Download> download = otoLiteClient.getDownload(new UploadResult(392, "secret"));
+		Download d;
+		try {
+			d = download.get();
+			System.out.println(d.isFinalized());
+			System.out.println(d.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		otoLiteClient.close();
 		
 		/*Upload upload = new Upload();
 		upload.setGlossaryType("plants");

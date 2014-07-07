@@ -3,6 +3,8 @@ package edu.arizona.biosemantics.oto.client;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import edu.arizona.biosemantics.oto.client.lite.OTOLiteClient;
 import edu.arizona.biosemantics.oto.client.oto.OTOClient;
@@ -21,8 +23,10 @@ public class Main {
 
 	/**
 	 * @param args
+	 * @throws ExecutionException 
+	 * @throws InterruptedException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException, ExecutionException {
 		LocalGlossary localGlossary = new LocalGlossary();
 		List<TermCategory> termCategories = new ArrayList<TermCategory>();
 		List<WordRole> wordRoles = new ArrayList<WordRole>();
@@ -30,10 +34,10 @@ public class Main {
 
 		/** get permanent glossary **/
 		OTOClient otoClient = new OTOClient("http://localhost:8080/OTO5/");
-		GlossaryDownload glossaryDownload = otoClient.download("ant_agosti");
-		
-		termCategories.addAll(glossaryDownload.getTermCategories());
-		termSynonyms.addAll(glossaryDownload.getTermSynonyms());
+		Future<GlossaryDownload> glossaryDownload = otoClient.getGlossaryDownload("ant_agosti");
+		GlossaryDownload gdl = glossaryDownload.get();
+		termCategories.addAll(gdl.getTermCategories());
+		termSynonyms.addAll(gdl.getTermSynonyms());
 
 		/** get temporary glossary **/
 		OTOLiteClient otoLiteClient = new OTOLiteClient("http://localhost:8080/OTOLite/");
@@ -53,10 +57,11 @@ public class Main {
 		upload.setPossibleOtherTerms(possOt);
 		upload.setPossibleStructures(possStr);
 		
-		UploadResult uploadResult = otoLiteClient.upload(upload);
-		Download download = otoLiteClient.download(uploadResult);
-		List<Decision> decisions = download.getDecisions();
-		List<Synonym> synonyms = download.getSynonyms();
+		Future<UploadResult> uploadResult = otoLiteClient.putUpload(upload);
+		Future<Download> download = otoLiteClient.getDownload(uploadResult.get());
+		Download d = download.get();
+		List<Decision> decisions = d.getDecisions();
+		List<Synonym> synonyms = d.getSynonyms();
 
 		HashSet<String> hasSynSet = new HashSet<String>();
 		for(Synonym synonym : synonyms) {

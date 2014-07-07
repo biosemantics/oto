@@ -1,5 +1,11 @@
 package edu.arizona.biosemantics.oto.client.oto;
 
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
+import edu.arizona.biosemantics.oto.common.model.GlossaryDictionaryEntry;
+
 
 
 
@@ -7,12 +13,23 @@ public class Main {
 
 	/**
 	 * @param args
+	 * @throws ExecutionException 
+	 * @throws InterruptedException 
 	 */
-	public static void main(String[] args) {
-		//IOTOClient otoClient = new OTOClient("http://biosemantics.arizona.edu/ONTNEW/");
-		IOTOClient otoClient = new OTOClient("http://biosemantics.arizona.edu:8080/OTO/");	
+	public static void main(String[] args) throws InterruptedException, ExecutionException {
+		OTOClient otoClient = new OTOClient("http://biosemantics.arizona.edu:8080/OTO2/");
+		//OTOClient otoClient = new OTOClient("http://localhost:9090/oto/");	
+		otoClient.open();
 		
-		System.out.println(otoClient.getGlossaryDictionaryEntries("Hymenoptera", "abundance"));
+		otoClient.getGlossaryDownload("Plant").get();
+		//otoClient.getCategories().get();
+		//otoClient.getGlossaryDictionaryEntry("Plant", "abaxial", "position").get();
+		//otoClient.getGlossaryDictionaryEntries("Plant", "abaxial").get();
+		
+		/*Future<List<GlossaryDictionaryEntry>> entries = otoClient.getGlossaryDictionaryEntries("Hymenoptera", "abundance");
+		
+		System.out.println(entries.get());*/
+		otoClient.close();
 		
 		//GlossaryDictionaryEntry result = otoClient.getGlossaryDictionaryEntry("Plant", "round22", "shape");
 		

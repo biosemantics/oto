@@ -17,7 +17,7 @@ public class Main {
 	 * @throws InterruptedException 
 	 */
 	public static void main(String[] args) throws InterruptedException, ExecutionException {
-		OTOClient otoClient = new OTOClient("http://biosemantics.arizona.edu:8080/OTO2/");
+		OTOClient otoClient = new OTOClient("http://biosemantics.arizona.edu/OTO/");
 		//OTOClient otoClient = new OTOClient("http://localhost:9090/oto/");	
 		otoClient.open();
 		

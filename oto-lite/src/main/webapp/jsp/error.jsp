@@ -14,9 +14,9 @@
 	<%@ page isErrorPage="true"%>
 	<jsp:include page="header.jsp" />
 	<h2>
-		<font class="font-text-style">The Application encountered an
+		<font class="font-text-style">The application encountered an
 			internal error while processing your request. Please make sure you
-			have the correct upload ID. Thanks! </font>
+			have the correct upload ID. </font>
 	</h2>
 	<%
 		String message = (String) request.getAttribute("message") != null ? (String) request

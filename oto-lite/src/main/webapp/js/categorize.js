@@ -72,11 +72,11 @@ function deleteCategory(categoryName, uploadID) {
 							}
 						}
 						alert("Category '" + categoryName
-								+ "' has been deleted successfully!");
+								+ "' was successfully deleted.");
 
 					} else {
-						alert("Deleting category '" + categoryName
-								+ "' failed. Please try again later. ");
+						alert("Failed to delete category '" + categoryName
+								+ "'. Please try again later. ");
 					}
 				}
 			};
@@ -844,7 +844,7 @@ function mouse_up_handler(e) {
 					if (is_changeDecision) {
 						if (targetbox != null) {
 							if (!isSingleTerm(term_Chosen) && ctrlKeyPressed(e)) {
-								alert("Only single term can be copied. Please click 'x' to break synonyms first. ");
+								alert("Only single terms can be copied. Click the 'x' to break synonyms first. ");
 							} else {
 								drag_clone_content.parentNode
 										.removeChild(drag_clone_content);
@@ -880,9 +880,9 @@ function mouse_up_handler(e) {
 						var term_chosen_name = term_Chosen.id;
 						if (target_term != null && target_term != term_Chosen) {
 							if (!isSingleTerm(term_Chosen)) {
-								alert("Only single terms can be dragged to make synonym. Please click 'x' to break synonyms first. ");
+								alert("Only single terms can be dragged to make synonyms. Click the 'x' to break synonyms first. ");
 							} else {
-								var confirmed = confirm("Do you want to make the two terms synonyms? ");
+								var confirmed = confirm("Are you sure you want to make the two terms synonyms? ");
 								if (confirmed) {
 									var isToMerge = hasDuplicate(target_term,
 											term_chosen_name);
@@ -950,7 +950,7 @@ function mouse_up_handler(e) {
 					}
 				} else {
 					if (!isSingleTerm(term_Chosen)) {
-						alert("Only single term can be removed from category box. Please remove synonyms first.");
+						alert("Only single terms can be removed from category box. Please remove synonyms first.");
 					} else {
 						// delete saved decision: will return to left side
 						// var confirmed = confirm("Are you sure you want to remove
@@ -1207,7 +1207,7 @@ function getTargetCategory(evn) {
 						}
 					}
 				} else {
-					alert("Please drag source term onto a saved term!");
+					alert("Drag a source term onto a saved term.");
 				}
 			}
 		}
@@ -1233,8 +1233,7 @@ function drag_init() {
 	// session timeout reminder: promt one at 50 minutes
 	setInterval(
 			function() {
-				alert("The session will timeout in 10 minutes, please save your changes. "
-						+ "Otherwise you may lose all your work!");
+				alert("Your session will timeout in 10 minutes. Please save any changes you have made. (Otherwise your changes may be lost!)");
 			}, 3000000);
 }
 
@@ -1395,10 +1394,10 @@ function save_categories(uploadID) {
 	request += "</decisions>";
 	// alert(request);
 	if (!dataChanged) {
-		alert("You did not make any changes. To categorize listed terms, select terms, and drag them into the category boxes.");
+		alert("You have not made any changes. To categorize listed terms, select terms and drag them into the category boxes.");
 		return;
 	}
-	confirmed = confirm("Are you sure to save your decisions?");
+	confirmed = confirm("Are you sure you want to save your decisions?");
 	if (confirmed) {
 		// the saving processing image visible
 		document.getElementById("processingSaveImage").style.visibility = 'visible';
@@ -1419,10 +1418,10 @@ function sendSaveRequest(requestXML) {
 						window.onbeforeunload = null;
 						location.reload();
 					} else {
-						alert("Saving changes failed. Please try again later. ");
+						alert("Failed to save changes. Please try again later. ");
 					}
 				} else {
-					alert("Saving changes failed. Please try again later. ");
+					alert("Failed to save changes. Please try again later. ");
 				}
 			}
 		};
@@ -1493,17 +1492,17 @@ function updateLocations(termName) {
  */
 function newCategory() {
 	var i;
-	var name = prompt("Please input category name: ", "");
+	var name = prompt("New category name: ", "");
 	if (name) {
 		var catExisted = document.getElementsByClassName('categoryTable');
 		for (i = 0; i < catExisted.length; i++) {
 			if (catExisted[i].id.toLowerCase() == name.toLowerCase()) {
-				alert("Category '" + name + "' has already existed. ");
+				alert("Category '" + name + "' has already been used. ");
 				return;
 			}
 		}
 
-		var def = prompt("Please input the definition of '" + name + "': ", "");
+		var def = prompt("Please provide a definition for category '" + name + "': ", "");
 		if (def) {
 			var startNewRow = toStartNewRow();
 
@@ -1654,35 +1653,34 @@ function fixTypo(term) {
 	}
 
 	// user input: replacement of the original term
-	var replacement = prompt("Please input the correct spell of term '" + term
+	var replacement = prompt("Modify term '" + term
 			+ "':", "");
 	if (!replacement) {
 		return;
 	}
 
 	if (replacement == term) {
-		alert("The correct spell you typed is the same with '" + term + "'!");
+		//alert("The correct spell you typed is the same with '" + term + "'!");
 		return;
 	}
 
 	// if term already exists, do not modify
 	if ($("[termName='" + replacement + "']").length > 0) {
 		alert("Term '" + replacement
-				+ "' already exists. You can just ignore the mistyped term '"
+				+ "' already exists. You can ignore the mistyped term '"
 				+ term + "' and leave it in the left side. ");
 		return;
 	}
 
 	var patt2 = /^[a-zA-Z\s_]+$/;
 	if (!patt2.test(replacement)) {
-		alert("A valid term name can only contain letters, space and underscore. Please input a valid term name!");
+		alert("Term names may contain letters, spaces and underscores. Please input a valid term name.");
 		return;
 	}
 
-	var confirmed = confirm("You are going to correct term '" + term + "' to '"
+	var confirmed = confirm("You are about to correct term '" + term + "' to '"
 			+ replacement + "'. "
-			+ "The change will be applied to all its copies too. \n"
-			+ "Are you sure you want to make the change? ");
+			+ "This will affect all copies of the term. Are you sure you want to make the change?");
 
 	if (!confirmed) {
 		return;
@@ -1699,12 +1697,12 @@ function fixTypo(term) {
 					if (XHR.responseText == "success") {
 						updateTermTypoInWebPage(term, replacement);
 					} else {
-						alert("Fix typo from '" + term + "' to '" + replacement
-								+ "' failed. Please try again later. ");
+						alert("Failed to update term '" + term + "' to '" + replacement
+								+ "'. Please try again later. ");
 					}
 				} else {
-					alert("Fix typo from '" + term + "' to '" + replacement
-							+ "' failed. Please try again later. ");
+					alert("Failed to update term '" + term + "' to '" + replacement
+							+ "'. Please try again later. ");
 				}
 			}
 		};
@@ -1761,7 +1759,7 @@ function changeTermName(obj, replacementName) {
  * allow user to input a term and locate the term
  */
 function openTermLocator() {
-	var name = prompt("Please input term's name: ", "");
+	var name = prompt("Term name: ", "");
 	if (name) {
 		setTerm(name);
 	}
@@ -1786,14 +1784,14 @@ function finishCategorizing() {
 				if (XHR.status == 200) {
 					if (XHR.responseText == "success") {
 						window.top.postMessage('done', '*');
-						alert("The categorization of this upload has been finalized. ");
+						alert("Categorization has been finalized. ");
 						window.onbeforeunload = null;
 						location.reload();
 					} else {
-						alert("Finish categorizing failed. Please try again later. ");
+						alert("Categorization was not finalized. Please try again later. ");
 					}
 				} else {
-					alert("Finish categorizing failed. Please try again later. ");
+					alert("Categorization was not finalized. Please try again later. ");
 				}
 			}
 		};
@@ -1812,8 +1810,7 @@ window.onbeforeunload = function() {
 	// event = evn;
 	// alert(typeof evn);
 	if (dataChanged()) {
-		return ("You have unsaved changes. "
-				+ "You will lose both your reviewing history and categorizing decisions if you leave the page.");
+		return ("You have unsaved changes. If you leave the page you will lose both your reviewing history and categorizing decisions.");
 
 		// window.event.returnValue = "You have unsaved changes in current page.
 		// Are you sure you want to leave the page without saving?";

@@ -12,7 +12,7 @@ function getDownloadableFiles() {
 	// update msg
 	var msglabel = $("#serverMsg");
 	if (msglabel != null) {
-		msglabel.html("Waiting for server to response..");
+		msglabel.html("Waiting for the server to respond.");
 	}
 	var dataset = document.getElementById("dataset").value;
 	if (dataset == "") {
@@ -48,7 +48,7 @@ function displayDownloadableFiles() {
 				if (msg == "error") {
 					msglabel.toggleClass("error");
 					msglabel
-							.html("No downloadable files found for this dataset. Please try again later. ");
+							.html("No downloadable files were found for this dataset. Please try again later. ");
 					return;
 				}
 			}
@@ -59,7 +59,7 @@ function displayDownloadableFiles() {
 				// update server msg
 				msglabel.html("This dataset has been merged into '"
 						+ mergedInto
-						+ "', which is also available for download. ");
+						+ "'. Both datasets are available for download. ");
 			} else {
 				msglabel.html("");
 				msglabel.toggleClass("info");
@@ -113,7 +113,7 @@ function displayDownloadableFiles() {
 			}
 
 			if (!hasDownload) {
-				msglabel.html("No available download for this dataset now. ");
+				msglabel.html("There are no downloads available for the selected dataset at this time.");
 			}
 		} else {
 			if (msglabel != null) {
@@ -133,7 +133,7 @@ function download() {
 function startDownload(dataset) {
 	var msglabel = document.getElementById("serverMsg");
 	if (msglabel != null) {
-		msglabel.innerHTML = "Waiting for server to response..";
+		msglabel.innerHTML = "Waiting for the server to respond.";
 	}
 	var x = "value=" + dataset;
 	XHR = createXHR();
@@ -166,8 +166,8 @@ function onDownload() {
 					var mergedDataset = mergedInto[0].childNodes[0].nodeValue;
 					var confirmed = confirm("The dataset you selected has been merged into '"
 							+ mergedDataset
-							+ "' which is also available for download. \n\n"
-							+ "Are you sure to continue to download this dataset? ");
+							+ "'. Both datasets are available for download. \n\n"
+							+ "Are you sure you want to continue downloading this dataset? ");
 					if (!confirmed) {
 						msglabel.innerHTML = "";
 						msglabel.toggleClass("info");
@@ -182,7 +182,7 @@ function onDownload() {
 					msglabel.innerHTML = "";
 				}
 			} else {
-				msglabel.innerHTML = "File not found. Please try again later. ";
+				msglabel.innerHTML = "The requested file was not found. Please try again later. ";
 			}
 		} else {
 			if (msglabel != null) {

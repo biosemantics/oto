@@ -47,7 +47,7 @@ function UpdateAdoptions() {
 					alert(msg + " terms approved since last check. ");	
 				}
 			} else {
-				alert("Failed in updating terms' adoptions. Please try again later. ");
+				alert("Failed to update term adoptions. Please try again later. ");
 			}
 		}
 	}
@@ -93,24 +93,24 @@ function setOntology() {
  */
 function validateSubmission() {
 	if ($("#termName").val() == "") {
-		alert("Term name cannot be empty!");
+		alert("Term name cannot be empty.");
 		return;
 	}
 
 	if ($("#definition").val() == "") {
-		alert("Definition cannot be empty!");
+		alert("Definition cannot be empty.");
 		return;
 	}
 
 	var ontology = $("#ontology").val();
 	if (ontology == "") {
-		alert("Please select an ontology!");
+		alert("Please select an ontology.");
 		return;
 	}
 
 	var superClassID = $("#superClassID").val();
 	if (superClassID == "") {
-		alert("Super Class ID cannot be empty! You can get a valid super class ID from 'Ontology Lookup Service'. ");
+		alert("Super Class ID cannot be empty. You can get a valid super class ID from 'Ontology Lookup Service'. ");
 		return;
 	}
 
@@ -123,7 +123,7 @@ function validateSubmission() {
 	}
 
 	if ($("#category").val() == "") {
-		alert("Category cannot be empty!");
+		alert("Category cannot be empty.");
 		return;
 	}
 
@@ -310,7 +310,7 @@ function removeTerm(obj_term, term, i, j, glossTypeID) {
 				obj_srcSize.innerHTML = Number(obj_srcSize.innerHTML) - 1;
 				obj_destSize.innerHTML = Number(obj_destSize.innerHTML) + 1;
 			} else {
-				alert("Failed in moving the term. Please try again later. ");
+				alert("Failed to move the term. Please try again later. ");
 			}
 		}
 	}

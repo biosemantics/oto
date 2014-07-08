@@ -52,7 +52,7 @@ var reviewedTerms = ""; // hold all the terms touched since last page loading
 function copySystemDecisions(dataset) {
 	// construct value
 	var value = dataset;
-	var confirmed = confirm("Please save your changes on this page before you proceed. \nClick 'OK' to proceed directly.");
+	var confirmed = confirm("Please make sure you have saved your changes on this page before you proceed. Click 'OK' when you are ready to proceed.");
 	if (!confirmed) {
 		return;
 	}
@@ -75,7 +75,7 @@ function copySystemDecisions(dataset) {
 				window.onbeforeunload = null;
 				window.location.reload();
 			} else {
-				alert("Copying system decision failed. Please try again later. ");
+				alert("Failed to copy system decision. Please try again later. ");
 			}
 		}
 	}
@@ -744,7 +744,7 @@ function mouse_up_handler(e) {
 				if (is_changeDecision) {
 					if (targetbox != null) {
 						if (!isSingleTerm(term_Chosen) && ctrlKeyPressed(e)) {
-							alert("Only single term can be copied. Please click 'x' to break synonyms first. ");
+							alert("Only single terms can be copied. Click the 'x' to break synonyms first. ");
 						} else {
 							drag_clone_content.parentNode
 									.removeChild(drag_clone_content);
@@ -780,9 +780,9 @@ function mouse_up_handler(e) {
 					var term_chosen_name = term_Chosen.id;
 					if (target_term != null && target_term != term_Chosen) {
 						if (!isSingleTerm(term_Chosen)) {
-							alert("Only single terms can be dragged to make synonym. Please click 'x' to break synonyms first. ");
+							alert("Only single terms can be dragged to make synonyms. Click the 'x' to break synonyms first. ");
 						} else {
-							var confirmed = confirm("Do you want to make '"
+							var confirmed = confirm("Are you sure you want to make '"
 									+ term_chosen_name + "' and '"
 									+ target_term.id + "' synonyms? ");
 							if (confirmed) {
@@ -835,7 +835,7 @@ function mouse_up_handler(e) {
 				}
 			} else {
 				if (!isSingleTerm(term_Chosen)) {
-					alert("Only single term can be removed from category box. Please remove synonyms first.");
+					alert("Only single terms can be removed from the category box. Please remove synonyms first.");
 				} else {
 					// delete saved decision: will return to left side
 					// var confirmed = confirm("Are you sure you want to remove
@@ -843,7 +843,7 @@ function mouse_up_handler(e) {
 
 					// todo: force comments
 					var comment = prompt(
-							"Please explain why you need to uncategorize this term (CANNOT be empty): ",
+							"Please provide an explanation for why this term is being uncategorized (cannot be empty): ",
 							"");
 					if (comment) {
 						comment = replaceSpecialChar(comment);
@@ -1088,7 +1088,7 @@ function getTargetCategory(evn) {
 						}
 					}
 				} else {
-					alert("Please drag source term onto a saved term!");
+					alert("Drag a source term onto a saved term.");
 				}
 			}
 		}
@@ -1113,7 +1113,7 @@ function drag_init() {
 	// session timeout reminder: promt one at 50 minutes
 	setInterval(
 			function() {
-				alert("The session will timeout in 10 minutes, please save your changes. Otherwise you may lose all your work!")
+				alert("Your session will timeout in 10 minutes. Please save any changes you have made. (Otherwise your changes may be lost!)")
 			}, 3000000);
 }
 
@@ -1282,10 +1282,10 @@ function save_categories(flag) {
 	request += "</decisions>";
 	// alert(request);
 	if (!dataChanged) {
-		alert("You did not make any changes. To categorize listed terms, select terms, and drag them into the category boxes.");
+		alert("You have not made any changes. To categorize listed terms, select terms and drag them into the category boxes.");
 		return;
 	}
-	confirmed = confirm("Are you sure to save your decisions?");
+	confirmed = confirm("Are you sure you want to save your decisions?");
 	if (confirmed) {
 		window.onbeforeunload = null;
 		// the saving processing image visible
@@ -1354,32 +1354,32 @@ function updateLocations(termName) {
  * add a new category
  */
 function newCategory() {
-	var name = prompt("Please input category name: ", "");
+	var name = prompt("New category name: ", "");
 	if (name) {
 		// force category to be lower case
 		name = name.toLowerCase();
 
 		// name cannot be "discarded"
 		if (name == 'discarded') {
-			alert("Caegory name cannot be 'discarded'! ");
+			alert("This name may not be used.");
 			return;
 		}
 
 		// no space
 		if (name.indexOf(" ") >= 0) {
-			alert("Category name cannot have space in it. You may use underscore '_' to replace the space. ");
+			alert("Category name may not include spaces. (Use underscores '_' instead.)");
 			return;
 		}
 
 		var catExisted = document.getElementsByClassName('categoryTable');
 		for (i = 0; i < catExisted.length; i++) {
 			if (catExisted[i].id.toLowerCase() == name.toLowerCase()) {
-				alert("Category '" + name + "' has already existed. ");
+				alert("Category '" + name + "' has already been used. ");
 				return;
 			}
 		}
 
-		var def = prompt("Please input the definition of '" + name + "': ", "");
+		var def = prompt("Please provide a definition for category '" + name + "': ", "");
 		if (def) {
 			var startNewRow = toStartNewRow();
 
@@ -1512,7 +1512,7 @@ function getNewName(name) {
  * allow user to input a term and locate the term
  */
 function openTermLocator() {
-	var name = prompt("Please input term's name: ", "");
+	var name = prompt("Enter term name: ", "");
 	if (name) {
 		setTerm(name);
 	}
@@ -1525,8 +1525,7 @@ window.onbeforeunload = function() {
 	// event = evn;
 	// alert(typeof evn);
 	if (dataChanged()) {
-		return ("You have reviewed some term or unsaved categorizing decisions. "
-				+ "You will lose both your reviewing history and categorizing decisions if you leave the page.");
+		return ("You have unsaved changes. If you leave the page you will lose both your reviewing history and categorizing decisions.");
 
 		// window.event.returnValue = "You have unsaved changes in current page.
 		// Are you sure you want to leave the page without saving?";

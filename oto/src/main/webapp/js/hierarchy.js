@@ -484,11 +484,11 @@ function hasDataToSave(){
 function save_tree(flag) {
 	if (!hasDataToSave()) {
 		//if no data to save, alert notification and return
-		alert("You did not make any changes. You can drag structures on to the hierarchy tree.");
+		alert("You have not made any changes. Drag structures onto the hierarchy tree.");
 		return;
 	}
 	
-	var confirmed = confirm("NOTE: Decisions CANNOT be changed after saved. Are you sure to save the hierarchy tree?");
+	var confirmed = confirm("NOTE: Decisions cannot be modified after saving the hierarchy tree. Are you sure you want to save?");
 	if (!confirmed) {
 		return;
 	} else {
@@ -519,7 +519,7 @@ function save_tree(flag) {
 	request += "</nodes>";
 	//alert(request);
 	
-/*	var confirmed = confirm("NOTE: Decisions CANNOT be changed after saved. Are you sure to save the hierarchy tree?");
+/*	var confirmed = confirm("NOTE: Decisions CANNOT be changed after saved. Are you sure to you want to save the hierarchy tree?");
 	if (!confirmed) {
 		return;
 	}*/

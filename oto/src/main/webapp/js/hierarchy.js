@@ -40,7 +40,7 @@ function mouse_down_handler(e) {
 		set_drag_from();
 		if (drag_from == "right") {
 			if (tag_chosen.nextSibling != null && tag_chosen.nextSibling.className == "clip") {
-				alert("Only leaf node can be dragged!");
+				alert("Only leaf node can be dragged.");
 				return false;
 			}
 		}
@@ -164,9 +164,9 @@ function revertNode(nodeID) {
 		}
 		if (hasMoreThanOne) {
 			//set color grey
-			tag.childNodes[1].style.color = "grey";
+			tag.getElementsByTagName("label")[0].style.color = "grey";
 		} else {
-			tag.childNodes[1].style.color = "black";
+			tag.getElementsByTagName("label")[0].style.color = "black";
 		}
 	}
 }
@@ -263,12 +263,12 @@ function mouse_up_handler(e) {
 			
 			if (tag_chosen.id == target_node.id) {
 				//node can not be itself's child
-				alert("Terms can NOT be children of itself! ");
+				alert("A term cannot be a child of itself.");
 			} else if (inParent) {
 				//node cannot be its ancestors' child
-				alert("Terms can Not be children of itself. The term is already an ancester of the target node.");
+				alert("A term cannot be a child of itself. The term is already an ancestor of the target node.");
 			} else if (alreadyChild) {
-				alert("This term is already a child of the target node.");
+				alert("The term is already an ancestor of the target node.");
 			} else {
 				//do the adding node
 				if (clip != null) {
@@ -333,8 +333,10 @@ function mouse_up_handler(e) {
 					if (drag_from == 'left') {
 						var tagTR;
 						tagTR = tag_chosen.parentNode.parentNode;
-						tagTR.style.visibility = 'hidden';
+						//tagTR.style.visibility = 'hidden';
 						//tagTR.parentNode.removeChild(tagTR);
+						update_term_color(tag_chosen);
+						
 					} else {
 						removeNode(tag_chosen);
 					}
@@ -343,7 +345,39 @@ function mouse_up_handler(e) {
 		}
 	}
 	
-	
+	function update_term_color(object){
+		var nodeID = object.id;
+		
+		var hasMoreThanOne = false; //whether there are more than one same tag in the tree
+		var nodelist = document.getElementById('hierarchyTree').getElementsByClassName('dTreeNode');
+		for (i = 0; i < nodelist.length; i++) {
+			if (nodelist[i].id == nodeID) {
+				hasMoreThanOne = true;
+			} 
+		}
+		
+		//locate the tag from taglist: compare one by one
+		var tags = document.getElementById('availableTags').getElementsByClassName("structure");
+		var tag_tr, tag;
+		for (i = 0; i < tags.length; i++) {
+			if (tags[i].id == nodeID) {
+				tag = tags[i];
+				tag_tr = tag.parentNode.parentNode;
+				break;
+			}
+		}
+		if (tag_tr != null) {
+			if (tag_tr.style.visibility != null && tag_tr.style.visibility == 'hidden') {
+				tag_tr.style.visibility = 'visible';
+			}
+			if (hasMoreThanOne) {
+				//set color grey
+				tag.getElementsByTagName("label")[0].style.color = "grey";
+			} else {
+				tag.getElementsByTagName("label")[0].style.color = "black";
+			}
+		}
+	}
 	
 	old_target_node = target_node;
 	delete_drag_clone();
@@ -484,7 +518,7 @@ function hasDataToSave(){
 function save_tree(flag) {
 	if (!hasDataToSave()) {
 		//if no data to save, alert notification and return
-		alert("You have not made any changes. Drag structures onto the hierarchy tree.");
+		alert("No changes have been made. Click and drag structures onto the tree to make changes.");
 		return;
 	}
 	

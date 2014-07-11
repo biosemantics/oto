@@ -187,9 +187,9 @@ function mouse_up_handler(e) {
 		} else if (drag_from == "order") {
 			// remove term from order
 			if (term_chosen.getAttribute("rel") == "base") {
-				alert("Base term CANNOT be removed!");
+				alert("Base term cannot be removed.");
 			} else {
-				var toRemove = confirm("Remove the term from current order?");
+				var toRemove = confirm("Remove term from current order?");
 				if (toRemove) {
 					// remove the term
 					var order_tr = term_chosen.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
@@ -374,7 +374,7 @@ function save_order(btn) {
 	}
 
 	if (!hasDataToSave(baseOrder)) {
-		alert("You did not make any change in this order.");
+		alert("No changes have been made to this order.");
 		return;
 	}
 	// alert(baseOrder.innerHTML);
@@ -510,13 +510,13 @@ function save_order(btn) {
 
 function newTerm(btn) {
 	var name = prompt(
-			"Please input term name (Term name can only contain letters, numbers, space and underscore. ): ",
+			"Please input term name (may contain letters, numbers, spaces and underscores): ",
 			"");
 
 	// validate input
 	var regex = /^[a-zA-Z\s\d_]+$/;
 	if (!regex.test(name)) {
-		alert("A valid term name can only contain letters, numbers, space and underscore. Please input a valid term name!");
+		alert("Term names may contain letters, numbers, spaces and underscores. Please input a valid term name.");
 		return;
 	}
 
@@ -527,7 +527,7 @@ function newTerm(btn) {
 		var i;
 		for (i = 0; i < terms_existed.length; i++) {
 			if (name == terms_existed[i].innerHTML) {
-				alert("'" + name + "' has already existed in this order!");
+				alert("'" + name + "' has already been used in this order.");
 				return;
 			}
 		}
@@ -558,13 +558,13 @@ function newTerm(btn) {
 
 function newOrder(btn) {
 	var name = prompt(
-			"Please input the name of order (A valid order name can only contain letters, numbers, space, underscore, ( and ).): ",
+			"Please provide a name for the order (may contain letters, numbers, spaces, underscores, '(' and ')'): ",
 			"");
 
 	// validate input: only allow letters, numbers, space, underscore and ( )
 	var regex = /^[a-zA-Z\s\d_\(\)]+$/;
 	if (!regex.test(name)) {
-		alert("A valid order name can only contain letters, numbers, space, underscore, ( and ). Please input a valid order name!");
+		alert("Order names may contain letters, numbers, space, underscores, '(' and ')'. Please input a valid order name.");
 		return;
 	}
 
@@ -576,13 +576,13 @@ function newOrder(btn) {
 		var i;
 		for (i = 0; i < orders_existed.length; i++) {
 			if (name == orders_existed[i].id) {
-				alert("Order '" + name + "' has already existed!");
+				alert("Order '" + name + "' has already been used.");
 				return;
 			}
 		}
 
-		var explanation = prompt("Please explain the function of the order '"
-				+ name + "' you just created : \n\n *Required!");
+		var explanation = prompt("Please provide a definition for order '"
+				+ name + "' (cannot be empty): ");
 		if (!explanation || explanation == '') {
 			// alert("Please specify functin of order to create a new order. ");
 			return;
@@ -736,9 +736,9 @@ function hideEditBtn(td) {
 function editOrderName(groupID, oldName) {
 	// user input: replacement of the original term
 	var replacement = prompt(
-			"Please input new order name of order '"
+			"New order name for '"
 					+ oldName
-					+ "' (A valid order name can only contain letters, numbers, space, underscore, ( and ).): ",
+					+ "' (may contain letters, numbers, spaces, underscores, '(' and ')'): ",
 			"");
 	if (!replacement) {
 		return;
@@ -751,14 +751,14 @@ function editOrderName(groupID, oldName) {
 	// validate input: only allow letters, numbers, space, underscore and ( )
 	var regex = /^[a-zA-Z\s\d_\(\)]+$/;
 	if (!regex.test(replacement)) {
-		alert("A valid order name can only contain letters, numbers, space, underscore, ( and ). Please input a valid order name!");
+		alert("Order names may contain letters, numbers, space, underscores, '(' and ')'. Please input a valid order name.");
 		return;
 	}
 
 	// check duplication
 	if ($("#group_" + groupID).find("[orderName='" + replacement + "']").length > 0) {
 		alert("Order name '" + replacement
-				+ "' already exists in this order group. ");
+				+ "' has already been used in this order group. ");
 		return;
 	}
 
@@ -771,14 +771,14 @@ function editOrderName(groupID, oldName) {
 					if (XHR.responseText == "success") {
 						updateOrderName(groupID, oldName, replacement);
 					} else {
-						alert("Edit order name from '" + oldName + "' to '"
+						alert("Failed to change order name from '" + oldName + "' to '"
 								+ replacement
-								+ "' failed. Please try again later. ");
+								+ "'. Please try again later. ");
 					}
 				} else {
-					alert("Edit order name from '" + oldName + "' to '"
+					alert("Failed to change order name from '" + oldName + "' to '"
 							+ replacement
-							+ "' failed. Please try again later. ");
+							+ "'. Please try again later. ");
 				}
 			}
 		};

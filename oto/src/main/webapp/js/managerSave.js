@@ -191,7 +191,7 @@ function copyAcceptedDecisionsTo(toDataset) {
 				alert(response);
 				window.location.reload();
 			} else {
-				alert("Copying accepted decision failed. Please try again later. ");
+				alert("Failed to copy decisions. Please try again later. ");
 				document.getElementById('serverMessage').innerHTML = "";
 			}
 		}
@@ -201,7 +201,7 @@ function copyAcceptedDecisionsTo(toDataset) {
 	xmlhttp.setRequestHeader("Content-Type",
 			"application/x-www-form-urlencoded; charset=UTF-8")
 	xmlhttp.send('value=' + value);
-	$("#serverMessage").html("Copying accepted decisions ...");
+	$("#serverMessage").html("Copying accepted decisions...");
 }
 
 function acceptSynonym(btn) {
@@ -288,7 +288,7 @@ function saveHierarchyByManager(btn) {
 
 	// get decision_cell
 	if (accept == "") {
-		alert("Please select to accept this category decision or to decline. ");
+		alert("Select to accept or decline this category decision. ");
 		return;
 	} else if (accept == "y") {
 		decision_cell = document.getElementById(term + '_acceptedDecisions');
@@ -306,7 +306,8 @@ function saveHierarchyByManager(btn) {
 	request += "</confirm>";
 	// alert(request);
 
-	var confirmed = confirm("NOTE: Decisions CANNOT be changed after saved. Are you sure to save your decisions?");
+	var confirmed = confirm("NOTE: Decisions cannot be modified after saving. Are you sure you want to save?");
+	
 	if (!confirmed) {
 		return;
 	}
@@ -403,7 +404,7 @@ function saveTermInOrderByManager(btn) {
 
 	// get decision_cell
 	if (accept == "") {
-		alert("Please select to accept this category decision or to decline. ");
+		alert("Select to accept or decline this category decision. ");
 		return;
 	} else if (accept == "y") {
 		decision_cell = document.getElementById(orderID + "_" + distance
@@ -426,7 +427,7 @@ function saveTermInOrderByManager(btn) {
 	request += "</confirm>";
 	alert(request);
 
-	var confirmed = confirm("NOTE: Decisions CANNOT be changed after saved. Are you sure to save your decisions?");
+	var confirmed = confirm("NOTE: Decisions cannot be modified after saving. Are you sure you want to save?");
 	if (!confirmed) {
 		return;
 	}
@@ -461,7 +462,7 @@ function doDeleteDataset(dataset, fromMerge) {
 				if (fromMerge) {
 					$("#serverMessage").toggleClass("info");
 					document.getElementById('serverMessage').innerHTML = "The newly created dataset '"
-							+ dataset + "' has been deleted. ";
+							+ dataset + "' was deleted. ";
 				} else {
 					alert(response);
 					window.location.reload();
@@ -470,10 +471,10 @@ function doDeleteDataset(dataset, fromMerge) {
 				if (fromMerge) {
 					$("#serverMessage").toggleClass("error");
 					$("#serverMessage").html(
-							"Deleting dataset '" + dataset
-									+ "' failed. You can delete it later. ");
+							"Failed to delete dataset '" + dataset
+									+ "'. You can delete it later. ");
 				} else {
-					alert("Deleting this dataset failed. Please try again later. ");
+					alert("Failed to delete dataset. Please try again later. ");
 					document.getElementById('serverMessage').innerHTML = "";
 				}
 			}
@@ -493,8 +494,7 @@ function doDeleteDataset(dataset, fromMerge) {
  * @param type
  */
 function deleteDataset(dataset) {
-	var confirmed = confirm("Deleting will remove all the data in this dataset and canot be undone. "
-			+ "Are you sure you want to delete this dataset? ");
+	var confirmed = confirm("Warning: This will permanently remove all data in this dataset. This operation cannot be undone. Are you sure you want to delete this dataset?");
 	if (!confirmed) {
 		return;
 	}
@@ -526,7 +526,7 @@ function doFinalize(dataset, type) {
 				alert(response);
 				window.location.reload();
 			} else {
-				alert("Finalize this dataset failed. Please try again later. ");
+				alert("Failed to finalize dataset. Please try again later. ");
 			}
 		}
 	}
@@ -541,15 +541,15 @@ function doFinalize(dataset, type) {
 // invoked when hit btn finish confirming.
 function finalizeDataset(dataset, type) {
 	// type: 1-categorizing; 2-hierarchy tree; 3-orders
-	var bothPageConfirmed = confirm("Categorization and synonyms decisions are displayed in separate tabs. "
-			+ "Your action will finalize both 'Categories' and 'Synonyms' tabs.\n"
-			+ "Have you checked both 'Categories' and 'Synonyms' tabs? \n\n"
-			+ "Click 'OK' to continue finalizing. ");
+	var bothPageConfirmed = confirm("Categorization and synonym decisions are displayed in separate tabs. "
+			+ "This will finalize both 'Categories' and 'Synonyms' tabs.\n"
+			+ "Please make sure you have checked both tabs for correctness. \n\n"
+			+ "Click 'OK' to continue. ");
 	if (!bothPageConfirmed) {
 		return;
 	}
 
-	var confirmed = confirm("After finalizing dataset, this dataset will be available for downloading on Github (https://github.com/biosemantics/glossaries) and this dataset cannot be changed anymore. "
+	var confirmed = confirm("After this dataset is finalized, it will be available for download on Github (https://github.com/biosemantics/glossaries) and no further changes will be possible. "
 			+ "Are you sure you want to finalize this dataset?");
 	if (confirmed) {
 		document.getElementById('serverMessage').innerHTML = "<label>Finalizing the dataset ... This may take a while ... Please wait ...</label>";
@@ -575,7 +575,7 @@ function isValidMerge(glossID, name, isNameVerified) {
 	}
 
 	if (count < 1) {
-		alert("Select the datasets you want to merge first. ");
+		alert("Select the datasets you want to merge. ");
 		return "";
 	}
 
@@ -585,7 +585,7 @@ function isValidMerge(glossID, name, isNameVerified) {
 
 	// name cannot be empty
 	if (name == null || name == "") {
-		alert("You must specify the name of merged dataset.");
+		alert("Please specify the name of merged dataset.");
 		return "";
 	}
 
@@ -593,7 +593,7 @@ function isValidMerge(glossID, name, isNameVerified) {
 	var re = /^[\w_]+$/g;
 	var accepted = re.exec(name);
 	if (!accepted) {
-		alert("The name of merged data can only have 'A'-'Z' 'a'-'z' '0'-'9' and '_'. \n "
+		alert("Names may only contain 'A'-'Z', 'a'-'z', '0'-'9' and '_'. \n "
 				+ "Please choose another name. ");
 		return "";
 	}
@@ -639,8 +639,8 @@ function mergeDatasets(glossID, glossName) {
 	}
 
 	name = glossName + "_" + name;
-	var confirmed = confirm("The merged dataset name is '" + name + "'. \n"
-			+ "Press 'OK' to continue with the modified name");
+	var confirmed = confirm("The name of the merged dataset will be '" + name + "'. \n"
+			+ "Press 'OK' to continue with the modified name.");
 	if (!confirmed) {
 		return;
 	}
@@ -656,7 +656,7 @@ function mergeDatasets(glossID, glossName) {
 
 	if (datasetsString == name) {// only one dataset selected and equal to
 		// the target name
-		alert("You need to select at least one other dataset to merge into '"
+		alert("Please select at least one other dataset to merge into '"
 				+ name + "'. ");
 		return;
 	}
@@ -689,8 +689,8 @@ function mergeDatasets(glossID, glossName) {
 								false);
 					}
 				} else if (response == "yes-rename") {
-					alert("The dataset '" + name
-							+ "' already exist. Please type in another name. ");
+					alert("Dataset '" + name
+							+ "' already exists. Please type in another name. ");
 					$("#serverMessage").html("");
 				} else if (response == "no") {
 					backupBeforeMerge(glossID, name, datasetsString, true,
@@ -703,7 +703,7 @@ function mergeDatasets(glossID, glossName) {
 				}
 			} else {
 				document.getElementById('serverMessage_' + glossID).innerHTML = "";
-				alert("Check dataset existence failed. Please try again later. ");
+				alert("Failed to check if dataset exists. Please try again later. ");
 			}
 		}
 	}
@@ -712,7 +712,7 @@ function mergeDatasets(glossID, glossName) {
 	xmlhttp.setRequestHeader("Content-Type",
 			"application/x-www-form-urlencoded; charset=UTF-8")
 	xmlhttp.send('value=' + name);
-	document.getElementById('serverMessage').innerHTML = "Validating dataset name ...";
+	document.getElementById('serverMessage').innerHTML = "Validating dataset name...";
 }
 
 function backupBeforeMerge(glossID, datasetName, datasetsString, toCreateNewDB,
@@ -741,12 +741,12 @@ function backupBeforeMerge(glossID, datasetName, datasetsString, toCreateNewDB,
 								isSystemMerge, false);
 					}
 				} else {
-					alert("Failed at backing up database. Please try again later. ");
+					alert("Failed to back up database. Please try again later. ");
 					$("#serverMessage").html("");
 				}
 			} else {
 				$("#serverMessage").html("");
-				alert("Failed at backing up database. Please try again later. ");
+				alert("Failed to back up database. Please try again later. ");
 			}
 		}
 	}
@@ -754,7 +754,7 @@ function backupBeforeMerge(glossID, datasetName, datasetsString, toCreateNewDB,
 	xmlhttp.setRequestHeader("Content-Type",
 			"application/x-www-form-urlencoded; charset=UTF-8")
 	xmlhttp.send('value=beforeMerge');
-	document.getElementById('serverMessage').innerHTML = "Backing up database ...";
+	document.getElementById('serverMessage').innerHTML = "Backing up database...";
 }
 
 /**
@@ -793,7 +793,7 @@ function createMergedDataset(glossID, datasetName, datasetsString) {
 				}
 			} else {
 				$("#serverMessage").html("");
-				alert("Failed at creating dataset '" + datasetName
+				alert("Failed to create dataset '" + datasetName
 						+ "'. Please try again later. ");
 			}
 		}
@@ -858,16 +858,16 @@ function doMerge_bak(glossID, target_name, datasets, isSystemMerge,
 						.getElementsByTagName("response")[0].childNodes[0].nodeValue;
 				if (response == "success") {
 					msgLabel.toggleClass("info");
-					msgLabel.html("Merge datasets SUCCESSFULLY. ");
+					msgLabel.html("Successfully merged datasets. ");
 					if (isSystemMerge) {
 						msgLabel
 								.html("Finalizing dataset '"
 										+ target_name
-										+ "'... This may take a while, please wait ...");
+										+ "'... This may take a while. Please wait ...");
 						doFinalize(target_name, "1");
 					} else {
-						alert("Datasets have been merged into '" + target_name
-								+ "' successfully.");
+						alert("Datasets were successfully merged into '" + target_name
+								+ "'.");
 						msgLabel.toggleClass("info");
 						msgLabel.html("");
 						window.location.reload();
@@ -875,9 +875,9 @@ function doMerge_bak(glossID, target_name, datasets, isSystemMerge,
 				} else {
 					msgLabel.toggleClass("error");
 					msgLabel
-							.html("Failed at inserting source data into merged dataset. Please try again later.");
+							.html("Failed to insert source data into merged dataset. Please try again later.");
 					doDeleteDataset(target_name, true);
-					alert("Failed in merging dataset. Please try again later. ");
+					alert("Failed to merge dataset. Please try again later. ");
 					msgLabel.html("");
 					window.location.reload();
 				}
@@ -894,7 +894,7 @@ function doMerge_bak(glossID, target_name, datasets, isSystemMerge,
 			"application/x-www-form-urlencoded; charset=UTF-8");
 	xmlhttp.send('value=' + value);
 	msgLabel
-			.html("Merging datasets ... This may take a while ... Please wait ...");
+			.html("Merging datasets. ... This may take a while. ... Please wait. ...");
 }
 
 /**
@@ -935,7 +935,7 @@ function doMerge(glossID, target_name, datasets, isSystemMerge,
 			"application/x-www-form-urlencoded; charset=UTF-8");
 	xmlhttp.send('value=' + value);
 	msgLabel
-			.html("Merging datasets ... This may take a while ... Please wait ...");
+			.html("Merging datasets. ... This may take a while. ... Please wait. ...");
 	setTimeout(checkMergeStatus, 1000);
 }
 
@@ -968,22 +968,22 @@ function checkFinalizeStatus() {
 					msgLabel
 							.html("("
 									+ check_status_count
-									+ " s) Finalizing datasets is still running ... Please wait ...");
+									+ " s) Still finalizing datasets ... Please wait ...");
 					setTimeout(checkFinalizeStatus, 1000);
 				} else if (response == "success") { // copied from doMerge
 					msgLabel.toggleClass("info");
-					msgLabel.html("Finalize datasets SUCCESSFULLY. ");
+					msgLabel.html("Successfully finalized datasets. ");
 				} else { // error
 					msgLabel.toggleClass("error");
 					msgLabel
-							.html("Failed in finalizing. Please try again later.");
-					alert("Failed in finalizing dataset. Please try again later. ");
+							.html("Failed to finalize datasets. Please try again later.");
+					alert("Failed to finalize datasets. Please try again later. ");
 					msgLabel.html("");
 					window.location.reload();
 				}
 			} else {
-				alert("Checking finalizing status failed. This doesn't mean the finalizing has failed. "
-						+ "It could be that the finalization is taking longer than expected. Please come back later to view the results. ");
+				alert("Failed to check status of finalizing process. (This does not mean that finalizing has failed. "
+						+ "It could be that the process is taking longer than expected.) Please come back later to view the results. ");
 			}
 		}
 	}
@@ -1025,7 +1025,7 @@ function checkMergeStatus() {
 					msgLabel
 							.html("("
 									+ check_status_count
-									+ " s) Merging datasets is still running ... Please wait ...");
+									+ " s) Still merging datasets ... Please wait ...");
 					setTimeout(checkMergeStatus, 1000);
 				} else if (response == "success") { // copied from doMerge
 					msgLabel.toggleClass("info");
@@ -1034,11 +1034,11 @@ function checkMergeStatus() {
 						msgLabel
 								.html("Finalizing dataset '"
 										+ merge_target_name
-										+ "'... This may take a while, please wait ...");
+										+ "'... This may take a while. Please wait ...");
 						doFinalize(merge_target_name, "1");
 					} else {
-						alert("Datasets have been merged into '"
-								+ merge_target_name + "' successfully.");
+						alert("Datasets were successfully merged into '"
+								+ merge_target_name + "'.");
 						msgLabel.toggleClass("info");
 						msgLabel.html("");
 						window.location.reload();
@@ -1046,15 +1046,15 @@ function checkMergeStatus() {
 				} else { // copied from doMerge
 					msgLabel.toggleClass("error");
 					msgLabel
-							.html("Failed at inserting source data into merged dataset. Please try again later.");
+							.html("Failed to insert source data into merged dataset. Please try again later.");
 					doDeleteDataset(merge_target_name, true);
-					alert("Failed in merging dataset. Please try again later. ");
+					alert("Failed to merge dataset. Please try again later. ");
 					msgLabel.html("");
 					window.location.reload();
 				}
 			} else {
-				alert("Checking merge status failed. This doesn't mean the merge failed. "
-						+ "It could be that the merge is taking longer than expected. Please come back later to view the results. ");
+				alert("Failed to check merge status. (This does not mean the merge has failed. "
+						+ "It could be that the process is taking longer than expected.) Please come back later to view the results. ");
 			}
 		}
 	}
@@ -1069,7 +1069,7 @@ function checkMergeStatus() {
 function reopenDataset(dataset, type) {
 	// type: 1-categorizing; 2-hierarchy tree; 3-orders
 
-	var confirmed = confirm("Reopen this dataset will disallow current download. "
+	var confirmed = confirm("Reopening this dataset will cancel the current download. "
 			+ "Are you sure you want to reopen this dataset?");
 	if (!confirmed) {
 		return;
@@ -1089,10 +1089,10 @@ function reopenDataset(dataset, type) {
 	xmlhttp.onreadystatechange = function() {
 		if (xmlhttp.readyState == 4) {
 			if (xmlhttp.status == 200) {
-				alert("Dataset reopened SUCCESSFULLY.");
+				alert("Successfully reopened dataset.");
 				window.location.reload();
 			} else {
-				alert("Reopen this dataset failed. Please try again later. ");
+				alert("Failed to open dataset. Please try again later. ");
 			}
 		}
 	}
@@ -1179,7 +1179,7 @@ function save_categorize(requestXML, decision, isAccept) {
 				}
 			} else {
 				// show customer error
-				alert("We are facing an internal error: " + xmlhttp.status
+				alert("An internal error occurred: " + xmlhttp.status
 						+ ". Please try again. ");
 			}
 		}
@@ -1253,7 +1253,7 @@ function save_path(requestXML, decision) {
 				decision_form.parentNode.removeChild(decision_form);
 			} else {
 				// show customer error
-				alert("We are facing an internal error: " + xmlhttp.status
+				alert("An internal error occurred: " + xmlhttp.status
 						+ ". Please try again. ");
 			}
 		}
@@ -1287,7 +1287,7 @@ function save_termOfOrder(requestXML, decision) {
 				}
 			} else {
 				// show customer error
-				alert("We are facing an internal error: " + xmlhttp.status
+				alert("An internal error occurred: " + xmlhttp.status
 						+ ". Please try again. ");
 			}
 		}

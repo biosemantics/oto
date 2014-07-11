@@ -68,7 +68,7 @@ function create_dataset() {
 	// underscore
 	var regex = /^[a-zA-Z][a-zA-Z\d_]+$/;
 	if (!regex.test(prefix)) {
-		alert("A valid dataset name must starts with letter and can only contain letters, numbers and underscore. \n\nPlease input a valid order name!");
+		alert("Dataset names must starts with letter and may contain letters, numbers and underscores. \n\nPlease input a valid order name.");
 		return;
 	}
 
@@ -83,11 +83,11 @@ function create_dataset() {
 				success : function(msg) {
 					$("#creationNote").hide();
 					if (msg.indexOf("error") >= 0) {
-						alert("Create dataset failed. Please try again later. ");
+						alert("Failed to create dataset. Please try again later. ");
 					} else {// success, return dataset name
 						alert("Dataset '"
 								+ msg
-								+ "' has been created successfully. "
+								+ "' was created successfully. "
 								+ "You may import tasks on the right side of this page.");
 						location.reload();
 					}
@@ -109,7 +109,7 @@ function setDatasetPrivacy(btn, datasetName, privacy) {
 		data : "value=" + datasetName + ";" + privacy,
 		success : function(msg) {
 			if (msg.indexOf("error") >= 0) {
-				alert("set dataset privacy failed. Please try again later. ");
+				alert("Failed to set dataset privacy. Please try again later. ");
 			} else {// success
 				// change privacy sign
 				var signName = (privacy == "1" ? "private" : "public");
@@ -136,8 +136,8 @@ function setDatasetPrivacy(btn, datasetName, privacy) {
  * @param datasetName
  */
 function deleteDataset(btn, datasetName) {
-	if (!confirm("Delete dataset will remove all the data in this dataset and cannot be undone. \n\n"
-			+ "Are you sure you want to delete the dataset '"
+	if (!confirm("Warning: This will permanently remove all data in this dataset. This operation cannot be undone. \n\n"
+			+ "Are you sure you want to delete dataset '"
 			+ datasetName
 			+ "'?")) {
 		return;
@@ -156,10 +156,10 @@ function deleteDataset(btn, datasetName) {
 			$(btn).parent().find(".processingNote").hide();
 			$(btn).parent().find(".processingSign").hide();
 			if (msg.indexOf("Error") >= 0) {
-				alert("Delete dataset failed. Please try again later. ");
+				alert("Failed to delete dataset. Please try again later. ");
 			} else {// success
 				alert("Dataset '" + datasetName
-						+ "' has been deleted sucessfully.");
+						+ "' was deleted sucessfully.");
 				location.reload();
 			}
 		}
@@ -191,7 +191,7 @@ function selectFile(importBtn) {
  */
 function submitImport(submitBtn) {
 	if ($(submitBtn).parent().find(".selectFileInput").first().val() == "") {
-		alert("No file chosen. Please select .csv file to import. ");
+		alert("No file chosen. Please select a .csv file to import. ");
 		return;
 	}
 

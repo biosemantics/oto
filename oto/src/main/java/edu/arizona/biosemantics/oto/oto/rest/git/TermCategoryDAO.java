@@ -49,9 +49,17 @@ public class TermCategoryDAO {
 					new InputStreamReader(new FileInputStream(file)),
 					',', '"', 9);
 			String[] nextLine;
+			int line = 0;
 			while ((nextLine = reader.readNext()) != null) {
-				boolean hasSyn = nextLine[2].equals("1");
-				result.add(new TermCategory(nextLine[0], nextLine[1], hasSyn, nextLine[3], nextLine[4]));
+				line++;
+				try {
+					boolean hasSyn = nextLine[2].equals("1");
+					result.add(new TermCategory(nextLine[0], nextLine[1], hasSyn, nextLine[3], nextLine[4]));
+				} catch(ArrayIndexOutOfBoundsException e) {
+					// there is a line that does not conform to the csv schema
+					// maybe there is an extra line at the file end?
+					// we'll just ignore this line to be more robust
+				}
 			}
 			reader.close();
 		} else {

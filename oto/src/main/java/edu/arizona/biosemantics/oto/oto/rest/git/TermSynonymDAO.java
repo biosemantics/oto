@@ -10,6 +10,7 @@ import java.util.List;
 
 import au.com.bytecode.opencsv.CSVReader;
 import edu.arizona.biosemantics.gitclient.GitClient;
+import edu.arizona.biosemantics.oto.common.model.TermCategory;
 import edu.arizona.biosemantics.oto.common.model.TermSynonym;
 import edu.arizona.biosemantics.oto.oto.Configuration;
 
@@ -51,7 +52,13 @@ public class TermSynonymDAO {
 					',', '"', 9);
 			String[] nextLine;
 			while ((nextLine = reader.readNext()) != null) {
-				result.add(new TermSynonym(nextLine[0], nextLine[1], nextLine[2], nextLine[3]));
+				try {
+					result.add(new TermSynonym(nextLine[0], nextLine[1], nextLine[2], nextLine[3]));
+				} catch(ArrayIndexOutOfBoundsException e) {
+					// there is a line that does not conform to the csv schema
+					// maybe there is an extra line at the file end?
+					// we'll just ignore this line to be more robust
+				}
 			}
 			reader.close();
 		} else {

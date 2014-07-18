@@ -64,6 +64,7 @@ function unhide(object){
   * @param term
   */
  function setTerm_categorizing(term) {
+	 //console.log("click: show term context");
 	 markTermReviewed(term);
 	 setTerm(term);
  }
@@ -75,6 +76,7 @@ function unhide(object){
 	}
  
  function setTerm(term) {
+	 //console.log("show context of " + term);
 	 document.getElementById("glossaryTerm").innerHTML = term;
 	 var current = document.getElementsByClassName('currentContext')[0];
 	 if (current.id == "context") {
@@ -408,9 +410,9 @@ function unhide(object){
 						+ "</font>";*/
 					var splitRegex = new RegExp(normalizedTermName, "i"); // -> /normalizedTermName/i
 					var splits = contexts[i].childNodes[1].childNodes[0].nodeValue.split(splitRegex);
-					console.log(splitRegex);
+					//console.log(splitRegex);
 					for(var j=0; j<splits.length; j++) {
-						console.log(splits[j]);
+						//console.log(splits[j]);
 						td1Content += "<font class=\"font-text-style\">"
 							+ splits[j]
 							+ "</font>";

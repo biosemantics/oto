@@ -283,8 +283,10 @@
 															%>
 															<tr class="term_row_saved" id="<%=eachTerm.getTerm()%>"
 																valign="middle">
-																<td valign="middle"><img class="dragAfterSave"
-																	src="images/drag.jpg" width="10px;"></img> <a
+																<td valign="middle" class="term_cell_saved">
+																	<!-- <img class="dragAfterSave"
+																	src="images/drag.jpg" width="10px;"></img> --> <a
+																	class="term_label_saved"
 																	style="text-decoration: none; color: <%=(eachTerm.isReviewed() ? "grey"
 												: "black")%>"
 																	href="javascript:void(0)"
@@ -305,7 +307,7 @@
  											.getSyns();
  									for (Term eachSyn : syns) {
  %><label class="syn" id="<%=eachSyn.getTerm()%>"
-																	style="vertical-align: middle;"><br>&nbsp;&nbsp;&nbsp;&nbsp;<a
+																	style="vertical-align: middle;"><br>&nbsp;&nbsp;&nbsp;&nbsp;<a class="syn_a"
 																			style="text-decoration: none; color: <%=(eachSyn.isReviewed() ? "grey"
 														: "black")%>"
 																			href="javascript:void(0)"
@@ -323,7 +325,8 @@
 																				color='blue'>x</font></label></label> <%
  	}
  								}
- %></td>
+ %>
+																</td>
 															</tr>
 															<%
 																}

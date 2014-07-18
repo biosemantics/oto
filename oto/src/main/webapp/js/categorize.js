@@ -311,6 +311,7 @@ function getTermClone() {
 
 	// clone the whole group, and then delete unselected ones
 	drag_clone = document.getElementById(maskName);
+	$("#" + maskName).hide();
 	drag_clone_content = term_Chosen.cloneNode(true);
 	drag_clone.appendChild(drag_clone_content);
 }
@@ -326,6 +327,7 @@ function getGroupClone() {
 
 	// clone the whole group, and then delete unselected ones
 	drag_clone = document.getElementById(maskName);
+	$("#" + maskName).hide();
 	drag_clone_content = group_chosen.cloneNode(true);
 
 	if (term_selected) {
@@ -425,7 +427,9 @@ function removeTerm(obj_cross) {
 	tr.className = "term_row_saved";
 	tr.id = term_to_remove.id;
 	var td = document.createElement("td");
-	td.innerHTML = "<img class='dragAfterSave' src='images/drag.jpg' width='10px;'></img> ";
+	td.className = "term_cell_saved";
+	// td.innerHTML = "<img class='dragAfterSave' src='images/drag.jpg'
+	// width='10px;'></img> ";
 
 	// mark reviewed
 	markTermReviewed(term_to_remove.id);
@@ -473,8 +477,7 @@ function removeTermWithName(term) {
 	tr.className = "term_row_saved";
 	tr.id = term;
 	var td = document.createElement("td");
-	td.innerHTML = "<img class='dragAfterSave' src='images/drag.jpg' width='10px;'></img>"
-			+ term;
+	td.innerHTML = term;
 	var sign = termToRemove.getElementsByTagName("a")[0].cloneNode(true);
 	td.appendChild(sign);
 	tr.appendChild(td);
@@ -489,9 +492,58 @@ function removeTermWithName(term) {
 }
 
 /**
+ * function is for mouse_down_handler. calculate if the object is a draggable
+ * term group
+ * 
+ * @param mouseOnObj
+ */
+var _isDraggingTermGroup = false;
+function isDraggingTermGroup(mouseOnObj) {
+	var test = mouseOnObj.className;
+	if (test == "dragGroupTable" || test == "termsTable" || test == "term_row"
+			|| test == "term" || test == "dragme") {
+		_isDraggingTermGroup = true;
+		return true;
+	} else {
+		_isDraggingTermGroup = false;
+		return false;
+	}
+}
+
+/**
+ * function is for mouse_down_handler. calculate if the object is a draggable
+ * saved term
+ * 
+ * @param mouseObj
+ * @returns {Boolean}
+ */
+var _isDraggingSavedTerm = false;
+function isDraggingSavedTerm(mouseObj) {
+	var test = mouseObj.className;
+	if (test == "term_row_saved" || test == "term_cell_saved"
+			|| test == "term_label_saved" || test == "syn" || test == "syn_a") {
+		_isDraggingSavedTerm = true;
+		return true;
+	} else {
+		_isDraggingSavedTerm = false;
+		return false;
+	}
+}
+
+/**
  * mouse down event handler record the old position of the obj and cursor
+ * 
+ * calculate the following:
+ * 
+ * is obj a draggable? if so, drag an uncategorized term group or drag a saved
+ * term if drag and uncategorized term group, dragging from left or dragging
+ * from right
+ * 
+ * calculate category_from if dragging from right create the dragging clone
+ * 
  */
 function mouse_down_handler(e) {
+	// console.log("mouse down");
 	clearTimeout(resumeTimeout);
 	category_to_resume = null;
 
@@ -500,6 +552,8 @@ function mouse_down_handler(e) {
 	event = evn;
 
 	current_obj = evn.target || evn.srcElement;
+//	console.log("current obj classname: " + current_obj.className + "; tag: "
+//			+ current_obj.tagName);
 	/*
 	 * if (evn.target) { current_obj = evn.target; } else { current_obj =
 	 * evn.srcElement; }
@@ -508,7 +562,8 @@ function mouse_down_handler(e) {
 
 	set_drag_from();
 
-	if (current_obj.className.indexOf("dragme") > -1) {
+	if (isDraggingTermGroup(current_obj)) {
+		// if (current_obj.className.indexOf("dragme") > -1) {
 		// get group_chosen: <div class="dragGroupTable">
 		group_chosen = current_obj;
 		while (group_chosen.tagName != "HTML"
@@ -542,7 +597,8 @@ function mouse_down_handler(e) {
 		drag_clone.style["top"] = obj_y + "px";// bug
 		drag_clone.style["left"] = obj_x + "px";
 		drag_clone.style["visibility"] = "visible";
-	} else if (current_obj.className == "dragAfterSave") {
+	} else if (isDraggingSavedTerm(current_obj)) {
+		// } else if (current_obj.className == "dragAfterSave") {
 		// alert(current_obj.className);
 		is_makeSorE = false;// why exist?
 
@@ -552,44 +608,42 @@ function mouse_down_handler(e) {
 			term_Chosen = term_Chosen.parentNode;
 		}
 
-		if (term_Chosen.className == "term_row_saved") {
-			is_drag = true;
+		// if (term_Chosen.className == "term_row_saved") {
+		is_drag = true;
 
-			/*
-			 * var label = term_Chosen.getElementsByTagName('label'); if
-			 * (label.length > 0) { return false; // if is the host of a
-			 * existent relationship, // cannot be dragged }
-			 * 
-			 * var newrelation =
-			 * term_Chosen.getElementsByClassName('newRelation'); if
-			 * (newrelation.length > 0) { return false; // if is the host of a
-			 * new relationship, cannot // be dragged }
-			 */
+		/*
+		 * var label = term_Chosen.getElementsByTagName('label'); if
+		 * (label.length > 0) { return false; // if is the host of a existent
+		 * relationship, // cannot be dragged }
+		 * 
+		 * var newrelation = term_Chosen.getElementsByClassName('newRelation');
+		 * if (newrelation.length > 0) { return false; // if is the host of a
+		 * new relationship, cannot // be dragged }
+		 */
 
-			// is_makeSorE = true;
-			getTermClone();
+		// is_makeSorE = true;
+		getTermClone();
 
-			// get category_from and its top & bottom
-			get_category_from();
+		// get category_from and its top & bottom
+		get_category_from();
 
-			// set drag_clone position and visibility
-			obj_x = term_Chosen.offsetLeft;
-			obj_y = term_Chosen.offsetTop;
-			var temp = term_Chosen;
-			while (temp.offsetParent) {
-				temp = temp.offsetParent;
-				obj_x = obj_x + temp.offsetLeft;
-				obj_y = obj_y + temp.offsetTop;
-			}
-
-			// alert(term_Chosen.parentNode.parentNode.parentNode.scrollTop);
-			obj_y = obj_y
-					- term_Chosen.parentNode.parentNode.parentNode.scrollTop;
-
-			drag_clone.style["top"] = obj_y + "px";// bug when scroll
-			drag_clone.style["left"] = obj_x + "px";
-			drag_clone.style["visibility"] = "visible";
+		// set drag_clone position and visibility
+		obj_x = term_Chosen.offsetLeft;
+		obj_y = term_Chosen.offsetTop;
+		var temp = term_Chosen;
+		while (temp.offsetParent) {
+			temp = temp.offsetParent;
+			obj_x = obj_x + temp.offsetLeft;
+			obj_y = obj_y + temp.offsetTop;
 		}
+
+		// alert(term_Chosen.parentNode.parentNode.parentNode.scrollTop);
+		obj_y = obj_y - term_Chosen.parentNode.parentNode.parentNode.scrollTop;
+
+		drag_clone.style["top"] = obj_y + "px";// bug when scroll
+		drag_clone.style["left"] = obj_x + "px";
+		drag_clone.style["visibility"] = "visible";
+		// }
 	} else {
 		// alert("else");
 	}
@@ -601,12 +655,14 @@ function mouse_down_handler(e) {
  * mouse move event handler update position of the dragged obj
  */
 function mouse_move_handler(e) {
+	// console.log("mouse move");
 	var evn;
 	evn = e || event;
 
 	if (is_drag) {
+		$("#" + maskName).show();
 		clearTimeout(resumeTimeout);
-		drag_clone.style["visibility"] = "visible";
+		// drag_clone.style["visibility"] = "visible";
 		var y = evn.clientY
 				+ document.getElementsByTagName('html')[0].scrollTop;
 
@@ -619,7 +675,7 @@ function mouse_move_handler(e) {
 		drag_clone.style["top"] = (y - 2) + "px";
 		drag_clone.style["left"] = (evn.clientX - 2) + "px";
 
-		if (current_obj.className == "dragAfterSave") {
+		if (_isDraggingSavedTerm) {
 			var cursor_y = evn.clientY
 					+ document.getElementById('categories_div').scrollTop
 					+ document.getElementsByTagName('html')[0].scrollTop;
@@ -678,12 +734,14 @@ function mouse_move_handler(e) {
  * the destination is inside the table range
  */
 function mouse_up_handler(e) {
+	// console.log("mouse up");
 	var evn;
 	evn = e || event;
 
 	var up_obj = evn.target || evn.srcElement;
 	// console.log("up_obj: " + up_obj.className + "; down_obj: " +
 	// down_obj.className);
+
 	if (up_obj.className.indexOf("dragme") > -1
 			&& up_obj.innerHTML == current_obj.innerHTML) {
 		clearDragTrack();
@@ -694,12 +752,12 @@ function mouse_up_handler(e) {
 	if (is_drag) {
 		clearTimeout(resumeTimeout);
 		getTargetCategory(evn);
-		if (current_obj.className.indexOf("dragme") > -1) {// drag before
-															// saving
+		if (_isDraggingTermGroup) {// drag before
+			// saving
 			if (target_category != null) {// (left -> target category) or
 				// (right -> different category)
-				if (!(drag_from == "right" && target_category == old_target_category 
-						&& category_from == target_category)) {
+				if (!(drag_from == "right"
+						&& target_category == old_target_category && category_from == target_category)) {
 					var i;
 					// find div newDecisions for category
 					targetbox = target_category
@@ -736,7 +794,7 @@ function mouse_up_handler(e) {
 				// drag from left but no target category
 				alert("To categorize terms, drag terms into the categories box.");
 			}
-		} else if (current_obj.className == "dragAfterSave") {
+		} else if (_isDraggingSavedTerm) {
 			// drag after decision saved: change decision or make synonym
 			if (target_category != null) {
 				targetbox = target_category
@@ -764,6 +822,12 @@ function mouse_up_handler(e) {
 								}
 							}
 							markTermReviewed(term_Chosen.id);
+							
+							//mark reviewed for synonyms
+							var synonyms = term_Chosen.getElementsByClassName("syn");
+							for (i = 0; i < synonyms.length; i++) {
+								markTermReviewed(synonyms[i].id);
+							}
 
 							obj_to_append.getElementsByTagName("a")[0].style["color"] = "red";
 							setRed(obj_to_append);
@@ -783,7 +847,8 @@ function mouse_up_handler(e) {
 							alert("Only single terms can be dragged to make synonyms. Click the 'x' to break synonyms first. ");
 						} else {
 							var confirmed = confirm("Are you sure you want to make '"
-									+ term_chosen_name + "' and '"
+									+ term_chosen_name
+									+ "' and '"
 									+ target_term.id + "' synonyms? ");
 							if (confirmed) {
 								var isToMerge = hasDuplicate(target_term,
@@ -1042,7 +1107,7 @@ function getTargetCategory(evn) {
 		}
 	}
 
-	if (current_obj.className == "dragAfterSave") {
+	if (_isDraggingSavedTerm) {
 		if (target_category != null) {
 			// target_category should be the same with current_category
 			var currentCategory = term_Chosen;
@@ -1302,6 +1367,7 @@ function submitGroupForm() {
 }
 
 function showTermsReport(term) {
+	// console.log("click: show term report");
 	markTermReviewed(term);
 	window
 			.open(
@@ -1379,7 +1445,8 @@ function newCategory() {
 			}
 		}
 
-		var def = prompt("Please provide a definition for category '" + name + "': ", "");
+		var def = prompt("Please provide a definition for category '" + name
+				+ "': ", "");
 		if (def) {
 			var startNewRow = toStartNewRow();
 

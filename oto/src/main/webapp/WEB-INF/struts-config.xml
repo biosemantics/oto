@@ -110,6 +110,10 @@
 			parameter="/jsp/manageDatasets.jsp">
 		</action>
 
+		<action path="/cleanup" type="org.apache.struts.actions.ForwardAction"
+			parameter="/jsp/cleanupGlossary.jsp">
+		</action>
+
 		<!-- ==================BEGIN=========Action Mapping Definition for Login================== -->
 		<action path="/validateLogin"
 			type="edu.arizona.biosemantics.oto.oto.action.UserLoginAction" name="loginForm"
@@ -232,10 +236,10 @@
 			type="edu.arizona.biosemantics.oto.oto.action.SaveOrderAction" name="generalForm"
 			scope="request" validate="true">
 		</action>
-		
+
 		<action path="/saveManagerDecision"
-			type="edu.arizona.biosemantics.oto.oto.action.SaveManagerDecisionAction" name="generalForm"
-			scope="request" validate="true">
+			type="edu.arizona.biosemantics.oto.oto.action.SaveManagerDecisionAction"
+			name="generalForm" scope="request" validate="true">
 		</action>
 
 		<action path="/checkDataSet"
@@ -377,6 +381,18 @@
 
 		<action path="/resetOTODemo"
 			type="edu.arizona.biosemantics.oto.oto.action.ResetOTODemoAction"
+			name="generalForm" scope="request" validate="true">
+			<forward name="home" path="/jsp/index.jsp" />
+		</action>
+
+		<action path="/cleanupDatasetWithGlossary"
+			type="edu.arizona.biosemantics.oto.oto.action.CleanupDatasetWithCleanGlossaryTablesAction"
+			name="generalForm" scope="request" validate="true">
+			<forward name="home" path="/jsp/index.jsp" />
+		</action>
+		
+		<action path="/preCheckCleanup"
+			type="edu.arizona.biosemantics.oto.oto.action.preCheckCleanupAction"
 			name="generalForm" scope="request" validate="true">
 			<forward name="home" path="/jsp/index.jsp" />
 		</action>

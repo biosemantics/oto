@@ -20,7 +20,6 @@ public class GeneralDBAccess extends DatabaseAccess {
 
 	public GeneralDBAccess() throws IOException {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	private static final Logger LOGGER = Logger
@@ -292,12 +291,12 @@ public class GeneralDBAccess extends DatabaseAccess {
 				stmt.executeUpdate("delete from OTO_Demo_user_orders_decisions;");
 				stmt.executeUpdate("update datasetprefix set termorderdownloadable = false "
 						+ "where prefix = 'OTO_Demo'");
-				
-				//delete user created terms and orders (3 orders)
+
+				// delete user created terms and orders (3 orders)
 				stmt.executeUpdate("delete from OTO_Demo_web_orders_terms where id > 29;");
 				stmt.executeUpdate("delete from OTO_Demo_web_orders where id > 6;");
-				
-				//reset order name to initial name (3 orders)
+
+				// reset order name to initial name (3 orders)
 				stmt.executeUpdate("update OTO_Demo_web_orders set name = 'Pubescence Order' where id = 2;");
 				stmt.executeUpdate("update OTO_Demo_web_orders set name = 'Shape Order' where id = 4;");
 				stmt.executeUpdate("update OTO_Demo_web_orders set name = 'Orientation Order' where id = 6;");
@@ -318,6 +317,136 @@ public class GeneralDBAccess extends DatabaseAccess {
 			}
 		}
 		return rv;
+	}
+
+	/**
+	 * check if glossary table exists in database
+	 * 
+	 * @param tablename
+	 * @param type
+	 *            termCategory | synonym
+	 * @return
+	 * @throws SQLException
+	 */
+	public boolean checkGlossaryTable(String tablename, String type)
+			throws SQLException {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		boolean rv = false;
+
+		try {
+			conn = getConnection();
+			String sql = "select term, category, termID from " + tablename;
+			if (type.equals("synonym")) {
+				sql = "select term, category, synonym, termID from "
+						+ tablename;
+			}
+			pstmt = conn.prepareStatement(sql);
+			rset = pstmt.executeQuery();
+			if (rset != null) {
+				rv = true;
+			}
+		} catch (Exception exe) {
+			LOGGER.error(
+					"Couldn't execute checkGlossaryTable in GeneralDBAccess: ",
+					exe);
+			System.out.println(exe);
+		} finally {
+			if (pstmt != null) {
+				pstmt.close();
+			}
+			if (rset != null) {
+				rset.close();
+			}
+
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		return rv;
+	}
+
+	/**
+	 * check if dataset prefix exist in database
+	 * 
+	 * @param datasetprefix
+	 * @return
+	 * @throws SQLException
+	 */
+	public boolean validateDatasetPrefix(String datasetprefix)
+			throws SQLException {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		boolean rv = false;
+
+		try {
+			conn = getConnection();
+			pstmt = conn
+					.prepareStatement("select prefix from datasetprefix where prefix = ?");
+			pstmt.setString(1, datasetprefix);
+			rset = pstmt.executeQuery();
+			if (rset.next()) {
+				rv = true;
+			}
+		} catch (Exception exe) {
+			LOGGER.error(
+					"Couldn't execute validateDatasetPrefix in GeneralDBAccess: ",
+					exe);
+			System.out.println(exe);
+		} finally {
+			if (pstmt != null) {
+				pstmt.close();
+			}
+			if (rset != null) {
+				rset.close();
+			}
+
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		return rv;
+	}
+
+	/**
+	 * get number of records in table
+	 * 
+	 * @param tablename
+	 * @return
+	 * @throws SQLException
+	 */
+	public int getNumRecords(String tablename) throws SQLException {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		int count = 0;
+
+		try {
+			conn = getConnection();
+			pstmt = conn.prepareStatement("select count(*) from " + tablename);
+			rset = pstmt.executeQuery();
+			if (rset.next()) {
+				count = rset.getInt(1);
+			}
+		} catch (Exception exe) {
+			LOGGER.error("Couldn't execute getNumRecords in GeneralDBAccess: ",
+					exe);
+			System.out.println(exe);
+		} finally {
+			if (pstmt != null) {
+				pstmt.close();
+			}
+			if (rset != null) {
+				rset.close();
+			}
+
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		return count;
 	}
 
 	/**
@@ -367,6 +496,376 @@ public class GeneralDBAccess extends DatabaseAccess {
 		}
 
 		return datasets;
+	}
+
+	/**
+	 * for categorization page, clean up data with given glossary tables by
+	 * deleting existing records related to terms in clean glossary and
+	 * re-create matching records for those terms
+	 * 
+	 * @param dataset
+	 * @param clean_term_category_table
+	 * @param clean_syns_table
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean cleanupDatasetWithGivenGlossaryTables(String dataset,
+			String clean_term_category_table, String clean_syns_table,
+			int userid) throws Exception {
+		boolean success = false;
+
+		boolean hasSynTable = true;
+		if (clean_syns_table.equals("")) {
+			hasSynTable = false;
+		}
+
+		// initialize varibales
+		Connection conn = null;
+		PreparedStatement pstmt = null, pstmt2 = null;
+		ResultSet rset = null, rset2 = null, rset3 = null;
+		HashMap<String, Integer> termIndexMap = new HashMap<String, Integer>();
+		int termCount = 0;
+		int termCategoryCount = 0;
+		int termSynPairCount = 0;
+		try {
+			conn = getConnection();
+			System.out.println("*********Update Started************** "
+					+ System.currentTimeMillis());
+			conn.setAutoCommit(false);
+
+			/**
+			 * match category names
+			 */
+			System.out.println("processing category changes ... "
+					+ System.currentTimeMillis());
+			String sql = "select distinct category from "
+					+ clean_term_category_table + " where category not in "
+					+ "(select category from " + dataset + "_categories)";
+			pstmt = conn.prepareStatement(sql);
+			rset = pstmt.executeQuery();
+			while (rset.next()) {
+				// insert new category name
+				sql = "insert into " + dataset
+						+ "_categories (category, definition) values (?, ?)";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, rset.getString(1));
+				pstmt.setString(2,
+						"Created by dataset cleaning up. Definition needs to be added. ");
+				pstmt.executeUpdate();
+			}
+
+			/**
+			 * clean up all the approvals
+			 */
+			System.out.println("clean up all the approvals ... "
+					+ System.currentTimeMillis());
+			sql = "update " + dataset + "_confirmed_category "
+					+ "set categoryApproved = false, "
+					+ "synonymApproved = false, " + "isApprovedSynonym = false";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.executeUpdate();
+			System.out
+					.println("clean up tracks of terms in the clean glossary ... "
+							+ System.currentTimeMillis());
+
+			/**
+			 * clean up all records related to terms in the clean glossary here
+			 * only consider terms that are going to be re-added
+			 */
+
+			if (hasSynTable) {
+				sql = "select distinct term from " + "(select term from "
+						+ clean_term_category_table + " union "
+						+ " (select synonym from " + clean_syns_table
+						+ " where term in " + "(select term from "
+						+ clean_term_category_table + "))) a";
+			} else {
+				sql = "select distinct term from " + clean_term_category_table;
+			}
+
+			pstmt = conn.prepareStatement(sql);
+			rset = pstmt.executeQuery();
+			while (rset.next()) {
+				String term = rset.getString(1);
+				/**
+				 * delete all decisions related to this term, including the
+				 * original term and all its copies
+				 */
+				sql = "delete from " + dataset + "_user_terms_decisions "
+						+ "where term rlike '^" + term + "(_\\d+)?'";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.executeUpdate();
+
+				// delete from _confirmed_category table
+				sql = "delete from " + dataset + "_confirmed_category "
+						+ "where term = ? or synonym = ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, term);
+				pstmt.setString(2, term);
+				pstmt.executeUpdate();
+
+				/**
+				 * delete all review history except userid = userid
+				 */
+				sql = "delete from " + dataset
+						+ "_review_history where term = ? and userid <> "
+						+ userid;
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, term);
+				pstmt.executeUpdate();
+
+				/**
+				 * keep all the comments for now
+				 */
+			}
+
+			System.out.println("Starts to add matching records ... "
+					+ System.currentTimeMillis());
+			/**
+			 * term -> (n) categories -> (m) synonyms
+			 * 
+			 * might lose some terms if the clean glossary is not valid, e.g.
+			 * terms in synonyms table but not in term-category table
+			 */
+			// only consider main terms at this point
+			sql = "select distinct term from " + clean_term_category_table;
+			pstmt = conn.prepareStatement(sql);
+			rset = pstmt.executeQuery();
+			while (rset.next()) {
+				String term = rset.getString(1);
+
+				termCount++;
+				System.out.println("[" + termCount + "] processing term: "
+						+ term);
+
+				// check if term exist in _web_grouped_terms
+				sql = "select term from " + dataset + "_web_grouped_terms "
+						+ "where term = ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, term);
+				rset2 = pstmt.executeQuery();
+				if (!rset2.next()) {
+					// doean't exist, this is a new term
+					sql = "insert into "
+							+ dataset
+							+ "_web_grouped_terms (groupID, term, sourceDataset) "
+							+ "values (?, ?, ?)";
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setInt(1, 0);
+					pstmt.setString(2, term);
+					pstmt.setString(3, dataset);
+					pstmt.executeUpdate();
+				}
+
+				/**
+				 * insert record to match glossary
+				 */
+
+				// get categoies associated with this term
+				sql = "select term, category from " + clean_term_category_table
+						+ " where term = ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, term);
+				rset2 = pstmt.executeQuery();
+				while (rset2.next()) {// for each category of this term
+					String category = rset2.getString("category");
+					termCategoryCount++;
+					System.out.println("\t[" + termCategoryCount
+							+ "] processing category: " + category);
+
+					// check if this term is an approved synonym in this
+					// category
+					if (hasSynTable) {
+						sql = "select synonym from " + clean_syns_table
+								+ " where synonym = ? and category = ?";
+						pstmt = conn.prepareStatement(sql);
+						pstmt.setString(1, term);
+						pstmt.setString(2, category);
+						rset3 = pstmt.executeQuery();
+						if (rset3.next()) {
+							// is not a main term, do not insert
+							continue;
+						}
+					}
+
+					// get and maintain termIndex
+					int termIndex = 0;
+					String termWithIndex = term;
+					if (termIndexMap.get(term) != null) {
+						termIndex = termIndexMap.get(term);
+						termWithIndex = term + "_"
+								+ Integer.toString(termIndex);
+						termIndexMap.put(term, termIndex + 1);
+					} else {
+						termIndexMap.put(term, 1);
+					}
+
+					// get synonyms
+					boolean hasSyn = false;
+					ArrayList<String> syns = new ArrayList<String>();
+					if (hasSynTable) {
+						sql = "select * from " + clean_syns_table
+								+ " where term = ? and category = ?";
+						pstmt = conn.prepareStatement(sql);
+						pstmt.setString(1, term);
+						pstmt.setString(2, category);
+						rset3 = pstmt.executeQuery();
+						while (rset3.next()) {
+							hasSyn = true;
+							syns.add(rset3.getString("synonym"));
+						}
+					}
+
+					String insert_decision_sql = "insert into "
+							+ dataset
+							+ "_user_terms_decisions ("
+							+ "term, userid, decision, decisiondate, isAdditional, "
+							+ "relatedTerms, isActive, isLatest, hasConflict, hasSyn) values "
+							+ "(?, ?, ?, sysdate(), ?, "
+							+ "?, true, true, false, ?)";
+					String insert_confirm_sql = "insert into "
+							+ dataset
+							+ "_confirmed_category ("
+							+ "term, category, userid, confirmdate, categoryApproved, "
+							+ "synonymApproved, synonym, termIndex, termWithIndex, synonymWithIndex, "
+							+ "isApprovedSynonym) values ("
+							+ "?, ?, ?, sysdate(), true, " + "?, ?, ?, ?, ?, "
+							+ "?)";
+
+					if (hasSyn) {
+						String syns_str = ""; // the synonym string for main
+												// term
+
+						for (String syn : syns) {
+							//compute synonym with index
+							int synIndex = 0;
+							String synWithIndex = syn;
+							if (termIndexMap.get(syn) != null) {
+								synIndex = termIndexMap.get(syn);
+								synWithIndex = syn + "_"
+										+ Integer.toString(synIndex);
+								termIndexMap.put(syn, synIndex + 1);
+							} else {
+								termIndexMap.put(syn, 1);
+							}
+							
+							//add synonym to synonym string
+							if (syns_str.equals("")) {
+								syns_str = "'" + synWithIndex + "'";
+							} else {
+								syns_str += ", '" + synWithIndex + "'";
+							}
+
+							termSynPairCount++;
+							System.out.println("\t\t[" + termSynPairCount
+									+ "] processing synonym: " + syn);
+
+							// insert synonym to _user_terms_decisions
+							pstmt = conn.prepareStatement(insert_decision_sql);
+							pstmt.setString(1, synWithIndex); // term
+							pstmt.setInt(2, userid);// userid
+							pstmt.setString(3, category);// decision
+							pstmt.setBoolean(4, true);// isAdditional
+							pstmt.setString(5, "synonym of '" + termWithIndex
+									+ "'");// related terms
+							pstmt.setBoolean(6, false);// hassyn
+							pstmt.executeUpdate();
+
+							// insert (term, synonym) to _confirmed_category
+							pstmt = conn.prepareStatement(insert_confirm_sql);
+							pstmt.setString(1, term);// term
+							pstmt.setString(2, category);// category
+							pstmt.setInt(3, userid);// userid
+							pstmt.setBoolean(4, true);// synonymApproved
+							pstmt.setString(5, syn);// synonym
+							pstmt.setInt(6, termIndex); // term index
+							pstmt.setString(7, termWithIndex);// term with index
+							pstmt.setString(8, synWithIndex); // synonymWithIndex
+							pstmt.setBoolean(9, false); // isApprovedSynonym
+							pstmt.executeUpdate();
+
+							// insert syn to _confirmed_category
+							pstmt = conn.prepareStatement(insert_confirm_sql);
+							pstmt.setString(1, syn);// term
+							pstmt.setString(2, category);// category
+							pstmt.setInt(3, userid);// userid
+							pstmt.setBoolean(4, false);// synonymApproved
+							pstmt.setString(5, "");// synonym
+							pstmt.setInt(6, synIndex); // term index
+							pstmt.setString(7, synWithIndex);// term with index
+							pstmt.setString(8, ""); // synonymWithIndex
+							pstmt.setBoolean(9, true); // isApprovedSynonym
+							pstmt.executeUpdate();
+						}
+
+						// insert main term into _user_terms_decisions table
+						pstmt = conn.prepareStatement(insert_decision_sql);
+						pstmt.setString(1, termWithIndex); // term
+						pstmt.setInt(2, userid);// userid
+						pstmt.setString(3, category);// decision
+						pstmt.setBoolean(4, false);// isAdditional
+						pstmt.setString(5, syns_str);// related terms
+						pstmt.setBoolean(6, true);// hassyn
+						pstmt.executeUpdate();
+					} else { // no synonym
+						pstmt2 = conn.prepareStatement(insert_decision_sql);
+						pstmt2.setString(1, termWithIndex); // term
+						pstmt2.setInt(2, userid);// userid
+						pstmt2.setString(3, category);// decision
+						pstmt2.setBoolean(4, false);// isAdditional
+						pstmt2.setString(5, "");// related terms
+						pstmt2.setBoolean(6, false);// hassyn
+						pstmt2.executeUpdate();
+
+						pstmt2 = conn.prepareStatement(insert_confirm_sql);
+						pstmt2.setString(1, term);// term
+						pstmt2.setString(2, category);// category
+						pstmt2.setInt(3, userid);// userid
+						pstmt2.setBoolean(4, false);// synonymApproved
+						pstmt2.setString(5, "");// synonym
+						pstmt2.setInt(6, termIndex); // term index
+						pstmt2.setString(7, termWithIndex);// term with index
+						pstmt2.setString(8, ""); // synonymWithIndex
+						pstmt2.setBoolean(9, false); // isApprovedSynonym
+						pstmt2.executeUpdate();
+					}
+				}
+			}
+
+			// automatically reopen the dataset
+			pstmt = conn
+					.prepareStatement("update datasetprefix set grouptermsdownloadable = false "
+							+ "where prefix = ?");
+			pstmt.setString(1, dataset);
+			pstmt.executeUpdate();
+
+			conn.commit();
+			success = true;
+		} catch (Exception exe) {
+			exe.printStackTrace();
+			throw exe;
+		} finally {
+			closeConnection(pstmt, rset, conn);
+
+			if (rset2 != null) {
+				rset2.close();
+			}
+
+			if (rset3 != null) {
+				rset3.close();
+			}
+
+			if (pstmt2 != null) {
+				pstmt2.close();
+			}
+		}
+
+		System.out.println("Done mapping clean dataset: term: " + termCount
+				+ "; term category: " + termCategoryCount
+				+ "; synonyms pairs: " + termSynPairCount + "   "
+				+ System.currentTimeMillis());
+
+		return success;
 	}
 
 }

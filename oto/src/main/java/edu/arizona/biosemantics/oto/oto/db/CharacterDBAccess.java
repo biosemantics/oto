@@ -1748,7 +1748,7 @@ public class CharacterDBAccess extends DatabaseAccess {
 				} else {
 					if (lastGroupid != groupid) {
 						// add the previous TermsGroup into result list
-						if (lastGroupid != 0 && tg.GetTermsInGroup() != null
+						if (tg.GetTermsInGroup() != null
 								&& tg.GetTermsInGroup().size() > 0) {
 							tgList.add(tg);
 						}

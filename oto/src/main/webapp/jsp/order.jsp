@@ -237,10 +237,8 @@
 		<tr>
 			<td height="480px" align="center"><font class="font-text-style"
 				color="green" style="font-size: 15px"> Dataset <b><%=dataset%></b>
-					has been reviewed and finalized! <br></br> You can <a
-					href="javascript:void(0)" onclick="startDownload('<%=dataset%>')">click
-						here</a> to download this finalized term set. (<a
-					href="gotoDownload.do">Download more</a>)
+					has been reviewed and finalized! <br></br> <a
+					href="gotoDownload.do">Click here</a> to go to the download page.
 			</font><br></br> <label id="serverMsg">&nbsp;</label></td>
 		</tr>
 		<%

@@ -32,15 +32,6 @@
 <script language="javascript" src="js/context.js"></script>
 <script language="javascript" src="js/download.js"></script>
 <script language="javascript" src="js/reset.js"></script>
-<script language="javascript">
-	function showReport(tag) {
-		window
-				.open(
-						'comment.do?tag=' + tag,
-						'',
-						'height=500,width=1000, directories=no, toolbar=no, location=no, menubar=no,resizable=yes,scrollbars=yes, statusbar=no, left=0,top=0');
-	}
-</script>
 </head>
 
 <body onload="hierarchy_init()">
@@ -68,10 +59,9 @@
 		<tr>
 			<td><font class="font-text-style" id="dataset_info">Current
 					Dataset: <b><%=dataset%></b>
-			</font>
-				<%
-					if (dataset.equals("OTO_Demo")) {
-				%> <input type="button" class="uiButton uiButtonMedium"
+			</font> <%
+ 	if (dataset.equals("OTO_Demo")) {
+ %> <input type="button" class="uiButton uiButtonMedium"
 				style="margin-left: 10px"
 				title="Reset OTO_Demo dataset by clearing all decisions. Any user can reset this dataset, therefore your decisions in OTO_Demo dataset may be deleted by other users. "
 				value="Reset to initial status" onclick="resetOTODemo(2)"></input> <%
@@ -138,8 +128,9 @@
 									<tr style="display: block;">
 										<td class="tag">
 											<div class="structure" id=<%=tag.getID()%>>
-												<img style="vertical-align: middle;" class="dragme"
-													src="images/drag.jpg" width="12px;"></img><label
+												<!-- <img style="vertical-align: middle;" class="dragme"
+													src="images/drag.jpg" width="12px;"></img> -->
+												<label class="structure_label"
 													style="cursor: pointer; <%if (tag.isDecided())
 									out.print("color:grey");
 								else
@@ -193,10 +184,8 @@
 		<tr>
 			<td height="480px" align="center"><font class="font-text-style"
 				color="green" style="font-size: 15px"> Dataset <b><%=dataset%></b>
-					has been reviewed and finalized! <br></br> You can <a
-					href="javascript:void(0)" onclick="startDownload('<%=dataset%>')">click
-						here</a> to download this finalized term set. (<a
-					href="gotoDownload.do">Download more</a>)
+					has been reviewed and finalized! <br></br> <a
+					href="gotoDownload.do">Click here</a> to go to the download page.
 			</font><br></br> <label id="serverMsg">&nbsp;</label></td>
 		</tr>
 		<%

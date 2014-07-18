@@ -272,9 +272,10 @@
 					<li style="padding-bottom: 10px;"><font
 						class="font-text-style"><b style="color: green">View
 								context/glossary</b><br />To view context or glossary, just click
-							the term name, and the context/glossary will show up in the
-							context/glossary panel at the bottom of page. Click the 'Context'
-							and 'Glossary' tab to view the content you like. <a
+							the term name or click on the nodes on the tree, and the
+							context/glossary will show up in the context/glossary panel at
+							the bottom of page. Click the 'Context' and 'Glossary' tab to
+							view the content you like. <a
 							href="jsp/video.jsp?v=context_tree&h=View context/glossary">watch
 								video</a><br /></font></li>
 					<li style="padding-bottom: 10px;"><font
@@ -284,8 +285,9 @@
 							agree with your order) or a <img src="images/down.jpg"
 							width="14px"></img> (meaning decisions made by other uses are not
 							exactly the same with your order) button. Click the button, you
-							will see a full report of that term. <br />You can also make
-							comment on this term in the report page. <a
+							will see a full report of that term. For nodes on the tree,
+							double click on the nodes to view the term's report. <br />You
+							can also make comment on this term in the report page. <a
 							href="jsp/video.jsp?v=termreport_tree&h=View term's report/Comment">watch
 								video</a><br /></font></li>
 					<li style="padding-bottom: 10px;"><font
@@ -675,6 +677,15 @@
 		<tr>
 			<td>
 				<ul>
+					<li style="padding-bottom: 10px;"><font
+						class="font-text-style"><b style="color: green">Updates
+								on July 18, 2014</b><br /> 1. Remove dragging arrow in group term
+							and hierarchy page<br /> 2. In hierarchy page, click on saved
+							node to view context, and double click on saved node to view
+							term's report. <br /> 3. Add web service of <a
+							href="http://biosemantics.arizona.edu/OTO/cleanup.do">
+								cleanup dataset from clean glossry</a> for super users only <br />
+							4. Update finalized message for hierarchy and order page. <br /></font></li>
 					<li style="padding-bottom: 10px;"><font
 						class="font-text-style"><b style="color: green">Updates
 								on June 30, 2014</b><br /> 1. Make order name editable<br /> 2.

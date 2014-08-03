@@ -150,7 +150,7 @@
 							%>
 							<td align="right" width="10%"
 								style="border-bottom: 1px solid green"><input type="button"
-								name="button" value="Reopen this dataset"
+								name="button" value="Reopen this term set"
 								class="uiButton uiButtonSpecial uiButtonMedium"
 								style="padding: 0px 1px 1px 1px"
 								onclick="reopenDataset('<%=selectedDataset%>', '1')" /></td>
@@ -171,7 +171,7 @@
 							%>
 							<td align="right" valign="middle" width="10%"
 								style="border-bottom: 1px solid green"><input type="button"
-								name="button" value="Finalize this dataset"
+								name="button" value="Finalize this term set"
 								title="Finalize all approved categorization and synonyms decisions"
 								class="uiButton uiButtonSpecial uiButtonMedium"
 								style="padding: 0px 1px 1px 1px"

@@ -118,7 +118,7 @@
 											action="finishConfirming.do" method="post">
 											<img src="images/green_rot.gif" id="downloadTerms"
 												style="visibility: hidden" width="15px;" /><input
-												type="button" name="button" value="Finalize this dataset"
+												type="button" name="button" value="Finalize this term set"
 												class="uiButton uiButtonSpecial uiButtonMedium"
 												style="padding: 0px 1px 1px 1px"
 												onclick="finalizeDataset('<%=selectedDataset%>', '2')" />
@@ -128,7 +128,7 @@
 										<form id="reopenDataset" name="generalForm">
 											<img src="images/green_rot.gif" id="reopen"
 												style="visibility: hidden" width="15px;" /><input
-												type="button" name="button" value="Reopen this dataset"
+												type="button" name="button" value="Reopen this term set"
 												class="uiButton uiButtonSpecial uiButtonMedium"
 												style="padding: 0px 1px 1px 1px"
 												onclick="reopenDataset('<%=selectedDataset%>', '2')" />

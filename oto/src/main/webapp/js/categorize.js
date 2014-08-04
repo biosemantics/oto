@@ -1581,7 +1581,7 @@ function getNewName(name) {
 function openTermLocator() {
 	var name = prompt("Enter term name: ", "");
 	if (name) {
-		setTerm(name);
+		setTerm(name.trim());
 	}
 }
 

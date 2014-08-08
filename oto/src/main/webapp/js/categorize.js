@@ -503,6 +503,7 @@ function isDraggingTermGroup(mouseOnObj) {
 	if (test == "dragGroupTable" || test == "termsTable" || test == "term_row"
 			|| test == "term" || test == "dragme") {
 		_isDraggingTermGroup = true;
+		_isDraggingSavedTerm = false;
 		return true;
 	} else {
 		_isDraggingTermGroup = false;
@@ -523,6 +524,7 @@ function isDraggingSavedTerm(mouseObj) {
 	if (test == "term_row_saved" || test == "term_cell_saved"
 			|| test == "term_label_saved" || test == "syn" || test == "syn_a") {
 		_isDraggingSavedTerm = true;
+		_isDraggingTermGroup = false;
 		return true;
 	} else {
 		_isDraggingSavedTerm = false;
@@ -552,8 +554,8 @@ function mouse_down_handler(e) {
 	event = evn;
 
 	current_obj = evn.target || evn.srcElement;
-//	console.log("current obj classname: " + current_obj.className + "; tag: "
-//			+ current_obj.tagName);
+	// console.log("current obj classname: " + current_obj.className + "; tag: "
+	// + current_obj.tagName);
 	/*
 	 * if (evn.target) { current_obj = evn.target; } else { current_obj =
 	 * evn.srcElement; }
@@ -763,7 +765,10 @@ function mouse_up_handler(e) {
 					targetbox = target_category
 							.getElementsByClassName("newDecisions")[0];
 					// drop the terms_chosen
-					if (targetbox != null) {
+					if (targetbox != null) {						
+						// update group_chosen
+						update_group_chosen();
+						
 						// append clone content
 						clearCheckboxBeforeDrop();
 						drag_clone_content.parentNode
@@ -771,9 +776,7 @@ function mouse_up_handler(e) {
 						append_selected_terms(targetbox);
 						setDragMeSign("drag-back");
 						expandRow();
-						old_target_category = target_category;
-						// update group_chosen
-						update_group_chosen();
+						old_target_category = target_category;						
 					}
 				}
 			} else if (drag_from == "right") {// drag from right back to left
@@ -822,9 +825,10 @@ function mouse_up_handler(e) {
 								}
 							}
 							markTermReviewed(term_Chosen.id);
-							
-							//mark reviewed for synonyms
-							var synonyms = term_Chosen.getElementsByClassName("syn");
+
+							// mark reviewed for synonyms
+							var synonyms = term_Chosen
+									.getElementsByClassName("syn");
 							for (i = 0; i < synonyms.length; i++) {
 								markTermReviewed(synonyms[i].id);
 							}
@@ -958,6 +962,7 @@ function clearDragTrack() {
 	term_Chosen = null;
 	delete_drag_clone();
 	group_chosen = null;
+	category_from = null;
 }
 
 function setDragMeSign(picName) {
@@ -1063,6 +1068,7 @@ function generateDeletedTerm(termName, comment) {
  * @param: evn: to get the cursor position
  */
 function getTargetCategory(evn) {
+	target_category = null;
 	var i, top, bottom, left, right;
 	var cursor_x = evn.clientX;
 	var cursor_y = evn.clientY
@@ -1530,7 +1536,7 @@ function get_category_from() {
 	if (term_Chosen != null) {
 		category_from = term_Chosen;
 		while (category_from.className != "categoryTerms") {
-			category_from = category_from.parentNode;
+			category_from = category_from.parentNode;			
 		}
 
 		// get category_to_resume

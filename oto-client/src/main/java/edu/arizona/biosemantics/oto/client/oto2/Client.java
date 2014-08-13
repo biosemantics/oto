@@ -2,6 +2,7 @@ package edu.arizona.biosemantics.oto.client.oto2;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import javax.ws.rs.client.InvocationCallback;
@@ -58,9 +59,14 @@ public class Client extends OTOLiteClient {
 		buckets.add(othersBucket);
 		collection.setBuckets(buckets);
 		collection.setName(upload.getSource());
-		Collection result = client.put(collection);
-		
-		return ConcurrentUtils.constantFuture(new UploadResult(result.getId(), result.getSecret()));
+		Future<Collection> result = client.put(collection);
+		try {
+			collection = result.get();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ConcurrentUtils.constantFuture(null);
+		}
+		return ConcurrentUtils.constantFuture(new UploadResult(collection.getId(), collection.getSecret()));
 	}
 	
 	@Override
@@ -79,7 +85,14 @@ public class Client extends OTOLiteClient {
 	public Future<Download> getDownload(UploadResult uploadResult) {
 		edu.arizona.biosemantics.oto2.oto.client.rest.Client client = new edu.arizona.biosemantics.oto2.oto.client.rest.Client(url);
 		
-		Collection collection = client.get(String.valueOf(uploadResult.getUploadId()), uploadResult.getSecret());
+		Future<Collection> result = client.get(String.valueOf(uploadResult.getUploadId()), uploadResult.getSecret());
+		Collection collection;
+		try {
+			collection = result.get();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ConcurrentUtils.constantFuture(null);
+		}
 		
 		List<Decision> decisions = new LinkedList<Decision>();
 		for(Label label : collection.getLabels()) {

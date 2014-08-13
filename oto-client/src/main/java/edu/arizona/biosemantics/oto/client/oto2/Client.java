@@ -6,7 +6,8 @@ import java.util.concurrent.Future;
 
 import javax.ws.rs.client.InvocationCallback;
 
-import com.google.gwt.thirdparty.guava.common.util.concurrent.Futures;
+import org.apache.commons.lang3.concurrent.ConcurrentUtils;
+
 import com.google.inject.name.Named;
 
 import edu.arizona.biosemantics.oto.client.lite.OTOLiteClient;
@@ -59,7 +60,7 @@ public class Client extends OTOLiteClient {
 		collection.setName(upload.getSource());
 		Collection result = client.put(collection);
 		
-		return Futures.immediateFuture(new UploadResult(result.getId(), result.getSecret()));
+		return ConcurrentUtils.constantFuture(new UploadResult(result.getId(), result.getSecret()));
 	}
 	
 	@Override
@@ -106,7 +107,7 @@ public class Client extends OTOLiteClient {
 			}
 		}
 		
-		return Futures.immediateFuture(new Download(false, decisions, synonyms));
+		return ConcurrentUtils.constantFuture(new Download(false, decisions, synonyms));
 	}
 
 	@Override

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.arizona.biosemantics.oto</groupId>
 	<artifactId>oto-client</artifactId>
-	<version>0.0.5-SNAPSHOT</version>
+	<version>0.0.6-SNAPSHOT</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -46,6 +46,11 @@
 		  <groupId>edu.arizona.biosemantics.oto</groupId>
 		  <artifactId>oto-common</artifactId>
 		  <version>0.0.7-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+		  <groupId>edu.arizona.biosemantics.oto2</groupId>
+		  <artifactId>oto</artifactId>
+		  <version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	

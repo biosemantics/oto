@@ -25,9 +25,9 @@ import edu.arizona.biosemantics.oto.common.model.lite.UploadResult;
 
 public class OTOLiteClient {
 
-	private String url;
-	private Client client;
-	private WebTarget target;		
+	protected String url;
+	protected Client client;
+	protected WebTarget target;		
 	
 	/**
 	 * @param url

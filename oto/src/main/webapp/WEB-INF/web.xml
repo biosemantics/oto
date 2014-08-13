@@ -26,6 +26,10 @@
 			<param-value>com.javahash.jersey;edu.arizona.biosemantics.oto.oto.rest</param-value>
 		</init-param>
 		<init-param>
+			<param-name>jersey.config.server.provider.classnames</param-name>
+    		<param-value>org.glassfish.jersey.filter.LoggingFilter</param-value>
+    	</init-param>
+		<init-param>
 			<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
 			<param-value>true</param-value>
 		</init-param>

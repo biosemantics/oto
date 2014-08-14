@@ -9,6 +9,7 @@ import javax.ws.rs.client.InvocationCallback;
 
 import org.apache.commons.lang3.concurrent.ConcurrentUtils;
 
+import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import edu.arizona.biosemantics.oto.client.lite.OTOLiteClient;
@@ -24,6 +25,7 @@ import edu.arizona.biosemantics.oto2.oto.shared.model.Label;
 
 public class Client extends OTOLiteClient {
 
+	@Inject
 	public Client(@Named("OTOLiteClient_Url")String url) {
 		super(url);
 	}
@@ -31,6 +33,7 @@ public class Client extends OTOLiteClient {
 	@Override
 	public Future<UploadResult> putUpload(Upload upload) {
 		edu.arizona.biosemantics.oto2.oto.client.rest.Client client = new edu.arizona.biosemantics.oto2.oto.client.rest.Client(url);
+		client.open();
 		
 		Collection collection = new Collection();
 		Bucket structureBucket = new Bucket();
@@ -66,6 +69,7 @@ public class Client extends OTOLiteClient {
 			e.printStackTrace();
 			return ConcurrentUtils.constantFuture(null);
 		}
+		client.close();
 		return ConcurrentUtils.constantFuture(new UploadResult(collection.getId(), collection.getSecret()));
 	}
 	

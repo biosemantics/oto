@@ -276,6 +276,8 @@ public class GeneralDBAccess extends DatabaseAccess {
 				stmt.executeUpdate("delete from OTO_Demo_syns;");
 				stmt.executeUpdate("delete from OTO_Demo_term_category;");
 				stmt.executeUpdate("delete from OTO_Demo_user_terms_decisions;");
+				stmt.executeUpdate("delete from OTO_Demo_categories "
+						+ "where category not in (select category from categories); ");
 				// set finalized to be false
 				stmt.executeUpdate("update datasetprefix set grouptermsdownloadable = false "
 						+ "where prefix = 'OTO_Demo'");
@@ -496,6 +498,42 @@ public class GeneralDBAccess extends DatabaseAccess {
 		}
 
 		return datasets;
+	}
+
+	/**
+	 * all the tables for one dataset
+	 * 
+	 * @param datasetName
+	 * @return
+	 */
+	public ArrayList<String> getDatasetTableList() {
+		ArrayList<String> tableList = new ArrayList<String>();
+		// initial data
+		tableList.add("_web_grouped_terms");
+		tableList.add("_web_orders");
+		tableList.add("_web_orders_terms");
+		tableList.add("_web_tags");
+		tableList.add("_categories");
+		tableList.add("_sentence");
+
+		// tables to hold decisions
+		tableList.add("_user_orders_decisions");
+		tableList.add("_user_tags_decisions");
+		tableList.add("_user_terms_decisions");
+		tableList.add("_user_terms_relations");
+		tableList.add("_review_history");
+		tableList.add("_comments");
+
+		// approved decisions
+		tableList.add("_confirmed_category");
+		tableList.add("_confirmed_orders");
+		tableList.add("_confirmed_paths");
+
+		// finalized tables
+		tableList.add("_syns");
+		tableList.add("_term_category");
+
+		return tableList;
 	}
 
 	/**
@@ -737,7 +775,7 @@ public class GeneralDBAccess extends DatabaseAccess {
 												// term
 
 						for (String syn : syns) {
-							//compute synonym with index
+							// compute synonym with index
 							int synIndex = 0;
 							String synWithIndex = syn;
 							if (termIndexMap.get(syn) != null) {
@@ -748,8 +786,8 @@ public class GeneralDBAccess extends DatabaseAccess {
 							} else {
 								termIndexMap.put(syn, 1);
 							}
-							
-							//add synonym to synonym string
+
+							// add synonym to synonym string
 							if (syns_str.equals("")) {
 								syns_str = "'" + synWithIndex + "'";
 							} else {

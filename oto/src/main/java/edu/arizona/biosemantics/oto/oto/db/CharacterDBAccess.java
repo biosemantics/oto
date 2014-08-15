@@ -5909,7 +5909,8 @@ public class CharacterDBAccess extends DatabaseAccess {
 			pstmt.executeUpdate();
 
 			// delete tables
-			ArrayList<String> tables = getDatasetTableList();
+			ArrayList<String> tables = GeneralDBAccess.getInstance()
+					.getDatasetTableList();
 			for (int i = 0; i < tables.size(); i++) {
 				sql = "drop table if exists " + dataPrefix + tables.get(i);
 				pstmt = conn.prepareStatement(sql);
@@ -6197,42 +6198,6 @@ public class CharacterDBAccess extends DatabaseAccess {
 	}
 
 	/**
-	 * all the tables for one dataset
-	 * 
-	 * @param datasetName
-	 * @return
-	 */
-	private ArrayList<String> getDatasetTableList() {
-		ArrayList<String> tableList = new ArrayList<String>();
-		// initial data
-		tableList.add("_web_grouped_terms");
-		tableList.add("_web_orders");
-		tableList.add("_web_orders_terms");
-		tableList.add("_web_tags");
-		tableList.add("_categories");
-		tableList.add("_sentence");
-
-		// tables to hold decisions
-		tableList.add("_user_orders_decisions");
-		tableList.add("_user_tags_decisions");
-		tableList.add("_user_terms_decisions");
-		tableList.add("_user_terms_relations");
-		tableList.add("_review_history");
-		tableList.add("_comments");
-
-		// approved decisions
-		tableList.add("_confirmed_category");
-		tableList.add("_confirmed_orders");
-		tableList.add("_confirmed_paths");
-
-		// finalized tables
-		tableList.add("_syns");
-		tableList.add("_term_category");
-
-		return tableList;
-	}
-
-	/**
 	 * update note in table datasetprefix
 	 * 
 	 * @param datasetName
@@ -6290,7 +6255,7 @@ public class CharacterDBAccess extends DatabaseAccess {
 	 * @param createrID
 	 *            : the owner of this newly created dataset
 	 * @param glossaryID
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public boolean createDatasetIfNotExist(String datasetName, String note,
 			int createrID, int glossaryID) throws Exception {
@@ -6330,7 +6295,8 @@ public class CharacterDBAccess extends DatabaseAccess {
 				}
 
 				// add tables
-				ArrayList<String> tables = getDatasetTableList();
+				ArrayList<String> tables = GeneralDBAccess.getInstance()
+						.getDatasetTableList();
 				for (int i = 0; i < tables.size(); i++) {
 					String tableSuffix = tables.get(i);
 					sql = "create table " + datasetName + tableSuffix
@@ -6559,8 +6525,8 @@ public class CharacterDBAccess extends DatabaseAccess {
 						pstmt.setString(5, rset.getString("status"));
 						pstmt.setString(6, rset.getString("tag"));
 						pstmt.executeUpdate();
-						hash_sentences
-								.put(rset.getString("originalSent").trim(), true);
+						hash_sentences.put(rset.getString("originalSent")
+								.trim(), true);
 					}
 				}
 				// st.executeUpdate("insert into "
@@ -7084,7 +7050,8 @@ public class CharacterDBAccess extends DatabaseAccess {
 				conn = getConnection();
 				st = conn.createStatement();
 				for (String ds : toDelete) {
-					ArrayList<String> tables = getDatasetTableList();
+					ArrayList<String> tables = GeneralDBAccess.getInstance()
+							.getDatasetTableList();
 					for (int i = 0; i < tables.size(); i++) {
 						st.executeUpdate("drop table if exists " + ds
 								+ tables.get(i));

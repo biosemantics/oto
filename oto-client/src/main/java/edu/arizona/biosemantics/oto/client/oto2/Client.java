@@ -88,8 +88,9 @@ public class Client extends OTOLiteClient {
 	@Override
 	public Future<Download> getDownload(UploadResult uploadResult) {
 		edu.arizona.biosemantics.oto2.oto.client.rest.Client client = new edu.arizona.biosemantics.oto2.oto.client.rest.Client(url);
-		
+		client.open();
 		Future<Collection> result = client.get(String.valueOf(uploadResult.getUploadId()), uploadResult.getSecret());
+		client.close();
 		Collection collection;
 		try {
 			collection = result.get();

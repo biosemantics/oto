@@ -1,5 +1,8 @@
 package edu.arizona.biosemantics.oto.steps.client;
 
+/**
+ * 
+ */
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;

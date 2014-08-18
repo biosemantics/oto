@@ -1,5 +1,5 @@
 /*Not actually used in Parser project, for testing purpose only*//*--------------------------------------------------|
-| dTree 2.05 | www.destroydrop.com/javascript/tree/ |
+| dTree 2.05 | www.destroydrop.com/javascript/tree/ |
 |---------------------------------------------------|
 | Copyright (c) 2002-2003 Geir Landrö               |
 |                                                   |

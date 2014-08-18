@@ -1,15 +1,12 @@
 package edu.arizona.biosemantics.oto.steps.client.presenter.toontologies;
 
 public class BrowseSuperClassURL {
-	private static String poroURL = "http://purl.bioontology.org/ontology/PORO";
-	private static String OLSURL = "http://www.ebi.ac.uk/ontology-lookup/";
+	private static String OLSURL = "http://www.ontobee.org/browser/index.php?o=";
 
 	public static String get(String ontologyName) {
-		if (ontologyName.equals("PORO")) {
-			return poroURL;
-		} else {
-			return OLSURL + "browse.do?ontName=" + ontologyName;
-		}
+		if(ontologyName==null || ontologyName.isEmpty()){
+			return "http://www.ontobee.org/";
+		}else
+			return OLSURL +  ontologyName;
 	}
-
 }

@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
+import edu.arizona.biosemantics.oto.steps.server.Configuration;
+
 public class FileIO {
 	private static FileIO insatnce;
 
@@ -32,14 +34,13 @@ public class FileIO {
 
 		// get folder path from configuration
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		Properties properties = new Properties();
+		/*Properties properties = new Properties();
 		properties.load(loader.getResourceAsStream("config.properties"));
-		String folderPath = properties.getProperty("src_file_dir");
-		if (folderPath.endsWith("/")) {
-			folderPath = folderPath + uploadID + "/";
-		} else {
-			folderPath = folderPath + "/" + uploadID + "/";
-		}
+		String folderPath = properties.getProperty("src_file_dir");*/
+		String folderPath = Configuration.src_file_dir;
+	
+		folderPath = folderPath + File.separator + uploadID + File.separator;
+	
 
 		String filePath = folderPath + fileName;
 

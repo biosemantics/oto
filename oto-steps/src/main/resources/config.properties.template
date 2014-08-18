@@ -16,3 +16,5 @@ dict_dir=C:/wordnet/wn31/dict/
 #source files location configuration
 src_file_dir=C:/git/oto-steps/srcfiles/
 
+#ontology base IRI
+etc_ontology_baseIRI=http://www.etc-project.org/owl/ontologies/

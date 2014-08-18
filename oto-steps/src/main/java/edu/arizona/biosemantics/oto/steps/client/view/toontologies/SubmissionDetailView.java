@@ -63,7 +63,8 @@ public class SubmissionDetailView extends Composite implements
 		row++;
 		layout.setHTML(row, 0, "Ontology: ");
 		cellFormatter.addStyleName(row, 0, "tbl_field_label");
-		layout.setHTML(row, 1, submission.getOntologyID());
+		String onto = submission.getOntologyID()==null || submission.getOntologyID().isEmpty()? submission.getLocalOntologyID() : submission.getOntologyID(); 
+		layout.setHTML(row, 1, onto);
 
 		row++;
 		layout.setHTML(row, 0, "Super Class ID: ");
@@ -89,7 +90,7 @@ public class SubmissionDetailView extends Composite implements
 			row++;
 			layout.setHTML(row, 0, "Permanent ID: ");
 			cellFormatter.addStyleName(row, 0, "tbl_field_label");
-			layout.setHTML(row, 1, submission.getDefinition());
+			layout.setHTML(row, 1, submission.getPermanentID());
 		}
 
 		row++;
@@ -117,7 +118,7 @@ public class SubmissionDetailView extends Composite implements
 		if (hasBioportalInfo) {
 			layout.setWidget(row, 0, btnRow);
 			cellFormatter.setColSpan(row, 0, 2);
-			cellFormatter.addStyleName(row, 0, "tbl_btn_row");
+			//cellFormatter.addStyleName(row, 0, "tbl_btn_row");
 			btnRow.setSpacing(10);
 		}
 	}

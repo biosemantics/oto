@@ -13,6 +13,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -22,6 +23,7 @@ import org.xml.sax.SAXException;
 import edu.arizona.biosemantics.bioportal.client.BioPortalClient;
 import edu.arizona.biosemantics.bioportal.client.Filter;
 import edu.arizona.biosemantics.bioportal.model.ProvisionalClass;
+import edu.arizona.biosemantics.oto.steps.server.Configuration;
 import edu.arizona.biosemantics.oto.steps.server.db.ToOntologiesDAO;
 import edu.arizona.biosemantics.oto.steps.shared.beans.toontologies.OntologySubmission;
 
@@ -34,9 +36,10 @@ public class TermsToOntologiesClient {
 			String bioportalAPIKey) throws IOException {
 		this.bioportalUserID = bioportalUserId;
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		Properties properties = new Properties();
+		/*Properties properties = new Properties();
 		properties.load(loader.getResourceAsStream("config.properties"));
-		String url = properties.getProperty("bioportalUrl");
+		String url = properties.getProperty("bioportalUrl");*/
+		String url = Configuration.bioportalUrl;
 		bioPortalClient = new BioPortalClient(url, bioportalAPIKey);
 	}
 

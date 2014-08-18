@@ -12,6 +12,7 @@ import java.util.Properties;
 
 import edu.arizona.biosemantics.oto.common.ontologylookup.search.OntologyLookupClient;
 import edu.arizona.biosemantics.oto.common.ontologylookup.search.data.SimpleEntity;
+import edu.arizona.biosemantics.oto.steps.server.Configuration;
 import edu.arizona.biosemantics.oto.steps.server.beans.TermForTreePopulation;
 import edu.arizona.biosemantics.oto.steps.server.utilities.Utilities;
 import edu.arizona.biosemantics.oto.steps.shared.beans.hierarchy.Structure;
@@ -343,11 +344,13 @@ public class HierarchyDAO extends AbstractDAO {
 				// create ontology lookup client
 				ClassLoader loader = Thread.currentThread()
 						.getContextClassLoader();
-				Properties properties = new Properties();
+				/*Properties properties = new Properties();
 				properties
 						.load(loader.getResourceAsStream("config.properties"));
 				String ontologyDir = properties.getProperty("ontology_dir");
-				String dictDir = properties.getProperty("dict_dir");
+				String dictDir = properties.getProperty("dict_dir");*/
+				String ontologyDir = Configuration.ontology_dir;
+				String dictDir = Configuration.dict_dir;
 
 				olClient = new OntologyLookupClient(ontologyName, ontologyDir,
 						dictDir);
@@ -430,6 +433,14 @@ public class HierarchyDAO extends AbstractDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
+			if (conn != null) {
+				try {
+					conn.rollback();
+				} catch (SQLException exe) {
+					exe.printStackTrace();
+					throw exe;
+				}
+			}
 			e.printStackTrace();
 			throw e;
 		} finally {

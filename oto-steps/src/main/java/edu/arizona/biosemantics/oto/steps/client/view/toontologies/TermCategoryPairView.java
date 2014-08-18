@@ -43,10 +43,10 @@ public class TermCategoryPairView extends Composite implements
 
 		if (tcPair.isRemoved()) {
 			actionImg = new Image("images/correct.png");
-			actionImg.setHeight("17px");
+			actionImg.setHeight("12px");
 		} else {
 			actionImg = new Image("images/cross.png");
-			actionImg.setHeight("14px");
+			actionImg.setHeight("10px");
 		}
 		actionImg.addStyleName("img_btn right");
 

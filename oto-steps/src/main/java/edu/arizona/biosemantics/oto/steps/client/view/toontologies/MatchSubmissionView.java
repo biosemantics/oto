@@ -41,10 +41,6 @@ public class MatchSubmissionView extends Composite implements
 
 		// matches
 		if (ontRecords.size() > 0) {
-			Label label = new Label("Ontology Records of '" + term + " ("
-					+ category + ")" + "': ");
-			label.addStyleName("TO_ONTOLOGY_content_title");
-			layout.add(label);
 
 			// first column: radio btn
 			Column<OntologyRecord, Boolean> radioColumn = new Column<OntologyRecord, Boolean>(
@@ -84,19 +80,8 @@ public class MatchSubmissionView extends Composite implements
 				}
 			};
 			ontologyRecordsTbl.addColumn(ontologyColumn, "Ontology");
-
-			// 3rd column: parent term / super class
-			TextColumn<OntologyRecord> parentColumn = new TextColumn<OntologyRecord>() {
-
-				@Override
-				public String getValue(OntologyRecord object) {
-					return object.getParent();
-				}
-			};
-			ontologyRecordsTbl.addColumn(parentColumn,
-					"ParentTerm / SuperClassID");
-
-			// 4th column: definition
+			
+			// 3th column: definition
 			TextColumn<OntologyRecord> definitionColumn = new TextColumn<OntologyRecord>() {
 
 				@Override
@@ -106,11 +91,22 @@ public class MatchSubmissionView extends Composite implements
 			};
 			ontologyRecordsTbl.addColumn(definitionColumn, "Definition");
 
+			// 4rd column: parent term / super class
+			TextColumn<OntologyRecord> parentColumn = new TextColumn<OntologyRecord>() {
+
+				@Override
+				public String getValue(OntologyRecord object) {
+					return object.getParent();
+				}
+			};
+			ontologyRecordsTbl.addColumn(parentColumn,
+					"Superclass");
+
 			// set column width
 			ontologyRecordsTbl.setColumnWidth(radioColumn, "10%");
-			ontologyRecordsTbl.setColumnWidth(ontologyColumn, "30%");
+			ontologyRecordsTbl.setColumnWidth(ontologyColumn, "20%");
 			ontologyRecordsTbl.setColumnWidth(parentColumn, "20%");
-			ontologyRecordsTbl.setColumnWidth(definitionColumn, "40%");
+			ontologyRecordsTbl.setColumnWidth(definitionColumn, "50%");
 
 			// set data
 			ontologyRecordsTbl.setRowCount(records.size(), true);
@@ -131,8 +127,8 @@ public class MatchSubmissionView extends Composite implements
 			layout.add(ontologyRecordsTbl);
 
 		} else {
-			Label label = new Label("No ontology record for '" + term + " ("
-					+ category + ")'.");
+			Label label = new Label("'" + term + "' as a "
+					+ category + " does not exist in the ontologies");
 			label.addStyleName("TO_ONTOLOGY_content_title");
 			layout.add(label);
 		}
@@ -142,7 +138,8 @@ public class MatchSubmissionView extends Composite implements
 		layout.add(btnRow);
 
 		// new submission button
-		newSubmissionBtn = new Button("Create New Submission");
+		newSubmissionBtn = new Button("Add to Ontologies");
+		newSubmissionBtn.addStyleName("center");
 
 		if (hasBioportalInfo) {
 			btnRow.add(newSubmissionBtn);

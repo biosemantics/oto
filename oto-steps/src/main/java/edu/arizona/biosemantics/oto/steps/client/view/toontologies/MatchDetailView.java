@@ -3,6 +3,7 @@ package edu.arizona.biosemantics.oto.steps.client.view.toontologies;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import com.google.gwt.user.client.ui.HTMLTable.ColumnFormatter;
@@ -14,13 +15,13 @@ public class MatchDetailView extends Composite implements
 		MatchDetailPresenter.Display {
 
 	public MatchDetailView(OntologyMatch match) {
-		DecoratorPanel decPanel = new DecoratorPanel();
+		VerticalPanel decPanel = new VerticalPanel();
 		decPanel.setSize("100%", "100%");
 		initWidget(decPanel);
 
 		FlexTable layout = new FlexTable();
 		layout.setSize("100%", "100%");
-		decPanel.setWidget(layout);
+		decPanel.add(layout);
 		FlexCellFormatter cellFormatter = layout.getFlexCellFormatter();
 		ColumnFormatter columnFormatter = layout.getColumnFormatter();
 
@@ -55,7 +56,7 @@ public class MatchDetailView extends Composite implements
 		cellFormatter.addStyleName(row, 0, "tbl_field_label");
 		layout.setHTML(row, 1, match.getPermanentID());
 	}
-
+	
 	public Widget asWidget() {
 		return this;
 	}

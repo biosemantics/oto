@@ -23,6 +23,7 @@ public class OtoTabPanelView extends Composite implements
 		numTabs = 0;
 
 		layout = new FlexTable();
+		layout.setSize("100%", "100%"); //Hong added 6/18/14
 		initWidget(layout);
 
 		// mimic appearance of gwt panel

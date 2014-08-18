@@ -1,11 +1,46 @@
 package edu.arizona.biosemantics.oto.steps.server.rpc;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Set;
 
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLAnnotation;
+import org.semanticweb.owlapi.model.OWLAnnotationProperty;
+import org.semanticweb.owlapi.model.OWLAxiom;
+import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLDataProperty;
+import org.semanticweb.owlapi.model.OWLDataPropertyDomainAxiom;
+import org.semanticweb.owlapi.model.OWLDeclarationAxiom;
+import org.semanticweb.owlapi.model.OWLLiteral;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyID;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
+import org.semanticweb.owlapi.model.PrefixManager;
+import org.semanticweb.owlapi.model.SetOntologyID;
+import org.semanticweb.owlapi.reasoner.ConsoleProgressMonitor;
+import org.semanticweb.owlapi.reasoner.Node;
+import org.semanticweb.owlapi.reasoner.OWLReasoner;
+import org.semanticweb.owlapi.reasoner.OWLReasonerConfiguration;
+import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
+import org.semanticweb.owlapi.reasoner.SimpleConfiguration;
+import org.semanticweb.owlapi.reasoner.structural.StructuralReasonerFactory;
+import org.semanticweb.owlapi.util.DefaultPrefixManager;
+import org.semanticweb.owlapi.util.SimpleIRIMapper;
+import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
+
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-import edu.arizona.biosemantics.oto.steps.client.rpc.ToOntologiesService;
+import edu.arizona.biosemantics.oto.steps.shared.rpc.RPCResult;
+import edu.arizona.biosemantics.oto.steps.shared.rpc.ToOntologiesService;
 import edu.arizona.biosemantics.oto.steps.client.view.toontologies.OperationType;
+import edu.arizona.biosemantics.oto.steps.server.Configuration;
 import edu.arizona.biosemantics.oto.steps.server.bioportal.TermsToOntologiesClient;
 import edu.arizona.biosemantics.oto.steps.server.db.GeneralDAO;
 import edu.arizona.biosemantics.oto.steps.server.db.ToOntologiesDAO;
@@ -22,6 +57,7 @@ public class ToOntologiesServiceImpl extends RemoteServiceServlet implements
 		ToOntologiesService {
 
 	private static final long serialVersionUID = 8235809276166612584L;
+	private OntologyFileServiceImpl ontologyFileService = new OntologyFileServiceImpl();
 
 	@Override
 	public void moveTermCategoryPair(String uploadID,
@@ -80,32 +116,49 @@ public class ToOntologiesServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public void submitSubmission(OntologySubmission submission,
+	public RPCResult<Boolean> submitSubmission(OntologySubmission submission,
 			String uploadID, OperationType type) throws Exception {
+		RPCResult<Boolean> result = new RPCResult<Boolean>();
 		UploadInfo info = GeneralDAO.getInstance().getUploadInfo(
 				Integer.parseInt(uploadID));
 		TermsToOntologiesClient sendToOntologyClient = new TermsToOntologiesClient(
 				info.getBioportalUserID(), info.getBioportalApiKey());
 		if (type.equals(OperationType.NEW_SUBMISSION)) {
-			// get uuid first
+			// get uuid first: biosemantics.arizona.edu rest has problems
 			submission.setLocalID(QueryOTO.getInstance().getUUID(
 					submission.getTerm(), submission.getCategory(),
 					Utilities.getGlossaryNameByID(info.getGlossaryType()),
 					submission.getDefinition()));
+			if (submission.getOntologyID()!=null && !submission.getOntologyID().trim().isEmpty()){
+				// submit to bioportal
+				String tmpID = sendToOntologyClient.submitTerm(submission);
+				submission.setTmpID(tmpID);
+				// insert record to database
+				ToOntologiesDAO.getInstance().addSubmission(submission,
+						Integer.parseInt(uploadID));
+			}
+			if (submission.getLocalOntologyID()!=null){
+				RPCResult<String> updateResult = ontologyFileService.updateOntologyFile(submission);
+				if(updateResult.getData()==null){
+					result.setMessage("update local ontology failed: ");
+				}else{
+					submission.setTmpID(updateResult.getData());
+					ToOntologiesDAO.getInstance().addSubmission(submission,
+							Integer.parseInt(uploadID));
+				}
+				result.setMessage(result.getMessage()+" "+updateResult.getMessage());
+			}
 
-			// submit to bioportal
-			String tmpID = sendToOntologyClient.submitTerm(submission);
-			submission.setTmpID(tmpID);
-
-			// insert record to database
-			ToOntologiesDAO.getInstance().addSubmission(submission,
-					Integer.parseInt(uploadID));
-		} else {
+		}else
+		{
 			sendToOntologyClient.updateTerm(submission);
 			ToOntologiesDAO.getInstance().updateSubmission(submission);
 		}
+		return result;
 	}
 
+	
+	
 	@Override
 	public OntologySubmission getDefaultDataForNewSubmission(String uploadID,
 			String term, String category) throws Exception {

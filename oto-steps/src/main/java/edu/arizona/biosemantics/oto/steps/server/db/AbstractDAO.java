@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
+import edu.arizona.biosemantics.oto.steps.server.Configuration;
+
 public abstract class AbstractDAO {
 	private String databaseName;
 	private String databaseUser;
@@ -15,11 +17,15 @@ public abstract class AbstractDAO {
 
 	public AbstractDAO() throws Exception {
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		Properties properties = new Properties();
+		/*Properties properties = new Properties();
 		properties.load(loader.getResourceAsStream("config.properties"));
 		this.databaseName = properties.getProperty("otolite_databaseName");
 		this.databaseUser = properties.getProperty("otolite_databaseUser");
-		this.databasePassword = properties.getProperty("otolite_databasePassword");
+		this.databasePassword = properties.getProperty("otolite_databasePassword");*/
+		this.databaseName = Configuration.otolite_databaseName;
+		this.databaseUser = Configuration.otolite_databaseUser;
+		this.databasePassword = Configuration.otolite_databasePassword;
+		
 		Class.forName("com.mysql.jdbc.Driver").newInstance();
 	}
 

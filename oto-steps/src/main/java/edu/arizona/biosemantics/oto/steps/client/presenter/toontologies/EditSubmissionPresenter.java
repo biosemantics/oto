@@ -5,6 +5,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
@@ -18,20 +19,15 @@ import edu.arizona.biosemantics.oto.steps.shared.beans.toontologies.OntologySubm
 public class EditSubmissionPresenter implements Presenter {
 	public static interface Display {
 		OperationType getType();
-
 		Button getSubmitBtn();
-
 		Button getBackBtn();
-
 		String getOntologyValue();
-
-		Image getBrowseOntologyIcon();
-
 		OntologySubmission getDataToSubmit();
-
 		OntologySubmission getOriginalData();
-
 		Widget asWidget();
+		//Button getUpdateLocalBtn();
+		Button getBrowseOntologyIcon1();
+		Button getBrowseOntologyIcon2();
 	}
 
 	private final Display display;
@@ -68,8 +64,25 @@ public class EditSubmissionPresenter implements Presenter {
 						.getDataToSubmit(), display.getType()));
 			}
 		});
+		
+		/*display.getUpdateLocalBtn().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				eventBus.fireEvent(new UpdateLocalEvent());
+			}
+		});*/
+		
+		display.getBrowseOntologyIcon1().addClickHandler(new ClickHandler() {
 
-		display.getBrowseOntologyIcon().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				Window.open(
+						BrowseSuperClassURL.get(display.getOntologyValue()),
+						"_blank", "");
+			}
+		});
+		
+		display.getBrowseOntologyIcon2().addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
@@ -79,5 +92,7 @@ public class EditSubmissionPresenter implements Presenter {
 			}
 		});
 	}
+	
+	
 
 }

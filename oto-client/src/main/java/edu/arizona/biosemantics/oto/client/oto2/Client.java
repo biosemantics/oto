@@ -65,11 +65,12 @@ public class Client extends OTOLiteClient {
 		Future<Collection> result = client.put(collection);
 		try {
 			collection = result.get();
+			client.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+			client.close();
 			return ConcurrentUtils.constantFuture(null);
 		}
-		client.close();
 		return ConcurrentUtils.constantFuture(new UploadResult(collection.getId(), collection.getSecret()));
 	}
 	
@@ -79,10 +80,11 @@ public class Client extends OTOLiteClient {
 		List<UploadResult> result = new LinkedList<UploadResult>();
 		try {
 			result.add(future.get());
+			callback.completed(result);
 		} catch (Exception e) {
 			e.printStackTrace();
+			callback.failed(e);
 		}
-		callback.completed(result);
 	}
 	
 	@Override
@@ -90,12 +92,13 @@ public class Client extends OTOLiteClient {
 		edu.arizona.biosemantics.oto2.oto.client.rest.Client client = new edu.arizona.biosemantics.oto2.oto.client.rest.Client(url);
 		client.open();
 		Future<Collection> result = client.get(String.valueOf(uploadResult.getUploadId()), uploadResult.getSecret());
-		client.close();
 		Collection collection;
 		try {
 			collection = result.get();
+			client.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+			client.close();
 			return ConcurrentUtils.constantFuture(null);
 		}
 		
@@ -105,12 +108,6 @@ public class Client extends OTOLiteClient {
 				List<edu.arizona.biosemantics.oto2.oto.shared.model.Term> termsSynonyms = label.getSynonyms(mainTerm);
 				decisions.add(new Decision(label.getId() + "-" + mainTerm.getId(), mainTerm.getTerm(), label.getName(), 
 						(termsSynonyms != null && !termsSynonyms.isEmpty()), collection.getName()));
-				
-				
-				/*for(edu.arizona.biosemantics.oto2.oto.shared.model.Term termsSynonym : termsSynonyms) {
-					decisions.add(new Decision(label.getId() + "-" + termsSynonym.getId(), termsSynonym.getTerm(), label.getName(), 
-							(termsSynonyms != null && !termsSynonyms.isEmpty()), collection.getName()));
-				}*/
 			}
 		}
 		
@@ -130,7 +127,21 @@ public class Client extends OTOLiteClient {
 
 	@Override
 	public void getDownload(UploadResult uploadResult, InvocationCallback<List<Download>> callback) {
-		
+		Future<Download> future = this.getDownload(uploadResult);
+		List<Download> result = new LinkedList<Download>();
+		try {
+			result.add(future.get());
+			callback.completed(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			callback.failed(e);
+		}
+	}
+	
+	public static void main(String[] args) throws InterruptedException, ExecutionException {
+		Client client = new Client("http://127.0.0.1:8888/");
+		Future<Download> futureDownload = client.getDownload(new UploadResult(24, "30"));
+		Download result = futureDownload.get();		
 	}
 	
 }

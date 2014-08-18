@@ -16,7 +16,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.arizona.biosemantics.oto.steps.client.presenter.Presenter;
-import edu.arizona.biosemantics.oto.steps.client.rpc.OrderServiceAsync;
+import edu.arizona.biosemantics.oto.steps.shared.rpc.OrderServiceAsync;
 import edu.arizona.biosemantics.oto.steps.client.view.orders.OrderSetContentView;
 import edu.arizona.biosemantics.oto.steps.client.view.orders.Styles;
 import edu.arizona.biosemantics.oto.steps.shared.beans.orders.OrderSet;

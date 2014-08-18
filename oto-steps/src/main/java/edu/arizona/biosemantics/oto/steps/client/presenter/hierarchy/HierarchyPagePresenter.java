@@ -34,8 +34,8 @@ import edu.arizona.biosemantics.oto.steps.client.event.processing.ProcessingEndE
 import edu.arizona.biosemantics.oto.steps.client.event.processing.ProcessingStartEvent;
 import edu.arizona.biosemantics.oto.steps.client.presenter.MainPresenter;
 import edu.arizona.biosemantics.oto.steps.client.presenter.Presenter;
-import edu.arizona.biosemantics.oto.steps.client.rpc.HierarchyService;
-import edu.arizona.biosemantics.oto.steps.client.rpc.HierarchyServiceAsync;
+import edu.arizona.biosemantics.oto.steps.shared.rpc.HierarchyService;
+import edu.arizona.biosemantics.oto.steps.shared.rpc.HierarchyServiceAsync;
 import edu.arizona.biosemantics.oto.steps.client.view.hierarchy.OtoTreeNodeView;
 import edu.arizona.biosemantics.oto.steps.client.view.hierarchy.StructureTermView;
 import edu.arizona.biosemantics.oto.steps.client.widget.OtoDialog;

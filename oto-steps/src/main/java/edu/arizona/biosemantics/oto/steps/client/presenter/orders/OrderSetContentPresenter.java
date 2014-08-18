@@ -28,7 +28,7 @@ import edu.arizona.biosemantics.oto.steps.client.event.orders.DropTermToBoxEvent
 import edu.arizona.biosemantics.oto.steps.client.event.processing.ProcessingEndEvent;
 import edu.arizona.biosemantics.oto.steps.client.event.processing.ProcessingStartEvent;
 import edu.arizona.biosemantics.oto.steps.client.presenter.Presenter;
-import edu.arizona.biosemantics.oto.steps.client.rpc.OrderServiceAsync;
+import edu.arizona.biosemantics.oto.steps.shared.rpc.OrderServiceAsync;
 import edu.arizona.biosemantics.oto.steps.client.view.orders.DraggableTermView;
 import edu.arizona.biosemantics.oto.steps.client.view.orders.DroppableContainerView;
 import edu.arizona.biosemantics.oto.steps.client.view.orders.OrderNameLabelView;

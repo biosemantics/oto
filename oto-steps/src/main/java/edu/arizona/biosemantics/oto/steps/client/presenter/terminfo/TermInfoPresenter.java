@@ -21,8 +21,8 @@ import edu.arizona.biosemantics.oto.steps.client.event.processing.ProcessingEndE
 import edu.arizona.biosemantics.oto.steps.client.event.processing.ProcessingStartEvent;
 import edu.arizona.biosemantics.oto.steps.client.presenter.MainPresenter;
 import edu.arizona.biosemantics.oto.steps.client.presenter.Presenter;
-import edu.arizona.biosemantics.oto.steps.client.rpc.TermInfoService;
-import edu.arizona.biosemantics.oto.steps.client.rpc.TermInfoServiceAsync;
+import edu.arizona.biosemantics.oto.steps.shared.rpc.TermInfoService;
+import edu.arizona.biosemantics.oto.steps.shared.rpc.TermInfoServiceAsync;
 import edu.arizona.biosemantics.oto.steps.client.view.terminfo.ContextContentView;
 import edu.arizona.biosemantics.oto.steps.client.view.terminfo.DictionaryContentView;
 import edu.arizona.biosemantics.oto.steps.client.view.terminfo.GlossaryContentView;

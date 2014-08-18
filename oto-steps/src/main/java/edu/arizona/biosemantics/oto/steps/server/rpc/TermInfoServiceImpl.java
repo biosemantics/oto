@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-import edu.arizona.biosemantics.oto.steps.client.rpc.TermInfoService;
+import edu.arizona.biosemantics.oto.steps.shared.rpc.TermInfoService;
 import edu.arizona.biosemantics.oto.steps.server.db.ContextDAO;
 import edu.arizona.biosemantics.oto.steps.server.db.ToOntologiesDAO;
 import edu.arizona.biosemantics.oto.steps.server.fileio.FileIO;
@@ -14,7 +14,7 @@ import edu.arizona.biosemantics.oto.steps.shared.beans.terminfo.TermContext;
 import edu.arizona.biosemantics.oto.steps.shared.beans.terminfo.TermDictionary;
 import edu.arizona.biosemantics.oto.steps.shared.beans.terminfo.TermGlossary;
 
-public class TermInfoServiceIml extends RemoteServiceServlet implements
+public class TermInfoServiceImpl extends RemoteServiceServlet implements
 		TermInfoService {
 
 	/**
@@ -22,6 +22,7 @@ public class TermInfoServiceIml extends RemoteServiceServlet implements
 	 */
 	private static final long serialVersionUID = -8348271874856917361L;
 
+	
 	@Override
 	public ArrayList<TermContext> getTermContext(String term, String uploadID)
 			throws Exception {

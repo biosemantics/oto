@@ -14,7 +14,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.arizona.biosemantics.oto.common.action.Forwardable;
 import edu.arizona.biosemantics.oto.oto.beans.SessionDataManager;
 import edu.arizona.biosemantics.oto.oto.beans.User;
-import edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess;
+import edu.arizona.biosemantics.oto.oto.db.CategorizationDBAccess;
 import edu.arizona.biosemantics.oto.oto.db.UserDataAccess;
 import edu.arizona.biosemantics.oto.oto.form.GeneralForm;
 
@@ -57,13 +57,16 @@ public class MergeDatasetsAction extends ParserAction {
 						}
 					}
 
-					CharacterDBAccess cdba = new CharacterDBAccess();
+					// CharacterDBAccess cdba = new CharacterDBAccess();
 					User user = sessionDataMgr.getUser();
 
 					HttpSession session = request.getSession();
 					session.setAttribute("mergeStatus", "processing");
-					boolean success = cdba.mergeDatasets(datasets, new_name,
-							user, glossaryID, isSystemMerge);
+					boolean success = CategorizationDBAccess.getInstance()
+							.mergeDatasets(datasets, new_name, user,
+									glossaryID, isSystemMerge);
+					// cdba.mergeDatasets(datasets, new_name,
+					// user, glossaryID, isSystemMerge);
 
 					if (success) {
 						responseText = "success";

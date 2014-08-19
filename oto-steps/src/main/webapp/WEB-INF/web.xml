@@ -47,5 +47,15 @@
 		<servlet-name>ToOntologiesServiceImpl</servlet-name>
 		<url-pattern>/otosteps/toOntologies</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>OntologyFileServiceImpl</servlet-name>
+		<servlet-class>edu.arizona.biosemantics.oto.steps.server.rpc.OntologyFileServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>OntologyFileServiceImpl</servlet-name>
+		<url-pattern>/otosteps/ontologyFile</url-pattern>
+	</servlet-mapping>
 
 </web-app>

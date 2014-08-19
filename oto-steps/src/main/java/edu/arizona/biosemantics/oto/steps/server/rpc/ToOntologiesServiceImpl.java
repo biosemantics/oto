@@ -129,14 +129,14 @@ public class ToOntologiesServiceImpl extends RemoteServiceServlet implements
 					submission.getTerm(), submission.getCategory(),
 					Utilities.getGlossaryNameByID(info.getGlossaryType()),
 					submission.getDefinition()));
-			if (submission.getOntologyID()!=null && !submission.getOntologyID().trim().isEmpty()){
+			/*if (submission.getOntologyID()!=null && !submission.getOntologyID().trim().isEmpty()){ //@TODO not submitting anything while testing the functions
 				// submit to bioportal
 				String tmpID = sendToOntologyClient.submitTerm(submission);
 				submission.setTmpID(tmpID);
 				// insert record to database
 				ToOntologiesDAO.getInstance().addSubmission(submission,
 						Integer.parseInt(uploadID));
-			}
+			}*/
 			if (submission.getLocalOntologyID()!=null){
 				RPCResult<String> updateResult = ontologyFileService.updateOntologyFile(submission);
 				if(updateResult.getData()==null){

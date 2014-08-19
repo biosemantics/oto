@@ -36,9 +36,11 @@ public class QueryOTO extends AbstractOTOAccessObject {
 	 */
 	public String getUUID(String term, String category, String glossaryType,
 			String definition) {
-		OTOClient otoClient = createOTOClient();
+		return "fakeid";
+		//@TODO hook it back later
+		/*OTOClient otoClient = createOTOClient();
 		return otoClient.insertAndGetGlossaryDictionaryEntry(glossaryType,
-				term, category, definition).getTermID();
+				term, category, definition).getTermID();*/
 	}
 
 	/**

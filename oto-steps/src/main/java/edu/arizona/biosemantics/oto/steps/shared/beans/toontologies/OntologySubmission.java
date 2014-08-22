@@ -27,12 +27,10 @@ public class OntologySubmission implements Serializable {
 
 	private String partOfClass;
 
-	private String otherID;
-
 	private boolean submitAsSynonym;
 
 	private String localOntologyID;
-
+	private String classID;
 	public OntologySubmission() {
 		// has to be here for GWT serializable
 	}
@@ -149,20 +147,14 @@ public class OntologySubmission implements Serializable {
 		return this.partOfClass;
 	}
 
-	public String getOtherID() {
-		return this.otherID;
-	}
-	public void setOtherID(String otherID) {
-		this.otherID = otherID;
-	}
-
-	public void setLocalOntologyID(String prefix) {
+	
+	/*public void setLocalOntologyID(String prefix) {
 		this.localOntologyID = prefix;
 	}
 
 	public String getLocalOntologyID() {
 		return this.localOntologyID;
-	}
+	}*/
 
 	public void setSubmitAsSynonym(boolean asSyn) {
 		this.submitAsSynonym = asSyn;	
@@ -172,4 +164,15 @@ public class OntologySubmission implements Serializable {
 		return this.submitAsSynonym;	
 	}
 
+	/**
+	 * used for submitting sysnonyms to a known class
+	 * @return
+	 */
+	public String getClassID() {
+		return this.classID;
+	}
+
+	public void setClassID(String classid) {
+		this.classID = classid;
+	}
 }

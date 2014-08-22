@@ -137,7 +137,7 @@ public class ToOntologiesServiceImpl extends RemoteServiceServlet implements
 				ToOntologiesDAO.getInstance().addSubmission(submission,
 						Integer.parseInt(uploadID));
 			}*/
-			if (submission.getLocalOntologyID()!=null){
+			if (submission.getOntologyID().startsWith("ETC_")){
 				RPCResult<String> updateResult = ontologyFileService.updateOntologyFile(submission);
 				if(updateResult.getData()==null){
 					result.setMessage("update local ontology failed: ");

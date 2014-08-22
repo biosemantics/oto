@@ -18,11 +18,18 @@ public class Mireot {
 	/**
 	 * 
 	 */
-	public Mireot() {
+	public Mireot(List<OWLClass> classes, OWLOntology ont) {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public OWLOntology extract(List<OWLClassExpression> classes, OWLOntology ont){
+	public Mireot(OWLClass classes, OWLOntology ont) {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public OWLOntology extract(){
+		
+		
+		
 		return null;
 	}
 

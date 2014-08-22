@@ -61,7 +61,7 @@ public class ToOntologyView extends Composite implements ToOntologyPresenter.Dis
 		layout.add(top);
 		layout.setWidgetTopHeight(top, 1, Unit.PCT, 15, Unit.PCT);
 		Label instruction1 = new Label();
-		instruction1.setText("This is an optional step where you can organize your terms into a local ontology (specific for a taxon group) and submit your terms to some other ontologies via Bioportal. You can skip this step by clicking on 'Next'.");
+		instruction1.setText("This is an optional step where you can organize your terms into a local ontology (specific for a taxon group) and/or submit your terms to some other ontologies via Bioportal. You can skip this step by clicking on 'Next'.");
 		top.add(instruction1);
 
 
@@ -132,7 +132,7 @@ public class ToOntologyView extends Composite implements ToOntologyPresenter.Dis
 	}
 	@Override
 	public void setLocalOntoPanel(){
-		Label ontoName = new Label("Name your local ontology: ");
+		Label ontoName = new Label("File name for your local ontology: ");
 		//ontoName.addStyleName("field_label");
 		localOntoName = new TextBox();
 		localOntoName.setHeight("10px");

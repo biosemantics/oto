@@ -217,8 +217,6 @@ public class ToOntologyPresenter implements Presenter {
 
 					@Override
 					public void onSelect(OntologyRecordSelectChangedEvent event) {
-						//change button label from "Submit to Ontology" to "Add to Local Ontology"
-						//display.getMiddlePanel().getWidget()
 						displayOntologyRecordDetail(event.getSelectedRecord()
 								.getType(), event.getSelectedRecord().getId());
 								

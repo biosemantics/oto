@@ -35,7 +35,7 @@ public class OntologyServiceImpl implements OntologyService {
 	 */
 	@Override
 	public boolean exists(OWLOntology ont, OWLClass clas) {
-		return ont.getClassesInSignature(true).contains(clas);
+		return ont.getClassesInSignature(true).contains(clas); //include all imported ontos
 	}
 
 	/* (non-Javadoc)

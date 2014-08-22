@@ -63,7 +63,8 @@ public class SubmissionDetailView extends Composite implements
 		row++;
 		layout.setHTML(row, 0, "Ontology: ");
 		cellFormatter.addStyleName(row, 0, "tbl_field_label");
-		String onto = submission.getOntologyID()==null || submission.getOntologyID().isEmpty()? submission.getLocalOntologyID() : submission.getOntologyID(); 
+		//String onto = submission.getOntologyID()==null || submission.getOntologyID().isEmpty()? submission.getLocalOntologyID() : submission.getOntologyID(); 
+		String onto = submission.getOntologyID(); 
 		layout.setHTML(row, 1, onto);
 
 		row++;

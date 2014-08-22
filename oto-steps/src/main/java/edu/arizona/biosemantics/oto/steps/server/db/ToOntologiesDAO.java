@@ -152,7 +152,7 @@ public class ToOntologiesDAO extends AbstractDAO {
 			pstmt_select = conn.prepareStatement(sql);
 			pstmt_select.setString(1, userID);
 			rset = pstmt_select.executeQuery();
-			if(rset.next()){
+			while(rset.next()){
 				info.add(new OntologyInfo(rset.getString("filename"), rset.getString("prefix"), rset.getString("otype"), rset.getString("taxongroup")));
 			}
 		}catch (SQLException e){
@@ -243,11 +243,11 @@ public class ToOntologiesDAO extends AbstractDAO {
 					else ontologyID += ontoID+",";
 				}
 				submission.setOntologyID(ontologyID.replaceFirst(",$", ""));
-				submission.setLocalOntologyID(localOntologyID.replaceFirst(",$", ""));
+				//submission.setLocalOntologyID(localOntologyID.replaceFirst(",$", ""));
 				submission.setSource(rset.getString("source"));
 				submission.setSampleSentence(rset.getString("sampleSentence"));
 				submission.setSynonyms(rset.getString("synonyms"));
-				submission.setOtherID(rset.getString("otherClassIDs4Term"));
+				submission.setClassID(rset.getString("otherClassIDs4Term"));
 				submission.setPartOfClass(rset.getString("partOfClassID"));
 				submission.setSubmitAsSynonym(rset.getBoolean("submitAsSynonym"));	
 			}
@@ -908,7 +908,8 @@ public class ToOntologiesDAO extends AbstractDAO {
 					+ "synonyms = ?, " + "source = ?, sampleSentence = ?, term =?, category=?, submitAsSynonym=?, otherClassIDs4Term=? , submittedBy=?"
 					+ "where ID = ? ";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, (submission.getOntologyID()+","+submission.getLocalOntologyID()).replaceAll("^,|,$", ""));
+			//pstmt.setString(1, (submission.getOntologyID()/*+","+submission.getLocalOntologyID()*/).replaceAll("^,|,$", ""));
+			pstmt.setString(1, submission.getOntologyID());
 			pstmt.setString(2, submission.getSuperClass());
 			pstmt.setString(3, submission.getPartOfClass());
 			pstmt.setString(4, submission.getDefinition());
@@ -918,7 +919,7 @@ public class ToOntologiesDAO extends AbstractDAO {
 			pstmt.setString(8, submission.getTerm());
 			pstmt.setString(9, submission.getCategory());
 			pstmt.setInt(10, submission.getSubmitAsSynonym()? 1 : 0);
-			pstmt.setString(11, submission.getOtherID());
+			pstmt.setString(11, submission.getClassID());
 			pstmt.setString(12, submission.getSubmittedBy());
 			pstmt.setInt(13, Integer.parseInt(submission.getSubmissionID()));
 			pstmt.executeUpdate();
@@ -948,7 +949,8 @@ public class ToOntologiesDAO extends AbstractDAO {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, submission.getTerm());
 			pstmt.setString(2, submission.getCategory());
-			pstmt.setString(3, (submission.getOntologyID()+","+submission.getLocalOntologyID()).replaceAll("^,|,$", "")); //at least one of them is not empty
+			//pstmt.setString(3, (submission.getOntologyID()+","+submission.getLocalOntologyID()).replaceAll("^,|,$", "")); //at least one of them is not empty
+			pstmt.setString(3, submission.getOntologyID()); //at least one of them is not empty
 			pstmt.setString(4, submission.getSubmittedBy());
 			pstmt.setString(5, submission.getLocalID());
 
@@ -961,13 +963,13 @@ public class ToOntologiesDAO extends AbstractDAO {
 
 			pstmt.setString(12, submission.getSource());
 			pstmt.setString(13, submission.getSampleSentence());
-			if(!submission.getLocalOntologyID().isEmpty()){
+			if(submission.getOntologyID().startsWith("ETC_")){
 				pstmt.setInt(14, 1); //submission to local is automatically accepted
 			}else{
 				pstmt.setInt(14, 0);
 			}
 			pstmt.setInt(15, submission.getSubmitAsSynonym()? 1: 0);
-			pstmt.setString(16, submission.getOtherID());
+			pstmt.setString(16, submission.getClassID());
 			pstmt.executeUpdate();
 			sql = "SELECT LAST_INSERT_ID()";
 			pstmt_id = conn.prepareStatement(sql);

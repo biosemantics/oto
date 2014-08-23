@@ -228,7 +228,7 @@ public class ToOntologiesDAO extends AbstractDAO {
 			if (rset.next()) {
 				submission.setTerm(rset.getString("term"));
 				submission.setCategory(rset.getString("category"));
-				submission.setSubmissionID(rset.getString("ID"));
+				submission.setSubmissionID(ID+"");
 				submission.setSubmittedBy(rset.getString("submittedBy"));
 				submission.setLocalID(rset.getString("localID"));
 				submission.setTmpID(rset.getString("tmpID"));
@@ -237,19 +237,20 @@ public class ToOntologiesDAO extends AbstractDAO {
 				submission.setDefinition(rset.getString("definition"));
 				String[] ontoIDs = rset.getString("ontologyID").split("\\s*[ ,]\\s*");
 				String ontologyID = "";
-				String localOntologyID = "";
 				for(String ontoID: ontoIDs){
-					if(ontoID.startsWith("ETC_")) localOntologyID += ontoID+",";
-					else ontologyID += ontoID+",";
+					ontologyID += ontoID+",";
 				}
 				submission.setOntologyID(ontologyID.replaceFirst(",$", ""));
-				//submission.setLocalOntologyID(localOntologyID.replaceFirst(",$", ""));
 				submission.setSource(rset.getString("source"));
 				submission.setSampleSentence(rset.getString("sampleSentence"));
 				submission.setSynonyms(rset.getString("synonyms"));
-				submission.setClassID(rset.getString("otherClassIDs4Term"));
+				//if(rset.getBoolean("submitAsSynonym")){
+					submission.setClassID(rset.getString("classID"));
+				//}
 				submission.setPartOfClass(rset.getString("partOfClassID"));
 				submission.setSubmitAsSynonym(rset.getBoolean("submitAsSynonym"));	
+				submission.setEorQ(rset.getString("EorQ"));
+				submission.setClassID(rset.getString("classID"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -905,7 +906,7 @@ public class ToOntologiesDAO extends AbstractDAO {
 			conn = getConnection();
 			String sql = "update ontology_submissions set ontologyID = ?, "
 					+ "superClassID = ?, " +"partOfClassID = ?, " + "definition = ?,"
-					+ "synonyms = ?, " + "source = ?, sampleSentence = ?, term =?, category=?, submitAsSynonym=?, otherClassIDs4Term=? , submittedBy=?"
+					+ "synonyms = ?, " + "source = ?, sampleSentence = ?, term =?, category=?, submitAsSynonym=?, EorQ=? , classID=?, submittedBy=?"
 					+ "where ID = ? ";
 			pstmt = conn.prepareStatement(sql);
 			//pstmt.setString(1, (submission.getOntologyID()/*+","+submission.getLocalOntologyID()*/).replaceAll("^,|,$", ""));
@@ -919,9 +920,10 @@ public class ToOntologiesDAO extends AbstractDAO {
 			pstmt.setString(8, submission.getTerm());
 			pstmt.setString(9, submission.getCategory());
 			pstmt.setInt(10, submission.getSubmitAsSynonym()? 1 : 0);
-			pstmt.setString(11, submission.getClassID());
-			pstmt.setString(12, submission.getSubmittedBy());
-			pstmt.setInt(13, Integer.parseInt(submission.getSubmissionID()));
+			pstmt.setString(11, submission.getEorQ());
+			pstmt.setString(12,  submission.getClassID());
+			pstmt.setString(13, submission.getSubmittedBy());
+			pstmt.setInt(14, Integer.parseInt(submission.getSubmissionID()));
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -944,8 +946,8 @@ public class ToOntologiesDAO extends AbstractDAO {
 			String sql = "insert into ontology_submissions"
 					+ "(term, category, ontologyID, submittedBy, localID, "
 					+ "tmpID, permanentID, superClassID, partOfClassID, synonyms, definition, "
-					+ "source, sampleSentence, accepted, submitAsSynonym, otherClassIDs4Term) " + "values "
-					+ "(?, ?, ?, ?, ?, " + "?, ?, ?,?, ?, ?, " + "? ,?, ?, ?, ?)";
+					+ "source, sampleSentence, accepted, submitAsSynonym, EorQ, classID) " + "values "
+					+ "(?, ?, ?, ?, ?, " + "?, ?, ?,?, ?, ?, " + "? ,?, ?, ?, ?,?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, submission.getTerm());
 			pstmt.setString(2, submission.getCategory());
@@ -969,7 +971,8 @@ public class ToOntologiesDAO extends AbstractDAO {
 				pstmt.setInt(14, 0);
 			}
 			pstmt.setInt(15, submission.getSubmitAsSynonym()? 1: 0);
-			pstmt.setString(16, submission.getClassID());
+			pstmt.setString(16, submission.getEorQ());
+			pstmt.setString(17, submission.getClassID()==null? "":submission.getClassID());//for submittedAsSynonym terms.
 			pstmt.executeUpdate();
 			sql = "SELECT LAST_INSERT_ID()";
 			pstmt_id = conn.prepareStatement(sql);

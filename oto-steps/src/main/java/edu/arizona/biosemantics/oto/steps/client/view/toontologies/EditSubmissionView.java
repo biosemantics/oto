@@ -390,7 +390,7 @@ public class EditSubmissionView extends Composite implements
 		}
 		data.setCategory(categoryBox.getText());
 		data.setEorQ(isEntity.getValue()? "entity":"quality");
-		data.setClassID(classIDBox.getText().trim());
+		data.setClassID(classIDBox.getText().trim().compareTo("http://purl.obolibrary.org/obo/")==0? "":classIDBox.getText().trim());
 		data.setOntologyID(ontologyBox.getItemText(ontologyBox
 				.getSelectedIndex()).trim());
 		//data.setLocalOntologyID(localOntologyBox.getItemText(localOntologyBox

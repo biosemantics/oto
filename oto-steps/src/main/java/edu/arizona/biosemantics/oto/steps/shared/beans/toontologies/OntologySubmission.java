@@ -29,7 +29,7 @@ public class OntologySubmission implements Serializable {
 
 	private boolean submitAsSynonym;
 
-	private String localOntologyID;
+	//private String localOntologyID;
 	private String classID;
 
 	private String EorQ;

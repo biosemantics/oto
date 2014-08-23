@@ -459,7 +459,7 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 		submission.setSuperClass(superString);	
 		submission.setTmpID("");
 
-		//consistent, now update records and ontology
+		//now update records and ontology, check for consistency later
 		result.setData(newTerm);
 		result.setSucceeded(true);
 		return;
@@ -619,9 +619,9 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 				if(superTerm.startsWith("http")){
 					superClass = factory.getOWLClass(IRI.create(superTerm)); //extract mireot module related to superClass
 					OWLOntology moduleOnto = extractModule(ont, manager,
-							reasoner, factory, superTerm, superClass);
+							reasoner, factory, superClass);
 					introducedClasses.addAll(moduleOnto.getClassesInSignature());
-				}else{
+				}else{//this block is not executed because we require all superTerm to be a known class with IRI
 					clabel = factory.getOWLLiteral(superTerm, "en");
 					superClass = factory.getOWLClass(":"+superTerm.replaceAll("\\s+", "_"), pm); //use ID here.
 					introducedClasses.add(superClass);
@@ -673,7 +673,7 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 						//external 
 						wholeClass = factory.getOWLClass(IRI.create(wholeTerm)); //extract module
 						OWLOntology moduleOnto = extractModule(ont, manager,
-								reasoner, factory, wholeTerm, wholeClass);
+								reasoner, factory,  wholeClass);
 						introducedClasses.addAll(moduleOnto.getClassesInSignature());
 					}else{
 						//local
@@ -702,7 +702,7 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 			}
 		}
 
-		//consistent, now update records and ontology
+		//now update records and ontology and check for consistency later
 		submission.setPermanentID(newClass.getIRI().toString()); //accepted to internal ontology right away
 		result.setData(newTerm);
 		result.setSucceeded(true);
@@ -717,7 +717,7 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 		OWLClass newClass;
 		newClass = factory.getOWLClass(IRI.create(classID));
 		OWLOntology moduleOnto = extractModule(ont, manager,
-				reasoner, factory, newTerm, newClass);
+				reasoner, factory, newClass);
 		OWLAxiom subclassAxiom;
 		//make all added class subclass of quality/entity
 		if(isQuality){//add a quality
@@ -744,7 +744,7 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 
 	private OWLOntology extractModule(OWLOntology ont,
 			OWLOntologyManager manager, OWLReasoner reasoner,
-			OWLDataFactory factory, String term, OWLClass claz)
+			OWLDataFactory factory, OWLClass claz)
 			throws SQLException, Exception {
 		OWLOntology ontology = fetchParentOntology(claz.getIRI());
 		//create and save inference-entailment module as an ontology file
@@ -752,7 +752,7 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 		        manager, ontology, ModuleType.STAR);
 		Set<OWLEntity> seeds = new HashSet<OWLEntity>();
 		seeds.add(claz);
-		File mod = new File(Configuration.fileBase, "module."+term+".owl");
+		File mod = new File(Configuration.fileBase, "module."+getLabel(claz, factory)+".owl");
 		//IRI moduleIRI = IRI.create(Configuration.ontology_dir+"\\"+"module."+term+".owl");
 		IRI moduleIRI = IRI.create(mod);
 		OWLOntology moduleOnto = sme.extractAsOntology(seeds, moduleIRI, -1, 0, reasoner); //take all superclass and no subclass into the seeds.

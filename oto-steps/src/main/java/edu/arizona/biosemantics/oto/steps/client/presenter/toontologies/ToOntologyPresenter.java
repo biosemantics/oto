@@ -257,7 +257,6 @@ public class ToOntologyPresenter implements Presenter {
 
 		eventBus.addHandler(BackToDetailViewEvent.TYPE,
 				new BackToDetailViewEventHandler() {
-
 					@Override
 					public void onClick(BackToDetailViewEvent event) {
 						// display the detail view

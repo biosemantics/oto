@@ -31,6 +31,8 @@ public class OntologySubmission implements Serializable {
 
 	private String localOntologyID;
 	private String classID;
+
+	private String EorQ;
 	public OntologySubmission() {
 		// has to be here for GWT serializable
 	}
@@ -175,4 +177,12 @@ public class OntologySubmission implements Serializable {
 	public void setClassID(String classid) {
 		this.classID = classid;
 	}
+
+	public void setEorQ(String string) {
+		this.EorQ = string;
+	}
+	public String getEorQ() {
+		return this.EorQ;
+	}
+	
 }

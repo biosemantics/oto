@@ -348,7 +348,7 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
        
 		//collect data
 		String newTerm = submission.getTerm();
-		boolean isQuality = submission.getCategory().compareTo("quality")==0;
+		boolean isQuality = submission.getEorQ().compareTo("quality")==0;
 		//String source = submission.getSource();
 		//String etcLocalID = submission.getLocalID();
 		String[] classIDs = submission.getClassID()==null ||submission.getClassID().trim().isEmpty()? null : submission.getClassID().split("\\s*,\\s*");
@@ -502,7 +502,7 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 	private void updateOntologyWithNewClass(OWLOntology ont, OntologySubmission submission, OWLOntologyManager manager, PrefixManager pm, RPCResult<String> result, OWLReasoner reasoner) throws Exception{
 		//collect data
 		String newTerm = submission.getTerm();
-		boolean isQuality = submission.getCategory().compareTo("quality")==0;
+		boolean isQuality = submission.getEorQ().compareTo("quality")==0;
 		String definition = submission.getDefinition();
 		String source = submission.getSource();
 		String etcLocalID = submission.getLocalID();

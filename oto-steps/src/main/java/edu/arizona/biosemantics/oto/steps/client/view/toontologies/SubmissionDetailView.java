@@ -61,6 +61,11 @@ public class SubmissionDetailView extends Composite implements
 		layout.setHTML(row, 1, submission.getCategory());
 
 		row++;
+		layout.setHTML(row, 0, "Submitted as : ");
+		cellFormatter.addStyleName(row, 0, "tbl_field_label");
+		layout.setHTML(row, 1, submission.getEorQ());
+		
+		row++;
 		layout.setHTML(row, 0, "Ontology: ");
 		cellFormatter.addStyleName(row, 0, "tbl_field_label");
 		//String onto = submission.getOntologyID()==null || submission.getOntologyID().isEmpty()? submission.getLocalOntologyID() : submission.getOntologyID(); 

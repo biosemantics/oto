@@ -34,7 +34,7 @@ public class EditSubmissionView extends Composite implements
 
 	private TextBox termBox;
 	private CheckBox asSynBox;
-	//private TextBox categoryBox;
+	private TextBox categoryBox;
 	private ListBox ontologyBox;
 	private TextBox superClassBox;
 	private TextArea definitionArea;
@@ -138,7 +138,7 @@ public class EditSubmissionView extends Composite implements
 		layout.setWidget(row, 1, isQuality);
 		
 		//etc internal category the term belongs to, e.g. structure
-		/*row++;
+		row++;
 		layout.setHTML(row, 0, "*Category  ");
 		categoryBox = new TextBox();
 		categoryBox.setText(submission.getCategory());
@@ -146,7 +146,7 @@ public class EditSubmissionView extends Composite implements
 		categoryBox.setEnabled(false);
 		cellFormatter.addStyleName(row, 0, "tbl_field_label");
 		layout.setWidget(row, 1, categoryBox);
-		*/
+	
 
 		//local or external ontology where the term will be added or submitted to
 		row++;
@@ -388,7 +388,8 @@ public class EditSubmissionView extends Composite implements
 			data.setPartOfClass(partOfClassBox.getText().trim().compareTo("http://purl.obolibrary.org/obo/")==0? "":partOfClassBox.getText().trim());	
 			data.setSuperClass(superClassBox.getText().trim().compareTo("http://purl.obolibrary.org/obo/")==0? "":superClassBox.getText().trim());
 		}
-		data.setCategory(isEntity.getValue()? "entity":"quality");
+		data.setCategory(categoryBox.getText());
+		data.setEorQ(isEntity.getValue()? "entity":"quality");
 		data.setClassID(classIDBox.getText().trim());
 		data.setOntologyID(ontologyBox.getItemText(ontologyBox
 				.getSelectedIndex()).trim());

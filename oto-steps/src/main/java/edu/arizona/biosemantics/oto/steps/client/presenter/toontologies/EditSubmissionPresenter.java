@@ -60,8 +60,26 @@ public class EditSubmissionPresenter implements Presenter {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				eventBus.fireEvent(new SubmitSubmissionEvent(display
-						.getDataToSubmit(), display.getType()));
+				OntologySubmission submission = display.getDataToSubmit();
+				String error ="The following requires a value: ";
+				if(submission.getTerm().length()==0)
+					error += System.getProperty("line.separator", "\n")+"Term, ";
+				if(submission.getOntologyID().length()==0)
+					error += System.getProperty("line.separator", "\n")+"Target ontology, ";
+				if(submission.getEorQ().length()==0)
+					error += System.getProperty("line.separator", "\n")+"E or Q, ";
+				if(submission.getSubmitAsSynonym() && submission.getClassID().length()==0)
+					error += System.getProperty("line.separator", "\n")+"Class ID, ";
+				if(!submission.getSubmitAsSynonym() && submission.getClassID().length()==0 && submission.getDefinition().length()==0)
+					error += System.getProperty("line.separator", "\n")+"Definition, ";
+				if(!submission.getSubmitAsSynonym() && (submission.getClassID()+submission.getSuperClass()+submission.getPartOfClass()).length()==0)
+					error += System.getProperty("line.separator", "\n")+"One of Class ID, Superclass, and Part of must have a value, ";
+				
+				error = error.replaceFirst(",\\s+$", "");
+				if(error.compareTo("The following requires a value: ")==0)
+					eventBus.fireEvent(new SubmitSubmissionEvent(submission, display.getType()));
+				else
+					Window.alert(error);
 			}
 		});
 		

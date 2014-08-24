@@ -19,7 +19,6 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.AddImport;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
-import org.semanticweb.owlapi.model.OWLAnnotationAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
@@ -31,9 +30,7 @@ import org.semanticweb.owlapi.model.OWLImportsDeclaration;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
-import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.PrefixManager;
 import org.semanticweb.owlapi.reasoner.ConsoleProgressMonitor;
 import org.semanticweb.owlapi.reasoner.Node;
@@ -49,12 +46,10 @@ import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 import uk.ac.manchester.cs.owlapi.modularity.ModuleType;
 import uk.ac.manchester.cs.owlapi.modularity.SyntacticLocalityModuleExtractor;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import edu.arizona.biosemantics.oto.steps.server.Configuration;
 import edu.arizona.biosemantics.oto.steps.server.db.ToOntologiesDAO;
-import edu.arizona.biosemantics.oto.steps.server.ontology.Mireot;
 import edu.arizona.biosemantics.oto.steps.shared.rpc.OntologyFileService;
 import edu.arizona.biosemantics.oto.steps.shared.rpc.RPCResult;
 import edu.arizona.biosemantics.oto.steps.shared.beans.toontologies.OntologyInfo;
@@ -63,6 +58,21 @@ import edu.arizona.biosemantics.oto.steps.shared.beans.toontologies.OntologySubm
 /**
  * @author Hong Cui
  * This service takes care of access to ontology files, both user created or existing ones.
+ * 
+ * 
+ * 
+ * ontology creation use cases:
+					 * add a synonym to a known class (local or external) => the synonym and its class will be in local
+					 * add a new class from an external ontology to local => class and its related module will be added in the local 
+					 * add a new term to local with a known class from the external ontology as its superclass => new class will be created, and the superclass and its module added in the local
+					 * add a new term to local without a known class from the external ontology as its superclass, but with a super term that need also to be added to local => new class and its superclass will be created in the local and made descendant classes of entity/quality 
+					 * add a new term without superclass => new class will be created and made subclass of entity/quality  
+
+					 * 
+					 * There will be cases where we'd like to add a new term to local, but there is not a sufficiently good superclass for the term in external ontology. In this case, we need to 
+					 * add needed ancestor classes first to local. One of the ancestor class need to have a superclass in the external ontology. In rare cases where no superclass can be located in the 
+					 * external ontology, the to-be added  
+					  
  *
  */
 public class OntologyFileServiceImpl extends RemoteServiceServlet implements OntologyFileService{
@@ -72,8 +82,37 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 	 */
 	private static final long serialVersionUID = -668703714442141846L;
 	private OntologyServiceImpl ontologyService = new OntologyServiceImpl();
-	static Hashtable referencedOntologies = null;
+	static Hashtable<String, OWLOntology> referencedOntologies = null;
+	private static OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+	private static OWLDataFactory factory = manager.getOWLDataFactory();
+	private static OWLClass entity = null;
+	private static OWLClass quality = null;
+	private static OWLObjectProperty partOf = null;
+	private static OWLAnnotationProperty label = null;
+	private static OWLAnnotationProperty synAnnotation = null;
+	private static OWLAnnotationProperty defAnnotation =null;
+	private static OWLAnnotationProperty creationDateAnnotation = null;
+	private static OWLAnnotationProperty createdByAnnotation = null;
+	private static OWLAnnotationProperty rSynAnnotation = null;
+	private static OWLAnnotationProperty nSynAnnotation = null;
+	private static OWLAnnotationProperty eSynAnnotation = null;
+	private static OWLAnnotationProperty bSynAnnotation = null;
 	
+
+	static{
+		entity = factory.getOWLClass(IRI.create("http://purl.obolibrary.org/obo/CARO_0000006")); //material anatomical entity
+		quality = factory.getOWLClass(IRI.create("http://purl.obolibrary.org/obo/PATO_0000001")); //quality
+		partOf = factory.getOWLObjectProperty(IRI.create("http://purl.obolibrary.org/obo/BFO_0000050"));
+		label = factory.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI());
+		synAnnotation = factory.getOWLAnnotationProperty(IRI.create("http://www.geneontology.org/formats/oboInOwl#hasExactSynonym"));
+		defAnnotation = factory.getOWLAnnotationProperty(IRI.create("http://purl.obolibrary.org/obo/IAO_0000115"));
+		creationDateAnnotation = factory.getOWLAnnotationProperty(IRI.create("http://www.geneontology.org/formats/oboInOwl#creation_date"));
+		createdByAnnotation = factory.getOWLAnnotationProperty(IRI.create("http://www.geneontology.org/formats/oboInOwl#created_by"));
+		rSynAnnotation = factory.getOWLAnnotationProperty(IRI.create("http://www.geneontology.org/formats/oboInOwl#hasRelatedSynonym"));
+		nSynAnnotation = factory.getOWLAnnotationProperty(IRI.create("http://www.geneontology.org/formats/oboInOwl#hasNarrowSynonym"));
+		eSynAnnotation = factory.getOWLAnnotationProperty(IRI.create("http://www.geneontology.org/formats/oboInOwl#hasExactSynonym"));
+		bSynAnnotation = factory.getOWLAnnotationProperty(IRI.create("http://www.geneontology.org/formats/oboInOwl#hasBroadSynonym"));
+	}
 		
 	
 
@@ -104,7 +143,7 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 			String type, String taxonGroup) throws Exception{
 
 		OntologyInfo info = new OntologyInfo(newOnto.getName(), prefix, type, taxonGroup);
-		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+		//OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		//OntologyIRI and DocumentIRI mapping, create ontology
 		IRI ontologyIRI = IRI
 				.create(Configuration.etc_ontology_baseIRI+prefix.toLowerCase()+".owl");
@@ -112,7 +151,7 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 		SimpleIRIMapper mapper = new SimpleIRIMapper(ontologyIRI, documentIRI);
 		manager.addIRIMapper(mapper);
 		OWLOntology ont = manager.createOntology(ontologyIRI);
-		OWLDataFactory factory = manager.getOWLDataFactory();
+		//OWLDataFactory factory = manager.getOWLDataFactory();
 		//add namespaces
 
 		//import base ontologies: general
@@ -129,106 +168,91 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 		}
 
 		//add annotation properties
-		OWLAnnotationProperty label = factory
-				.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI());
+		//OWLAnnotationProperty label = factory
+		//		.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI());
 		/*
 		    <owl:AnnotationProperty rdf:about="http://purl.obolibrary.org/obo/IAO_0000115">
 	        	<rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">definition</rdfs:label>
 	    	</owl:AnnotationProperty>
 		 */
-		OWLAnnotationProperty annotation = factory.getOWLAnnotationProperty(IRI.create("http://purl.obolibrary.org/obo/IAO_0000115"));
+		//OWLAnnotationProperty annotation = factory.getOWLAnnotationProperty(IRI.create("http://purl.obolibrary.org/obo/IAO_0000115"));
 		OWLLiteral literal = factory.getOWLLiteral("definition");
 		OWLAnnotation anno = factory.getOWLAnnotation(label,literal);
-		OWLAxiom axiom = factory.getOWLAnnotationAssertionAxiom(annotation.getIRI(), anno);
+		OWLAxiom axiom = factory.getOWLAnnotationAssertionAxiom(defAnnotation.getIRI(), anno);
 		manager.addAxiom(ont, axiom);
 
 		/*<owl:AnnotationProperty rdf:about="http://www.geneontology.org/formats/oboInOwl#hasBroadSynonym">
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has_broad_synonym</rdfs:label>
     	</owl:AnnotationProperty>*/
-		annotation = factory.getOWLAnnotationProperty(IRI.create("http://www.geneontology.org/formats/oboInOwl#hasBroadSynonym"));
+		
 		literal = factory.getOWLLiteral("has_broad_synonym");
 		anno = factory.getOWLAnnotation(label,literal);
-		axiom = factory.getOWLAnnotationAssertionAxiom(annotation.getIRI(), anno);
+		axiom = factory.getOWLAnnotationAssertionAxiom(bSynAnnotation.getIRI(), anno);
 		manager.addAxiom(ont, axiom);
 
 		/*
 	    <owl:AnnotationProperty rdf:about="http://www.geneontology.org/formats/oboInOwl#hasExactSynonym">
 	        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has_exact_synonym</rdfs:label>
 	    </owl:AnnotationProperty>*/
-		annotation = factory.getOWLAnnotationProperty(IRI.create("http://www.geneontology.org/formats/oboInOwl#hasExactSynonym"));
 		literal = factory.getOWLLiteral("has_exact_synonym");
 		anno = factory.getOWLAnnotation(label,literal);
-		axiom = factory.getOWLAnnotationAssertionAxiom(annotation.getIRI(), anno);
+		axiom = factory.getOWLAnnotationAssertionAxiom(eSynAnnotation.getIRI(), anno);
 		manager.addAxiom(ont, axiom);
 
 		/*
 	    <owl:AnnotationProperty rdf:about="http://www.geneontology.org/formats/oboInOwl#hasNarrowSynonym">
 	        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has_narrow_synonym</rdfs:label>
 	    </owl:AnnotationProperty>*/
-		annotation = factory.getOWLAnnotationProperty(IRI.create("http://www.geneontology.org/formats/oboInOwl#hasNarrowSynonym"));
 		literal = factory.getOWLLiteral("has_narrow_synonym");
 		anno = factory.getOWLAnnotation(label,literal);
-		axiom = factory.getOWLAnnotationAssertionAxiom(annotation.getIRI(), anno);
+		axiom = factory.getOWLAnnotationAssertionAxiom(nSynAnnotation.getIRI(), anno);
 		manager.addAxiom(ont, axiom);
 
 		/*
 	    <owl:AnnotationProperty rdf:about="http://www.geneontology.org/formats/oboInOwl#hasRelatedSynonym">
 	        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">has_related_synonym</rdfs:label>
 	    </owl:AnnotationProperty>*/
-		annotation = factory.getOWLAnnotationProperty(IRI.create("http://www.geneontology.org/formats/oboInOwl#hasRelatedSynonym"));
 		literal = factory.getOWLLiteral("has_related_synonym");
 		anno = factory.getOWLAnnotation(label,literal);
-		axiom = factory.getOWLAnnotationAssertionAxiom(annotation.getIRI(), anno);
+		axiom = factory.getOWLAnnotationAssertionAxiom(rSynAnnotation.getIRI(), anno);
 		manager.addAxiom(ont, axiom);
 
 		/*
 	    <owl:AnnotationProperty rdf:about="http://www.geneontology.org/formats/oboInOwl#created_by"/>*/
-		annotation = factory.getOWLAnnotationProperty(IRI.create("http://www.geneontology.org/formats/oboInOwl#created_by"));
 		literal = factory.getOWLLiteral("created_by");
 		anno = factory.getOWLAnnotation(label,literal);
-		axiom = factory.getOWLAnnotationAssertionAxiom(annotation.getIRI(), anno);
+		axiom = factory.getOWLAnnotationAssertionAxiom(createdByAnnotation.getIRI(), anno);
 		manager.addAxiom(ont, axiom);
 
 		/*
 	    <owl:AnnotationProperty rdf:about="http://www.geneontology.org/formats/oboInOwl#creation_date"/>*/
-		annotation = factory.getOWLAnnotationProperty(IRI.create("http://www.geneontology.org/formats/oboInOwl#creation_date"));
 		literal = factory.getOWLLiteral("creation_date");
 		anno = factory.getOWLAnnotation(label,literal);
-		axiom = factory.getOWLAnnotationAssertionAxiom(annotation.getIRI(), anno);
+		axiom = factory.getOWLAnnotationAssertionAxiom(creationDateAnnotation.getIRI(), anno);
 		manager.addAxiom(ont, axiom);
 
-		//create entity and quality classes
-		PrefixManager pm = new DefaultPrefixManager(
-				Configuration.etc_ontology_baseIRI+prefix.toLowerCase()+"#");
+		//entity and quality classes and part_of, has_part relations are imported from ro, a "general" ontology
+		//PrefixManager pm = new DefaultPrefixManager(
+		//		Configuration.etc_ontology_baseIRI+prefix.toLowerCase()+"#");
 
-		OWLLiteral clabel = factory.getOWLLiteral("entity", "en");
-		anno = factory.getOWLAnnotation(label, clabel);
-		OWLClass entityClass = factory.getOWLClass(":entity", pm); //use ID, then create label
-		axiom = factory.getOWLDeclarationAxiom(entityClass);
+		
+		/*OWLClass entity = factory.getOWLClass(IRI.create("http://purl.obolibrary.org/obo/CARO_0000006")); //material anatomical entity
+		OWLLiteral clabel = factory.getOWLLiteral("material anatomical entity", "en");
+		axiom = factory.getOWLDeclarationAxiom(entity);
 		manager.addAxiom(ont, axiom);
-		axiom = factory.getOWLAnnotationAssertionAxiom(entityClass.getIRI(), anno);
+		axiom = factory.getOWLAnnotationAssertionAxiom(entity.getIRI(), factory.getOWLAnnotation(label, clabel));
 		manager.addAxiom(ont, axiom);
 
-		OWLClass entity = factory.getOWLClass(IRI.create("http://purl.obolibrary.org/obo/BFO_0000001"));
-		axiom = factory.getOWLEquivalentClassesAxiom(entity, entityClass);
+		OWLClass quality = factory.getOWLClass(IRI.create("http://purl.obolibrary.org/obo/PATO_0000001")); //quality
+		clabel = factory.getOWLLiteral("quality", "en");
+		axiom = factory.getOWLDeclarationAxiom(entity);
+		manager.addAxiom(ont, axiom);
+		axiom = factory.getOWLAnnotationAssertionAxiom(entity.getIRI(), factory.getOWLAnnotation(label, clabel));
 		manager.addAxiom(ont, axiom);
 		
 
-		clabel = factory.getOWLLiteral("quality", "en");
-		anno = factory.getOWLAnnotation(label, clabel);
-		OWLClass qualityClass = factory.getOWLClass(":quality", pm); //use ID, then create label
-		axiom = factory.getOWLDeclarationAxiom(qualityClass);
-		manager.addAxiom(ont, axiom);
-		axiom = factory.getOWLAnnotationAssertionAxiom(qualityClass.getIRI(), anno);
-		manager.addAxiom(ont, axiom);
 
-		OWLClass patoQuality = factory.getOWLClass(IRI.create("http://purl.obolibrary.org/obo/PATO_0000001"));
-		axiom = factory.getOWLEquivalentClassesAxiom(patoQuality, qualityClass);
-		manager.addAxiom(ont, axiom);
 
-		//disjoint entity and quality classes
-		axiom = factory.getOWLDisjointClassesAxiom(entityClass, qualityClass);
-		manager.addAxiom(ont, axiom);
 
 		//has_part/part_of inverse object properties
 		OWLObjectProperty hasPart = factory.getOWLObjectProperty(":has_part", pm);
@@ -238,7 +262,10 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 
 		manager.addAxiom(ont, factory.getOWLTransitiveObjectPropertyAxiom(partOf));
 		manager.addAxiom(ont, factory.getOWLTransitiveObjectPropertyAxiom(hasPart));
-
+		*/
+		//disjoint entity and quality classes
+		axiom = factory.getOWLDisjointClassesAxiom(entity, quality);
+		manager.addAxiom(ont, axiom);
 		//save ontology to file
 		manager.saveOntology(ont, documentIRI);	
 		return info;
@@ -251,7 +278,7 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 	 */
 	@Override
 	public RPCResult<String> updateOntologyFile(OntologySubmission submission) throws Exception {
-		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+		//OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 		//preload PO, PATO, HAO, PORO, and RO
 
 		if(referencedOntologies==null){
@@ -307,9 +334,9 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 
 		boolean asSynonym = submission.getSubmitAsSynonym();
 		if(asSynonym){
-			updateOntologyWithNewSynonym(ont, submission, manager, pm, result, reasoner);
+			updateOntologyWithNewSynonym(ont, submission,  pm, result, reasoner);
 		}else{
-			updateOntologyWithNewClass(ont, submission, manager, pm, result, reasoner);
+			updateOntologyWithNewClass(ont, submission,  pm, result, reasoner);
 		}
 		
 		//consistency checking, if not consistent, the problem need to be fixed manually. 
@@ -344,7 +371,7 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 	 * @param result
 	 * @throws Exception
 	 */
-	private void updateOntologyWithNewSynonym(OWLOntology ont, OntologySubmission submission, OWLOntologyManager manager, PrefixManager pm, RPCResult<String> result, OWLReasoner reasoner) throws Exception{
+	private void updateOntologyWithNewSynonym(OWLOntology ont, OntologySubmission submission, PrefixManager pm, RPCResult<String> result, OWLReasoner reasoner) throws Exception{
        
 		//collect data
 		String newTerm = submission.getTerm();
@@ -355,13 +382,6 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 		//String submittedBy = submission.getSubmittedBy();
 		//String sampleSent = submission.getSampleSentence();
 		String [] synonyms = submission.getSynonyms()==null ||  submission.getSynonyms().trim().isEmpty() ? null  : submission.getSynonyms().split("\\s*,\\s*");
-
-		//prepare needed annotation properties
-		OWLDataFactory factory = manager.getOWLDataFactory();
-		OWLAnnotationProperty label = factory
-				.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI());
-		OWLAnnotationProperty synAnnotation = factory.getOWLAnnotationProperty(IRI.create("http://www.geneontology.org/formats/oboInOwl#hasExactSynonym"));
-		OWLAnnotationProperty defAnnotation = factory.getOWLAnnotationProperty(IRI.create("http://purl.obolibrary.org/obo/IAO_0000115"));
 
 		ArrayList<OWLClass> class4Syn = new ArrayList<OWLClass>();//in the same order
 		ArrayList<String> superClass4Syn = new ArrayList<String>();//as the above
@@ -379,10 +399,8 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 							ontology4Syn, theClass);
 				}else if(!exist){
 					//an external class does not exist => add class, then add syn	
-					OWLClass quality = factory.getOWLClass(":quality", pm);
-					OWLClass entity = factory.getOWLClass(":entity", pm);
-					theClass = addModuleOfClass(ont, manager, result, reasoner,
-							newTerm, isQuality, classID, factory, quality, entity);  
+					theClass = addModuleOfClass(ont, result, reasoner,
+							newTerm, isQuality, classID, quality, entity);  
 					
 					addSynonymToClass(ont, manager, newTerm, factory, class4Syn, superClass4Syn,
 							ontology4Syn, theClass);					
@@ -499,7 +517,7 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 	 * @param pm 
 	 * @return the classID of the new term.
 	 */
-	private void updateOntologyWithNewClass(OWLOntology ont, OntologySubmission submission, OWLOntologyManager manager, PrefixManager pm, RPCResult<String> result, OWLReasoner reasoner) throws Exception{
+	private void updateOntologyWithNewClass(OWLOntology ont, OntologySubmission submission, PrefixManager pm, RPCResult<String> result, OWLReasoner reasoner) throws Exception{
 		//collect data
 		String newTerm = submission.getTerm();
 		boolean isQuality = submission.getEorQ().compareTo("quality")==0;
@@ -513,18 +531,6 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 		String [] isATerms = submission.getSuperClass().split("\\s*,\\s*");
 		String [] partOfTerms = submission.getPartOfClass()==null || submission.getPartOfClass().trim().isEmpty() ? null : submission.getPartOfClass().split("\\s*,\\s*");
 		String [] synonyms = submission.getSynonyms()==null ||  submission.getSynonyms().trim().isEmpty() ? null  : submission.getSynonyms().split("\\s*,\\s*");
-
-
-		OWLDataFactory factory = manager.getOWLDataFactory();
-		//get annotation properties and quality and entity classes
-		OWLAnnotationProperty label = factory
-				.getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI());
-		OWLAnnotationProperty defAnnotation = factory.getOWLAnnotationProperty(IRI.create("http://purl.obolibrary.org/obo/IAO_0000115"));
-		OWLAnnotationProperty synAnnotation = factory.getOWLAnnotationProperty(IRI.create("http://www.geneontology.org/formats/oboInOwl#hasExactSynonym"));
-		OWLAnnotationProperty createdByAnnotation = factory.getOWLAnnotationProperty(IRI.create("http://www.geneontology.org/formats/oboInOwl#created_by"));
-		OWLAnnotationProperty creationDateAnnotation = factory.getOWLAnnotationProperty(IRI.create("http://www.geneontology.org/formats/oboInOwl#creation_date"));
-		OWLClass quality = factory.getOWLClass(":quality", pm);
-		OWLClass entity = factory.getOWLClass(":entity", pm);
 
 		OWLClass newClass = null;
 		if(classID !=null && classID.length()>0){
@@ -543,8 +549,8 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 
 		boolean extractedSuperclassModule = false;
 		if(classID !=null && classID.length()>0){
-			newClass = addModuleOfClass(ont, manager, result, reasoner,
-					newTerm, isQuality, classID, factory, quality, entity);    	
+			newClass = addModuleOfClass(ont, result, reasoner,
+					newTerm, isQuality, classID, quality, entity);    	
 			extractedSuperclassModule = true;
 		}
 		
@@ -598,7 +604,7 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 		if(synonyms!=null){
 			for(String synonym: synonyms){
 				if(!synonym.isEmpty()){
-					OWLAnnotation anno = factory.getOWLAnnotation(synAnnotation, factory.getOWLLiteral(synonym, "en"));
+					OWLAnnotation anno = factory.getOWLAnnotation(eSynAnnotation, factory.getOWLLiteral(synonym, "en"));
 					OWLAxiom axiom = factory.getOWLAnnotationAssertionAxiom(newClass.getIRI(), anno);
 					manager.addAxiom(ont, axiom);
 				}
@@ -618,16 +624,26 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 				Set<OWLClass> introducedClasses = new HashSet<OWLClass> ();//to hold all classes related to the superClass
 				if(superTerm.startsWith("http")){
 					superClass = factory.getOWLClass(IRI.create(superTerm)); //extract mireot module related to superClass
-					OWLOntology moduleOnto = extractModule(ont, manager,
-							reasoner, factory, superClass);
+					OWLOntology moduleOnto = extractModule(ont, reasoner, superClass);
 					introducedClasses.addAll(moduleOnto.getClassesInSignature());
-				}else{//this block is not executed because we require all superTerm to be a known class with IRI
+				}else{//allow to create a new superClass in local ontology, which will be a subclass of entity/quality
 					clabel = factory.getOWLLiteral(superTerm, "en");
 					superClass = factory.getOWLClass(":"+superTerm.replaceAll("\\s+", "_"), pm); //use ID here.
 					introducedClasses.add(superClass);
 					//label for the superClass
 					labelAnno = factory.getOWLAnnotation(label, clabel);
 					axiom = factory.getOWLAnnotationAssertionAxiom(superClass.getIRI(), labelAnno);
+					manager.addAxiom(ont, axiom);
+					//what about definition for superClass?
+					
+					//add created-by annotation
+					axiom = factory.getOWLAnnotationAssertionAxiom(superClass.getIRI(), factory.getOWLAnnotation(createdByAnnotation, factory.getOWLLiteral(submittedBy)));
+					manager.addAxiom(ont, axiom);
+
+					//add creation date annotation
+					DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+					Date date = new Date();
+					axiom = factory.getOWLAnnotationAssertionAxiom(superClass.getIRI(),  factory.getOWLAnnotation(creationDateAnnotation, factory.getOWLLiteral(dateFormat.format(date))));
 					manager.addAxiom(ont, axiom);
 				}
 				
@@ -664,7 +680,6 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 				result.setMessage(result.getMessage()+" Part Of terms are not allowed for quality terms.");
 			}else{
 				//subclasses of Entity
-				OWLObjectProperty partOf = factory.getOWLObjectProperty(":part_of", pm);
 				for(String wholeTerm: partOfTerms){//IRIs or terms
 					if(wholeTerm.isEmpty()) continue;
 					OWLClass wholeClass = null;
@@ -672,8 +687,7 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 					if(wholeTerm.startsWith("http")){
 						//external 
 						wholeClass = factory.getOWLClass(IRI.create(wholeTerm)); //extract module
-						OWLOntology moduleOnto = extractModule(ont, manager,
-								reasoner, factory,  wholeClass);
+						OWLOntology moduleOnto = extractModule(ont, reasoner,  wholeClass);
 						introducedClasses.addAll(moduleOnto.getClassesInSignature());
 					}else{
 						//local
@@ -683,6 +697,16 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 						//label for the whole class
 						labelAnno = factory.getOWLAnnotation(label, clabel);
 						axiom = factory.getOWLAnnotationAssertionAxiom(wholeClass.getIRI(), labelAnno);
+						manager.addAxiom(ont, axiom);
+						//what about definition for wholeTerm?
+						//add created-by annotation
+						axiom = factory.getOWLAnnotationAssertionAxiom(wholeClass.getIRI(), factory.getOWLAnnotation(createdByAnnotation, factory.getOWLLiteral(submittedBy)));
+						manager.addAxiom(ont, axiom);
+
+						//add creation date annotation
+						DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+						Date date = new Date();
+						axiom = factory.getOWLAnnotationAssertionAxiom(wholeClass.getIRI(),  factory.getOWLAnnotation(creationDateAnnotation, factory.getOWLLiteral(dateFormat.format(date))));
 						manager.addAxiom(ont, axiom);
 					}
 
@@ -709,15 +733,13 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 		return;
 	}
 
-	private OWLClass addModuleOfClass(OWLOntology ont,
-			OWLOntologyManager manager, RPCResult<String> result,
+	private OWLClass addModuleOfClass(OWLOntology ont, RPCResult<String> result,
 			OWLReasoner reasoner, String newTerm, boolean isQuality,
-			String classID, OWLDataFactory factory, OWLClass quality,
+			String classID, OWLClass quality,
 			OWLClass entity) throws SQLException, Exception {
 		OWLClass newClass;
 		newClass = factory.getOWLClass(IRI.create(classID));
-		OWLOntology moduleOnto = extractModule(ont, manager,
-				reasoner, factory, newClass);
+		OWLOntology moduleOnto = extractModule(ont, reasoner, newClass);
 		OWLAxiom subclassAxiom;
 		//make all added class subclass of quality/entity
 		if(isQuality){//add a quality
@@ -743,8 +765,8 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 	}
 
 	private OWLOntology extractModule(OWLOntology ont,
-			OWLOntologyManager manager, OWLReasoner reasoner,
-			OWLDataFactory factory, OWLClass claz)
+			 OWLReasoner reasoner,
+		     OWLClass claz)
 			throws SQLException, Exception {
 		OWLOntology ontology = fetchParentOntology(claz.getIRI());
 		//create and save inference-entailment module as an ontology file

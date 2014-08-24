@@ -2,28 +2,39 @@ package edu.arizona.biosemantics.oto.steps.client.view.toontologies;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ButtonBase;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import com.google.gwt.user.client.ui.HTMLTable.ColumnFormatter;
 
 import edu.arizona.biosemantics.oto.steps.client.presenter.MainPresenter;
 import edu.arizona.biosemantics.oto.steps.client.presenter.toontologies.EditSubmissionPresenter;
-import edu.arizona.biosemantics.oto.steps.shared.beans.toontologies.AvailableOntologies;
 import edu.arizona.biosemantics.oto.steps.shared.beans.toontologies.OntologySubmission;
+
+
+/* ontology creation use cases:
+	 * add a synonym to a known class (local or external) => the synonym and its class will be in local
+	 * add a new class from an external ontology to local => class and its related module will be added in the local 
+	 * add a new term to local with a known class from the external ontology as its superclass => new class will be created, and the superclass and its module added in the local
+	 * add a new term to local without a known class from the external ontology as its superclass, but with a super term that need also to be added to local => new class and its superclass will be created in the local and made descendant classes of entity/quality 
+	 * add a new term without superclass => new class will be created and made subclass of entity/quality  
+
+	 * 
+	 * There will be cases where we'd like to add a new term to local, but there is not a sufficiently good superclass for the term in external ontology. In this case, we need to 
+	 * add needed ancestor classes first to local. One of the ancestor class need to have a superclass in the external ontology. In rare cases where no superclass can be located in the 
+	 * external ontology, the to-be added  
+*/
 
 public class EditSubmissionView extends Composite implements
 		EditSubmissionPresenter.Display {
@@ -108,14 +119,16 @@ public class EditSubmissionView extends Composite implements
 		termBox = new TextBox();
 		termBox.setText(submission.getTerm());
 		termBox.setHeight("10px");
-		cellFormatter.addStyleName(row, 0, "tbl_field_label");
+		cellFormatter.addStyleName(row, 0, "tbl_field_label required");
 		layout.setWidget(row, 1, termBox);
 		
 		//synonym submission
 		row++;
 		asSynBox = new CheckBox();
-		layout.setWidget(row, 0, asSynBox);
-		layout.setHTML(row, 1, "submit as a synonym");
+		layout.setHTML(row, 0, "Submit as a synonym ");
+		cellFormatter.addStyleName(row, 0, "tbl_field_label");
+		layout.setWidget(row, 1, asSynBox);
+		
 		asSynBox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -132,14 +145,20 @@ public class EditSubmissionView extends Composite implements
 	    });
 		//entity or quality
 		row++;
+		Label EorQ = new Label ("*E or Q ");
+		EorQ.setTitle("select submission type");
+		EorQ.addStyleName("tbl_field_label required");
 		isEntity = new RadioButton("category", "entity");
 	    isQuality = new RadioButton("category", "quality");
-		layout.setWidget(row, 0, isEntity);
-		layout.setWidget(row, 1, isQuality);
+	    HorizontalPanel hp = new HorizontalPanel();
+	    hp.add(isEntity);
+	    hp.add(isQuality);
+	    layout.setWidget(row, 0, EorQ);
+	    layout.setWidget(row, 1, hp);
 		
 		//etc internal category the term belongs to, e.g. structure
 		row++;
-		layout.setHTML(row, 0, "*Category  ");
+		layout.setHTML(row, 0, "Category  ");
 		categoryBox = new TextBox();
 		categoryBox.setText(submission.getCategory());
 		categoryBox.setHeight("10px");
@@ -153,7 +172,7 @@ public class EditSubmissionView extends Composite implements
 		ontologyBox = new ListBox();
 		ontologyBox.addItem("");
 		ontologyBox.setHeight("20px");
-		layout.setHTML(row, 0, "Target Ontology ");
+		layout.setHTML(row, 0, "*Target Ontology ");
 		cellFormatter.addStyleName(row, 0, "tbl_field_label required");
 		layout.setWidget(row, 1, ontologyBox);
 
@@ -207,7 +226,7 @@ public class EditSubmissionView extends Composite implements
 		superClassBox.setHeight("10px");
 		superClassBox.setWidth("90%");
 		superClassBox.setText("http://purl.obolibrary.org/obo/");
-		Label isALbl = new Label("*Is a ");
+		Label isALbl = new Label("Superclass ");
 		isALbl.setTitle("fill in the full class ID (IRI) of the term's desired superclass");
 		isALbl.addStyleName("tbl_field_label");
 		layout.setWidget(row, 0, isALbl);
@@ -243,8 +262,8 @@ public class EditSubmissionView extends Composite implements
 		//definition of the new term
 		row++;
 		definitionArea = new TextArea();
-		layout.setHTML(row, 0, "*Definition ");
-		cellFormatter.addStyleName(row, 0, "tbl_field_label required");
+		layout.setHTML(row, 0, "Definition ");
+		cellFormatter.addStyleName(row, 0, "tbl_field_label");
 		layout.setWidget(row, 1, definitionArea);
 		definitionArea.setWidth("90%");
 
@@ -381,25 +400,43 @@ public class EditSubmissionView extends Composite implements
 			data.setTmpID(submission.getTmpID().trim());
 		}
 		
-		data.setTerm(termBox.getText().trim());
+		String value = termBox.getText().trim();
+		data.setTerm(value);
+		
 		data.setSubmitAsSynonym(asSynBox.getValue());
 		if(!asSynBox.getValue()){
-			data.setDefinition(definitionArea.getText().trim());
-			data.setPartOfClass(partOfClassBox.getText().trim().compareTo("http://purl.obolibrary.org/obo/")==0? "":partOfClassBox.getText().trim());	
-			data.setSuperClass(superClassBox.getText().trim().compareTo("http://purl.obolibrary.org/obo/")==0? "":superClassBox.getText().trim());
+			value = definitionArea.getText().trim();
+			data.setDefinition(value);
+			
+			value = partOfClassBox.getText().trim().compareTo("http://purl.obolibrary.org/obo/")==0? "":partOfClassBox.getText().trim();
+			data.setPartOfClass(value);
+			
+			value = superClassBox.getText().trim().compareTo("http://purl.obolibrary.org/obo/")==0? "":superClassBox.getText().trim();
+			data.setSuperClass(value);
 		}
 		data.setCategory(categoryBox.getText());
-		data.setEorQ(isEntity.getValue()? "entity":"quality");
-		data.setClassID(classIDBox.getText().trim().compareTo("http://purl.obolibrary.org/obo/")==0? "":classIDBox.getText().trim());
-		data.setOntologyID(ontologyBox.getItemText(ontologyBox
-				.getSelectedIndex()).trim());
+
+		value = (isEntity.getValue() || isQuality.getValue())? (isEntity.getValue()? "entity":"quality") : "";
+		data.setEorQ(value);
+		
+		
+		value = classIDBox.getText().trim().compareTo("http://purl.obolibrary.org/obo/")==0? "":classIDBox.getText().trim();
+		data.setClassID(value);
+
+		
+		value = ontologyBox.getItemText(ontologyBox.getSelectedIndex()).trim();
+		data.setOntologyID(value);
+		
 		//data.setLocalOntologyID(localOntologyBox.getItemText(localOntologyBox
 		//		.getSelectedIndex()).trim());
 		data.setSource(sourceBox.getText().trim());
 		data.setSynonyms(synonymsArea.getText().trim());
 		data.setSampleSentence(sampleSentenceArea.getText().trim());
-		data.setSubmittedBy("hong"); //TODO: replace hardcoded value with userID variable
+		
+		data.setSubmittedBy("hong"); //TODO: replace hard-coded value with userID variable
+		
 		return data;
+		
 	}
 
 	@Override

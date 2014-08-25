@@ -180,6 +180,7 @@ public class ToOntologyPresenter implements Presenter {
 		});
 
 		
+		
 		eventBus.addHandler(TermCategoryPairSelectedEvent.TYPE,
 				new TermCategoryPairSelectedEventHandler() {
 

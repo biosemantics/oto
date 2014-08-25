@@ -33,7 +33,7 @@ import edu.arizona.biosemantics.oto.steps.shared.beans.toontologies.OntologySubm
 	 * 
 	 * There will be cases where we'd like to add a new term to local, but there is not a sufficiently good superclass for the term in external ontology. In this case, we need to 
 	 * add needed ancestor classes first to local. One of the ancestor class need to have a superclass in the external ontology. In rare cases where no superclass can be located in the 
-	 * external ontology, the to-be added  
+	 * external ontology,  the added class will be a subclass of the top entity or quality class  
 */
 
 public class EditSubmissionView extends Composite implements

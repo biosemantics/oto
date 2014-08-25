@@ -71,7 +71,7 @@ import edu.arizona.biosemantics.oto.steps.shared.beans.toontologies.OntologySubm
 					 * 
 					 * There will be cases where we'd like to add a new term to local, but there is not a sufficiently good superclass for the term in external ontology. In this case, we need to 
 					 * add needed ancestor classes first to local. One of the ancestor class need to have a superclass in the external ontology. In rare cases where no superclass can be located in the 
-					 * external ontology, the to-be added  
+					 * external ontology,  the added class will be a subclass of the top entity or quality class  
 					  
  *
  */
@@ -83,6 +83,7 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 	private static final long serialVersionUID = -668703714442141846L;
 	private OntologyServiceImpl ontologyService = new OntologyServiceImpl();
 	static Hashtable<String, OWLOntology> referencedOntologies = null;
+	//one manager manages all the ontologies files, check if an ontology is already being managed before load it, create ontologyIRI and documentIRI mapping for each loaded ontology.
 	private static OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
 	private static OWLDataFactory factory = manager.getOWLDataFactory();
 	private static OWLClass entity = null;
@@ -161,9 +162,11 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 			if(!onto.getOntologyPrefix().startsWith("ETC_")){ //upload files from server, add live access to ontology url later
 				File ontoFile = new File(Configuration.ontology_dir, onto.getOntologyFileName());
 				IRI toImport=IRI.create(ontoFile);
+				mapper = new SimpleIRIMapper(IRI.create(Configuration.oboOntologyBaseIRI+onto.getOntologyFileName()), toImport);
+				manager.addIRIMapper(mapper);
 				OWLImportsDeclaration importDeclaraton = factory.getOWLImportsDeclaration(toImport);
 				manager.applyChange(new AddImport(ont, importDeclaraton));
-				manager.loadOntology(toImport);
+				if(manager.getOntology(toImport)==null) manager.loadOntology(toImport);	
 			}
 		}
 
@@ -279,36 +282,45 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 	@Override
 	public RPCResult<String> updateOntologyFile(OntologySubmission submission) throws Exception {
 		//OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-		//preload PO, PATO, HAO, PORO, and RO
+		RPCResult<String> result = new RPCResult<String>();
+		// find the ontology file
+		String ontoPrefix = submission.getOntologyID();
+		if(!ontoPrefix.startsWith("ETC_")){
+			result.setMessage("At this time, Target ontology can only be an ETC ontology");
+			result.setData(null);
+			result.setSucceeded(true);
+			return result;
+		}
 
+		//preload PO, PATO, HAO, PORO, and RO
 		if(referencedOntologies==null){
 			referencedOntologies = new Hashtable<String, OWLOntology>();
 			File[] ontoFiles = new File(Configuration.ontology_dir).listFiles();
 			for(File ontoFile: ontoFiles){
-				OWLOntology onto =manager.loadOntologyFromOntologyDocument(ontoFile);//loading onto takes time, should preload them.
+				OWLOntology onto =manager.loadOntologyFromOntologyDocument(ontoFile);//loading ontologies takes time, preload them here.
 				referencedOntologies.put(ontoFile.getName().replaceFirst(".owl$", ""), onto);
+				SimpleIRIMapper mapper = new SimpleIRIMapper(IRI.create(Configuration.oboOntologyBaseIRI+ontoFile.getName()), IRI.create(ontoFile));
+				manager.addIRIMapper(mapper);
 			}
 		}
 		
-		
-		RPCResult<String> result = new RPCResult<String>();
-		// find the ontology file
-		String ontoPrefix = submission.getOntologyID();
-		if(!ontoPrefix.startsWith("ETC_")) return result;
-		
 		String filename = ToOntologiesDAO.getInstance().getOntologyFileName(ontoPrefix);
 		File ontoFile = new File(Configuration.fileBase/*+ File.separator + authenticationToken.getUserId()*/,  filename+".owl");
-
+		OWLOntology ont = null;
+		if(referencedOntologies.get(ontoPrefix.toLowerCase())==null){
+			//load ontology
+			IRI ontologyIRI = IRI
+					.create(Configuration.etc_ontology_baseIRI+submission.getOntologyID().toLowerCase()+".owl");
+			IRI documentIRI = IRI.create("file:/"+Configuration.fileBase+File.separator+filename+".owl");
+			SimpleIRIMapper mapper = new SimpleIRIMapper(ontologyIRI, documentIRI);
+			manager.addIRIMapper(mapper);
+			ont = manager.loadOntologyFromOntologyDocument(ontoFile);
+			referencedOntologies.put(ontoPrefix.toLowerCase(), ont);
+		}else{
+			ont = referencedOntologies.get(ontoPrefix.toLowerCase());
+		}
 		
-
-		//load ontology
-		IRI ontologyIRI = IRI
-				.create(Configuration.etc_ontology_baseIRI+submission.getOntologyID().toLowerCase()+".owl");
-		IRI documentIRI = IRI.create("file:/"+Configuration.fileBase+File.separator+filename+".owl");
-		SimpleIRIMapper mapper = new SimpleIRIMapper(ontologyIRI, documentIRI);
-		manager.addIRIMapper(mapper);
-		OWLOntology ont = manager.loadOntologyFromOntologyDocument(ontoFile);
-
+		
 		PrefixManager pm = new DefaultPrefixManager(
 				Configuration.etc_ontology_baseIRI+submission.getOntologyID().toLowerCase()+"#");
 
@@ -782,7 +794,7 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 		//import the module ontology to current onto in memory
 		OWLImportsDeclaration importDeclaraton = factory.getOWLImportsDeclaration(moduleIRI);
 		manager.applyChange(new AddImport(ont, importDeclaraton));
-		manager.loadOntology(moduleIRI);
+		if(manager.getOntology(moduleIRI)==null) manager.loadOntology(moduleIRI);
 		return moduleOnto;
 	}
 

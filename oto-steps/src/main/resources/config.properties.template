@@ -18,3 +18,4 @@ src_file_dir=C:/git/oto-steps/srcfiles/
 
 #ontology base IRI
 etc_ontology_baseIRI=http://www.etc-project.org/owl/ontologies/
+oboOntologyBaseIRI=http://purl.obolibrary.org/obo/

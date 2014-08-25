@@ -24,6 +24,7 @@ public class Configuration {
 	public static String fileBase;
 	public static String src_file_dir;
 	public static String etc_ontology_baseIRI;
+	public static String oboOntologyBaseIRI;
 
 	static {
 		//Logger.getLogger(Configuration.class).debug("Init Configuration");
@@ -39,6 +40,7 @@ public class Configuration {
 			bioportalUrl = properties.getProperty("bioportalUrl");
 			OTO_url = properties.getProperty("OTO_url");
 			etc_ontology_baseIRI = properties.getProperty("etc_ontology_baseIRI");
+			oboOntologyBaseIRI = properties.getProperty("oboOntologyBaseIRI");
 			//dirs don't end with /
 			ontology_dir = properties.getProperty("ontology_dir").replaceFirst("[/\\\\]+$", "").replaceAll("[/\\\\]", Matcher.quoteReplacement(File.separator));
 			dict_dir = properties.getProperty("dict_dir").replaceFirst("[/\\\\]+$", "").replaceAll("[/\\\\]", Matcher.quoteReplacement(File.separator));

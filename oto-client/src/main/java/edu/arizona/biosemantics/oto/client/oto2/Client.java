@@ -21,6 +21,7 @@ import edu.arizona.biosemantics.oto.common.model.lite.Upload;
 import edu.arizona.biosemantics.oto.common.model.lite.UploadResult;
 import edu.arizona.biosemantics.oto2.oto.shared.model.Bucket;
 import edu.arizona.biosemantics.oto2.oto.shared.model.Collection;
+import edu.arizona.biosemantics.oto2.oto.shared.model.Context;
 import edu.arizona.biosemantics.oto2.oto.shared.model.Label;
 
 public class Client extends OTOLiteClient {
@@ -91,7 +92,7 @@ public class Client extends OTOLiteClient {
 	public Future<Download> getDownload(UploadResult uploadResult) {
 		edu.arizona.biosemantics.oto2.oto.client.rest.Client client = new edu.arizona.biosemantics.oto2.oto.client.rest.Client(url);
 		client.open();
-		Future<Collection> result = client.get(String.valueOf(uploadResult.getUploadId()), uploadResult.getSecret());
+		Future<Collection> result = client.get(uploadResult.getUploadId(), uploadResult.getSecret());
 		Collection collection;
 		try {
 			collection = result.get();
@@ -131,6 +132,26 @@ public class Client extends OTOLiteClient {
 		List<Download> result = new LinkedList<Download>();
 		try {
 			result.add(future.get());
+			callback.completed(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			callback.failed(e);
+		}
+	}
+	
+	public Future<List<Context>> putContexts(int collectionId, String secret, List<Context> contexts) {
+		edu.arizona.biosemantics.oto2.oto.client.rest.Client client = new edu.arizona.biosemantics.oto2.oto.client.rest.Client(url);
+		client.open();
+		Future<List<Context>> result = client.put(collectionId, secret, contexts);
+		client.close();
+		return result;
+	}
+	
+	public void putContexts(int collectionId, String secret, List<Context> contexts, InvocationCallback<List<Context>> callback) {
+		Future<List<Context>> future = this.putContexts(collectionId, secret, contexts);
+		List<Context> result = new LinkedList<Context>();
+		try {
+			result.addAll(future.get());
 			callback.completed(result);
 		} catch (Exception e) {
 			e.printStackTrace();

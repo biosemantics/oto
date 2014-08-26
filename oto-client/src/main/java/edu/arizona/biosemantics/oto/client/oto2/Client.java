@@ -143,8 +143,15 @@ public class Client extends OTOLiteClient {
 		edu.arizona.biosemantics.oto2.oto.client.rest.Client client = new edu.arizona.biosemantics.oto2.oto.client.rest.Client(url);
 		client.open();
 		Future<List<Context>> result = client.put(collectionId, secret, contexts);
-		client.close();
-		return result;
+		try {
+			contexts = result.get();
+			client.close();
+			return ConcurrentUtils.constantFuture(contexts);
+		} catch (Exception e) {
+			e.printStackTrace();
+			client.close();
+			return ConcurrentUtils.constantFuture(null);
+		}
 	}
 	
 	public void putContexts(int collectionId, String secret, List<Context> contexts, InvocationCallback<List<Context>> callback) {

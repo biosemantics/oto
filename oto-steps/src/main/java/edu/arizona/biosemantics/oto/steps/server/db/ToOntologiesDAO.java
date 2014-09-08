@@ -777,7 +777,7 @@ public class ToOntologiesDAO extends AbstractDAO {
 
 					// get mapping status
 					sql = "select * from selected_ontology_records "
-							+ "where term = ? and category = ? and glossaryType = ?";
+							+ "where candidateTerm = ? and category = ? and glossaryType = ?";
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, term);
 					pstmt.setString(2, category);

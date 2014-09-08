@@ -31,13 +31,12 @@ public class TermCategoryPairView extends Composite implements
 				+ ")");
 		nameLabel.addStyleName("clickable");
 		namePart.add(nameLabel);
-		if (tcPair.getStatus().equals(MappingStatus.MAPPED_TO_MATCH)) {
-			nameLabel.addStyleName("TO_ONTOLOGY_mapped_to_match");
-		} else if (tcPair.getStatus()
-				.equals(MappingStatus.MAPPED_TO_SUBMISSION)) {
-			nameLabel.addStyleName("TO_ONTOLOGY_mapped_to_submission");
-		} else {
-			nameLabel.addStyleName("TO_ONTOLOGY_not_mapped");
+		if (tcPair.getStatus().equals(MappingStatus.MAPPED_TO_SUBMISSION)) {
+			nameLabel.addStyleName("TO_ONTOLOGY_mapped_to_submission"); //submitted
+		} else if (tcPair.getStatus().equals(MappingStatus.MAPPED_TO_MATCH)) {
+			nameLabel.addStyleName("TO_ONTOLOGY_mapped_to_match"); //exists in an external ontology
+		} else  {
+			nameLabel.addStyleName("TO_ONTOLOGY_not_mapped"); //other
 		}
 		layout.add(namePart);
 

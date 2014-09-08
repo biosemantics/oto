@@ -22,15 +22,17 @@
 }
 
 .TO_ONTOLOGY_mapped_to_match {
-	color: #279446;
-}
-
-.TO_ONTOLOGY_mapped_to_submission {
+	/*color: #279446;*/
 	color: #a8d04d;
 }
 
+.TO_ONTOLOGY_mapped_to_submission {
+	/*color: #a8d04d;*/
+	color: #EEEEEE;
+}
+
 .TO_ONTOLOGY_not_mapped {
-	color: red;
+	color: grey;
 }
 
 .TO_ONTOLOGY_currentPair {

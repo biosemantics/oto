@@ -51,17 +51,26 @@ public class SubmissionDetailView extends Composite implements
 		}
 
 		row++;
+		layout.setHTML(row, 0, "Candidate Term: ");
+		cellFormatter.addStyleName(row, 0, "tbl_field_label");
+		layout.setHTML(row, 1, submission.getCandidateTerm());
+		
+		row++;
 		layout.setHTML(row, 0, "Term: ");
 		cellFormatter.addStyleName(row, 0, "tbl_field_label");
-		layout.setHTML(row, 1, submission.getTerm());
-
+		String term = submission.getTerm();
+		if(submission.getSubmitAsSynonym()){
+			term = term + "[is a synonym]";
+		}			
+		layout.setHTML(row, 1, term);
+		
 		row++;
 		layout.setHTML(row, 0, "Category: ");
 		cellFormatter.addStyleName(row, 0, "tbl_field_label");
 		layout.setHTML(row, 1, submission.getCategory());
 
 		row++;
-		layout.setHTML(row, 0, "Submitted as : ");
+		layout.setHTML(row, 0, "E or Q : ");
 		cellFormatter.addStyleName(row, 0, "tbl_field_label");
 		layout.setHTML(row, 1, submission.getEorQ());
 		

@@ -22,7 +22,7 @@ public interface ToOntologiesServiceAsync {
 	void getOntologyRecords(String uploadID, String term, String category,
 			AsyncCallback<ArrayList<OntologyRecord>> callback);
 
-	void updateSelectedOntologyRecord(String uploadID, String term,
+	void updateSelectedOntologyRecord(String uploadID, String candTerm, String term,
 			String category, String recordID, OntologyRecordType recordType,
 			AsyncCallback<Void> callback);
 
@@ -40,7 +40,7 @@ public interface ToOntologiesServiceAsync {
 	void getDefaultDataForNewSubmission(String uploadID, String term,
 			String category, AsyncCallback<OntologySubmission> callback);
 
-	void clearSelection(String glossaryType, String term, String category,
+	void clearSelection(String glossaryType, String candTerm, String term, String category,
 			AsyncCallback<Void> callback);
 
 	void refreshOntologyStatus(String uploadID, AsyncCallback<Void> callback);

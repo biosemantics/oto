@@ -26,8 +26,7 @@ public class EditSubmissionPresenter implements Presenter {
 		OntologySubmission getOriginalData();
 		Widget asWidget();
 		//Button getUpdateLocalBtn();
-		Button getBrowseOntologyIcon1();
-		Button getBrowseOntologyIcon2();
+		Button getBrowseOntologyIcon();
 	}
 
 	private final Display display;
@@ -90,7 +89,7 @@ public class EditSubmissionPresenter implements Presenter {
 			}
 		});*/
 		
-		display.getBrowseOntologyIcon1().addClickHandler(new ClickHandler() {
+		display.getBrowseOntologyIcon().addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
@@ -100,15 +99,6 @@ public class EditSubmissionPresenter implements Presenter {
 			}
 		});
 		
-		display.getBrowseOntologyIcon2().addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				Window.open(
-						BrowseSuperClassURL.get(display.getOntologyValue()),
-						"_blank", "");
-			}
-		});
 	}
 	
 	

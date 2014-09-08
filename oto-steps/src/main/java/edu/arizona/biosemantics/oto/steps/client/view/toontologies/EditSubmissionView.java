@@ -57,15 +57,16 @@ public class EditSubmissionView extends Composite implements
 	private TextBox partOfClassBox;
 	//private TextBox otherIDBox;
 	//private ListBox localOntologyBox;
-	private Button browserOntologyIcon1;
-	private Button browserOntologyIcon2;
+	private Button browserOntologyIcon;
 	private TextBox classIDBox;
 	private RadioButton isEntity;
 	private RadioButton isQuality;
+	private TextBox cTermBox;
 	
-	public void setDefaultData() {
+	/*public void setDefaultData() {
 		synonymsArea.setText(submission.getSynonyms());
 		sourceBox.setText(submission.getSource());
+		sampleSentenceArea.setText(submission.getSampleSentence());
 
 		if (type.equals(OperationType.UPDATE_SUBMISSION)) {
 			// ontology
@@ -73,18 +74,18 @@ public class EditSubmissionView extends Composite implements
 			//for (AvailableOntologies ont : AvailableOntologies.values()) {  
 			for (String ont : MainPresenter.availableOntologies) {
 				if (ont.toString().equals(submission.getOntologyID())) {
-					ontologyBox.setSelectedIndex(i);
+					ontologyBox.setSelectedIndex(2+i); 
 					break;
 				}
 				i++;
 			}
 
-			superClassBox.setText(submission.getSuperClass());
-			partOfClassBox.setText(submission.getPartOfClass());
+			superClassBox.setText(submission.getSuperClass()==null || submission.getSuperClass().length()==0? "http://purl.obolibrary.org/obo/":submission.getSuperClass());
+			partOfClassBox.setText(submission.getPartOfClass()==null || submission.getPartOfClass().length()==0? "http://purl.obolibrary.org/obo/":submission.getPartOfClass());
 			definitionArea.setText(submission.getDefinition());
 			sampleSentenceArea.setText(submission.getSampleSentence());
 		}
-	}
+	}*/
 
 	public EditSubmissionView(OntologySubmission submission, OperationType type) {
 		this.submission = submission;
@@ -113,11 +114,20 @@ public class EditSubmissionView extends Composite implements
 		columnFormatter.setWidth(2, "10%");
 		columnFormatter.setStyleName(0, "align_right");
 
-		//the term to be submitted, if a noun, use singular form, e.g. cauline leaf
+		//the candidate term to be submitted, if a noun, use singular form as the submitting term, e.g. cauline leaf
 		int row = 1;
+		layout.setHTML(row, 0, "Candidate Term  ");
+		cTermBox = new TextBox();
+		cTermBox.setText(submission.getCandidateTerm());
+		cTermBox.setEnabled(false);
+		cTermBox.setHeight("10px");
+		cellFormatter.addStyleName(row, 0, "tbl_field_label");
+		layout.setWidget(row, 1, cTermBox);
+		
+		row++;
 		layout.setHTML(row, 0, "*Term  ");
 		termBox = new TextBox();
-		termBox.setText(submission.getTerm());
+		termBox.setText(submission.getTerm()==null ||submission.getTerm().length()==0? submission.getCandidateTerm() : submission.getTerm());
 		termBox.setHeight("10px");
 		cellFormatter.addStyleName(row, 0, "tbl_field_label required");
 		layout.setWidget(row, 1, termBox);
@@ -125,6 +135,7 @@ public class EditSubmissionView extends Composite implements
 		//synonym submission
 		row++;
 		asSynBox = new CheckBox();
+		asSynBox.setValue(submission.getSubmitAsSynonym());
 		layout.setHTML(row, 0, "Submit as a synonym ");
 		cellFormatter.addStyleName(row, 0, "tbl_field_label");
 		layout.setWidget(row, 1, asSynBox);
@@ -153,6 +164,8 @@ public class EditSubmissionView extends Composite implements
 	    HorizontalPanel hp = new HorizontalPanel();
 	    hp.add(isEntity);
 	    hp.add(isQuality);
+	    if(submission.getEorQ()!=null && submission.getEorQ().compareTo("entity")==0) isEntity.setValue(true);
+	    if(submission.getEorQ()!=null && submission.getEorQ().compareTo("quality")==0) isQuality.setValue(true);
 	    layout.setWidget(row, 0, EorQ);
 	    layout.setWidget(row, 1, hp);
 		
@@ -179,7 +192,9 @@ public class EditSubmissionView extends Composite implements
 		for (String ont : MainPresenter.availableOntologies) {
 			ontologyBox.addItem(ont);
 		}
-		
+		if(submission.getOntologyID()!=null && submission.getOntologyID().length()>0)
+			ontologyBox.setSelectedIndex(2+MainPresenter.availableOntologies.indexOf(submission.getOntologyID()));
+
 		/*row++;
 		//an internal ontology the term will be added to. Required.
 		//to the internal ontology, the term is a new term but it could exist in other ontologies.
@@ -212,12 +227,17 @@ public class EditSubmissionView extends Composite implements
 		classIDBox = new TextBox();
 		classIDBox.setHeight("10px");
 		classIDBox.setWidth("90%");
-		classIDBox.setText("http://purl.obolibrary.org/obo/");
+		classIDBox.setText(submission.getClassID()==null || submission.getClassID().length()==0? "http://purl.obolibrary.org/obo/": submission.getClassID());
 		Label classID = new Label("Class ID ");
 		classID.setTitle("fill in the full class ID (IRI)");
 		classID.addStyleName("tbl_field_label");
 		layout.setWidget(row, 0, classID);
 		layout.setWidget(row, 1, classIDBox);
+		browserOntologyIcon = new Button(); 
+		//new Image("images/locator.png");
+		browserOntologyIcon.setHeight("20px");
+		browserOntologyIcon.addStyleName("TO_ONTOLOGY_search_button");
+		layout.setWidget(row, 2, browserOntologyIcon);
 
 		//for term submission only. ID of the superClass for the new term in the target or its base ontology.
 		//what if a term is to be submitted to both an external and an internal ontology and their superclasses in two ontologies are different? make two separate submission.
@@ -225,18 +245,14 @@ public class EditSubmissionView extends Composite implements
 		superClassBox = new TextBox();
 		superClassBox.setHeight("10px");
 		superClassBox.setWidth("90%");
-		superClassBox.setText("http://purl.obolibrary.org/obo/");
+		superClassBox.setText(submission.getSuperClass()==null || submission.getSuperClass().length()==0? "http://purl.obolibrary.org/obo/":submission.getSuperClass());
 		Label isALbl = new Label("Superclass ");
 		isALbl.setTitle("fill in the full class ID (IRI) of the term's desired superclass");
 		isALbl.addStyleName("tbl_field_label");
 		layout.setWidget(row, 0, isALbl);
 		//cellFormatter.addStyleName(row, 0, "tbl_field_label required");
 		layout.setWidget(row, 1, superClassBox);
-		browserOntologyIcon1 = new Button(); 
-		//new Image("images/locator.png");
-		browserOntologyIcon1.setHeight("20px");
-		browserOntologyIcon1.addStyleName("TO_ONTOLOGY_search_button");
-		layout.setWidget(row, 2, browserOntologyIcon1);
+		
 
 
 		//for term submission only. 
@@ -244,24 +260,21 @@ public class EditSubmissionView extends Composite implements
 		partOfClassBox = new TextBox();
 		partOfClassBox.setHeight("10px");
 		partOfClassBox.setWidth("90%");
-		partOfClassBox.setText("http://purl.obolibrary.org/obo/");
+		partOfClassBox.setText(submission.getPartOfClass()==null || submission.getPartOfClass().length()==0? "http://purl.obolibrary.org/obo/" : submission.getPartOfClass());
 		Label partOfLbl = new Label("Part of  ");
 		partOfLbl.setTitle("fill in the full class ID (IRI) of which the term is a part");
 		partOfLbl.addStyleName("tbl_field_label");
 		layout.setWidget(row, 0, partOfLbl);
 		//cellFormatter.addStyleName(row, 0, "tbl_field_label required");
 		layout.setWidget(row, 1, partOfClassBox);
-		browserOntologyIcon2 = new Button(); 
-		//new Image("images/locator.png");
-		browserOntologyIcon2.setHeight("20px");
-		browserOntologyIcon2.addStyleName("TO_ONTOLOGY_search_button");
-		layout.setWidget(row, 2, browserOntologyIcon2);
+		
 
 
 		//for term submission only
 		//definition of the new term
 		row++;
 		definitionArea = new TextArea();
+		definitionArea.setText(submission.getDefinition());
 		layout.setHTML(row, 0, "Definition ");
 		cellFormatter.addStyleName(row, 0, "tbl_field_label");
 		layout.setWidget(row, 1, definitionArea);
@@ -272,6 +285,7 @@ public class EditSubmissionView extends Composite implements
 		//synonyms of the new term
 		row++;	
 		synonymsArea = new TextBox();
+		synonymsArea.setText(submission.getSynonyms());
 		Label synLbl = new Label("Synonyms  ");
 		synLbl.addStyleName("tbl_field_label");
 		synLbl.setTitle("use comma to sperate multiple synonyms");
@@ -284,6 +298,7 @@ public class EditSubmissionView extends Composite implements
 		//source document where the term is collected
 		row++;
 		sourceBox = new TextBox();
+		sourceBox.setText(submission.getSource());
 		sourceBox.setHeight("10px");
 		layout.setHTML(row, 0, "Source  ");
 		cellFormatter.addStyleName(row, 0, "tbl_field_label");
@@ -293,6 +308,7 @@ public class EditSubmissionView extends Composite implements
 		//a sample sentence showing the usage of the new term in the source
 		row++;
 		sampleSentenceArea = new TextBox();
+		sampleSentenceArea.setText(submission.getSampleSentence());
 		layout.setHTML(row, 0, "Sample Sentence  ");
 		cellFormatter.addStyleName(row, 0, "tbl_field_label");
 		layout.setWidget(row, 1, sampleSentenceArea);
@@ -400,6 +416,8 @@ public class EditSubmissionView extends Composite implements
 			data.setTmpID(submission.getTmpID().trim());
 		}
 		
+		data.setCandidateTerm(cTermBox.getText().trim());
+		
 		String value = termBox.getText().trim();
 		data.setTerm(value);
 		
@@ -450,12 +468,8 @@ public class EditSubmissionView extends Composite implements
 	}
 
 	@Override
-	public Button getBrowseOntologyIcon1() {
-		return browserOntologyIcon1;
+	public Button getBrowseOntologyIcon() {
+		return browserOntologyIcon;
 	}
-	
-	@Override
-	public Button getBrowseOntologyIcon2() {
-		return browserOntologyIcon2;
-	}
+
 }

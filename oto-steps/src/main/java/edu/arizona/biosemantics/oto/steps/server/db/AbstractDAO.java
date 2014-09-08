@@ -30,8 +30,15 @@ public abstract class AbstractDAO {
 	}
 
 	public Connection getConnection() throws SQLException {
+		   Properties props = new Properties();
+		    props.put("user", databaseUser);
+		    props.put("password", databasePassword);
+		    props.put("autoReconnect", "true");
+		    props.put("rewriteBatchedStatements", "true");
 		return DriverManager.getConnection("jdbc:mysql://localhost:3306/"
-				+ databaseName, databaseUser, databasePassword);
+				+ databaseName, props);
+		
+		//rewriteBatchedStatements=true
 	}
 
 	public void closeConnection(Connection conn) throws SQLException {

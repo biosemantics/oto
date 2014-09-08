@@ -41,6 +41,7 @@ public class Configuration {
 			OTO_url = properties.getProperty("OTO_url");
 			etc_ontology_baseIRI = properties.getProperty("etc_ontology_baseIRI");
 			oboOntologyBaseIRI = properties.getProperty("oboOntologyBaseIRI");
+			
 			//dirs don't end with /
 			ontology_dir = properties.getProperty("ontology_dir").replaceFirst("[/\\\\]+$", "").replaceAll("[/\\\\]", Matcher.quoteReplacement(File.separator));
 			dict_dir = properties.getProperty("dict_dir").replaceFirst("[/\\\\]+$", "").replaceAll("[/\\\\]", Matcher.quoteReplacement(File.separator));

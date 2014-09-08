@@ -100,6 +100,7 @@ public class ToOntologyPresenter implements Presenter {
 			.create(ToOntologiesService.class);
 	private OntologyFileServiceAsync ontologyFileService = GWT.create(OntologyFileService.class);
 	private HandlerManager eventBus = new HandlerManager(null);
+	private String selectedCandidateTerm;
 	private String selectedTerm;
 	private String selectedCategory;
 	private Widget selectedPairLabel;
@@ -188,10 +189,10 @@ public class ToOntologyPresenter implements Presenter {
 					public void onTermCategoryPairSelected(
 							TermCategoryPairSelectedEvent event) {
 						TermCategoryPair data = event.getData();
-						selectedTerm = data.getTerm();
+						selectedCandidateTerm = data.getTerm();
 						selectedCategory = data.getCategory();
 						selectedPairLabel = event.getWidget();
-						updateMatchesAndSubmissions(selectedTerm,
+						updateMatchesAndSubmissions(selectedCandidateTerm,
 								selectedCategory);
 					}
 				});
@@ -208,7 +209,7 @@ public class ToOntologyPresenter implements Presenter {
 				new AddNewSubmissionEventHandler() {
 					@Override
 					public void onClick(AddNewSubmissionEvent event) {
-						dispayAddNewSubmissionView(selectedTerm,
+						displayAddNewSubmissionView(selectedCandidateTerm,
 								selectedCategory);
 					}
 				});
@@ -357,7 +358,7 @@ public class ToOntologyPresenter implements Presenter {
 						globalEventBus.fireEvent(new ProcessingEndEvent());
 						Window.alert("Submission Deleted. ");
 						display.getRightPanel().clear();
-						updateMatchesAndSubmissions(selectedTerm,
+						updateMatchesAndSubmissions(selectedCandidateTerm,
 								selectedCategory);
 					}
 
@@ -386,7 +387,7 @@ public class ToOntologyPresenter implements Presenter {
 			globalEventBus.fireEvent(new ProcessingStartEvent(
 					"updating ..."));
 		}
-
+		selectedTerm = submission.getTerm();
 		rpcService.submitSubmission(submission, MainPresenter.uploadID, type,
 				new AsyncCallback<RPCResult<Boolean>>() {
 
@@ -398,7 +399,7 @@ public class ToOntologyPresenter implements Presenter {
 						}else{
 							Window.alert(result.getMessage());
 						}
-						updateMatchesAndSubmissions(selectedTerm,
+						updateMatchesAndSubmissions(selectedCandidateTerm,
 								selectedCategory);
 					}
 
@@ -422,7 +423,7 @@ public class ToOntologyPresenter implements Presenter {
 						globalEventBus.fireEvent(new ProcessingEndEvent());
 						// update the match and submission part
 						Window.alert("Updated ontology matches and submissions successfully. ");
-						updateMatchesAndSubmissions(selectedTerm,
+						updateMatchesAndSubmissions(selectedCandidateTerm,
 								selectedCategory);
 					}
 
@@ -439,11 +440,11 @@ public class ToOntologyPresenter implements Presenter {
 		display.getRightPanel().clear();
 		rpcService.clearSelection(
 				Integer.toString(MainPresenter.uploadInfo.getGlossaryType()),
-				selectedTerm, selectedCategory, new AsyncCallback<Void>() {
+				selectedCandidateTerm, selectedTerm, selectedCategory, new AsyncCallback<Void>() {
 
 					@Override
 					public void onSuccess(Void result) {
-						updateMatchesAndSubmissions(selectedTerm,
+						updateMatchesAndSubmissions(selectedCandidateTerm,
 								selectedCategory);
 						updateTermCategoryPairStatus(MappingStatus.NOT_MAPPED);
 
@@ -457,7 +458,7 @@ public class ToOntologyPresenter implements Presenter {
 				});
 	}
 
-	private void dispayAddNewSubmissionView(String term, String category) {
+	private void displayAddNewSubmissionView(String term, String category) {//candidate term
 		rpcService.getDefaultDataForNewSubmission(MainPresenter.uploadID, term,
 				category, new AsyncCallback<OntologySubmission>() {
 
@@ -541,8 +542,9 @@ public class ToOntologyPresenter implements Presenter {
 	private void updateSelectedOntologyRecord(String recordID,
 			final OntologyRecordType type) {
 		display.getRightPanel().clear();
+		if(selectedTerm==null) selectedTerm = selectedCandidateTerm;
 		rpcService.updateSelectedOntologyRecord(MainPresenter.uploadID,
-				selectedTerm, selectedCategory, recordID, type,
+				selectedCandidateTerm, selectedTerm, selectedCategory, recordID, type,
 				new AsyncCallback<Void>() {
 
 					@Override

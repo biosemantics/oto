@@ -21,6 +21,8 @@ public class OntologyMatch implements Serializable {
 	public OntologyMatch(String term) {
 		this.term = term;
 	}
+	
+
 
 	public void setMatchingInfo(String ontologyID, String permanentID,
 			String parentTerm, String definition) {

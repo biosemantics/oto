@@ -104,4 +104,11 @@ public class QueryOTO extends AbstractOTOAccessObject {
 		return glossaries;
 	}
 
+	public ArrayList<String> getSynonyms(String term, String category){
+		//TODO when hooking up this, add function to otoClient
+		ArrayList<String> syns = new ArrayList<String>();
+		/*OTOClient otoClient = createOTOClient();
+		return otoClient.getSynonyms(term, category);*/ 
+		return syns;
+	}
 }

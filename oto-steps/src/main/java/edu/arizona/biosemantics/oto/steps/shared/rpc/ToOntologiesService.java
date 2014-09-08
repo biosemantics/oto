@@ -45,7 +45,7 @@ public interface ToOntologiesService extends RemoteService {
 	 * @param recordType
 	 * @throws Exception
 	 */
-	void updateSelectedOntologyRecord(String uploadID, String term,
+	void updateSelectedOntologyRecord(String uploadID, String candTerm, String term,
 			String category, String recordID, OntologyRecordType recordType)
 			throws Exception;
 
@@ -63,7 +63,7 @@ public interface ToOntologiesService extends RemoteService {
 
 	OntologyMatch getMatchDetail(String matchID) throws Exception;
 
-	void clearSelection(String glossaryType, String term, String category)
+	void clearSelection(String glossaryType, String candTerm, String term, String category)
 			throws Exception;
 
 	OntologySubmission getSubmissionDetail(String submissionID)

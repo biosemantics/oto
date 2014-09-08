@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Properties;
 
 import edu.arizona.biosemantics.oto.common.ontologylookup.search.OntologyLookupClient;
@@ -13,6 +15,7 @@ import edu.arizona.biosemantics.oto.common.ontologylookup.search.data.Entity;
 import edu.arizona.biosemantics.oto.common.ontologylookup.search.data.EntityProposals;
 import edu.arizona.biosemantics.oto.common.ontologylookup.search.data.FormalConcept;
 import edu.arizona.biosemantics.oto.steps.server.Configuration;
+import edu.arizona.biosemantics.oto.steps.server.oto.QueryOTO;
 import edu.arizona.biosemantics.oto.steps.server.utilities.Utilities;
 import edu.arizona.biosemantics.oto.steps.shared.beans.UploadInfo;
 import edu.arizona.biosemantics.oto.steps.shared.beans.terminfo.TermGlossary;
@@ -226,6 +229,7 @@ public class ToOntologiesDAO extends AbstractDAO {
 			pstmt.setInt(1, ID);
 			rset = pstmt.executeQuery();
 			if (rset.next()) {
+				submission.setCandidateTerm(rset.getString("candidateTerm"));
 				submission.setTerm(rset.getString("term"));
 				submission.setCategory(rset.getString("category"));
 				submission.setSubmissionID(ID+"");
@@ -312,10 +316,11 @@ public class ToOntologiesDAO extends AbstractDAO {
 		return submission;
 	}*/
 
+	
 	public OntologySubmission getDefaultDataForNewSubmission(int uploadID,
-			String term, String category) throws Exception {
+			String candTerm, String category) throws Exception {
 		OntologySubmission submission = new OntologySubmission();
-		submission.setTerm(term);
+		submission.setCandidateTerm(candTerm);
 		submission.setCategory(category);
 
 		UploadInfo info = GeneralDAO.getInstance().getUploadInfo(uploadID);
@@ -328,10 +333,10 @@ public class ToOntologiesDAO extends AbstractDAO {
 			conn = getConnection();
 
 			// get synonyms
-			String sql = "select synonyms from term_category_pair where uploadID = ? and term = ? and category = ?";
+			String sql = "select synonyms from term_category_pair_for_ontology where uploadID = ? and term = ? and category = ?";
 			pstmt_syns = conn.prepareStatement(sql);
 			pstmt_syns.setInt(1, uploadID);
-			pstmt_syns.setString(2, term);
+			pstmt_syns.setString(2, candTerm);
 			pstmt_syns.setString(3, category);
 			rset_syns = pstmt_syns.executeQuery();
 			if (rset_syns.next()) {
@@ -339,14 +344,15 @@ public class ToOntologiesDAO extends AbstractDAO {
 			}
 
 			// get sample sentence
-			sql = "select sentence from sentences where uploadID = ? "
-					+ "and sentence rlike '^(.*\\s)?" + term + "(\\s.*)?$'";
+			sql = "select source, sentence from sentences where uploadID = ? "
+					+ "and (sentence rlike '[[:<:]]" + candTerm + "[[:>:]]' or sentence rlike '[[:<:]]" + candTerm.replaceAll("_", "-") + "[[:>:]]')";
 			pstmt_sentence = conn.prepareStatement(sql);
 			pstmt_sentence.setInt(1, uploadID);
 			rset_sentence = pstmt_sentence.executeQuery();
 			if (rset_sentence.next()) {
 				// get the first sentence as sample sentence
-				submission.setSampleSentence(rset_sentence.getString(1));
+				submission.setSource(rset_sentence.getString(1));
+				submission.setSampleSentence(rset_sentence.getString(2));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -386,9 +392,10 @@ public class ToOntologiesDAO extends AbstractDAO {
 						+ "(select * from ontology_submissions "
 						+ "where permanentID is NULL or permanentID = '') a "
 						+ "left join "
-						+ "(select term, category, 1 as inUpload from term_category_pair "
+						+ "(select term, category, 1 as inUpload from term_category_pair_for_ontology "
 						+ "where uploadID = ?) b "
-						+ "on a.term = b.term and a.category = b.category) c "
+						//+ "on a.term = b.term and a.category = b.category) c "
+						+ "on a.candidateTerm = b.term and a.category = b.category) c "
 						+ "where inUpload = 1;";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, uploadID);
@@ -425,7 +432,7 @@ public class ToOntologiesDAO extends AbstractDAO {
 	 * @param recordID
 	 * @throws Exception
 	 */
-	public void updateSelectedOntologyRecord(int uploadID, String term,
+	public void updateSelectedOntologyRecord(int uploadID, String candTerm, String term, //submitting term, called by addSubmission
 			String category, OntologyRecordType type, int recordID)
 			throws Exception {
 		int glossaryType = GeneralDAO.getInstance().getGlossaryTypeByUploadID(
@@ -437,24 +444,27 @@ public class ToOntologiesDAO extends AbstractDAO {
 			conn = getConnection();
 			conn.setAutoCommit(false);
 			// delete existing record
-			String sql = "delete from selected_ontology_records where glossaryType = ? and "
+			String sql = "delete from selected_ontology_records where glossaryType = ? and candidateTerm = ? and "
 					+ "term = ? and category = ?";
 			pstmt_del = conn.prepareStatement(sql);
 			pstmt_del.setInt(1, glossaryType);
-			pstmt_del.setString(2, term);
-			pstmt_del.setString(3, category);
+			pstmt_del.setString(2, candTerm);
+			pstmt_del.setString(3, term);
+			pstmt_del.setString(4, category);
 			pstmt_del.executeUpdate();
 
 			// insert new record
 			sql = "insert into selected_ontology_records "
-					+ "(term, category, glossaryType, recordType, recordID) "
-					+ "values (?, ?, ?, ?, ?)";
+					+ "(candidateTerm, term, category, glossaryType, recordType, recordID) "
+					+ "values (?, ?, ?, ?, ?, ?)";
+			
 			pstmt_insert = conn.prepareStatement(sql);
-			pstmt_insert.setString(1, term);
-			pstmt_insert.setString(2, category);
-			pstmt_insert.setInt(3, glossaryType);
-			pstmt_insert.setInt(4, translateOntologyRecordType(type));
-			pstmt_insert.setInt(5, recordID);
+			pstmt_insert.setString(1, candTerm);
+			pstmt_insert.setString(2, term);
+			pstmt_insert.setString(3, category);
+			pstmt_insert.setInt(4, glossaryType);
+			pstmt_insert.setInt(5, translateOntologyRecordType(type));
+			pstmt_insert.setInt(6, recordID);
 			pstmt_insert.executeUpdate();
 			conn.commit();
 		} catch (SQLException e) {
@@ -476,7 +486,7 @@ public class ToOntologiesDAO extends AbstractDAO {
 
 	}
 
-	public void clearSelection(int glossaryType, String term, String category)
+	public void clearSelection(int glossaryType, String candidateTerm, String term, String category)
 			throws Exception {
 		PreparedStatement pstmt = null;
 		Connection conn = null;
@@ -565,13 +575,13 @@ public class ToOntologiesDAO extends AbstractDAO {
 	 * get both matches and submissions as ontology record
 	 * 
 	 * @param uploadID
-	 * @param term
+	 * @param candTerm
 	 * @param category
 	 * @return
 	 * @throws Exception
 	 */
 	public ArrayList<OntologyRecord> getOntologyRecords(int uploadID,
-			String term, String category) throws Exception {
+			String candTerm, String category) throws Exception {
 		ArrayList<OntologyRecord> records = new ArrayList<OntologyRecord>();
 		int glossaryType = GeneralDAO.getInstance().getGlossaryTypeByUploadID(
 				uploadID);
@@ -586,11 +596,13 @@ public class ToOntologiesDAO extends AbstractDAO {
 			boolean hasSelected = false;
 			int selectedType = 0; // 1-match, 2-submission
 			int selectedID = 0;
+			//String sql = "select * from selected_ontology_records where glossaryType = ? and "
+			//		+ "term = ? and category = ? limit 1";
 			String sql = "select * from selected_ontology_records where glossaryType = ? and "
-					+ "term = ? and category = ? limit 1";
+					+ "candidateTerm = ? and category = ? limit 1";
 			pstmt_selected = conn.prepareStatement(sql);
 			pstmt_selected.setInt(1, glossaryType);
-			pstmt_selected.setString(2, term);
+			pstmt_selected.setString(2, candTerm);
 			pstmt_selected.setString(3, category);
 			rset_selected = pstmt_selected.executeQuery();
 			if (rset_selected.next()) {
@@ -600,17 +612,22 @@ public class ToOntologiesDAO extends AbstractDAO {
 			}
 
 			// matches: global
-			sql = "select * from ontology_matches where term = ?";
+			sql = "select * from ontology_matches where term = ? or synonyms rlike '"+"[[:<:]]"+candTerm+"[[:>:]]'";
 			pstmt_match = conn.prepareStatement(sql);
-			pstmt_match.setString(1, term);
+			pstmt_match.setString(1, candTerm);
 			rset_match = pstmt_match.executeQuery();
 			while (rset_match.next()) {
-				OntologyRecord record = new OntologyRecord(term, category);
+				OntologyRecord record = new OntologyRecord(rset_match.getString("term"), category);
 				int ID = rset_match.getInt("ID");
 				record.setType(OntologyRecordType.MATCH);
 				record.setId(Integer.toString(ID));
 				record.setDefinition(rset_match.getString("definition"));
 
+				String[] syns = rset_match.getString("synonyms").trim().replaceFirst(",$", "").split(",");
+				for(String syn: syns){
+					record.addSynonym(syn);
+				}
+				
 				// parse permanentID, only the last part
 				String pID = truncatePermanentID(rset_match
 						.getString("permanentID"));
@@ -628,12 +645,19 @@ public class ToOntologiesDAO extends AbstractDAO {
 			}
 
 			// submissions: global
-			sql = "select * from ontology_submissions where term = ? and category = ?";
+			sql = "select * from ontology_submissions where candidateTerm = ? and category = ?";
 			pstmt_submission = conn.prepareStatement(sql);
-			pstmt_submission.setString(1, term);
+			pstmt_submission.setString(1, candTerm);
 			pstmt_submission.setString(2, category);
 			rset_submission = pstmt_submission.executeQuery();
 			while (rset_submission.next()) {
+				String[] syns = null;
+				String term = rset_submission.getString("term");
+				if(rset_submission.getInt("submitAsSynonym") == 1){
+					syns = rset_submission.getString("term").trim().replaceFirst(",$", "").split(",");
+					term = rset_submission.getString("classID");
+				}
+
 				OntologyRecord record = new OntologyRecord(term, category);
 				int ID = rset_submission.getInt("ID");
 				record.setType(OntologyRecordType.SUBMISSION);
@@ -641,9 +665,16 @@ public class ToOntologiesDAO extends AbstractDAO {
 				record.setDefinition(rset_submission.getString("definition"));
 				record.setParent(rset_submission.getString("superClassID"));
 				record.setOntology(rset_submission.getString("ontologyID")
-						+ (rset_submission.getBoolean("accepted") ? " [Accepted]"
+						+ (rset_submission.getBoolean("accepted") ? "["+truncatePermanentID(rset_submission.getString("permanentID"))+"]"
 								: " [Pending]"));
-
+				
+				if(syns!=null){
+					for(String syn: syns){
+						record.addSynonym(syn);
+					}
+				}
+				
+				
 				// get selected
 				if (hasSelected && selectedType == 2 && selectedID == ID) {
 					record.setSelected(true);
@@ -723,7 +754,7 @@ public class ToOntologiesDAO extends AbstractDAO {
 					break;
 				}
 
-				String sql = "select ID, term, category, removed from term_category_pair where uploadID = ? ";
+				String sql = "select ID, term, category, removed from term_category_pair_for_ontology where uploadID = ? ";
 				if (isGetStructure) {
 					sql += "and category = 'structure' ";
 				} else {
@@ -812,7 +843,7 @@ public class ToOntologiesDAO extends AbstractDAO {
 		Connection conn = null;
 		try {
 			conn = getConnection();
-			String sql = "update term_category_pair set removed = ? where uploadID = ? "
+			String sql = "update term_category_pair_for_ontology set removed = ? where uploadID = ? "
 					+ "and ID = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setBoolean(1, isRemove);
@@ -906,7 +937,7 @@ public class ToOntologiesDAO extends AbstractDAO {
 			conn = getConnection();
 			String sql = "update ontology_submissions set ontologyID = ?, "
 					+ "superClassID = ?, " +"partOfClassID = ?, " + "definition = ?,"
-					+ "synonyms = ?, " + "source = ?, sampleSentence = ?, term =?, category=?, submitAsSynonym=?, EorQ=? , classID=?, submittedBy=?"
+					+ "synonyms = ?, " + "source = ?, sampleSentence = ?, candidateTerm=?, term =?, category=?, submitAsSynonym=?, EorQ=? , classID=?, submittedBy=?"
 					+ "where ID = ? ";
 			pstmt = conn.prepareStatement(sql);
 			//pstmt.setString(1, (submission.getOntologyID()/*+","+submission.getLocalOntologyID()*/).replaceAll("^,|,$", ""));
@@ -917,13 +948,14 @@ public class ToOntologiesDAO extends AbstractDAO {
 			pstmt.setString(5, submission.getSynonyms());
 			pstmt.setString(6, submission.getSource());
 			pstmt.setString(7, submission.getSampleSentence());
-			pstmt.setString(8, submission.getTerm());
-			pstmt.setString(9, submission.getCategory());
-			pstmt.setInt(10, submission.getSubmitAsSynonym()? 1 : 0);
-			pstmt.setString(11, submission.getEorQ());
-			pstmt.setString(12,  submission.getClassID());
-			pstmt.setString(13, submission.getSubmittedBy());
-			pstmt.setInt(14, Integer.parseInt(submission.getSubmissionID()));
+			pstmt.setString(8,  submission.getCandidateTerm());
+			pstmt.setString(9, submission.getTerm());
+			pstmt.setString(10, submission.getCategory());
+			pstmt.setInt(11, submission.getSubmitAsSynonym()? 1 : 0);
+			pstmt.setString(12, submission.getEorQ());
+			pstmt.setString(13,  submission.getClassID());
+			pstmt.setString(14, submission.getSubmittedBy());
+			pstmt.setInt(15, Integer.parseInt(submission.getSubmissionID()));
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -944,35 +976,36 @@ public class ToOntologiesDAO extends AbstractDAO {
 			conn = getConnection();
 			conn.setAutoCommit(false);
 			String sql = "insert into ontology_submissions"
-					+ "(term, category, ontologyID, submittedBy, localID, "
+					+ "(candidateTerm, term, category, ontologyID, submittedBy, localID, "
 					+ "tmpID, permanentID, superClassID, partOfClassID, synonyms, definition, "
 					+ "source, sampleSentence, accepted, submitAsSynonym, EorQ, classID) " + "values "
-					+ "(?, ?, ?, ?, ?, " + "?, ?, ?,?, ?, ?, " + "? ,?, ?, ?, ?,?)";
+					+ "(?,?, ?, ?, ?, ?, " + "?, ?, ?,?, ?, ?, " + "? ,?, ?, ?, ?,?)";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, submission.getTerm());
-			pstmt.setString(2, submission.getCategory());
+			pstmt.setString(1, submission.getCandidateTerm());
+			pstmt.setString(2, submission.getTerm());
+			pstmt.setString(3, submission.getCategory());
 			//pstmt.setString(3, (submission.getOntologyID()+","+submission.getLocalOntologyID()).replaceAll("^,|,$", "")); //at least one of them is not empty
-			pstmt.setString(3, submission.getOntologyID()); //at least one of them is not empty
-			pstmt.setString(4, submission.getSubmittedBy());
-			pstmt.setString(5, submission.getLocalID());
+			pstmt.setString(4, submission.getOntologyID()); //at least one of them is not empty
+			pstmt.setString(5, submission.getSubmittedBy());
+			pstmt.setString(6, submission.getLocalID());
 
-			pstmt.setString(6, submission.getTmpID());
-			pstmt.setString(7, submission.getPermanentID()==null? "" : submission.getPermanentID());
-			pstmt.setString(8, submission.getSuperClass());
-			pstmt.setString(9, submission.getPartOfClass());
-			pstmt.setString(10, submission.getSynonyms());
-			pstmt.setString(11, submission.getDefinition());
+			pstmt.setString(7, submission.getTmpID());
+			pstmt.setString(8, submission.getPermanentID()==null? "" : submission.getPermanentID());
+			pstmt.setString(9, submission.getSuperClass());
+			pstmt.setString(10, submission.getPartOfClass());
+			pstmt.setString(11, submission.getSynonyms());
+			pstmt.setString(12, submission.getDefinition());
 
-			pstmt.setString(12, submission.getSource());
-			pstmt.setString(13, submission.getSampleSentence());
+			pstmt.setString(13, submission.getSource());
+			pstmt.setString(14, submission.getSampleSentence());
 			if(submission.getOntologyID().startsWith("ETC_")){
-				pstmt.setInt(14, 1); //submission to local is automatically accepted
+				pstmt.setInt(15, 1); //submission to local is automatically accepted
 			}else{
-				pstmt.setInt(14, 0);
+				pstmt.setInt(15, 0);
 			}
-			pstmt.setInt(15, submission.getSubmitAsSynonym()? 1: 0);
-			pstmt.setString(16, submission.getEorQ());
-			pstmt.setString(17, submission.getClassID()==null? "":submission.getClassID());//for submittedAsSynonym terms.
+			pstmt.setInt(16, submission.getSubmitAsSynonym()? 1: 0);
+			pstmt.setString(17, submission.getEorQ());
+			pstmt.setString(18, submission.getClassID()==null? "":submission.getClassID());//for submittedAsSynonym terms.
 			pstmt.executeUpdate();
 			sql = "SELECT LAST_INSERT_ID()";
 			pstmt_id = conn.prepareStatement(sql);
@@ -994,7 +1027,7 @@ public class ToOntologiesDAO extends AbstractDAO {
 			}
 			// after submissioin, set the new one to be the default mapping
 			if (submissionID > 0) {
-				updateSelectedOntologyRecord(uploadID, submission.getTerm(),
+				updateSelectedOntologyRecord(uploadID, submission.getCandidateTerm(), submission.getTerm(),
 						submission.getCategory(), OntologyRecordType.SUBMISSION,
 						submissionID);
 				conn.commit();
@@ -1015,9 +1048,7 @@ public class ToOntologiesDAO extends AbstractDAO {
 			close(pstmt);
 			close(pstmt_id);
 			closeConnection(conn);
-		}
-
-		
+		}		
 	}
 
 	/**
@@ -1055,7 +1086,7 @@ public class ToOntologiesDAO extends AbstractDAO {
 		try {
 			conn = getConnection();
 			conn.setAutoCommit(false);
-			String sql = "select term, category from term_category_pair "
+			String sql = "select term, category from term_category_pair_for_ontology "
 					+ "where uploadID = ? and removed = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, uploadID);
@@ -1085,24 +1116,41 @@ public class ToOntologiesDAO extends AbstractDAO {
 									System.out.println("\tmatch: "
 											+ e.getClassIRI());
 									// check if e already exist
-									sql = "select ID from ontology_matches where permanentID = ?";
+									sql = "select ID, term, synonyms from ontology_matches where permanentID = ?";
 									pstmt = conn.prepareStatement(sql);
 									pstmt.setString(1, e.getClassIRI());
 									rset2 = pstmt.executeQuery();
-
 									if (rset2.next()) {
-										// TODO: update?
+										if(rset2.getString("term").compareToIgnoreCase(term)!=0 && rset2.getString("synonyms").toLowerCase().matches(".*\\b"+term.toLowerCase()+"\\b.*")){
+											//update
+											String newTerm = "";
+											String newSyns = rset2.getString("synonyms"); 
+											if(rset2.getString("term").compareToIgnoreCase(e.getLabel())!=0){
+												newTerm = e.getLabel();
+												newSyns += rset2.getString("term")+",";
+											}else{
+												newTerm = rset2.getString("term");
+												newSyns += term+",";
+											}
+											sql = "update ontology_matches set term = ? and synonyms = ? where permanentID = ?";
+											pstmt_insert = conn.prepareStatement(sql);
+											pstmt_insert.setString(1, newTerm);
+											pstmt_insert.setString(2, newSyns);
+											pstmt_insert.setString(3, e.getClassIRI());
+											pstmt_insert.executeUpdate();
+										}
 									} else {
 										sql = "insert into ontology_matches "
-												+ "(term, ontologyID, permanentID, parentTerm, definition) "
-												+ "values (?, ?, ?, ?, ?)";
+												+ "(term, synonyms, ontologyID, permanentID, parentTerm, definition) "
+												+ "values (?, ?, ?, ?, ?, ?)";
 										pstmt_insert = conn.prepareStatement(sql);
-										pstmt_insert.setString(1, term);
-										pstmt_insert.setString(2,
+										pstmt_insert.setString(1, e.getLabel());
+										pstmt_insert.setString(2, term.compareToIgnoreCase(e.getLabel())!=0? term+",": ","); //synonym list ends with ','
+										pstmt_insert.setString(3,
 												ontologyName.toUpperCase());
-										pstmt_insert.setString(3, e.getClassIRI());
-										pstmt_insert.setString(4, e.getPLabel());
-										pstmt_insert.setString(5, e.getDef());
+										pstmt_insert.setString(4, e.getClassIRI());
+										pstmt_insert.setString(5, e.getPLabel());
+										pstmt_insert.setString(6, e.getDef());
 										pstmt_insert.executeUpdate();
 									}
 								}
@@ -1129,17 +1177,35 @@ public class ToOntologiesDAO extends AbstractDAO {
 								rset2 = pstmt.executeQuery();
 
 								if (rset2.next()) {
-									// TODO: update?
+									if(rset2.getString("term").compareToIgnoreCase(term)!=0 && rset2.getString("synonyms").toLowerCase().matches(".*\\b"+term.toLowerCase()+"\\b.*")){
+										//update
+										String newTerm = "";
+										String newSyns = rset2.getString("synonyms"); 
+										if(rset2.getString("term").compareToIgnoreCase(fc.getLabel())!=0){
+											newTerm = fc.getLabel();
+											newSyns += rset2.getString("term")+",";
+										}else{
+											newTerm = rset2.getString("term");
+											newSyns += term+",";
+										}
+										sql = "update ontology_matches set term = ? and synonyms = ? where permanentID = ?";
+										pstmt_insert = conn.prepareStatement(sql);
+										pstmt_insert.setString(1, newTerm);
+										pstmt_insert.setString(2, newSyns);
+										pstmt_insert.setString(3, fc.getClassIRI());
+										pstmt_insert.executeUpdate();
+									}
 								} else {
 									sql = "insert into ontology_matches "
-											+ "(term, ontologyID, permanentID, parentTerm, definition) "
-											+ "values (?, ?, ?, ?, ?)";
+											+ "(term, synonyms, ontologyID, permanentID, parentTerm, definition) "
+											+ "values (?, ?, ?, ?, ?, ?)";
 									pstmt_insert = conn.prepareStatement(sql);
-									pstmt_insert.setString(1, term);
-									pstmt_insert.setString(2, "PATO");
-									pstmt_insert.setString(3, fc.getClassIRI());
-									pstmt_insert.setString(4, fc.getPLabel());
-									pstmt_insert.setString(5, fc.getDef());
+									pstmt_insert.setString(1, fc.getLabel());
+									pstmt_insert.setString(2, term.compareToIgnoreCase(fc.getLabel())!=0? term+",": ",");
+									pstmt_insert.setString(3, "PATO");
+									pstmt_insert.setString(4, fc.getClassIRI());
+									pstmt_insert.setString(5, fc.getPLabel());
+									pstmt_insert.setString(6, fc.getDef());
 									pstmt_insert.executeUpdate();
 								}
 							}
@@ -1168,7 +1234,157 @@ public class ToOntologiesDAO extends AbstractDAO {
 		}
 	}
 
+	public Hashtable<String, String> getSynonymsFromUpload(int uploadID) throws Exception {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		Hashtable<String, String> syns = new Hashtable<String, String> ();
+		try{
+			conn = getConnection();
+			pstmt = conn.prepareStatement("select term, category, synonyms from term_category_pair_for_ontology where synonyms IS NOT NULL AND LENGTH(synonyms)>0 AND synonyms!='null'");
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+				syns.put(rset.getString("term")+"#"+rset.getString("category"), rset.getString("synonyms"));
+			}
+			//term_category_pair_for_ontology covers all entity/quality terms in a dataset. synonyms have already be standardized using term_category and the glossary, 
+			//next, collect synonyms from the glossary
+			
+			pstmt = conn.prepareStatement("select distinct term, category from term_category_pair_for_ontology");
+			rset = pstmt.executeQuery();
+			QueryOTO queryOTO = QueryOTO.getInstance();
+			while(rset.next()){
+				ArrayList<String> synonyms = queryOTO.getSynonyms(rset.getString("term"), rset.getString("category"));
+				for(String syn: synonyms){
+					syns.put(rset.getString("term")+"#"+rset.getString("category"), syn);
+				}
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			close(rset);
+			close(pstmt);
+			closeConnection(conn);
+		}
+		
+		return syns;
+	}
 
+	public int getLargestUploadIDFromInputForToOntologies() throws Exception{
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		try{
+			conn = getConnection();
+			pstmt = conn.prepareStatement("select max(uploadid) from term_category_pair_for_ontology");
+			rset = pstmt.executeQuery();
+			while(rset.next()){
+				return 1+rset.getInt(1);
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			close(rset);
+			close(pstmt);
+			closeConnection(conn);
+		}
+		return -1;
+	}
 
+	public void createInputForToOntology(int uploadID,
+			Hashtable<String, String> syns, HashSet<String> entities,
+			HashSet<String> states) throws Exception {
+		//INSERT INTO `term_category_pair_for_ontology` (`term`, `category`, `uploadID`) VALUES ('ID', 'term', 'category', 'synonyms', 'uploadID', 'removed');
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try{
+			conn = getConnection();
+			conn.setAutoCommit(false);
+			
+			//if uploadID exist, remove existing record 
+			pstmt = conn.prepareStatement("delete from term_category_pair_for_ontology where uploadID=?");
+			pstmt.setInt(1, uploadID);
+			pstmt.execute();
+			
+			//insert new records
+			pstmt = conn.prepareStatement("insert into term_category_pair_for_ontology (`term`, `category`, `synonyms`, `uploadID`) VALUES (?,?,?,?)");
+			
+			int i = 0;
+			for(String structure: entities){
+				i++;
+				pstmt.setString(1, structure);
+				pstmt.setString(2, "structure");
+				pstmt.setString(3, syns.get(structure+"#structure")==null? "" : syns.get(structure+"#structure"));
+				pstmt.setInt(4, uploadID);
+				pstmt.addBatch();
+				if (i % 1000 == 0) 
+					pstmt.executeBatch(); // Execute every 1000 items.        
+			}
+			
+			for(String state: states){
+				i++;
+				String[] term_category = state.split("#"); //term#category
+				pstmt.setString(1, term_category[0]); //term
+				pstmt.setString(2, term_category.length>1? term_category[1]:"character"); //category
+				pstmt.setString(3, syns.get(state)==null? "" : syns.get(state)); //term#category
+				pstmt.setInt(4, uploadID);
+				pstmt.addBatch();
+				if (i % 1000 == 0) 
+					pstmt.executeBatch(); // Execute every 1000 items.    
+			}
+			pstmt.executeBatch();
+			conn.commit();
+		}catch (SQLException e) {
+			if (conn != null) {
+				try {
+					conn.rollback();
+				} catch (SQLException exe) {
+					exe.printStackTrace();
+					throw exe;
+				}
+			}
+			e.printStackTrace();
+			throw e;
+		} finally {
+			close(pstmt);
+			closeConnection(conn);
+		}
+		
+	}
 
+	//for standing-alone test only: add sentences to sentences table
+	public void addSentence(int uploadID, int sentid, String source, String textNormalize) throws SQLException {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try{
+			conn = getConnection();
+			conn.setAutoCommit(false);
+			//add new
+			pstmt = conn.prepareStatement("insert into sentences (uploadID, sentid, source, sentence, originalsent) values(?,?,?,?,?)");
+			pstmt.setInt(1, uploadID);
+			pstmt.setInt(2, sentid);
+			pstmt.setString(3, source);
+			pstmt.setString(4, textNormalize.toLowerCase());
+			pstmt.setString(5, textNormalize);
+			pstmt.execute();
+			
+			conn.commit();
+		}catch (SQLException e) {
+			if (conn != null) {
+				try {
+					conn.rollback();
+				} catch (SQLException exe) {
+					exe.printStackTrace();
+					throw exe;
+				}
+			}
+			e.printStackTrace();
+			throw e;
+		} finally {
+			close(pstmt);
+			closeConnection(conn);
+		}
+		
+	}
 }

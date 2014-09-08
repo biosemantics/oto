@@ -82,11 +82,11 @@ public class ToOntologiesServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public void updateSelectedOntologyRecord(String uploadID, String term,
+	public void updateSelectedOntologyRecord(String uploadID, String candTerm, String term,
 			String category, String recordID, OntologyRecordType recordType)
 			throws Exception {
 		ToOntologiesDAO.getInstance().updateSelectedOntologyRecord(
-				Integer.parseInt(uploadID), term, category, recordType,
+				Integer.parseInt(uploadID), candTerm, term, category, recordType,
 				Integer.parseInt(recordID));
 	}
 
@@ -106,11 +106,14 @@ public class ToOntologiesServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public void deleteSubmission(OntologySubmission submission, String uploadID)
 			throws Exception {
+		
+		//TODO when hookup with etc site, update TermsToOntologiesClient to enable the deletion of a submission from bioportal
+		/*
 		UploadInfo info = GeneralDAO.getInstance().getUploadInfo(
 				Integer.parseInt(uploadID));
 		TermsToOntologiesClient sendToOntologyClient = new TermsToOntologiesClient(
 				info.getBioportalUserID(), info.getBioportalApiKey());
-		sendToOntologyClient.deleteTerm(submission);
+		sendToOntologyClient.deleteTerm(submission);*/
 		ToOntologiesDAO.getInstance().deleteSubmission(
 				Integer.parseInt(submission.getSubmissionID()));
 	}
@@ -167,10 +170,10 @@ public class ToOntologiesServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public void clearSelection(String glossaryType, String term, String category)
+	public void clearSelection(String glossaryType, String candTerm, String term, String category)
 			throws Exception {
 		ToOntologiesDAO.getInstance().clearSelection(
-				Integer.parseInt(glossaryType), term, category);
+				Integer.parseInt(glossaryType), candTerm, term, category);
 
 	}
 

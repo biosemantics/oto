@@ -1,6 +1,7 @@
 package edu.arizona.biosemantics.oto.steps.shared.beans.toontologies;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class OntologyRecord implements Serializable {
 
@@ -10,6 +11,7 @@ public class OntologyRecord implements Serializable {
 	private static final long serialVersionUID = 3964212136774172255L;
 	private String id;
 	private String term;
+	private ArrayList<String> syns = new ArrayList<String>();
 	private String category;
 	private String ontology;
 	private String parent; // either parent term in match or super class in
@@ -26,7 +28,15 @@ public class OntologyRecord implements Serializable {
 		this.term = term;
 		this.category = category;
 	}
+	
+	public void addSynonym(String syn){
+		syns.add(syn);
+	}
 
+	public ArrayList<String> getSynonyms(){
+		return syns;
+	}
+	
 	public String getCategory() {
 		return category;
 	}

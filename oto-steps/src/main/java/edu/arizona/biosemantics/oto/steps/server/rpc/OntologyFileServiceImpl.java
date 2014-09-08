@@ -471,7 +471,8 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 			}
 		}
 		//fill in more info to submission so the UI can present complete matching info.
-		String termString = "[syn:"+newTerm+"]";
+		//String termString = "[syn:"+newTerm+"]";
+		String termString = "";
 		String defString = "";
 		String idString = "";
 		String superString = "";
@@ -482,11 +483,11 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 			superString += superClass4Syn.get(i).toString()+";";
 		}
 
-
-		submission.setTerm(termString);
-		submission.setDefinition(defString);
-		submission.setPermanentID(idString);
-		submission.setSuperClass(superString);	
+		
+		submission.setClassID(termString.replaceFirst(";$", ""));
+		submission.setDefinition(defString.replaceFirst(";$", ""));
+		submission.setPermanentID(idString.replaceFirst(";$", ""));
+		submission.setSuperClass(superString.replaceFirst(";$", ""));	
 		submission.setTmpID("");
 
 		//now update records and ontology, check for consistency later
@@ -776,24 +777,29 @@ public class OntologyFileServiceImpl extends RemoteServiceServlet implements Ont
 		return newClass;
 	}
 
-	private OWLOntology extractModule(OWLOntology ont,
+	private OWLOntology extractModule(OWLOntology to_ont,
 			 OWLReasoner reasoner,
 		     OWLClass claz)
 			throws SQLException, Exception {
 		OWLOntology ontology = fetchParentOntology(claz.getIRI());
 		//create and save inference-entailment module as an ontology file
-		SyntacticLocalityModuleExtractor sme = new SyntacticLocalityModuleExtractor(
-		        manager, ontology, ModuleType.STAR);
+		
 		Set<OWLEntity> seeds = new HashSet<OWLEntity>();
 		seeds.add(claz);
 		File mod = new File(Configuration.fileBase, "module."+getLabel(claz, factory)+".owl");
-		//IRI moduleIRI = IRI.create(Configuration.ontology_dir+"\\"+"module."+term+".owl");
 		IRI moduleIRI = IRI.create(mod);
+		if(mod.exists()){
+			//remove the existing module -- in effect replace the old module with the new one.
+			manager.removeOntology(manager.getOntology(moduleIRI));;
+			mod.delete();
+		}
+		SyntacticLocalityModuleExtractor sme = new SyntacticLocalityModuleExtractor(
+				manager, ontology, ModuleType.STAR);
 		OWLOntology moduleOnto = sme.extractAsOntology(seeds, moduleIRI, -1, 0, reasoner); //take all superclass and no subclass into the seeds.
 		manager.saveOntology(moduleOnto, moduleIRI);
 		//import the module ontology to current onto in memory
 		OWLImportsDeclaration importDeclaraton = factory.getOWLImportsDeclaration(moduleIRI);
-		manager.applyChange(new AddImport(ont, importDeclaraton));
+		manager.applyChange(new AddImport(to_ont, importDeclaraton));
 		if(manager.getOntology(moduleIRI)==null) manager.loadOntology(moduleIRI);
 		return moduleOnto;
 	}

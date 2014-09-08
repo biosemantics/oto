@@ -71,7 +71,7 @@ public class MatchSubmissionView extends Composite implements
 					});
 			ontologyRecordsTbl.addColumn(radioColumn, "Select");
 
-			// second column: ontology column
+			// 2nd column: ontology column
 			TextColumn<OntologyRecord> ontologyColumn = new TextColumn<OntologyRecord>() {
 
 				@Override
@@ -81,7 +81,23 @@ public class MatchSubmissionView extends Composite implements
 			};
 			ontologyRecordsTbl.addColumn(ontologyColumn, "Ontology");
 			
-			// 3th column: definition
+			// 3th column: term
+			TextColumn<OntologyRecord> termColumn = new TextColumn<OntologyRecord>() {
+
+				@Override
+				public String getValue(OntologyRecord object) {
+					String termSyns = object.getTerm()+"[";
+					for(String syn: object.getSynonyms()){
+						termSyns+=syn+",";
+					}
+					termSyns = termSyns.replaceFirst(",$", "")+"]";
+					termSyns = termSyns.replaceFirst("\\[\\]$", "");
+					return termSyns;
+				}
+			};
+			ontologyRecordsTbl.addColumn(termColumn, "Term[Synonym]");
+			
+			// 4th column: definition
 			TextColumn<OntologyRecord> definitionColumn = new TextColumn<OntologyRecord>() {
 
 				@Override
@@ -90,8 +106,9 @@ public class MatchSubmissionView extends Composite implements
 				}
 			};
 			ontologyRecordsTbl.addColumn(definitionColumn, "Definition");
+			
 
-			// 4rd column: parent term / super class
+			// 5rd column: parent term / super class
 			TextColumn<OntologyRecord> parentColumn = new TextColumn<OntologyRecord>() {
 
 				@Override

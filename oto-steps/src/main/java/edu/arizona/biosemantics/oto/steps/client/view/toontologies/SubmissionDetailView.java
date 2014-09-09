@@ -61,7 +61,10 @@ public class SubmissionDetailView extends Composite implements
 		String term = submission.getTerm();
 		if(submission.getSubmitAsSynonym()){
 			term = term + "[is a synonym]";
-		}			
+		}	
+		if(submission.getSynonyms().trim().length()>0){
+			term = term + "[has syns: "+submission.getSynonyms()+"]";
+		}
 		layout.setHTML(row, 1, term);
 		
 		row++;

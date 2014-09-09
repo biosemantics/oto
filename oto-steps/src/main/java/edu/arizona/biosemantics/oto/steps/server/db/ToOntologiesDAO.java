@@ -645,7 +645,7 @@ public class ToOntologiesDAO extends AbstractDAO {
 			}
 
 			// submissions: global
-			sql = "select * from ontology_submissions where candidateTerm = ? and category = ?";
+			sql = "select * from ontology_submissions where (candidateTerm = ? or synonyms rlike '"+"[[:<:]]"+candTerm+"[[:>:]]') and category = ?";
 			pstmt_submission = conn.prepareStatement(sql);
 			pstmt_submission.setString(1, candTerm);
 			pstmt_submission.setString(2, category);
@@ -674,12 +674,17 @@ public class ToOntologiesDAO extends AbstractDAO {
 					}
 				}
 				
+				syns = rset_submission.getString("synonyms").trim().replaceFirst(",$", "").split(",");
+				for(String syn: syns){
+					record.addSynonym(syn);
+				}
+				
 				
 				// get selected
 				if (hasSelected && selectedType == 2 && selectedID == ID) {
 					record.setSelected(true);
 				}
-
+				
 				records.add(record);
 			}
 		} catch (SQLException e) {

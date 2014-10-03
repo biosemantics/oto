@@ -63,6 +63,7 @@ public class Client extends OTOLiteClient {
 		buckets.add(othersBucket);
 		collection.setBuckets(buckets);
 		collection.setName(upload.getSource());
+		collection.setType(upload.getGlossaryType());
 		Future<Collection> result = client.put(collection);
 		try {
 			collection = result.get();

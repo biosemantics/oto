@@ -28,7 +28,7 @@ import edu.arizona.biosemantics.oto.common.model.lite.Download;
 import edu.arizona.biosemantics.oto.common.model.lite.Upload;
 import edu.arizona.biosemantics.oto.common.model.lite.UploadResult;
 
-public class OTOClient {
+public class OTOClient implements AutoCloseable {
 
 	private String url;
 	private Client client;

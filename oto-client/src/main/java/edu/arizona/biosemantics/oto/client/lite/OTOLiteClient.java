@@ -19,6 +19,7 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
+import edu.arizona.biosemantics.oto.client.log.LogLevel;
 import edu.arizona.biosemantics.oto.common.model.lite.Download;
 import edu.arizona.biosemantics.oto.common.model.lite.Upload;
 import edu.arizona.biosemantics.oto.common.model.lite.UploadResult;
@@ -37,7 +38,8 @@ public class OTOLiteClient {
 		this.url = url;
 	}
 	
-	public void open() {		
+	public void open() {
+		log(LogLevel.INFO, "Open connection to oto lite");
 		client = ClientBuilder.newBuilder().withConfig(new ClientConfig()).register(JacksonFeature.class).build();
 		client.register(new LoggingFilter(Logger.getAnonymousLogger(), true));
 		
@@ -47,6 +49,7 @@ public class OTOLiteClient {
 	}
 	
 	public void close() {
+		log(LogLevel.INFO, "Close connection to oto lite");
 		client.close();
 	}
 		

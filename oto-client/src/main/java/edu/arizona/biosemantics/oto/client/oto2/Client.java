@@ -13,6 +13,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import edu.arizona.biosemantics.oto.client.lite.OTOLiteClient;
+import edu.arizona.biosemantics.oto.client.log.LogLevel;
 import edu.arizona.biosemantics.oto.common.model.lite.Decision;
 import edu.arizona.biosemantics.oto.common.model.lite.Download;
 import edu.arizona.biosemantics.oto.common.model.lite.Synonym;
@@ -33,47 +34,46 @@ public class Client extends OTOLiteClient {
 		
 	@Override
 	public Future<UploadResult> putUpload(Upload upload) {
-		edu.arizona.biosemantics.oto2.oto.client.rest.Client client = new edu.arizona.biosemantics.oto2.oto.client.rest.Client(url);
-		client.open();
-		
-		Collection collection = new Collection();
-		Bucket structureBucket = new Bucket();
-		structureBucket.setName("Structures");
-		Bucket characterBucket = new Bucket();
-		characterBucket.setName("Charaters");
-		Bucket othersBucket = new Bucket();
-		othersBucket.setName("Others");
-		
-		for(Term character : upload.getPossibleCharacters()) {
-			edu.arizona.biosemantics.oto2.oto.shared.model.Term term = new edu.arizona.biosemantics.oto2.oto.shared.model.Term(character.getTerm());
-			characterBucket.addTerm(term);
+		try(edu.arizona.biosemantics.oto2.oto.client.rest.Client client = new edu.arizona.biosemantics.oto2.oto.client.rest.Client(url)) {
+			client.open();
+			
+			Collection collection = new Collection();
+			Bucket structureBucket = new Bucket();
+			structureBucket.setName("Structures");
+			Bucket characterBucket = new Bucket();
+			characterBucket.setName("Charaters");
+			Bucket othersBucket = new Bucket();
+			othersBucket.setName("Others");
+			
+			for(Term character : upload.getPossibleCharacters()) {
+				edu.arizona.biosemantics.oto2.oto.shared.model.Term term = new edu.arizona.biosemantics.oto2.oto.shared.model.Term(character.getTerm());
+				characterBucket.addTerm(term);
+			}
+			for(Term other : upload.getPossibleOtherTerms()) {
+				edu.arizona.biosemantics.oto2.oto.shared.model.Term term = new edu.arizona.biosemantics.oto2.oto.shared.model.Term(other.getTerm());
+				othersBucket.addTerm(term);
+			}
+			for(Term structure : upload.getPossibleStructures()) {
+				edu.arizona.biosemantics.oto2.oto.shared.model.Term term = new edu.arizona.biosemantics.oto2.oto.shared.model.Term(structure.getTerm());
+				structureBucket.addTerm(term);
+			}
+			
+			List<Bucket> buckets = new LinkedList<Bucket>();
+			buckets.add(structureBucket);
+			buckets.add(characterBucket);
+			buckets.add(othersBucket);
+			collection.setBuckets(buckets);
+			collection.setName(upload.getSource());
+			collection.setType(upload.getGlossaryType());
+			Future<Collection> result = client.put(collection);
+			try {
+				collection = result.get();
+				return ConcurrentUtils.constantFuture(new UploadResult(collection.getId(), collection.getSecret()));
+			} catch (Exception e) {
+				log(LogLevel.ERROR, "Exception", e);
+				return ConcurrentUtils.constantFuture(null);
+			}
 		}
-		for(Term other : upload.getPossibleOtherTerms()) {
-			edu.arizona.biosemantics.oto2.oto.shared.model.Term term = new edu.arizona.biosemantics.oto2.oto.shared.model.Term(other.getTerm());
-			othersBucket.addTerm(term);
-		}
-		for(Term structure : upload.getPossibleStructures()) {
-			edu.arizona.biosemantics.oto2.oto.shared.model.Term term = new edu.arizona.biosemantics.oto2.oto.shared.model.Term(structure.getTerm());
-			structureBucket.addTerm(term);
-		}
-		
-		List<Bucket> buckets = new LinkedList<Bucket>();
-		buckets.add(structureBucket);
-		buckets.add(characterBucket);
-		buckets.add(othersBucket);
-		collection.setBuckets(buckets);
-		collection.setName(upload.getSource());
-		collection.setType(upload.getGlossaryType());
-		Future<Collection> result = client.put(collection);
-		try {
-			collection = result.get();
-			client.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-			client.close();
-			return ConcurrentUtils.constantFuture(null);
-		}
-		return ConcurrentUtils.constantFuture(new UploadResult(collection.getId(), collection.getSecret()));
 	}
 	
 	@Override

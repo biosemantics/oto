@@ -1,8 +1,6 @@
 package edu.arizona.biosemantics.oto.client.lite;
 
-import java.util.List;
 import java.util.concurrent.Future;
-import java.util.logging.Logger;
 
 import javax.ws.rs.client.AsyncInvoker;
 import javax.ws.rs.client.Client;
@@ -13,7 +11,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.jackson.JacksonFeature;
 
 import com.google.inject.Inject;
@@ -57,7 +54,7 @@ public class OTOLiteClient {
 		return this.getUploadInvoker().put(Entity.entity(upload, MediaType.APPLICATION_JSON), UploadResult.class);
 	}
 	
-	public void putUpload(Upload upload, InvocationCallback<List<UploadResult>> callback) {
+	public void putUpload(Upload upload, InvocationCallback<UploadResult> callback) {
 		this.getUploadInvoker().put(Entity.entity(upload, MediaType.APPLICATION_JSON), callback);
 	}
 	
@@ -65,8 +62,16 @@ public class OTOLiteClient {
 		return this.getDownloadInvoker(uploadResult).get(Download.class);
 	}
 	
-	public void getDownload(UploadResult uploadResult, InvocationCallback<List<Download>> callback) {
+	public void getDownload(UploadResult uploadResult, InvocationCallback<Download> callback) {
 		this.getDownloadInvoker(uploadResult).get(callback);
+	}
+	
+	public Future<Download> getCommunityDownload() {
+		return this.getCommunityDownloadInvoker().get(Download.class);
+	}
+
+	public void getCommunityDownload(InvocationCallback<Download> callback) {
+		this.getCommunityDownloadInvoker().get(callback);
 	}
 	
 	private AsyncInvoker getUploadInvoker() {
@@ -76,6 +81,10 @@ public class OTOLiteClient {
 	private AsyncInvoker getDownloadInvoker(UploadResult uploadResult) {
 		return target.path("rest").path("glossary").path("download").queryParam("uploadId", uploadResult.getUploadId())
 				.queryParam("secret", uploadResult.getSecret()).request(MediaType.APPLICATION_JSON).async();
+	}
+	
+	private AsyncInvoker getCommunityDownloadInvoker() {
+		return target.path("rest").path("glossary").path("communityDownload").request(MediaType.APPLICATION_JSON).async();
 	}
 	
 }

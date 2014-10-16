@@ -1,7 +1,9 @@
 package edu.arizona.biosemantics.oto.client.oto2;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -24,6 +26,9 @@ import edu.arizona.biosemantics.oto2.oto.shared.model.Bucket;
 import edu.arizona.biosemantics.oto2.oto.shared.model.Collection;
 import edu.arizona.biosemantics.oto2.oto.shared.model.Context;
 import edu.arizona.biosemantics.oto2.oto.shared.model.Label;
+import edu.arizona.biosemantics.oto2.oto.shared.model.community.Categorization;
+import edu.arizona.biosemantics.oto2.oto.shared.model.community.CommunityCollection;
+import edu.arizona.biosemantics.oto2.oto.shared.model.community.Synonymization;
 
 public class Client extends OTOLiteClient {
 
@@ -77,12 +82,10 @@ public class Client extends OTOLiteClient {
 	}
 	
 	@Override
-	public void putUpload(Upload upload, InvocationCallback<List<UploadResult>> callback) {
+	public void putUpload(Upload upload, InvocationCallback<UploadResult> callback) {
 		Future<UploadResult> future = this.putUpload(upload);
-		List<UploadResult> result = new LinkedList<UploadResult>();
 		try {
-			result.add(future.get());
-			callback.completed(result);
+			callback.completed(future.get());
 		} catch (Exception e) {
 			e.printStackTrace();
 			callback.failed(e);
@@ -91,49 +94,91 @@ public class Client extends OTOLiteClient {
 	
 	@Override
 	public Future<Download> getDownload(UploadResult uploadResult) {
-		edu.arizona.biosemantics.oto2.oto.client.rest.Client client = new edu.arizona.biosemantics.oto2.oto.client.rest.Client(url);
-		client.open();
-		Future<Collection> result = client.get(uploadResult.getUploadId(), uploadResult.getSecret());
-		Collection collection;
-		try {
-			collection = result.get();
-			client.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-			client.close();
-			return ConcurrentUtils.constantFuture(null);
-		}
-		
-		List<Decision> decisions = new LinkedList<Decision>();
-		for(Label label : collection.getLabels()) {
-			for(edu.arizona.biosemantics.oto2.oto.shared.model.Term mainTerm : label.getMainTerms()) {
-				List<edu.arizona.biosemantics.oto2.oto.shared.model.Term> termsSynonyms = label.getSynonyms(mainTerm);
-				decisions.add(new Decision(label.getId() + "-" + mainTerm.getId(), mainTerm.getTerm(), label.getName(), 
-						(termsSynonyms != null && !termsSynonyms.isEmpty()), collection.getName()));
-			}
-		}
-		
-		List<Synonym> synonyms = new LinkedList<Synonym>();
-		for(Label label : collection.getLabels()) {
-			for(edu.arizona.biosemantics.oto2.oto.shared.model.Term mainTerm : label.getMainTerms()) {
-				List<edu.arizona.biosemantics.oto2.oto.shared.model.Term> termsSynonyms = label.getSynonyms(mainTerm);
-				for(edu.arizona.biosemantics.oto2.oto.shared.model.Term termsSynonym : termsSynonyms) {
-					synonyms.add(new Synonym(label.getId() + "-" + mainTerm.getId() + "-" + termsSynonym.getId(), mainTerm.getTerm(), 
-							label.getName(), termsSynonym.getTerm()));
+		try(edu.arizona.biosemantics.oto2.oto.client.rest.Client client = new edu.arizona.biosemantics.oto2.oto.client.rest.Client(url)) {
+			client.open();
+			Future<Collection> result = client.get(uploadResult.getUploadId(), uploadResult.getSecret());
+			Collection collection;
+			try {
+				collection = result.get();
+				List<Decision> decisions = new LinkedList<Decision>();
+				for(Label label : collection.getLabels()) {
+					for(edu.arizona.biosemantics.oto2.oto.shared.model.Term mainTerm : label.getMainTerms()) {
+						List<edu.arizona.biosemantics.oto2.oto.shared.model.Term> termsSynonyms = label.getSynonyms(mainTerm);
+						decisions.add(new Decision(label.getId() + "-" + mainTerm.getId(), mainTerm.getTerm(), label.getName(), 
+								(termsSynonyms != null && !termsSynonyms.isEmpty()), collection.getName()));
+					}
 				}
+				
+				List<Synonym> synonyms = new LinkedList<Synonym>();
+				for(Label label : collection.getLabels()) {
+					for(edu.arizona.biosemantics.oto2.oto.shared.model.Term mainTerm : label.getMainTerms()) {
+						List<edu.arizona.biosemantics.oto2.oto.shared.model.Term> termsSynonyms = label.getSynonyms(mainTerm);
+						for(edu.arizona.biosemantics.oto2.oto.shared.model.Term termsSynonym : termsSynonyms) {
+							synonyms.add(new Synonym(label.getId() + "-" + mainTerm.getId() + "-" + termsSynonym.getId(), mainTerm.getTerm(), 
+									label.getName(), termsSynonym.getTerm()));
+						}
+					}
+				}
+				return ConcurrentUtils.constantFuture(new Download(false, decisions, synonyms));
+			} catch (Exception e) {
+				e.printStackTrace();
+				return ConcurrentUtils.constantFuture(null);
 			}
 		}
-		
-		return ConcurrentUtils.constantFuture(new Download(false, decisions, synonyms));
 	}
 
 	@Override
-	public void getDownload(UploadResult uploadResult, InvocationCallback<List<Download>> callback) {
+	public void getDownload(UploadResult uploadResult, InvocationCallback<Download> callback) {
 		Future<Download> future = this.getDownload(uploadResult);
-		List<Download> result = new LinkedList<Download>();
 		try {
-			result.add(future.get());
-			callback.completed(result);
+			callback.completed(future.get());
+		} catch (Exception e) {
+			e.printStackTrace();
+			callback.failed(e);
+		}
+	}
+	
+	public Future<Download> getCommunityDownload(String type) {
+		try(edu.arizona.biosemantics.oto2.oto.client.rest.Client client = new edu.arizona.biosemantics.oto2.oto.client.rest.Client(url)) {
+			client.open();
+			Future<CommunityCollection> result = client.getCommunityCollection(type);
+			CommunityCollection communityCollection;
+			try {
+				communityCollection = result.get();
+				
+				List<Decision> decisions = new LinkedList<Decision>();
+				Set<Synonymization> synonymizations = communityCollection.getSynonymizations();
+				Set<String> synonymTerms = new HashSet<String>();
+				for(Synonymization synonymization : synonymizations) {
+					synonymTerms.add(synonymization.getMainTerm());
+					synonymTerms.addAll(synonymization.getSynonyms());
+				}
+						
+				for(Categorization categorization : communityCollection.getCategorizations()) {
+					for(String category : categorization.getCategories()) {
+						String term = categorization.getTerm();
+						decisions.add(new Decision("", term, category, synonymTerms.contains(term), "OTO2 Community Decisions"));
+					}
+				}
+				
+				List<Synonym> synonyms = new LinkedList<Synonym>();
+				for(Synonymization synonymization : synonymizations) {
+					for(String synonym : synonymization.getSynonyms()) {
+						synonyms.add(new Synonym("", synonymization.getMainTerm(), synonymization.getLabel(), synonym));
+					}
+				}
+				return ConcurrentUtils.constantFuture(new Download(false, decisions, synonyms));
+			} catch (Exception e) {
+				e.printStackTrace();
+				return ConcurrentUtils.constantFuture(null);
+			}		
+		}
+	}
+
+	public void getCommunityDownload(InvocationCallback<Download> callback) {
+		Future<Download> future = this.getCommunityDownload();
+		try {
+			callback.completed(future.get());
 		} catch (Exception e) {
 			e.printStackTrace();
 			callback.failed(e);

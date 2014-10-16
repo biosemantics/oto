@@ -138,6 +138,7 @@ public class Client extends OTOLiteClient {
 		}
 	}
 	
+	@Override
 	public Future<Download> getCommunityDownload(String type) {
 		try(edu.arizona.biosemantics.oto2.oto.client.rest.Client client = new edu.arizona.biosemantics.oto2.oto.client.rest.Client(url)) {
 			client.open();
@@ -175,8 +176,9 @@ public class Client extends OTOLiteClient {
 		}
 	}
 
-	public void getCommunityDownload(InvocationCallback<Download> callback) {
-		Future<Download> future = this.getCommunityDownload();
+	@Override
+	public void getCommunityDownload(String type, InvocationCallback<Download> callback) {
+		Future<Download> future = this.getCommunityDownload(type);
 		try {
 			callback.completed(future.get());
 		} catch (Exception e) {

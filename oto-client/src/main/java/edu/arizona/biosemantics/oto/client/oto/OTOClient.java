@@ -44,7 +44,7 @@ public class OTOClient implements AutoCloseable {
 	
 	public void open() {		
 		client = ClientBuilder.newBuilder().withConfig(new ClientConfig()).register(JacksonFeature.class).build();
-		//client.register(new LoggingFilter(Logger.getAnonymousLogger(), true)); //turn this off for production mode
+		client.register(new LoggingFilter(Logger.getAnonymousLogger(), true)); //turn this off for production mode
 		
 		//this doesn't seem to work for posts (among others), even though it is documented as such, use authentication header instead there
 		//target = client.target(this.apiUrl).queryParam("apikey", this.apiKey);

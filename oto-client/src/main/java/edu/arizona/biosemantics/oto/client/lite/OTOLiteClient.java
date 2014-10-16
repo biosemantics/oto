@@ -1,6 +1,7 @@
 package edu.arizona.biosemantics.oto.client.lite;
 
 import java.util.concurrent.Future;
+import java.util.logging.Logger;
 
 import javax.ws.rs.client.AsyncInvoker;
 import javax.ws.rs.client.Client;
@@ -11,6 +12,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.jackson.JacksonFeature;
 
 import com.google.inject.Inject;
@@ -38,7 +40,7 @@ public class OTOLiteClient {
 	public void open() {
 		log(LogLevel.INFO, "Open connection to oto lite");
 		client = ClientBuilder.newBuilder().withConfig(new ClientConfig()).register(JacksonFeature.class).build();
-		//client.register(new LoggingFilter(Logger.getAnonymousLogger(), true)); //turn this off for production mode
+		client.register(new LoggingFilter(Logger.getAnonymousLogger(), true)); //turn this off for production mode
 		
 		//this doesn't seem to work for posts (among others), even though it is documented as such, use authentication header instead there
 		//target = client.target(this.apiUrl).queryParam("apikey", this.apiKey);
@@ -66,12 +68,12 @@ public class OTOLiteClient {
 		this.getDownloadInvoker(uploadResult).get(callback);
 	}
 	
-	public Future<Download> getCommunityDownload() {
-		return this.getCommunityDownloadInvoker().get(Download.class);
+	public Future<Download> getCommunityDownload(String type) {
+		return this.getCommunityDownloadInvoker(type).get(Download.class);
 	}
 
-	public void getCommunityDownload(InvocationCallback<Download> callback) {
-		this.getCommunityDownloadInvoker().get(callback);
+	public void getCommunityDownload(String type, InvocationCallback<Download> callback) {
+		this.getCommunityDownloadInvoker(type).get(callback);
 	}
 	
 	private AsyncInvoker getUploadInvoker() {
@@ -83,8 +85,8 @@ public class OTOLiteClient {
 				.queryParam("secret", uploadResult.getSecret()).request(MediaType.APPLICATION_JSON).async();
 	}
 	
-	private AsyncInvoker getCommunityDownloadInvoker() {
-		return target.path("rest").path("glossary").path("communityDownload").request(MediaType.APPLICATION_JSON).async();
+	private AsyncInvoker getCommunityDownloadInvoker(String type) {
+		return target.path("rest").path("glossary").path("communityDownload").path(type).request(MediaType.APPLICATION_JSON).async();
 	}
 	
 }

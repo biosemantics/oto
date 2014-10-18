@@ -16,7 +16,7 @@ public class TraceInjection {
 			+ "execution(public * *(..))")
 	public void trace(JoinPoint joinPoint) {
 		Signature sig = joinPoint.getSignature();
-		log(LogLevel.TRACE, "Call to " + sig.getDeclaringTypeName() + " " + sig.getName() + " with arguments: " + 
+		log(LogLevel.TRACE, "Call: " + sig.getDeclaringTypeName() + " " + sig.getName() + " Arguments: " + 
 				ObjectStringifier.stringify(joinPoint.getArgs()));
 	}
 	

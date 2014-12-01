@@ -87,7 +87,7 @@ public class Client extends OTOLiteClient {
 		try {
 			callback.completed(future.get());
 		} catch (Exception e) {
-			e.printStackTrace();
+			log(LogLevel.ERROR, "Couldn't put upload", e);
 			callback.failed(e);
 		}
 	}
@@ -121,7 +121,7 @@ public class Client extends OTOLiteClient {
 				}
 				return ConcurrentUtils.constantFuture(new Download(false, decisions, synonyms));
 			} catch (Exception e) {
-				e.printStackTrace();
+				log(LogLevel.ERROR, "Couldn't get download", e);
 				return ConcurrentUtils.constantFuture(null);
 			}
 		}
@@ -133,7 +133,7 @@ public class Client extends OTOLiteClient {
 		try {
 			callback.completed(future.get());
 		} catch (Exception e) {
-			e.printStackTrace();
+			log(LogLevel.ERROR, "Couldn't get download", e);
 			callback.failed(e);
 		}
 	}
@@ -170,7 +170,7 @@ public class Client extends OTOLiteClient {
 				}
 				return ConcurrentUtils.constantFuture(new Download(false, decisions, synonyms));
 			} catch (Exception e) {
-				e.printStackTrace();
+				log(LogLevel.ERROR, "Couldn't get community download", e);
 				return ConcurrentUtils.constantFuture(null);
 			}		
 		}
@@ -182,7 +182,7 @@ public class Client extends OTOLiteClient {
 		try {
 			callback.completed(future.get());
 		} catch (Exception e) {
-			e.printStackTrace();
+			log(LogLevel.ERROR, "Couldn't get community download", e);
 			callback.failed(e);
 		}
 	}
@@ -196,7 +196,7 @@ public class Client extends OTOLiteClient {
 			client.close();
 			return ConcurrentUtils.constantFuture(contexts);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log(LogLevel.ERROR, "Couldn't put contexts", e);
 			client.close();
 			return ConcurrentUtils.constantFuture(null);
 		}
@@ -209,7 +209,7 @@ public class Client extends OTOLiteClient {
 			result.addAll(future.get());
 			callback.completed(result);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log(LogLevel.ERROR, "Couldn't put contexts", e);
 			callback.failed(e);
 		}
 	}

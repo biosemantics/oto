@@ -40,7 +40,7 @@ public class Client extends OTOLiteClient {
 		
 	@Override
 	public Future<UploadResult> putUpload(Upload upload) {
-		try(edu.arizona.biosemantics.oto2.oto.client.rest.Client client = new edu.arizona.biosemantics.oto2.oto.client.rest.Client(url)) {
+		try(edu.arizona.biosemantics.oto2.oto.server.rest.client.Client client = new edu.arizona.biosemantics.oto2.oto.server.rest.client.Client(url)) {
 			client.open();
 			
 			Collection collection = new Collection();
@@ -95,7 +95,7 @@ public class Client extends OTOLiteClient {
 	
 	@Override
 	public Future<Download> getDownload(UploadResult uploadResult) {
-		try(edu.arizona.biosemantics.oto2.oto.client.rest.Client client = new edu.arizona.biosemantics.oto2.oto.client.rest.Client(url)) {
+		try(edu.arizona.biosemantics.oto2.oto.server.rest.client.Client client = new edu.arizona.biosemantics.oto2.oto.server.rest.client.Client(url)) {
 			client.open();
 			Future<Collection> result = client.get(uploadResult.getUploadId(), uploadResult.getSecret());
 			Collection collection;
@@ -141,7 +141,7 @@ public class Client extends OTOLiteClient {
 	
 	@Override
 	public Future<Download> getCommunityDownload(String type) {
-		try(edu.arizona.biosemantics.oto2.oto.client.rest.Client client = new edu.arizona.biosemantics.oto2.oto.client.rest.Client(url)) {
+		try(edu.arizona.biosemantics.oto2.oto.server.rest.client.Client client = new edu.arizona.biosemantics.oto2.oto.server.rest.client.Client(url)) {
 			client.open();
 			Future<CommunityCollection> result = client.getCommunityCollection(type);
 			CommunityCollection communityCollection;
@@ -189,7 +189,7 @@ public class Client extends OTOLiteClient {
 	}
 	
 	public Future<List<Context>> putContexts(int collectionId, String secret, List<Context> contexts) {
-		edu.arizona.biosemantics.oto2.oto.client.rest.Client client = new edu.arizona.biosemantics.oto2.oto.client.rest.Client(url);
+		edu.arizona.biosemantics.oto2.oto.server.rest.client.Client client = new edu.arizona.biosemantics.oto2.oto.server.rest.client.Client(url);
 		client.open();
 		Future<List<Context>> result = client.put(collectionId, secret, contexts);
 		try {

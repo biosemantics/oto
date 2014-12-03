@@ -35,7 +35,6 @@ public class Client extends OTOLiteClient {
 	@Inject
 	public Client(@Named("OTOLiteClient_Url")String url) {
 		super(url);
-		System.setProperty("http.keepAlive", "true"); //Needed to be added as Boston changed firewall. Bob suggested to set keep alive on http conections
 	}
 		
 	@Override

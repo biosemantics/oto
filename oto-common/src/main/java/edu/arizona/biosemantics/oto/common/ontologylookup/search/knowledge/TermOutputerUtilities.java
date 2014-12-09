@@ -46,10 +46,10 @@ public class TermOutputerUtilities {
 	 * constructor may be needed if we need to exclude different parts of ontology.
 	 * @param ontologyfolder
 	 */
-	public TermOutputerUtilities(String eonto, String bspo, String pato, Hashtable<String,String> ontoURLs){
+	public TermOutputerUtilities(String eonto, String bspo, String pato, String ro, Hashtable<String,String> ontoURLs){
 		//TODO:add GO:bioprocess
 		entityontologies = new String[]{eonto, bspo};
-		qualityontologies = new String[]{pato};
+		qualityontologies = new String[]{pato, ro};
 		//get organ adjectives from Dictionary
 		Enumeration<String> organs = Dictionary.organadjectives.keys();
 		while(organs.hasMoreElements()){

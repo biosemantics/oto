@@ -23,6 +23,7 @@ public class OntologyLookupClient {
 	public String eonto;
 	public String bspo;
 	public String pato;
+	public String ro;
 	public static String dictdir;
 	public Hashtable<String, String> ontoURLs = new Hashtable<String, String>();
 	
@@ -34,6 +35,7 @@ public class OntologyLookupClient {
 		this.ontologyLocalPath = ontologyDir + "/" + ontologyName + ".owl";
 		bspo = ontologyDir + "/bspo.owl";
 		pato = ontologyDir + "/pato.owl";
+		ro = ontologyDir + "/ro.owl";
 		dictdir = dictDir;
 
 		if (ontologyName.compareToIgnoreCase("po") == 0) {
@@ -57,9 +59,11 @@ public class OntologyLookupClient {
 				"http://purl.obolibrary.org/obo/bspo.owl");
 		ontoURLs.put(pato,
 				"http://purl.obolibrary.org/obo/pato.owl");
+		ontoURLs.put(ro, 
+				"http://purl.obolibrary.org/obo/ro.owl");
 
 		// now load ontologies
-		ontoutil = new TermOutputerUtilities(eonto, bspo, pato, ontoURLs);
+		ontoutil = new TermOutputerUtilities(eonto, bspo, pato, ro, ontoURLs);
 	}
 
 	public ArrayList<FormalConcept> searchCharacter(String term) {

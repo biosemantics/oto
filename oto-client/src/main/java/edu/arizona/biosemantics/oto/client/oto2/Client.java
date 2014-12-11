@@ -47,6 +47,8 @@ public class Client extends OTOLiteClient {
 			structureBucket.setName("Structures");
 			Bucket characterBucket = new Bucket();
 			characterBucket.setName("Charaters");
+			Bucket taxaBucket = new Bucket();
+			taxaBucket.setName("Taxon Names");
 			Bucket othersBucket = new Bucket();
 			othersBucket.setName("Others");
 			
@@ -61,6 +63,10 @@ public class Client extends OTOLiteClient {
 			for(Term structure : upload.getPossibleStructures()) {
 				edu.arizona.biosemantics.oto2.oto.shared.model.Term term = new edu.arizona.biosemantics.oto2.oto.shared.model.Term(structure.getTerm());
 				structureBucket.addTerm(term);
+			}
+			for(Term taxonName : upload.getPossibleTaxonNames()) {
+				edu.arizona.biosemantics.oto2.oto.shared.model.Term term = new edu.arizona.biosemantics.oto2.oto.shared.model.Term(taxonName.getTerm());
+				taxaBucket.addTerm(term);
 			}
 			
 			List<Bucket> buckets = new LinkedList<Bucket>();

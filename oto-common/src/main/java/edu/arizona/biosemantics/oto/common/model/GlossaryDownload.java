@@ -1,12 +1,13 @@
 package edu.arizona.biosemantics.oto.common.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class GlossaryDownload {
+public class GlossaryDownload implements Serializable {
 
 	private String version;
 	private List<TermCategory> termCategories = new ArrayList<TermCategory>();

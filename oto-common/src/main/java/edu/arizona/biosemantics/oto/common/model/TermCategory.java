@@ -1,6 +1,8 @@
 package edu.arizona.biosemantics.oto.common.model;
 
-public class TermCategory {
+import java.io.Serializable;
+
+public class TermCategory implements Serializable {
 
 	private String term;
 	private String category;

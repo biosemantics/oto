@@ -1,9 +1,11 @@
 package edu.arizona.biosemantics.oto.common.model;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class GlossaryDictionaryEntry {
+public class GlossaryDictionaryEntry implements Serializable {
 
 	private String termID;
 	private String term;

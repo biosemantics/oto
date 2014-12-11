@@ -1,9 +1,11 @@
 package edu.arizona.biosemantics.oto.common.model;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class Category {
+public class Category implements Serializable {
 	
 	private String category;
 	private String definition;

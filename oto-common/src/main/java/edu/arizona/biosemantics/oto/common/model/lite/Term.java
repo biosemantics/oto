@@ -1,6 +1,8 @@
 package edu.arizona.biosemantics.oto.common.model.lite;
 
-public class Term {
+import java.io.Serializable;
+
+public class Term implements Serializable {
 
 	private String term;
 	

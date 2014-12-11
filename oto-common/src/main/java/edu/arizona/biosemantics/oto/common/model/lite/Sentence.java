@@ -1,6 +1,8 @@
 package edu.arizona.biosemantics.oto.common.model.lite;
 
-public class Sentence {
+import java.io.Serializable;
+
+public class Sentence implements Serializable {
 
 	private int sentId;
 	private String source;

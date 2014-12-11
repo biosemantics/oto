@@ -1,11 +1,12 @@
 package edu.arizona.biosemantics.oto.common.model.lite;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class Download {
+public class Download implements Serializable {
 
 	private boolean finalized = false;
 	private List<Decision> decisions;

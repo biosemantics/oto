@@ -1,16 +1,18 @@
 package edu.arizona.biosemantics.oto.common.model.lite;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class Upload {
+public class Upload implements Serializable {
 
 	private List<Term> possibleStructures = new LinkedList<Term>();
 	private List<Term> possibleCharacters = new LinkedList<Term>();
 	private List<Term> possibleOtherTerms = new LinkedList<Term>();
+	private List<Term> possibleTaxonNames = new LinkedList<Term>();
 	private List<Sentence> sentences = new LinkedList<Sentence>();
 	private String glossaryType;
 	private String source;
@@ -34,6 +36,14 @@ public class Upload {
 		this.user = user;
 		this.bioportalUserId = bioportalUserId;
 		this.bioportalAPIKey = bioportalAPIKey;
+	}
+
+	public void setPossibleTaxonNames(List<Term> possibleTaxonNames) {
+		this.possibleTaxonNames = possibleTaxonNames;
+	}
+	
+	public List<Term> getPossibleTaxonNames() {
+		return possibleTaxonNames;
 	}
 
 	public List<Term> getPossibleStructures() {

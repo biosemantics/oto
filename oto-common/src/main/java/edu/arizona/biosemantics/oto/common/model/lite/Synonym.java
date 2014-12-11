@@ -1,6 +1,8 @@
 package edu.arizona.biosemantics.oto.common.model.lite;
 
-public class Synonym {
+import java.io.Serializable;
+
+public class Synonym implements Serializable {
 
 	private String id;
 	private String term;

@@ -1,9 +1,11 @@
 package edu.arizona.biosemantics.oto.common.model.lite;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class UploadResult {
+public class UploadResult implements Serializable {
 
 	private int uploadId;
 	private String secret;

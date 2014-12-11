@@ -1,6 +1,8 @@
 package edu.arizona.biosemantics.oto.common.model.lite;
 
-public class Decision {
+import java.io.Serializable;
+
+public class Decision implements Serializable {
 
 	private String id;
 	private String term;

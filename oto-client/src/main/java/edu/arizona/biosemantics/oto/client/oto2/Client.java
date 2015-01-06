@@ -73,6 +73,7 @@ public class Client extends OTOLiteClient {
 			buckets.add(structureBucket);
 			buckets.add(characterBucket);
 			buckets.add(othersBucket);
+			buckets.add(taxaBucket);
 			collection.setBuckets(buckets);
 			collection.setName(upload.getSource());
 			collection.setType(upload.getGlossaryType());

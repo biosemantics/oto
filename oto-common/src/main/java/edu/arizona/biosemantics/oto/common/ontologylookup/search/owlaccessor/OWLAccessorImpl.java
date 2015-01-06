@@ -135,8 +135,8 @@ public class OWLAccessorImpl implements OWLAccessor {
 			// retrieves all synonyms of every class and store it in search cache - Hariharan Task2
 			this.retrieveAllConcept();
 		}catch(Exception e){
-			System.out.println("can't load ontology:"+file.getPath());
-			LOGGER.error("", e);
+			System.out.println("can't load ontology:"+file.getAbsolutePath());
+			LOGGER.error("can't load ontology:"+file.getAbsolutePath(), e);
 			System.exit(1);
 		}
 	}

@@ -265,13 +265,14 @@ public class TermSearcher {
 		 * return candidateMataches(phrase, this.candidatematches,
 		 * phrasetype,.5f); } else
 		 */
+		
 		// keep weaker matches
-		if (candidatematches.size() == 0)
+		/*if (candidatematches.size() == 0)
 			TermSearcher.cacheIt(phrase, null, phrasetype);
 		
 		cacheCandidateMataches(cleanphrase, query, phrasetype, .5f);
-		return getCandidateMatches(query, phrasetype);
-		//return null;
+		return getCandidateMatches(query, phrasetype);*/
+		return null;
 	}
 
 	private void cacheCandidateMataches(String term, String query, String type,

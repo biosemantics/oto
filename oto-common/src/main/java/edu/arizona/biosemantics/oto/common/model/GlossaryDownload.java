@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class GlossaryDownload implements Serializable {
 
-	private String version;
+	private String version = "N/A";
 	private List<TermCategory> termCategories = new ArrayList<TermCategory>();
 	private List<TermSynonym> termSynonyms = new ArrayList<TermSynonym>();
 	

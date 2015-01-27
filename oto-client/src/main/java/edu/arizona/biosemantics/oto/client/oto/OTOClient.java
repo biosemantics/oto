@@ -104,10 +104,18 @@ public class OTOClient implements AutoCloseable {
 	}
 		
 	private AsyncInvoker getGlossaryDownloadInvoker(String glossaryType) {
+		// QUICK and dirty FIX until OTO/github glossaries repository spelling error is corrected
+		if(glossaryType.equalsIgnoreCase("Algae")) {
+			glossaryType = "Algea";
+		}
 		return target.path("rest").path("glossaries").path(glossaryType).request(MediaType.APPLICATION_JSON).async();
 	}	
 	
 	private AsyncInvoker getGlossaryDownloadInvoker(String glossaryType, String version) {
+		// QUICK and dirty FIX until OTO/github glossaries repository spelling error is corrected
+		if(glossaryType.equalsIgnoreCase("Algae")) {
+			glossaryType = "Algea";
+		}
 		return target.path("rest").path("glossaries").path(glossaryType).queryParam("version", version).request(MediaType.APPLICATION_JSON).async();
 	}
 	

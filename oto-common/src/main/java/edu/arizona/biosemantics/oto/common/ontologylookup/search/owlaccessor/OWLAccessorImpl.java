@@ -86,8 +86,8 @@ public class OWLAccessorImpl implements OWLAccessor {
 	private String source;
 	private OWLOntology rootOnt;
 
-	private static Hashtable<String, Hashtable<String, ArrayList<OWLClass>>> searchCache = new Hashtable<String, Hashtable<String, ArrayList<OWLClass>>>(); //con => {syn type => classes}
-	private static Hashtable<String, Set<OWLClass>> classesWithPartCache = new Hashtable<String, Set<OWLClass>> ();
+	private Hashtable<String, Hashtable<String, ArrayList<OWLClass>>> searchCache = new Hashtable<String, Hashtable<String, ArrayList<OWLClass>>>(); //con => {syn type => classes}
+	private Hashtable<String, Set<OWLClass>> classesWithPartCache = new Hashtable<String, Set<OWLClass>> ();
 	public final static String temp = "TEMP";
 	/**
 	 * Instantiates a new oWL accessor impl.

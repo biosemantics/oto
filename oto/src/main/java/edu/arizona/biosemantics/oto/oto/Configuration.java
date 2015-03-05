@@ -50,7 +50,7 @@ public class Configuration {
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		Properties properties = new Properties();
 		properties.load(loader.getResourceAsStream("config.properties"));
-		this.minPasswordLength = Integer.parseInt(properties.getProperty("MIN_PASSWORD_LENGTH"));
+		this.minPasswordLength = Integer.parseInt(properties.getProperty("MIN_PASSWORD_LENGTH").trim());
 		
 		this.otoEmailUser = properties.getProperty("OTO_EMAIL_USER");
 		this.otoEmailPassword = properties.getProperty("OTO_EMAIL_PASSWORD");

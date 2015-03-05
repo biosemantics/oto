@@ -19,7 +19,7 @@ import edu.arizona.biosemantics.oto.oto.beans.DecisionBean;
 import edu.arizona.biosemantics.oto.oto.beans.SpecificReportBean;
 import edu.arizona.biosemantics.oto.oto.beans.SynBean;
 import edu.arizona.biosemantics.oto.oto.beans.Term;
-import edu.arizona.biosemantics.oto.oto.beans.User;
+import edu.arizona.biosemantics.oto.common.model.User;
 
 /**
  * This class will handle all the report specific database queries

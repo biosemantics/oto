@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 import edu.arizona.biosemantics.oto.oto.beans.SentenceRecordBean;
 import edu.arizona.biosemantics.oto.oto.beans.TermAndExtentionBean;
-import edu.arizona.biosemantics.oto.oto.beans.User;
+import edu.arizona.biosemantics.oto.common.model.User;
 
 public class CategorizationDBAccess extends DatabaseAccess {
 

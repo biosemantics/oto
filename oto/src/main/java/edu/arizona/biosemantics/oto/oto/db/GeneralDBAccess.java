@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 import edu.arizona.biosemantics.oto.oto.beans.DatasetBean;
 import edu.arizona.biosemantics.oto.oto.beans.DatasetStatistics;
 import edu.arizona.biosemantics.oto.oto.beans.GlossaryNameMapper;
-import edu.arizona.biosemantics.oto.oto.beans.User;
+import edu.arizona.biosemantics.oto.common.model.User;
 
 public class GeneralDBAccess extends DatabaseAccess {
 

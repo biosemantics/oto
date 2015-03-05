@@ -12,7 +12,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.arizona.biosemantics.oto.common.action.Forwardable;
 import edu.arizona.biosemantics.oto.oto.Configuration;
-import edu.arizona.biosemantics.oto.oto.beans.User;
+import edu.arizona.biosemantics.oto.common.model.User;
 import edu.arizona.biosemantics.oto.oto.db.UserDataAccess;
 import edu.arizona.biosemantics.oto.oto.form.RegistrationForm;
 

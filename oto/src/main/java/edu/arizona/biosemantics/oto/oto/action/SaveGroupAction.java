@@ -21,7 +21,7 @@ import edu.arizona.biosemantics.oto.oto.beans.CategoryBean;
 import edu.arizona.biosemantics.oto.oto.beans.DecisionHolder;
 import edu.arizona.biosemantics.oto.oto.beans.SessionDataManager;
 import edu.arizona.biosemantics.oto.oto.beans.Term;
-import edu.arizona.biosemantics.oto.oto.beans.User;
+import edu.arizona.biosemantics.oto.common.model.User;
 import edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess;
 import edu.arizona.biosemantics.oto.oto.form.GeneralForm;
 

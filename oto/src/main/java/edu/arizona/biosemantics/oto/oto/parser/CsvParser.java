@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import edu.arizona.biosemantics.oto.oto.beans.SimpleOrderBean;
+import edu.arizona.biosemantics.oto.common.model.Order;
 
 /**
  * this class is to parse csv files for importing
@@ -21,7 +21,7 @@ public class CsvParser {
 	private String line = "";
 	private String splitBy = ",";
 	private ArrayList<String> termList;
-	private ArrayList<SimpleOrderBean> orderList;
+	private ArrayList<Order> orderList;
 	private ArrayList<String> sentences;
 
 	public CsvParser(InputStream fileStream, String splitBy) {
@@ -145,7 +145,7 @@ public class CsvParser {
 	 * @throws IOException
 	 */
 	private void parseOrderList() throws IOException {
-		orderList = new ArrayList<SimpleOrderBean>();
+		orderList = new ArrayList<Order>();
 		br = new BufferedReader(new InputStreamReader(fileStream));
 		while ((line = br.readLine()) != null) {
 			String[] words = line.split(splitBy);
@@ -154,7 +154,7 @@ public class CsvParser {
 				 * read in the order group name, order group name can be
 				 * duplicates
 				 */
-				SimpleOrderBean order = new SimpleOrderBean(words[0].trim()
+				Order order = new Order(words[0].trim()
 						.replaceAll("\"", ""));
 				if (words.length > 1) {
 					// read in the terms in this order group
@@ -185,7 +185,7 @@ public class CsvParser {
 		return termList;
 	}
 
-	public ArrayList<SimpleOrderBean> getOrderList() throws IOException {
+	public ArrayList<Order> getOrderList() throws IOException {
 		parseOrderList();
 		return orderList;
 	}

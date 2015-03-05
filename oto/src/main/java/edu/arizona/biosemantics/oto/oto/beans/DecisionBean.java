@@ -3,6 +3,8 @@ package edu.arizona.biosemantics.oto.oto.beans;
 import java.io.Serializable;
 import java.util.Date;
 
+import edu.arizona.biosemantics.oto.common.model.User;
+
 /**
  * This bean will hold the decision related information
  * @author Partha

@@ -20,7 +20,7 @@ import org.xml.sax.InputSource;
 import edu.arizona.biosemantics.oto.common.action.Forwardable;
 import edu.arizona.biosemantics.oto.oto.beans.SessionDataManager;
 import edu.arizona.biosemantics.oto.oto.beans.StructureNodeBean;
-import edu.arizona.biosemantics.oto.oto.beans.User;
+import edu.arizona.biosemantics.oto.common.model.User;
 import edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess;
 import edu.arizona.biosemantics.oto.oto.form.GeneralForm;
 

@@ -3,6 +3,8 @@ package edu.arizona.biosemantics.oto.oto.beans;
 import java.io.Serializable;
 import java.util.Date;
 
+import edu.arizona.biosemantics.oto.common.model.User;
+
 /**
  * This will store the comments from the user
  * @author Partha

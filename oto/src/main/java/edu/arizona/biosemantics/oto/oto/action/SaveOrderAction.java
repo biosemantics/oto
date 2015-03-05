@@ -22,7 +22,7 @@ import edu.arizona.biosemantics.oto.common.action.Forwardable;
 import edu.arizona.biosemantics.oto.oto.beans.Character;
 import edu.arizona.biosemantics.oto.oto.beans.Order;
 import edu.arizona.biosemantics.oto.oto.beans.SessionDataManager;
-import edu.arizona.biosemantics.oto.oto.beans.User;
+import edu.arizona.biosemantics.oto.common.model.User;
 import edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess;
 import edu.arizona.biosemantics.oto.oto.form.GeneralForm;
 

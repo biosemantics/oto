@@ -63,7 +63,7 @@ import edu.arizona.biosemantics.oto.oto.beans.TermGlossaryBean;
 import edu.arizona.biosemantics.oto.oto.beans.TermRelationBean;
 import edu.arizona.biosemantics.oto.oto.beans.TermsForBioportalBean;
 import edu.arizona.biosemantics.oto.oto.beans.TermsGroup;
-import edu.arizona.biosemantics.oto.oto.beans.User;
+import edu.arizona.biosemantics.oto.common.model.User;
 import edu.arizona.biosemantics.oto.oto.beans.UserStatisticsBean;
 import edu.arizona.biosemantics.oto.oto.beans.VersionBean;
 import edu.arizona.biosemantics.oto.oto.mail.NotifyEmail;

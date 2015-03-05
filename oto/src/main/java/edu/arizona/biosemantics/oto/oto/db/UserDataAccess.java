@@ -15,10 +15,10 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 import edu.arizona.biosemantics.oto.common.io.ExecCommmand;
+import edu.arizona.biosemantics.oto.common.model.User;
 import edu.arizona.biosemantics.oto.common.security.Encryptor;
 import edu.arizona.biosemantics.oto.common.security.PasswordGenerator;
 import edu.arizona.biosemantics.oto.oto.Configuration;
-import edu.arizona.biosemantics.oto.oto.beans.User;
 import edu.arizona.biosemantics.oto.oto.mail.NotifyEmail;
 
 /**

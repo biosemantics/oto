@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import edu.arizona.biosemantics.oto.oto.beans.SimpleOrderBean;
+import edu.arizona.biosemantics.oto.common.model.Order;
 
 public class OrderDBAcess extends DatabaseAccess {
 
@@ -68,7 +68,7 @@ public class OrderDBAcess extends DatabaseAccess {
 	 * @param orders
 	 * @throws Exception 
 	 */
-	public void importOrders(String dataset, ArrayList<SimpleOrderBean> orders)
+	public void importOrders(String dataset, ArrayList<Order> orders)
 			throws Exception {
 		Connection conn = null;
 		Statement stmt = null;
@@ -82,7 +82,7 @@ public class OrderDBAcess extends DatabaseAccess {
 			stmt.executeUpdate("delete from " + dataset + "_web_orders_terms");
 			stmt.executeUpdate("delete from " + dataset + "_web_orders");
 
-			for (SimpleOrderBean order : orders) {
+			for (Order order : orders) {
 				// insert base order
 				stmt.executeUpdate(
 						"insert into " + dataset + "_web_orders "

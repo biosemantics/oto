@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 
 import org.apache.log4j.Logger;
 
-import edu.arizona.biosemantics.oto.oto.beans.User;
+import edu.arizona.biosemantics.oto.common.model.User;
 
 public class GroupStrategyDBAccess extends DatabaseAccess {
 	

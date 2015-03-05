@@ -12,7 +12,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.arizona.biosemantics.oto.oto.beans.SessionDataManager;
-import edu.arizona.biosemantics.oto.oto.beans.User;
+import edu.arizona.biosemantics.oto.common.model.User;
 /**
  * This abstract class serves as the base class of all the Action classes.
  * It contains a set of methods that could be used to access the session related 

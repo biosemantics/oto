@@ -5,8 +5,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import edu.arizona.biosemantics.oto.common.model.GlossaryDictionaryEntry;
-
-
+import edu.arizona.biosemantics.oto.common.model.User;
 
 
 public class Main {
@@ -17,11 +16,26 @@ public class Main {
 	 * @throws InterruptedException 
 	 */
 	public static void main(String[] args) throws InterruptedException, ExecutionException {
-		OTOClient otoClient = new OTOClient("http://biosemantics.arizona.edu/OTO/");
-		//OTOClient otoClient = new OTOClient("http://localhost:9090/oto/");	
+		OTOClient otoClient = new OTOClient("http://localhost:8080/otoOld2/");
+
 		otoClient.open();
 		
-		otoClient.getGlossaryDownload("Plant").get();
+		User user = new User();
+		user.setUserEmail("thomas.rodenhausen@gmail.com");
+		user.setPassword("myPass");
+		user.setAffiliation("UA");
+		user.setFirstName("Thomas");
+		user.setLastName("Rodenhausen");
+		user.setBioportalUserId("asdf");
+		user.setBioportalApiKey("asdf2");
+		
+		Future<String> result = otoClient.postUser(user);
+		
+		//OTOClient otoClient = new OTOClient("http://biosemantics.arizona.edu/OTO/");
+		//OTOClient otoClient = new OTOClient("http://localhost:9090/oto/");	
+		//otoClient.open();
+		
+		//otoClient.getGlossaryDownload("Plant").get();
 		//otoClient.getCategories().get();
 		//otoClient.getGlossaryDictionaryEntry("Plant", "abaxial", "position").get();
 		//otoClient.getGlossaryDictionaryEntries("Plant", "abaxial").get();
@@ -29,7 +43,7 @@ public class Main {
 		/*Future<List<GlossaryDictionaryEntry>> entries = otoClient.getGlossaryDictionaryEntries("Hymenoptera", "abundance");
 		
 		System.out.println(entries.get());*/
-		otoClient.close();
+		//otoClient.close();
 		
 		//GlossaryDictionaryEntry result = otoClient.getGlossaryDictionaryEntry("Plant", "round22", "shape");
 		

@@ -1,17 +1,17 @@
-package edu.arizona.biosemantics.oto.oto.beans;
+package edu.arizona.biosemantics.oto.common.model;
 
 import java.util.ArrayList;
 
-public class SimpleOrderBean {
+public class Order {
 	private String orderName;
 	private ArrayList<String> terms;
 
-	public SimpleOrderBean(String orderName, ArrayList<String> terms) {
+	public Order(String orderName, ArrayList<String> terms) {
 		this.setOrderName(orderName);
 		this.setTerms(terms);
 	}
 
-	public SimpleOrderBean(String orderName) {
+	public Order(String orderName) {
 		this.setOrderName(orderName);
 	}
 

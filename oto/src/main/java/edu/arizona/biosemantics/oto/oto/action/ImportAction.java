@@ -13,7 +13,7 @@ import org.apache.struts.upload.FormFile;
 
 import edu.arizona.biosemantics.oto.common.action.Forwardable;
 import edu.arizona.biosemantics.oto.oto.beans.SessionDataManager;
-import edu.arizona.biosemantics.oto.oto.beans.SimpleOrderBean;
+import edu.arizona.biosemantics.oto.common.model.Order;
 import edu.arizona.biosemantics.oto.oto.db.CategorizationDBAccess;
 import edu.arizona.biosemantics.oto.oto.db.HierarchyDBAccess;
 import edu.arizona.biosemantics.oto.oto.db.OrderDBAcess;
@@ -35,7 +35,7 @@ public class ImportAction extends ParserAction {
 		String taskIndex = importForm.getTaskIndex();
 		InputStream fileStream = file.getInputStream();
 		ArrayList<String> termList = null;
-		ArrayList<SimpleOrderBean> orderList = null;
+		ArrayList<Order> orderList = null;
 
 		String datasetName = importForm.getDatasetName();
 		String message = "[" + datasetName + "] Import ";

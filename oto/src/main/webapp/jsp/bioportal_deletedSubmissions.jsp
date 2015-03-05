@@ -7,7 +7,7 @@
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.TermForBioportalBean"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.BioportalSubmissionBean"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.BioportalSubmissionsHolderBean"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
+<%@ page import="edu.arizona.biosemantics.oto.common.model.User"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.DatasetBean"%>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">

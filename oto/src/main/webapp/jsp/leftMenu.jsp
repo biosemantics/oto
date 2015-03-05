@@ -4,7 +4,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
+<%@ page import="edu.arizona.biosemantics.oto.common.model.User"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.GlossaryGroupBean"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.GlossaryNameMapper" %>

@@ -5,7 +5,7 @@
 <%@ page import="java.util.HashMap"%>
 <%@ page import="java.util.Set"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
+<%@ page import="edu.arizona.biosemantics.oto.common.model.User"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.DecisionBean"%>
 <%@ page import="java.text.SimpleDateFormat"%>
 <%@ page import="java.util.Random"%>

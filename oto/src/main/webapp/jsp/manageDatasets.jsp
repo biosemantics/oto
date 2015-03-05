@@ -4,7 +4,7 @@
 <%@ page import="java.util.ArrayList"%>
 <%@ page
 	import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
+<%@ page import="edu.arizona.biosemantics.oto.common.model.User"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.db.GeneralDBAccess"%>
 <%@ page
 	import="edu.arizona.biosemantics.oto.oto.beans.DatasetStatistics"%>

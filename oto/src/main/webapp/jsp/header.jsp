@@ -1,6 +1,6 @@
 <%@ page
 	import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.User"%>
+<%@ page import="edu.arizona.biosemantics.oto.common.model.User"%>
 <script language="javascript" src="js/jquery-1.8.3.js"></script>
 <script language="javascript" src="js/menu.js"></script>
 <%

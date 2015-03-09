@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 import edu.arizona.biosemantics.oto.common.io.ExecCommmand;
+import edu.arizona.biosemantics.oto.common.model.Authentication;
 import edu.arizona.biosemantics.oto.common.model.User;
 import edu.arizona.biosemantics.oto.common.security.Encryptor;
 import edu.arizona.biosemantics.oto.common.security.PasswordGenerator;
@@ -458,6 +459,67 @@ public class UserDataAccess extends DatabaseAccess {
 
 		return returnValue;
 
+	}
+	
+	public User getUser(String email) throws Exception {
+		User user = new User();
+		String sql = "select * FROM users WHERE email = ?";
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			conn = getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, email);
+			pstmt.execute();
+			ResultSet rset = pstmt.getResultSet();
+			
+			if(rset.next()) {
+				user.setActive(rset.getString("status").equals("Y") ? true : false);
+				user.setAffiliation(rset.getString("affiliation"));
+				user.setBioportalApiKey(rset.getString("bioportalApiKey"));
+				user.setBioportalUserId(rset.getString("bioportalUserId"));
+				user.setFirstName(rset.getString("firstname"));
+				user.setLastName(rset.getString("lastname"));
+				user.setPassword(rset.getString("password"));
+				user.setRole(rset.getString("role"));
+				user.setUserEmail(rset.getString("email"));
+				user.setUserId(rset.getInt("userid"));
+				return user;
+			}
+			throw new Exception("User does not exist");
+			
+		} catch (Exception exe) {
+			LOGGER.error("unable to update the user details: ", exe);
+			exe.printStackTrace();
+			throw exe;
+		} finally {
+			closeConnection(pstmt, conn);
+		}
+	}
+
+	public boolean validateAuthentication(Authentication authentication) {
+		User user;
+		try {
+			user = this.getUser(authentication.getEmail());
+			if(user == null)
+				return false;
+			
+			int id = user.getUserId();
+			String secret = Configuration.getInstance().getSecret() + id;
+			secret = Encryptor.getInstance().encrypt(secret);
+			return authentication.getToken().equals(secret);
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.error("Failed to validate token", e);
+			return false;
+		}	
+	}
+	
+	public String getAuthenticationToken(User user) throws Exception {
+		user = this.getUser(user.getUserEmail());
+		String secret = Configuration.getInstance().getSecret() + user.getUserId();
+		secret = Encryptor.getInstance().encrypt(secret);
+		return secret;
 	}
 
 }

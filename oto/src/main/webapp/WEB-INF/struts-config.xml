@@ -16,6 +16,8 @@
 			type="edu.arizona.biosemantics.oto.oto.form.RegistrationForm" />
 		<form-bean name="loginForm"
 			type="edu.arizona.biosemantics.oto.oto.form.UserLoginForm" />
+		<form-bean name="loginGoogleForm"
+			type="edu.arizona.biosemantics.oto.oto.form.UserLoginGoogleForm" />
 		<form-bean name="bioportalForm"
 			type="edu.arizona.biosemantics.oto.oto.form.BioportalForm" />
 		<form-bean name="importForm"
@@ -118,6 +120,12 @@
 		<action path="/validateLogin"
 			type="edu.arizona.biosemantics.oto.oto.action.UserLoginAction" name="loginForm"
 			scope="request" input="/login.jsp" validate="true">
+			<forward name="reload" path="/jsp/login.jsp" />
+			<forward name="home" path="/jsp/index.jsp" />
+		</action>
+		<action path="/validateLoginGoogle"
+			type="edu.arizona.biosemantics.oto.oto.action.UserLoginGoogleAction" name="loginGoogleForm"
+			scope="request" input="/googleLoginLanding.jsp" validate="true">
 			<forward name="reload" path="/jsp/login.jsp" />
 			<forward name="home" path="/jsp/index.jsp" />
 		</action>

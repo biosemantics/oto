@@ -6,6 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import edu.arizona.biosemantics.oto.common.model.TermContext;
 
 public class HierarchyDBAccess extends DatabaseAccess {
 
@@ -24,6 +28,17 @@ public class HierarchyDBAccess extends DatabaseAccess {
 		// TODO Auto-generated constructor stub
 	}
 
+	public void importStructures(String datasetName,
+			List<TermContext> termContexts, String fileName) throws Exception {
+		List<String> terms = new LinkedList<String>();
+		List<String> contexts = new LinkedList<String>();
+		for(TermContext context : termContexts) {
+			terms.add(context.getTerm());
+			contexts.add(context.getContext());
+		}
+		this.importStructures(datasetName, terms, fileName, contexts);
+	}
+	
 	/**
 	 * delete existing structures and import terms
 	 * 
@@ -33,8 +48,8 @@ public class HierarchyDBAccess extends DatabaseAccess {
 	 * @param sentences
 	 * @throws Exception 
 	 */
-	public void importStructures(String dataset, ArrayList<String> termList,
-			String fileName, ArrayList<String> sentences) throws Exception {
+	public void importStructures(String dataset, List<String> termList,
+			String fileName, List<String> sentences) throws Exception {
 		Connection conn = null;
 		Statement stmt = null;
 		PreparedStatement pstmt = null;
@@ -83,5 +98,7 @@ public class HierarchyDBAccess extends DatabaseAccess {
 				conn.close();
 		}
 	}
+
+
 
 }

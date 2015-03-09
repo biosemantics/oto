@@ -4,6 +4,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.form.RegistrationForm"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.Configuration"%>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>OTO</title>
@@ -14,9 +15,14 @@
 <script language="javascript" src="js/fader.js"></script>
 <script language="javascript" src="js/group.js"></script>
 <script language="javascript" src="js/download.js"></script>
+
 <script language="javascript">
 function loginCheck(){
 	document.getElementById('loginForm').submit();
+}
+
+function loginGoogleCheck() {
+	location.replace("https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/userinfo.profile%20https://www.googleapis.com/auth/userinfo.email&client_id=<%=Configuration.getInstance().getGoogleClientId() %>&redirect_uri=<%=Configuration.getInstance().getGoogleRedirectURI() %>&response_type=token");
 }
 
 function registrationCheck(){
@@ -143,7 +149,13 @@ function getPass() {
 								onclick="forgetPass()"><font id="forgetPassTxt"
 									class="font-text-style" color="White">Forgot your password?</font></a> | </font> <a href="#" onclick="fade('register',1500.0)"
 								><font class="font-text-style" color="White" id="registerTxt">Register</font></a></td>
-								
+							</tr>
+							<tr>
+								<td> &nbsp;<br></br></td>
+								<td align="left">
+									<input type="button" name="button" value="Google Log in" id="loginGoogleBtn"
+									class="uiButton uiButtonSpecial uiButtonMedium" onclick="loginGoogleCheck()">
+								</td>
 							</tr>
 						</table>
 						</form>

@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -206,7 +207,7 @@ public class GeneralDBAccess extends DatabaseAccess {
 	 * @throws Exception
 	 */
 	public void importSentences(Connection conn, PreparedStatement pstmt,
-			String dataset, String fileName, ArrayList<String> sentences)
+			String dataset, String fileName, List<String> sentences)
 			throws Exception {
 		ResultSet rset = null;
 		HashMap<String, Boolean> map = new HashMap<String, Boolean>();

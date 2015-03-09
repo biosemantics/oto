@@ -6,6 +6,8 @@ package edu.arizona.biosemantics.oto.oto.beans;
 
 import java.util.ArrayList;
 
+import edu.arizona.biosemantics.common.biology.TaxonGroup;
+
 public class GlossaryNameMapper {
 	private static GlossaryNameMapper instance;
 
@@ -69,6 +71,18 @@ public class GlossaryNameMapper {
 		}
 		return 0;
 	}
+
+	public int getGlossaryIDByName(TaxonGroup taxonGroup) {
+		String glossaryName = taxonGroup.getDisplayName();
+		
+		// QUICK and dirty FIX until OTO/github glossaries repository and also OTO database "glossaryTypes" table spelling error is corrected
+		if(glossaryName.equalsIgnoreCase("Algae")) {
+			glossaryName = "Algea";
+		}
+		return this.getGlossaryIDByName(glossaryName);
+	}
+
+	
 
 	/**
 	 * get all glossaries as an array list: no need to access database since

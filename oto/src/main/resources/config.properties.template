@@ -18,6 +18,13 @@ gitCommitterEmail=
 gitRepository=https://github.com/biosemantics/glossaries.git
 gitLocalPath=
 
+#Token generation secret
+secret=
+
+#Sign in with Google
+google_redirect_URI=http://127.0.0.1:8888/index.html?gwt.codesvr=127.0.0.1:9997
+google_client_id=610005360690-3v4ebauef6a4oc5i128nvvqmvh4uu8ke.apps.googleusercontent.com
+
 #where to store glossary files before commit to github
 GLOSSARY_FILE_PATH=
 

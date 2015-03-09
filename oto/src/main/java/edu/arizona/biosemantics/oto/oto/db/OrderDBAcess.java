@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.arizona.biosemantics.oto.common.model.Order;
 
@@ -68,7 +69,7 @@ public class OrderDBAcess extends DatabaseAccess {
 	 * @param orders
 	 * @throws Exception 
 	 */
-	public void importOrders(String dataset, ArrayList<Order> orders)
+	public void importOrders(String dataset, List<Order> orders)
 			throws Exception {
 		Connection conn = null;
 		Statement stmt = null;

@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import edu.arizona.biosemantics.oto.common.model.Category;
 import edu.arizona.biosemantics.oto.common.model.User;
+import edu.arizona.biosemantics.oto.common.security.Encryptor;
 import edu.arizona.biosemantics.oto.oto.db.UserDataAccess;
 import edu.arizona.biosemantics.oto.oto.rest.db.CategoryDAO;
 
@@ -51,5 +52,20 @@ public class UserResource {
 			e.printStackTrace();
 		}
 		return  "Registration failed";
+	}
+	
+	@GET
+	@Path("/token")
+	public String getAuthenticationToken(User user) {
+		try {
+			if(uda.validateUser(user)) {
+				String token = uda.getAuthenticationToken(user);
+				return token;
+			}
+		} catch(Exception e) {
+			logger.error("Exception " + e.toString());
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

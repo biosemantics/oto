@@ -45,11 +45,20 @@ public class Configuration {
 	private String backupFilepath;
 	private String downloadUrl;
 	private String os;
+	private String googleRedirectURI;
+	private String googleClientId;
+	private String secret;
 	
 	public Configuration() throws IOException {
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		Properties properties = new Properties();
 		properties.load(loader.getResourceAsStream("config.properties"));
+
+		this.secret = properties.getProperty("secret");
+		
+		this.googleRedirectURI = properties.getProperty("google_redirect_URI");
+		this.googleClientId = properties.getProperty("google_client_id");
+		
 		this.minPasswordLength = Integer.parseInt(properties.getProperty("MIN_PASSWORD_LENGTH").trim());
 		
 		this.otoEmailUser = properties.getProperty("OTO_EMAIL_USER");
@@ -216,5 +225,23 @@ public class Configuration {
 	public String getOs() {
 		return os;
 	}
+
+	public String getBackupFilepath() {
+		return backupFilepath;
+	}
+
+	public String getGoogleRedirectURI() {
+		return googleRedirectURI;
+	}
+
+	public String getGoogleClientId() {
+		return googleClientId;
+	}
+
+	public String getSecret() {
+		return secret;
+	}
+	
+	
 		
 }

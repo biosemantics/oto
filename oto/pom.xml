@@ -24,6 +24,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20090211</version>
+		</dependency>
+		<dependency>
 			<groupId>struts</groupId>
 			<artifactId>struts</artifactId>
 			<version>1.2.9</version>
@@ -39,9 +44,9 @@
 			<version>1.2.1</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.glassfish.jersey.containers</groupId>
-		    <artifactId>jersey-container-servlet-core</artifactId>
-		    <version>2.6</version>
+			<groupId>org.glassfish.jersey.containers</groupId>
+			<artifactId>jersey-container-servlet-core</artifactId>
+			<version>2.6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.media</groupId>
@@ -60,10 +65,10 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
- 			<groupId>mysql</groupId>
- 			<artifactId>mysql-connector-java</artifactId>
- 			<version>5.1.30</version>
- 		</dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.30</version>
+		</dependency>
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>

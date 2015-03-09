@@ -1,42 +1,48 @@
 package edu.arizona.biosemantics.oto.common.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class TermOrder {
-	private ArrayList<Order> orderData;
-	private Login loginData;
+public class TermOrder implements Serializable {
 	
-	public TermOrder(){
-		orderData = new ArrayList<Order>();
+	private List<Order> orders;
+	private Authentication authentication;
+	
+	public TermOrder(){ }
+	
+	public TermOrder(List<Order> orders, Authentication authentication) {
+		this.orders = orders;
+		this.authentication = authentication;
 	}
 	
-	public Login getLoginData(){
-		return loginData;
+	public Authentication getAuthentication(){
+		return authentication;
 	}
 	
-	public void setLoginData(Login data){
-		loginData = data;
+	public void setAuthentication(Authentication authentication){
+		this.authentication = authentication;
 	}
 	
-	public ArrayList<Order> getOrderData(){
-		return orderData;
+	public List<Order> getOrders(){
+		return orders;
 	}
 	
-	public void setOrderData(ArrayList<Order> data){
-		this.orderData = data;
+	public void setOrders(List<Order> orders){
+		this.orders = orders;
 	}
 	
 	public void addEntry(String orderName, ArrayList<String> includedTerms){
-		orderData.add(new Order(orderName, includedTerms));
+		orders.add(new Order(orderName, includedTerms));
 	}
 	
 	public String toString(){
 		StringBuffer buff = new StringBuffer();
 		buff.append("TermOrderData {\n");
-		for (Order pair: orderData){
+		for (Order pair: orders){
 			buff.append("\t[" + pair + "]\n");
 		}
 		buff.append("}\n");

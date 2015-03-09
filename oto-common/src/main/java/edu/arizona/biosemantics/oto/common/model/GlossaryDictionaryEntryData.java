@@ -4,26 +4,26 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class GlossaryDictionaryEntryData {
-	private Login loginData;
+	private Authentication authentication;
 	private String termDescription;
 	
 	public GlossaryDictionaryEntryData(){}
 	
-	public GlossaryDictionaryEntryData(Login loginData, String termDescription){
-		this.loginData = loginData;
+	public GlossaryDictionaryEntryData(Authentication authentication, String termDescription){
+		this.authentication = authentication;
 		this.termDescription = termDescription;
 	}
 	
-	public Login getLoginData(){
-		return loginData;
+	public Authentication getAuthentication(){
+		return authentication;
 	}
 	
 	public String getTermDescription(){
 		return termDescription;
 	}
 	
-	public void setLoginData(Login loginData){
-		this.loginData = loginData;
+	public void setAuthentication(Authentication authentication){
+		this.authentication = authentication;
 	}
 	
 	public void setTermDescription(String termDescription){

@@ -1,11 +1,17 @@
 package edu.arizona.biosemantics.oto.common.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Order {
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+public class Order implements Serializable {
 	private String orderName;
 	private ArrayList<String> terms;
 
+	public Order() { }
+	
 	public Order(String orderName, ArrayList<String> terms) {
 		this.setOrderName(orderName);
 		this.setTerms(terms);

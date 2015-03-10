@@ -51,7 +51,7 @@ public class ImportAction extends ParserAction {
 				overMax = terms.size() > 2000;
 				if(!overMax)
 					CategorizationDBAccess.getInstance().importTerms(datasetName,
-							terms, file.getFileName(), parser.getSentences());
+							terms, file.getFileName(), parser.getSentences(), true);
 				
 			} else if (taskIndex.equals("2")) { // hierarchy page
 				CsvParser parser = new CsvParser(file.getInputStream());
@@ -61,20 +61,15 @@ public class ImportAction extends ParserAction {
 				overMax = termList.size() > 2000;
 				if(!overMax)
 					HierarchyDBAccess.getInstance().importStructures(datasetName,
-							termList, file.getFileName(), parser.getSentences());
+							termList, file.getFileName(), parser.getSentences(), true);
 				
 			} else { // order
 				orderList = new CsvParser(fileStream).getOrderList();
 				
-				for(Order order : orderList) {
-					if(order.getTerms().size() > 2000) {
-						overMax = true;
-					}
-				}
-				
+				overMax = orderList.size() > 2000;				
 				message += "Term Order ";
 				if(!overMax)
-					OrderDBAcess.getInstance().importOrders(datasetName, orderList);
+					OrderDBAcess.getInstance().importOrders(datasetName, orderList, true);
 			}
 			
 			if(!overMax) {

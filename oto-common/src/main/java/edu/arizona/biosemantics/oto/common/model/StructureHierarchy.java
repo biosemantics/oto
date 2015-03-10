@@ -6,14 +6,16 @@ public class StructureHierarchy {
 
 	private List<TermContext> termContexts;
 	private String authenticationToken;
+	private boolean replace = true;
 	
 	public StructureHierarchy() { }
 	
 	public StructureHierarchy(List<TermContext> termContexts,
-			String authenticationToken) {
+			String authenticationToken, boolean replace) {
 		super();
 		this.termContexts = termContexts;
 		this.authenticationToken = authenticationToken;
+		this.replace = replace;
 	}
 
 	public List<TermContext> getTermContexts() {
@@ -31,4 +33,14 @@ public class StructureHierarchy {
 	public void setAuthenticationToken(String authenticationToken) {
 		this.authenticationToken = authenticationToken;
 	}
+
+	public boolean isReplace() {
+		return replace;
+	}
+
+	public void setReplace(boolean replace) {
+		this.replace = replace;
+	}
+	
+	
 }

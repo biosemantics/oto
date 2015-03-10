@@ -11,12 +11,14 @@ public class TermOrder implements Serializable {
 	
 	private List<Order> orders;
 	private String authenticationToken;
+	private boolean replace;
 	
 	public TermOrder(){ }
 	
-	public TermOrder(List<Order> orders, String authenticationToken) {
+	public TermOrder(List<Order> orders, String authenticationToken, boolean replace) {
 		this.orders = orders;
 		this.authenticationToken = authenticationToken;
+		this.replace = replace;
 	}
 	
 	public String getAuthenticationToken(){
@@ -47,5 +49,13 @@ public class TermOrder implements Serializable {
 		}
 		buff.append("}\n");
 		return buff.toString();
+	}
+	
+	public boolean isReplace() {
+		return replace;
+	}
+
+	public void setReplace(boolean replace) {
+		this.replace = replace;
 	}
 }

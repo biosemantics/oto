@@ -619,7 +619,7 @@
 							group name and all the other columns will be imported as terms in
 							this order group. You are able to add orders or terms under this
 							order group in Orders page after importing.<br />
-							3. The maximum number of terms is limited to 2000.<br />
+							3. The maximum number of orders is limited to 2000.<br />
 							4. The .CSV
 							file should have no column name row. If you have a column name
 							row, delete it before importing or the column name will be

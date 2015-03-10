@@ -32,14 +32,14 @@ public class CategorizationDBAccess extends DatabaseAccess {
 	}
 
 	public void importTerms(String datasetName, List<TermContext> termContexts,
-			String fileName) throws Exception {
+			String fileName, boolean replace) throws Exception {
 		List<String> terms = new LinkedList<String>();
 		List<String> contexts = new LinkedList<String>();
 		for(TermContext context : termContexts) {
 			terms.add(context.getTerm());
 			contexts.add(context.getContext());
 		}
-		this.importTerms(datasetName, terms, fileName, contexts);
+		this.importTerms(datasetName, terms, fileName, contexts, replace);
 	}
 	
 	/**
@@ -49,10 +49,11 @@ public class CategorizationDBAccess extends DatabaseAccess {
 	 * @param termList
 	 * @param fileName
 	 * @param sentences
+	 * @param replace 
 	 * @throws Exception
 	 */
 	public void importTerms(String dataset, List<String> termList,
-			String fileName, List<String> sentences) throws Exception {
+			String fileName, List<String> sentences, boolean replace) throws Exception {
 		Connection conn = null;
 		Statement stmt = null;
 		PreparedStatement pstmt = null;
@@ -66,6 +67,21 @@ public class CategorizationDBAccess extends DatabaseAccess {
 			for (String term : termList) {
 				stmt.execute("insert into " + dataset + "_web_grouped_terms "
 						+ "(groupId, term) values (0, '" + term + "')");
+			}
+			
+			if(replace) {
+				stmt.execute("delete from " + dataset + "_web_grouped_terms");
+				for (String term : termList) {
+					stmt.execute("insert into " + dataset + "_web_grouped_terms "
+							+ "(groupId, term) values (0, '" + term + "')");
+				}
+			} else {
+				//deduplicate
+				for (String term : termList) {
+					if(!exists(term, dataset)) 
+						stmt.execute("insert into " + dataset + "_web_grouped_terms "
+								+ "(groupId, term) values (0, '" + term + "')");
+				}
 			}
 
 			// import sentences
@@ -92,6 +108,27 @@ public class CategorizationDBAccess extends DatabaseAccess {
 			if (conn != null)
 				conn.close();
 		}
+	}
+
+	private boolean exists(String term, String dataset) throws Exception {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			String sql = "select term from " + dataset + "_web_grouped_terms where term = ?";
+			conn = getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, term);
+			ResultSet rset = pstmt.executeQuery();
+			return rset.next();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (pstmt != null)
+				pstmt.close();
+			if (conn != null)
+				conn.close();
+		}
+		return false;
 	}
 
 	/**

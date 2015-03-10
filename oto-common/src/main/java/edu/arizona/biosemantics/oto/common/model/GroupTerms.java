@@ -9,13 +9,15 @@ public class GroupTerms {
 
 	private List<TermContext> termContexts;
 	private String authenticationToken;
+	private boolean replace = true;
 	
 	public GroupTerms() { }
 	
-	public GroupTerms(List<TermContext> termContexts, String authenticationToken) {
+	public GroupTerms(List<TermContext> termContexts, String authenticationToken, boolean replace) {
 		super();
 		this.termContexts = termContexts;
 		this.authenticationToken = authenticationToken;
+		this.replace = replace;
 	}
 
 	public List<TermContext> getTermContexts() {
@@ -32,6 +34,14 @@ public class GroupTerms {
 
 	public void setAuthenticationToken(String authenticationToken) {
 		this.authenticationToken = authenticationToken;
+	}
+
+	public boolean isReplace() {
+		return replace;
+	}
+
+	public void setReplace(boolean replace) {
+		this.replace = replace;
 	}	
 	
 }

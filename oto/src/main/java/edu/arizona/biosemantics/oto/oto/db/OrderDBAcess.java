@@ -67,9 +67,10 @@ public class OrderDBAcess extends DatabaseAccess {
 	 * 
 	 * @param dataset
 	 * @param orders
+	 * @param b 
 	 * @throws Exception 
 	 */
-	public void importOrders(String dataset, List<Order> orders)
+	public void importOrders(String dataset, List<Order> orders, boolean replace)
 			throws Exception {
 		Connection conn = null;
 		Statement stmt = null;
@@ -79,40 +80,44 @@ public class OrderDBAcess extends DatabaseAccess {
 			stmt = conn.createStatement();
 			conn.setAutoCommit(false);
 
-			// delete existing orders and terms in orders
-			stmt.executeUpdate("delete from " + dataset + "_web_orders_terms");
-			stmt.executeUpdate("delete from " + dataset + "_web_orders");
+			if(replace) {
+				// delete existing orders and terms in orders
+				stmt.executeUpdate("delete from " + dataset + "_web_orders_terms");
+				stmt.executeUpdate("delete from " + dataset + "_web_orders");
+			}
 
 			for (Order order : orders) {
-				// insert base order
-				stmt.executeUpdate(
-						"insert into " + dataset + "_web_orders "
-								+ "(name, isBase) " + "values " + "('"
-								+ order.getOrderName() + "', true)",
-						Statement.RETURN_GENERATED_KEYS);
-				rset = stmt.getGeneratedKeys();
-				if (rset.next()) {
-					// insert base order terms
-					ArrayList<String> terms = order.getTerms();
-					int baseOrderID = rset.getInt(1);
-					boolean isBase = true; /*
-											 * make the first term the base. May
-											 * sounds not exact reasonable for
-											 * now, but should be fixed after
-											 * the change of order page
-											 */
-					for (String term : terms) {
-						String sql = "insert into " + dataset
-								+ "_web_orders_terms "
-								+ "(orderID, name, isBase) values " + "("
-								+ baseOrderID + ", '" + term + "', ";
-						if (isBase) {
-							sql += "true)";
-							isBase = false;
-						} else {
-							sql += "false)";
+				if(replace || !exists(order, dataset)) {
+					// insert base order
+					stmt.executeUpdate(
+							"insert into " + dataset + "_web_orders "
+									+ "(name, isBase) " + "values " + "('"
+									+ order.getOrderName() + "', true)",
+							Statement.RETURN_GENERATED_KEYS);
+					rset = stmt.getGeneratedKeys();
+					if (rset.next()) {
+						// insert base order terms
+						ArrayList<String> terms = order.getTerms();
+						int baseOrderID = rset.getInt(1);
+						boolean isBase = true; /*
+												 * make the first term the base. May
+												 * sounds not exact reasonable for
+												 * now, but should be fixed after
+												 * the change of order page
+												 */
+						for (String term : terms) {
+							String sql = "insert into " + dataset
+									+ "_web_orders_terms "
+									+ "(orderID, name, isBase) values " + "("
+									+ baseOrderID + ", '" + term + "', ";
+							if (isBase) {
+								sql += "true)";
+								isBase = false;
+							} else {
+								sql += "false)";
+							}
+							stmt.executeUpdate(sql);
 						}
-						stmt.executeUpdate(sql);
 					}
 				}
 			}
@@ -135,6 +140,27 @@ public class OrderDBAcess extends DatabaseAccess {
 			if (conn != null)
 				conn.close();
 		}
+	}
+
+	private boolean exists(Order order, String dataset) throws SQLException {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			String sql = "select name from " + dataset + "_web_orders where name = ?";
+			conn = getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, order.getOrderName());
+			ResultSet rset = pstmt.executeQuery();
+			return rset.next();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (pstmt != null)
+				pstmt.close();
+			if (conn != null)
+				conn.close();
+		}
+		return false;
 	}
 
 }

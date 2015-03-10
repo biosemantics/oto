@@ -5,6 +5,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.crypto.NoSuchPaddingException;
 import javax.ws.rs.Consumes;
@@ -21,7 +22,9 @@ import org.slf4j.LoggerFactory;
 
 import edu.arizona.biosemantics.oto.common.model.CreateDataset;
 import edu.arizona.biosemantics.oto.common.model.GroupTerms;
+import edu.arizona.biosemantics.oto.common.model.Order;
 import edu.arizona.biosemantics.oto.common.model.StructureHierarchy;
+import edu.arizona.biosemantics.oto.common.model.TermContext;
 import edu.arizona.biosemantics.oto.common.model.TermOrder;
 import edu.arizona.biosemantics.oto.common.model.User;
 import edu.arizona.biosemantics.oto.oto.beans.GlossaryNameMapper;
@@ -78,54 +81,57 @@ public class DatasetResource {
 	@Path("/{datasetName}/groupterms")
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public String groupTerms(@PathParam("datasetName") String datasetName, GroupTerms groupTerms) {		
+	public int groupTerms(@PathParam("datasetName") String datasetName, GroupTerms groupTerms) {		
 		try {
 			if(uaccess.validateAuthentication(groupTerms.getAuthenticationToken())) {
-				
-				CategorizationDBAccess.getInstance().importTerms(datasetName,
-						groupTerms.getTermContexts(), "web service group terms");
-				return "Group Terms data was imported successfully.";
-			} else { 
-				return "Invalid email or password! Please try again.";
+				List<TermContext> termContexts = groupTerms.getTermContexts();
+				if(termContexts.size() <= 2000) {
+					CategorizationDBAccess.getInstance().importTerms(datasetName,
+							groupTerms.getTermContexts(), "web service group terms", groupTerms.isReplace());
+					return termContexts.size();
+				}
 			}
 		} catch (Exception exe) {
 			logger.error("Couldnt' import group terms", exe);
-			return "An error occurred while attempting to populate the dataset. Please try again later.";
 		}
+		return 0;
 	}
 	
 	@Path("/{datasetName}/structurehierarchy")
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public String structureHierarchy(@PathParam("datasetName") String datasetName, StructureHierarchy structureHierarchy) {				
+	public int structureHierarchy(@PathParam("datasetName") String datasetName, StructureHierarchy structureHierarchy) {				
 		try {
 			if(uaccess.validateAuthentication(structureHierarchy.getAuthenticationToken())) {
-				HierarchyDBAccess.getInstance().importStructures(datasetName,
-						structureHierarchy.getTermContexts(), "web service structure hierarchy");
-				return "Structure Hierachy data was imported successfully.";
-			} else { 
-				return "Invalid email or password! Please try again.";
+				List<TermContext> termContexts = structureHierarchy.getTermContexts();
+				if(termContexts.size() <= 2000) {
+					HierarchyDBAccess.getInstance().importStructures(datasetName,
+							structureHierarchy.getTermContexts(), "web service structure hierarchy", structureHierarchy.isReplace());
+					return termContexts.size();
+				}
 			}
 		} catch (Exception exe) {
 			logger.error("Couldnt' import structure hierarchy", exe);
-			return "An error occurred while attempting to create the dataset. Please try again later.";
 		}
+		return 0;
 	}
 	
 	@Path("/{datasetName}/termorder")
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public String termOrder(@PathParam("datasetName") String datasetName, TermOrder termOrder) {		
+	public int termOrder(@PathParam("datasetName") String datasetName, TermOrder termOrder) {		
 		try {
 			if(uaccess.validateAuthentication(termOrder.getAuthenticationToken())) {
-				OrderDBAcess.getInstance().importOrders(datasetName, termOrder.getOrders());
-				return "Term Order data was imported successfully.";
-			} else { 
-				return "Invalid email or password! Please try again.";
+				List<Order> orders = termOrder.getOrders();
+				
+				if(orders.size() <= 2000) {
+					OrderDBAcess.getInstance().importOrders(datasetName, termOrder.getOrders(), termOrder.isReplace());
+					return orders.size();
+				}
 			}
 		} catch (Exception exe) {
 			logger.error("Couldnt' import term order", exe);
-			return "An error occurred while attempting to create the dataset. Please try again later.";
 		}
+		return 0;
 	}
 }

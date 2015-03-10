@@ -3,6 +3,7 @@ package edu.arizona.biosemantics.oto.oto.db;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -29,14 +30,14 @@ public class HierarchyDBAccess extends DatabaseAccess {
 	}
 
 	public void importStructures(String datasetName,
-			List<TermContext> termContexts, String fileName) throws Exception {
+			List<TermContext> termContexts, String fileName, boolean replace) throws Exception {
 		List<String> terms = new LinkedList<String>();
 		List<String> contexts = new LinkedList<String>();
 		for(TermContext context : termContexts) {
 			terms.add(context.getTerm());
 			contexts.add(context.getContext());
 		}
-		this.importStructures(datasetName, terms, fileName, contexts);
+		this.importStructures(datasetName, terms, fileName, contexts, replace);
 	}
 	
 	/**
@@ -49,7 +50,7 @@ public class HierarchyDBAccess extends DatabaseAccess {
 	 * @throws Exception 
 	 */
 	public void importStructures(String dataset, List<String> termList,
-			String fileName, List<String> sentences) throws Exception {
+			String fileName, List<String> sentences, boolean replace) throws Exception {
 		Connection conn = null;
 		Statement stmt = null;
 		PreparedStatement pstmt = null;
@@ -58,19 +59,26 @@ public class HierarchyDBAccess extends DatabaseAccess {
 			conn.setAutoCommit(false);
 			stmt = conn.createStatement();
 
-			// import structures
-			stmt.execute("delete from " + dataset + "_web_tags");
-
 			// insert default 7 terms
+			stmt.execute("delete from " + dataset + "_web_tags;");
 			stmt.execute("insert into " + dataset
 					+ "_web_tags(tagID, tagName) " + "values "
 					+ "(1, 'Plant'), (2, 'Root'), (3, 'Stem'), (4, 'Leaf'), "
 					+ "(5, 'Fruit'), (6, 'Seed'), (7, 'Flower');");
-
-			// insert new terms
-			for (String term : termList) {
-				stmt.execute("insert into " + dataset + "_web_tags "
-						+ "(tagName) values ('" + term + "')");
+			
+			if(replace) {
+				stmt.execute("delete from " + dataset + "_web_tags");
+				for (String term : termList) {
+					stmt.execute("insert into " + dataset + "_web_tags "
+							+ "(tagName) values ('" + term + "')");
+				}
+			} else {
+				//deduplicate
+				for (String term : termList) {
+					if(!exists(term, dataset)) 
+						stmt.execute("insert into " + dataset + "_web_tags "
+							+ "(tagName) values ('" + term + "')");
+				}
 			}
 
 			// import sentences
@@ -97,6 +105,27 @@ public class HierarchyDBAccess extends DatabaseAccess {
 			if (conn != null)
 				conn.close();
 		}
+	}
+
+	private boolean exists(String term, String dataset) throws Exception {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			String sql = "select tagID from " + dataset + "_web_tags where tagName = ?";
+			conn = getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, term);
+			ResultSet rset = pstmt.executeQuery();
+			return rset.next();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (pstmt != null)
+				pstmt.close();
+			if (conn != null)
+				conn.close();
+		}
+		return false;
 	}
 
 

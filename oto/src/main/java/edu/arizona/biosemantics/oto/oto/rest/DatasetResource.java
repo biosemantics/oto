@@ -81,57 +81,54 @@ public class DatasetResource {
 	@Path("/{datasetName}/groupterms")
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public int groupTerms(@PathParam("datasetName") String datasetName, GroupTerms groupTerms) {		
+	public GroupTerms.Result groupTerms(@PathParam("datasetName") String datasetName, GroupTerms groupTerms) {		
 		try {
 			if(uaccess.validateAuthentication(groupTerms.getAuthenticationToken())) {
 				List<TermContext> termContexts = groupTerms.getTermContexts();
 				if(termContexts.size() <= 2000) {
-					CategorizationDBAccess.getInstance().importTerms(datasetName,
-							groupTerms.getTermContexts(), "web service group terms", groupTerms.isReplace());
-					return termContexts.size();
+					return new GroupTerms.Result(CategorizationDBAccess.getInstance().importTerms(datasetName,
+							groupTerms.getTermContexts(), "web service group terms", groupTerms.isReplace()));
 				}
 			}
 		} catch (Exception exe) {
 			logger.error("Couldnt' import group terms", exe);
 		}
-		return 0;
+		return new GroupTerms.Result(0);
 	}
 	
 	@Path("/{datasetName}/structurehierarchy")
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public int structureHierarchy(@PathParam("datasetName") String datasetName, StructureHierarchy structureHierarchy) {				
+	public StructureHierarchy.Result structureHierarchy(@PathParam("datasetName") String datasetName, StructureHierarchy structureHierarchy) {				
 		try {
 			if(uaccess.validateAuthentication(structureHierarchy.getAuthenticationToken())) {
 				List<TermContext> termContexts = structureHierarchy.getTermContexts();
 				if(termContexts.size() <= 2000) {
-					HierarchyDBAccess.getInstance().importStructures(datasetName,
-							structureHierarchy.getTermContexts(), "web service structure hierarchy", structureHierarchy.isReplace());
-					return termContexts.size();
+					return new StructureHierarchy.Result(HierarchyDBAccess.getInstance().importStructures(datasetName,
+							structureHierarchy.getTermContexts(), "web service structure hierarchy", structureHierarchy.isReplace()));
 				}
 			}
 		} catch (Exception exe) {
 			logger.error("Couldnt' import structure hierarchy", exe);
 		}
-		return 0;
+		return new StructureHierarchy.Result(0);
 	}
 	
 	@Path("/{datasetName}/termorder")
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public int termOrder(@PathParam("datasetName") String datasetName, TermOrder termOrder) {		
+	public TermOrder.Result termOrder(@PathParam("datasetName") String datasetName, TermOrder termOrder) {		
 		try {
 			if(uaccess.validateAuthentication(termOrder.getAuthenticationToken())) {
 				List<Order> orders = termOrder.getOrders();
 				
 				if(orders.size() <= 2000) {
-					OrderDBAcess.getInstance().importOrders(datasetName, termOrder.getOrders(), termOrder.isReplace());
-					return orders.size();
+					return new TermOrder.Result(OrderDBAcess.getInstance().importOrders(datasetName, termOrder.getOrders(), termOrder.isReplace()));
 				}
 			}
 		} catch (Exception exe) {
 			logger.error("Couldnt' import term order", exe);
 		}
-		return 0;
+		return new TermOrder.Result(0);
 	}
 }

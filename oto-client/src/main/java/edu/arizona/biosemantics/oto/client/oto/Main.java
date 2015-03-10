@@ -31,6 +31,7 @@ public class Main {
 		String email = "thomas.rodenhausen@gmail.com";
 		String firstName = "Thomas";
 		String lastName = "Rodenhausen";
+		String token = "9ImelotCiHj2FMQ8fK5B0w==";
 		//String token = "TA+QdXcpz+AUi1iOjZDvZw==";
 		
 		/*User user = new User();
@@ -54,15 +55,22 @@ public class Main {
 		//List<Order> orders = new LinkedList<Order>();
 		//Future<String> result = otoClient.postTermOrder("thomas_tester123", new TermOrder(orders, new Authentication(email, token)));
 		
-		User user = new User();
-		user.setUserEmail(email);
-		user.setPassword(firstName + lastName);
+		//User user = new User();
+		//user.setUserEmail(email);
+		//user.setPassword(firstName + lastName);
 		
-		Future<String> tokenResult = otoClient.getUserAuthenticationToken(user);
-		String token = tokenResult.get();
-		Future<String> result = otoClient.postDataset(new CreateDataset("acb", TaxonGroup.PLANT, token));
+		//Future<String> tokenResult = otoClient.getUserAuthenticationToken(user);
+		//String token = tokenResult.get();
+		//Future<String> result = otoClient.postDataset(new CreateDataset("acb", TaxonGroup.PLANT, token));
 		
-		System.out.println(result.get());
+		List<TermContext> termContexts = new LinkedList<TermContext>();
+		termContexts.add(new TermContext("d", "d sentence"));
+		termContexts.add(new TermContext("e", "e sentence"));
+		termContexts.add(new TermContext("c", "c sentence"));
+		
+		GroupTerms groupTerms = new GroupTerms(termContexts, token, true);
+		Future<GroupTerms.Result> result = otoClient.postGroupTerms("thomas_tester123", groupTerms);
+		System.out.println(result.get().getCount());
 		
 		//OTOClient otoClient = new OTOClient("http://biosemantics.arizona.edu/OTO/");
 		//OTOClient otoClient = new OTOClient("http://localhost:9090/oto/");	

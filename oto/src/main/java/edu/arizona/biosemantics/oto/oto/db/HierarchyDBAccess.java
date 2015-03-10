@@ -29,7 +29,7 @@ public class HierarchyDBAccess extends DatabaseAccess {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void importStructures(String datasetName,
+	public int importStructures(String datasetName,
 			List<TermContext> termContexts, String fileName, boolean replace) throws Exception {
 		List<String> terms = new LinkedList<String>();
 		List<String> contexts = new LinkedList<String>();
@@ -37,7 +37,7 @@ public class HierarchyDBAccess extends DatabaseAccess {
 			terms.add(context.getTerm());
 			contexts.add(context.getContext());
 		}
-		this.importStructures(datasetName, terms, fileName, contexts, replace);
+		return this.importStructures(datasetName, terms, fileName, contexts, replace);
 	}
 	
 	/**
@@ -49,11 +49,12 @@ public class HierarchyDBAccess extends DatabaseAccess {
 	 * @param sentences
 	 * @throws Exception 
 	 */
-	public void importStructures(String dataset, List<String> termList,
+	public int importStructures(String dataset, List<String> termList,
 			String fileName, List<String> sentences, boolean replace) throws Exception {
 		Connection conn = null;
 		Statement stmt = null;
 		PreparedStatement pstmt = null;
+		int result = 0;
 		try {
 			conn = getConnection();
 			conn.setAutoCommit(false);
@@ -69,15 +70,18 @@ public class HierarchyDBAccess extends DatabaseAccess {
 			if(replace) {
 				stmt.execute("delete from " + dataset + "_web_tags");
 				for (String term : termList) {
+					result++;
 					stmt.execute("insert into " + dataset + "_web_tags "
 							+ "(tagName) values ('" + term + "')");
 				}
 			} else {
 				//deduplicate
 				for (String term : termList) {
-					if(!exists(term, dataset)) 
+					if(!exists(term, dataset)) {
+						result++; 
 						stmt.execute("insert into " + dataset + "_web_tags "
 							+ "(tagName) values ('" + term + "')");
+					}
 				}
 			}
 
@@ -105,6 +109,7 @@ public class HierarchyDBAccess extends DatabaseAccess {
 			if (conn != null)
 				conn.close();
 		}
+		return result;
 	}
 
 	private boolean exists(String term, String dataset) throws Exception {

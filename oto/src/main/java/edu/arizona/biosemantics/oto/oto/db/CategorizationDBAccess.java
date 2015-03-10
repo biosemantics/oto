@@ -31,7 +31,7 @@ public class CategorizationDBAccess extends DatabaseAccess {
 		super();
 	}
 
-	public void importTerms(String datasetName, List<TermContext> termContexts,
+	public int importTerms(String datasetName, List<TermContext> termContexts,
 			String fileName, boolean replace) throws Exception {
 		List<String> terms = new LinkedList<String>();
 		List<String> contexts = new LinkedList<String>();
@@ -39,7 +39,7 @@ public class CategorizationDBAccess extends DatabaseAccess {
 			terms.add(context.getTerm());
 			contexts.add(context.getContext());
 		}
-		this.importTerms(datasetName, terms, fileName, contexts, replace);
+		return this.importTerms(datasetName, terms, fileName, contexts, replace);
 	}
 	
 	/**
@@ -52,11 +52,12 @@ public class CategorizationDBAccess extends DatabaseAccess {
 	 * @param replace 
 	 * @throws Exception
 	 */
-	public void importTerms(String dataset, List<String> termList,
+	public int importTerms(String dataset, List<String> termList,
 			String fileName, List<String> sentences, boolean replace) throws Exception {
 		Connection conn = null;
 		Statement stmt = null;
 		PreparedStatement pstmt = null;
+		int result = 0;
 		try {
 			conn = getConnection();
 			conn.setAutoCommit(false);
@@ -72,15 +73,18 @@ public class CategorizationDBAccess extends DatabaseAccess {
 			if(replace) {
 				stmt.execute("delete from " + dataset + "_web_grouped_terms");
 				for (String term : termList) {
+					result++;
 					stmt.execute("insert into " + dataset + "_web_grouped_terms "
 							+ "(groupId, term) values (0, '" + term + "')");
 				}
 			} else {
 				//deduplicate
 				for (String term : termList) {
-					if(!exists(term, dataset)) 
+					if(!exists(term, dataset)) {
+						result++;
 						stmt.execute("insert into " + dataset + "_web_grouped_terms "
 								+ "(groupId, term) values (0, '" + term + "')");
+					}
 				}
 			}
 
@@ -108,6 +112,7 @@ public class CategorizationDBAccess extends DatabaseAccess {
 			if (conn != null)
 				conn.close();
 		}
+		return result;
 	}
 
 	private boolean exists(String term, String dataset) throws Exception {

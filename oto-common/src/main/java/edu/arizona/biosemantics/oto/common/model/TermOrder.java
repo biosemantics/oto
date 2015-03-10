@@ -9,6 +9,27 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class TermOrder implements Serializable {
 	
+	@XmlRootElement
+	public static class Result implements Serializable {
+		private int count;
+		
+		public Result() { 
+			
+		}
+		
+		public Result(int count) {
+			this.count = count;
+		}
+
+		public int getCount() {
+			return count;
+		}
+
+		public void setCount(int count) {
+			this.count = count;
+		}
+	}
+	
 	private List<Order> orders;
 	private String authenticationToken;
 	private boolean replace;

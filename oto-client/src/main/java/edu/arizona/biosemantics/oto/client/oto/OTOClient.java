@@ -129,16 +129,28 @@ public class OTOClient implements AutoCloseable {
 		return this.getDatasetInvoker().post(Entity.entity(createDataset, MediaType.APPLICATION_JSON), String.class);
 	}
 	
-	public Future<String> postGroupTerms(String datasetName, GroupTerms groupTerms) {
-		return this.getDatasetInvoker(datasetName, "groupterms").post(Entity.entity(groupTerms, MediaType.APPLICATION_JSON), String.class);
+	public Future<GroupTerms.Result> postGroupTerms(String datasetName, GroupTerms groupTerms) {
+		return this.getDatasetInvoker(datasetName, "groupterms").post(Entity.entity(groupTerms, MediaType.APPLICATION_JSON), GroupTerms.Result.class);
 	}
 	
-	public Future<String> postStructureHierarchy(String datasetName, StructureHierarchy structureHierarchy) {
-		return this.getDatasetInvoker(datasetName, "structurehierarchy").post(Entity.entity(structureHierarchy, MediaType.APPLICATION_JSON), String.class);
+	public Future<StructureHierarchy.Result> postStructureHierarchy(String datasetName, StructureHierarchy structureHierarchy) {
+		return this.getDatasetInvoker(datasetName, "structurehierarchy").post(Entity.entity(structureHierarchy, MediaType.APPLICATION_JSON), StructureHierarchy.Result.class);
 	}
 	
-	public Future<String> postTermOrder(String datasetName, TermOrder termOrder) {
-		return this.getDatasetInvoker(datasetName, "termorder").post(Entity.entity(termOrder, MediaType.APPLICATION_JSON), String.class);
+	public Future<TermOrder.Result> postTermOrder(String datasetName, TermOrder termOrder) {
+		return this.getDatasetInvoker(datasetName, "termorder").post(Entity.entity(termOrder, MediaType.APPLICATION_JSON), TermOrder.Result.class);
+	}
+	
+	public void postGroupTerms(String datasetName, GroupTerms groupTerms, InvocationCallback<GroupTerms.Result> callback) {
+		this.getDatasetInvoker(datasetName, "groupterms").post(Entity.entity(groupTerms, MediaType.APPLICATION_JSON), callback);
+	}
+	
+	public void postStructureHierarchy(String datasetName, StructureHierarchy structureHierarchy, InvocationCallback<StructureHierarchy.Result> callback) {
+		this.getDatasetInvoker(datasetName, "structurehierarchy").post(Entity.entity(structureHierarchy, MediaType.APPLICATION_JSON), callback);
+	}
+	
+	public void postTermOrder(String datasetName, TermOrder termOrder, InvocationCallback<TermOrder.Result> callback) {
+		this.getDatasetInvoker(datasetName, "termorder").post(Entity.entity(termOrder, MediaType.APPLICATION_JSON), callback);
 	}
 		
 	private AsyncInvoker getGlossaryDownloadInvoker(String glossaryType) {

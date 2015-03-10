@@ -70,11 +70,12 @@ public class OrderDBAcess extends DatabaseAccess {
 	 * @param b 
 	 * @throws Exception 
 	 */
-	public void importOrders(String dataset, List<Order> orders, boolean replace)
+	public int importOrders(String dataset, List<Order> orders, boolean replace)
 			throws Exception {
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rset = null;
+		int result = 0;
 		try {
 			conn = getConnection();
 			stmt = conn.createStatement();
@@ -119,6 +120,7 @@ public class OrderDBAcess extends DatabaseAccess {
 							stmt.executeUpdate(sql);
 						}
 					}
+					result ++;
 				}
 			}
 
@@ -140,6 +142,7 @@ public class OrderDBAcess extends DatabaseAccess {
 			if (conn != null)
 				conn.close();
 		}
+		return result;
 	}
 
 	private boolean exists(Order order, String dataset) throws SQLException {

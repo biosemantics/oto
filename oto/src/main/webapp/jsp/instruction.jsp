@@ -552,15 +552,17 @@
 							Format of 'Group Terms': <br /> <br />1. Only .CSV files can be
 							imported. <br />2. The first column of the .CSV file is term
 							name. The second column is the context sentence of the term. The
-							sentence column can be empty. <br />3. The .CSV file should have
+							sentence column can be empty. <br />
+							3. The maximum number of terms is limited to 2000.<br />		
+							4. The .CSV file should have
 							no column name row. If you have a column name row, delete it
-							before importing or the column name will be imported as a term. <br />4.
+							before importing or the column name will be imported as a term. <br />5.
 							No comma allowed in term's name. If comma exists, only the part
 							before the comma will be imported as a term. The rest will be
-							imported as part of the context sentence. <br />5. The .CSV file
+							imported as part of the context sentence. <br />6. The .CSV file
 							should look like this if opened as text. <br /> <img
 							style="padding-left: 18px"
-							src="images/screenshots/termsInText.png" /><br />6. The .CSV
+							src="images/screenshots/termsInText.png" /><br />7. The .CSV
 							file should look like this if opened as spreadsheet. <br /> <img
 							style="padding-left: 18px"
 							src="images/screenshots/termsInExcel.png" /><br /></font></li>
@@ -583,15 +585,17 @@
 							Hierarchy': <br /> <br />1. Only .CSV files can be imported. <br />2.
 							The first column of the .CSV file is structure name. The second
 							column is the context sentence of the structure. The sentence
-							column can be empty. <br />3. The .CSV file should have no
+							column can be empty. <br />
+							3. The maximum number of structures is limited to 2000.<br />
+							4. The .CSV file should have no
 							column name row. If you have a column name row, delete it before
-							importing or the column name will be imported as a structure. <br />4.
+							importing or the column name will be imported as a structure. <br />5.
 							No comma allowed in structure's name. If comma exists in
 							structure's name, only the part before the comma will be imported
 							as a structure. The rest will be imported as part of the context
-							sentence. <br />5. The .CSV file should look like this if opened
+							sentence. <br />6. The .CSV file should look like this if opened
 							as text. <br /> <img style="padding-left: 18px"
-							src="images/screenshots/structuresInText.png" /><br />6. The
+							src="images/screenshots/structuresInText.png" /><br />7. The
 							.CSV file should look like this if opened as spreadsheet. <br />
 							<img style="padding-left: 18px"
 							src="images/screenshots/structuresInExcel.png" /><br /></font></li>
@@ -614,15 +618,17 @@
 							one order group. The first column will be imported as the order
 							group name and all the other columns will be imported as terms in
 							this order group. You are able to add orders or terms under this
-							order group in Orders page after importing.<br />3. The .CSV
+							order group in Orders page after importing.<br />
+							3. The maximum number of terms is limited to 2000.<br />
+							4. The .CSV
 							file should have no column name row. If you have a column name
 							row, delete it before importing or the column name will be
-							imported as a order group. <br />4. No comma allowed in order
+							imported as a order group. <br />5. No comma allowed in order
 							group name and in term name. If comma exists, the column with
-							comma in it will be imported as two separate columns. <br />5.
+							comma in it will be imported as two separate columns. <br />6.
 							The .CSV file should look like this if opened as text. <br /> <img
 							style="padding-left: 18px"
-							src="images/screenshots/ordersInText.png" /><br />6. The .CSV
+							src="images/screenshots/ordersInText.png" /><br />7. The .CSV
 							file should look like this if opened as spreadsheet. <br /> <img
 							style="padding-left: 18px"
 							src="images/screenshots/ordersInExcel.png" /><br /></font></li>

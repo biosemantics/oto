@@ -41,32 +41,52 @@ public class ImportAction extends ParserAction {
 		String message = "[" + datasetName + "] Import ";
 
 		try {
+			
+			boolean overMax = false;
 			if (taskIndex.equals("1")) {// categorization page
 				CsvParser parser = new CsvParser(file.getInputStream());
+				ArrayList<String> terms = parser.getTermList();
+				
 				message += "terms for Group Terms ";
-				// import categorization terms
-				CategorizationDBAccess.getInstance().importTerms(datasetName,
-						parser.getTermList(), file.getFileName(),
-						parser.getSentences());
+				overMax = terms.size() > 2000;
+				if(!overMax)
+					CategorizationDBAccess.getInstance().importTerms(datasetName,
+							terms, file.getFileName(), parser.getSentences());
+				
 			} else if (taskIndex.equals("2")) { // hierarchy page
 				CsvParser parser = new CsvParser(file.getInputStream());
 				termList = parser.getStructureList();
 				message += "structures for Structure Hierarchy ";
-				// import hierarchy terms
-				HierarchyDBAccess.getInstance().importStructures(datasetName,
-						termList, file.getFileName(), parser.getSentences());
+				
+				overMax = termList.size() > 2000;
+				if(!overMax)
+					HierarchyDBAccess.getInstance().importStructures(datasetName,
+							termList, file.getFileName(), parser.getSentences());
+				
 			} else { // order
 				orderList = new CsvParser(fileStream).getOrderList();
+				
+				for(Order order : orderList) {
+					if(order.getTerms().size() > 2000) {
+						overMax = true;
+					}
+				}
+				
 				message += "Term Order ";
-				// import orders
-				OrderDBAcess.getInstance().importOrders(datasetName, orderList);
+				if(!overMax)
+					OrderDBAcess.getInstance().importOrders(datasetName, orderList);
 			}
-
-			message += "SUCCESSFULLY. ";
-
-			// set selected dataset to be current dataset
-			SessionDataManager sessionDataMgr = getSessionManager(request);
-			sessionDataMgr.setDataset(datasetName);
+			
+			if(!overMax) {
+				message += "SUCCESSFULLY. ";
+				
+				// set selected dataset to be current dataset
+				SessionDataManager sessionDataMgr = getSessionManager(request);
+				sessionDataMgr.setDataset(datasetName);
+			} else
+				message += "FAILED. Can not import more than 2000.";
+			
+			
 		} catch (Exception e) {
 			System.out.println(e.getStackTrace());
 			// todo: error management

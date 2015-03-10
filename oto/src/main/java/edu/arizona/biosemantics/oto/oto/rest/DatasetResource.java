@@ -1,7 +1,12 @@
 package edu.arizona.biosemantics.oto.oto.rest;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import javax.crypto.NoSuchPaddingException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -14,13 +19,13 @@ import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.arizona.biosemantics.oto.common.model.Authentication;
 import edu.arizona.biosemantics.oto.common.model.CreateDataset;
 import edu.arizona.biosemantics.oto.common.model.GroupTerms;
 import edu.arizona.biosemantics.oto.common.model.StructureHierarchy;
 import edu.arizona.biosemantics.oto.common.model.TermOrder;
 import edu.arizona.biosemantics.oto.common.model.User;
 import edu.arizona.biosemantics.oto.oto.beans.GlossaryNameMapper;
+import edu.arizona.biosemantics.oto.oto.beans.SessionDataManager;
 import edu.arizona.biosemantics.oto.oto.db.CategorizationDBAccess;
 import edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess;
 import edu.arizona.biosemantics.oto.oto.db.HierarchyDBAccess;
@@ -37,8 +42,9 @@ public class DatasetResource {
 	
 	private Logger logger;
 	private UserDataAccess uaccess;
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 	
-	public DatasetResource() throws IOException {
+	public DatasetResource() throws Exception {
 		logger =  LoggerFactory.getLogger(this.getClass());
 		uaccess = new UserDataAccess();
 	}	
@@ -48,26 +54,24 @@ public class DatasetResource {
 	public String createDataset(CreateDataset createDataset) {
 		int glossaryID = GlossaryNameMapper.getInstance().getGlossaryIDByName(createDataset.getTaxonGroup().getDisplayName());
 		
-		Authentication authentication = createDataset.getAuthentication();
     	try {
-        	if(uaccess.validateAuthentication(createDataset.getAuthentication())) {
-        		User user = uaccess.getUser(authentication.getEmail());
+        	if(uaccess.validateAuthentication(createDataset.getAuthenticationToken())) {
+        		User user = uaccess.getUserFromAuthenticationToken(createDataset.getAuthenticationToken());
+        		
+				String username = (user.getFirstName() + "_"	+ user.getLastName()).toLowerCase().replaceAll("^(a-z_)", "_");
+				String datasetName = createDataset.getName() + "_" + username + "_" + dateFormat.format(new Date());;
+        		
         		CharacterDBAccess cdba = new CharacterDBAccess();
-        		boolean success = cdba.createDatasetIfNotExist(createDataset.getName(),
+        		boolean success = cdba.createDatasetIfNotExist(datasetName,
         				"", user.getUserId(), glossaryID);
         		if (success){
-        			return "Your dataset was successfully created.";
-        		} else {
-        			return "Your dataset was not created. Please try again later.";
+        			return datasetName;
         		}
-        		
-        	} else { 
-        		return "Invalid email or password! Please try again.";
         	}
     	} catch (Exception exe) {
     		logger.error("Couldn't create dataset", exe);
-    		return "An error occurred while attempting to create the dataset. Please try again later.";
     	}
+    	return null;
 	}
 	
 	
@@ -75,9 +79,8 @@ public class DatasetResource {
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public String groupTerms(@PathParam("datasetName") String datasetName, GroupTerms groupTerms) {		
-		Authentication authentication = groupTerms.getAuthentication();
 		try {
-			if(uaccess.validateAuthentication(authentication)) {
+			if(uaccess.validateAuthentication(groupTerms.getAuthenticationToken())) {
 				
 				CategorizationDBAccess.getInstance().importTerms(datasetName,
 						groupTerms.getTermContexts(), "web service group terms");
@@ -95,9 +98,8 @@ public class DatasetResource {
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public String structureHierarchy(@PathParam("datasetName") String datasetName, StructureHierarchy structureHierarchy) {				
-		Authentication authentication = structureHierarchy.getAuthentication();
 		try {
-			if(uaccess.validateAuthentication(authentication)) {
+			if(uaccess.validateAuthentication(structureHierarchy.getAuthenticationToken())) {
 				HierarchyDBAccess.getInstance().importStructures(datasetName,
 						structureHierarchy.getTermContexts(), "web service structure hierarchy");
 				return "Structure Hierachy data was imported successfully.";
@@ -114,9 +116,8 @@ public class DatasetResource {
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public String termOrder(@PathParam("datasetName") String datasetName, TermOrder termOrder) {		
-		Authentication authentication = termOrder.getAuthentication();
 		try {
-			if(uaccess.validateAuthentication(authentication)) {
+			if(uaccess.validateAuthentication(termOrder.getAuthenticationToken())) {
 				OrderDBAcess.getInstance().importOrders(datasetName, termOrder.getOrders());
 				return "Term Order data was imported successfully.";
 			} else { 

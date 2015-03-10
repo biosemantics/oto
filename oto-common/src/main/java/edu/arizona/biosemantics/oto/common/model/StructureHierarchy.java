@@ -5,15 +5,15 @@ import java.util.List;
 public class StructureHierarchy {
 
 	private List<TermContext> termContexts;
-	private Authentication authentication;
+	private String authenticationToken;
 	
 	public StructureHierarchy() { }
 	
 	public StructureHierarchy(List<TermContext> termContexts,
-			Authentication authentication) {
+			String authenticationToken) {
 		super();
 		this.termContexts = termContexts;
-		this.authentication = authentication;
+		this.authenticationToken = authenticationToken;
 	}
 
 	public List<TermContext> getTermContexts() {
@@ -24,11 +24,11 @@ public class StructureHierarchy {
 		this.termContexts = termContexts;
 	}
 
-	public Authentication getAuthentication() {
-		return authentication;
+	public String getAuthenticationToken() {
+		return authenticationToken;
 	}
 
-	public void setAuthentication(Authentication authentication) {
-		this.authentication = authentication;
+	public void setAuthenticationToken(String authenticationToken) {
+		this.authenticationToken = authenticationToken;
 	}
 }

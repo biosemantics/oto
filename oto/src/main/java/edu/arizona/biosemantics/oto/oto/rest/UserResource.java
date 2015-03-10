@@ -1,9 +1,12 @@
 package edu.arizona.biosemantics.oto.oto.rest;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.crypto.NoSuchPaddingException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -35,7 +38,7 @@ public class UserResource {
 	
 	private Logger logger;
 	
-	public UserResource() throws IOException {
+	public UserResource() throws Exception {
 		logger =  LoggerFactory.getLogger(this.getClass());
 		uda = new UserDataAccess();
 	}	
@@ -54,7 +57,7 @@ public class UserResource {
 		return  "Registration failed";
 	}
 	
-	@GET
+	@POST
 	@Path("/token")
 	public String getAuthenticationToken(User user) {
 		try {

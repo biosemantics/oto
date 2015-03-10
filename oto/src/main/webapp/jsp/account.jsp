@@ -3,6 +3,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
+<%@ page import="edu.arizona.biosemantics.oto.oto.db.UserDataAccess"%>
 <%@ page import="edu.arizona.biosemantics.oto.common.model.User"%>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -19,11 +20,13 @@
 <body>
 <!-- Session Validity check -->
 <%
+	UserDataAccess ua = new UserDataAccess();
 	SessionDataManager sessionDataManager = (SessionDataManager) (session
 			.getAttribute("sessionDataMgr"));
 
 	if (sessionDataManager != null) {
 		User user = sessionDataManager.getUser();
+		String authentiationToken = ua.getAuthenticationToken(user);
 %>
 <!-- Session Validity check header End -->
 <jsp:include page="header.jsp" />
@@ -107,7 +110,14 @@
 					<td>&nbsp;</td>
 				</tr>
 		</table>
-
+	
+		<table style="margin-left: 80px">
+				<tr>
+					<td><font class="font-text-style" color="red"><b>Your Web Service Authentication Token</b></font></td>
+						<td> <%=authentiationToken%></input></td>
+						<td>&nbsp;</td>
+					</tr>
+			</table>
 
 		</form>
 		</td>

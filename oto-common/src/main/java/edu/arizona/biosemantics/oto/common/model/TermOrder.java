@@ -10,21 +10,21 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class TermOrder implements Serializable {
 	
 	private List<Order> orders;
-	private Authentication authentication;
+	private String authenticationToken;
 	
 	public TermOrder(){ }
 	
-	public TermOrder(List<Order> orders, Authentication authentication) {
+	public TermOrder(List<Order> orders, String authenticationToken) {
 		this.orders = orders;
-		this.authentication = authentication;
+		this.authenticationToken = authenticationToken;
 	}
 	
-	public Authentication getAuthentication(){
-		return authentication;
+	public String getAuthenticationToken(){
+		return authenticationToken;
 	}
 	
-	public void setAuthentication(Authentication authentication){
-		this.authentication = authentication;
+	public void setAuthenticationToken(String authenticationToken){
+		this.authenticationToken = authenticationToken;
 	}
 	
 	public List<Order> getOrders(){

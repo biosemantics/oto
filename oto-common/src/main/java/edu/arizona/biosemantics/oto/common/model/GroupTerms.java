@@ -8,14 +8,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class GroupTerms {
 
 	private List<TermContext> termContexts;
-	private Authentication authentication;
+	private String authenticationToken;
 	
 	public GroupTerms() { }
 	
-	public GroupTerms(List<TermContext> termContexts, Authentication authentication) {
+	public GroupTerms(List<TermContext> termContexts, String authenticationToken) {
 		super();
 		this.termContexts = termContexts;
-		this.authentication = authentication;
+		this.authenticationToken = authenticationToken;
 	}
 
 	public List<TermContext> getTermContexts() {
@@ -26,14 +26,12 @@ public class GroupTerms {
 		this.termContexts = termContexts;
 	}
 
-	public Authentication getAuthentication() {
-		return authentication;
+	public String getAuthenticationToken() {
+		return authenticationToken;
 	}
 
-	public void setAuthentication(Authentication authentication) {
-		this.authentication = authentication;
-	}
-	
-	
+	public void setAuthenticationToken(String authenticationToken) {
+		this.authenticationToken = authenticationToken;
+	}	
 	
 }

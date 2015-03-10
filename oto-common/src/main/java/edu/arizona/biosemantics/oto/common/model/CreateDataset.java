@@ -11,14 +11,14 @@ public class CreateDataset implements Serializable {
 
 	private String name;
 	private TaxonGroup taxonGroup;
-	private Authentication Authentication;
+	private String authenticationToken;
 
 	public CreateDataset() { }
 	
-	public CreateDataset(String name, TaxonGroup taxonGroup, Authentication authentication) {
+	public CreateDataset(String name, TaxonGroup taxonGroup, String authenticationToken) {
 		this.name = name;
 		this.taxonGroup = taxonGroup;
-		this.Authentication = authentication;
+		this.authenticationToken = authenticationToken;
 	}
 
 	public String getName() {
@@ -37,12 +37,12 @@ public class CreateDataset implements Serializable {
 		this.taxonGroup = taxonGroup;
 	}
 
-	public Authentication getAuthentication() {
-		return Authentication;
+	public String getAuthenticationToken() {
+		return authenticationToken;
 	}
 
-	public void setAuthentication(Authentication authentication) {
-		Authentication = authentication;
+	public void setAuthenticationToken(String authenticationToken) {
+		this.authenticationToken = authenticationToken;
 	}
 	
 	

@@ -25,7 +25,6 @@ import edu.arizona.biosemantics.oto.common.model.Category;
 import edu.arizona.biosemantics.oto.common.model.CreateDataset;
 import edu.arizona.biosemantics.oto.common.model.GlossaryDictionaryEntry;
 import edu.arizona.biosemantics.oto.common.model.GlossaryDownload;
-import edu.arizona.biosemantics.oto.common.model.Authentication;
 import edu.arizona.biosemantics.oto.common.model.GroupTerms;
 import edu.arizona.biosemantics.oto.common.model.StructureHierarchy;
 import edu.arizona.biosemantics.oto.common.model.TermContext;
@@ -118,6 +117,14 @@ public class OTOClient implements AutoCloseable {
 		this.getUserInvoker().post(Entity.entity(user, MediaType.APPLICATION_JSON), callback);
 	}
 	
+	public Future<String> getUserAuthenticationToken(User user) {
+		return this.getUserAuthenticationTokenInvoker().post(Entity.entity(user, MediaType.APPLICATION_JSON), String.class);
+	}
+	
+	public void getUserAuthenticationToken(User user, InvocationCallback<String> callback) {
+		this.getUserAuthenticationTokenInvoker().post(Entity.entity(user, MediaType.APPLICATION_JSON), callback);
+	}
+	
 	public Future<String> postDataset(CreateDataset createDataset) {
 		return this.getDatasetInvoker().post(Entity.entity(createDataset, MediaType.APPLICATION_JSON), String.class);
 	}
@@ -174,5 +181,9 @@ public class OTOClient implements AutoCloseable {
 	
 	private AsyncInvoker getUserInvoker() {
 		return target.path("rest").path("user").request(MediaType.APPLICATION_JSON).async();
+	}
+	
+	private AsyncInvoker getUserAuthenticationTokenInvoker() {
+		return target.path("rest").path("user").path("token").request(MediaType.APPLICATION_JSON).async();
 	}
 }

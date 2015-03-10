@@ -6,7 +6,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import edu.arizona.biosemantics.common.biology.TaxonGroup;
-import edu.arizona.biosemantics.oto.common.model.Authentication;
 import edu.arizona.biosemantics.oto.common.model.CreateDataset;
 import edu.arizona.biosemantics.oto.common.model.GlossaryDictionaryEntry;
 import edu.arizona.biosemantics.oto.common.model.GroupTerms;
@@ -16,7 +15,6 @@ import edu.arizona.biosemantics.oto.common.model.TermContext;
 import edu.arizona.biosemantics.oto.common.model.TermOrder;
 import edu.arizona.biosemantics.oto.common.model.User;
 import edu.arizona.biosemantics.oto.common.model.TermContext;
-
 
 public class Main {
 
@@ -31,7 +29,9 @@ public class Main {
 		otoClient.open();
 		
 		String email = "thomas.rodenhausen@gmail.com";
-		String token = "/jGE2LudoledEgsX/ccLe3fe4Ek=";
+		String firstName = "Thomas";
+		String lastName = "Rodenhausen";
+		//String token = "TA+QdXcpz+AUi1iOjZDvZw==";
 		
 		/*User user = new User();
 		user.setUserEmail(email);
@@ -44,16 +44,23 @@ public class Main {
 		
 		Future<String> result = otoClient.postUser(user);
 		*/
-		List<TermContext> termContexts = new LinkedList<TermContext>();
-		termContexts.add(new TermContext("a", "a sentence"));
+		//List<TermContext> termContexts = new LinkedList<TermContext>();
+		//termContexts.add(new TermContext("a", "a sentence"));
 		
 		//GroupTerms groupTerms = new GroupTerms(termContexts, new Authentication(email, token));
 		//Future<String> result = otoClient.postGroupTerms("thomas_tester123", groupTerms);
 		//Future<String> result  = otoClient.postStructureHierarchy("thomas_tester123", new StructureHierarchy(termContexts, new Authentication(email, token)));
 		
-		List<Order> orders = new LinkedList<Order>();
-		Future<String> result = otoClient.postTermOrder("thomas_tester123", new TermOrder(orders, new Authentication(email, token)));
-		//Future<String> result = otoClient.postDataset(new CreateDataset("thomas_tester123", TaxonGroup.PLANT, new Authentication(email, token)));
+		//List<Order> orders = new LinkedList<Order>();
+		//Future<String> result = otoClient.postTermOrder("thomas_tester123", new TermOrder(orders, new Authentication(email, token)));
+		
+		User user = new User();
+		user.setUserEmail(email);
+		user.setPassword(firstName + lastName);
+		
+		Future<String> tokenResult = otoClient.getUserAuthenticationToken(user);
+		String token = tokenResult.get();
+		Future<String> result = otoClient.postDataset(new CreateDataset("acb", TaxonGroup.PLANT, token));
 		
 		System.out.println(result.get());
 		

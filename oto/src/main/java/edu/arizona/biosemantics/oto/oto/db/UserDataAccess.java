@@ -5,20 +5,38 @@ package edu.arizona.biosemantics.oto.oto.db;
  */
 import java.io.File;
 import java.io.IOException;
+import java.security.AlgorithmParameters;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.spec.KeySpec;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.ShortBufferException;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
 
 import org.apache.log4j.Logger;
 
 import edu.arizona.biosemantics.oto.common.io.ExecCommmand;
-import edu.arizona.biosemantics.oto.common.model.Authentication;
 import edu.arizona.biosemantics.oto.common.model.User;
 import edu.arizona.biosemantics.oto.common.security.Encryptor;
 import edu.arizona.biosemantics.oto.common.security.PasswordGenerator;
+import edu.arizona.biosemantics.oto.common.security.SymmetricEncryption;
 import edu.arizona.biosemantics.oto.oto.Configuration;
 import edu.arizona.biosemantics.oto.oto.mail.NotifyEmail;
 
@@ -30,7 +48,9 @@ import edu.arizona.biosemantics.oto.oto.mail.NotifyEmail;
  */
 public class UserDataAccess extends DatabaseAccess {
 
-	public UserDataAccess() throws IOException {
+	private SymmetricEncryption symmetricEncryption = new SymmetricEncryption(Configuration.getInstance().getSecret());
+	
+	public UserDataAccess() throws IOException, NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException {
 		super();
 	}
 
@@ -461,6 +481,42 @@ public class UserDataAccess extends DatabaseAccess {
 
 	}
 	
+	public User getUser(int userId) throws Exception {
+		User user = new User();
+		String sql = "select * FROM users WHERE userid = ?";
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			conn = getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, userId);
+			pstmt.execute();
+			ResultSet rset = pstmt.getResultSet();
+			
+			if(rset.next()) {
+				user.setActive(rset.getString("status").equals("Y") ? true : false);
+				user.setAffiliation(rset.getString("affiliation"));
+				user.setBioportalApiKey(rset.getString("bioportalApiKey"));
+				user.setBioportalUserId(rset.getString("bioportalUserId"));
+				user.setFirstName(rset.getString("firstname"));
+				user.setLastName(rset.getString("lastname"));
+				user.setPassword(rset.getString("password"));
+				user.setRole(rset.getString("role"));
+				user.setUserEmail(rset.getString("email"));
+				user.setUserId(rset.getInt("userid"));
+				return user;
+			}
+			throw new Exception("User does not exist");
+			
+		} catch (Exception exe) {
+			LOGGER.error("unable to update the user details: ", exe);
+			exe.printStackTrace();
+			throw exe;
+		} finally {
+			closeConnection(pstmt, conn);
+		}
+	}
+	
 	public User getUser(String email) throws Exception {
 		User user = new User();
 		String sql = "select * FROM users WHERE email = ?";
@@ -497,29 +553,22 @@ public class UserDataAccess extends DatabaseAccess {
 		}
 	}
 
-	public boolean validateAuthentication(Authentication authentication) {
-		User user;
-		try {
-			user = this.getUser(authentication.getEmail());
-			if(user == null)
-				return false;
-			
-			int id = user.getUserId();
-			String secret = Configuration.getInstance().getSecret() + id;
-			secret = Encryptor.getInstance().encrypt(secret);
-			return authentication.getToken().equals(secret);
-		} catch (Exception e) {
-			e.printStackTrace();
-			LOGGER.error("Failed to validate token", e);
-			return false;
-		}	
+	public boolean validateAuthentication(String authenticationToken) throws Exception {
+		return this.getUserFromAuthenticationToken(authenticationToken) != null;		
 	}
 	
+	public User getUserFromAuthenticationToken(String authenticationToken) throws Exception {
+		byte[] bytes = DatatypeConverter.parseBase64Binary(authenticationToken);
+		String plain = symmetricEncryption.decrypt(bytes);
+		int userId = Integer.valueOf(plain.split(":")[1]);
+		return this.getUser(userId);
+	}
+
 	public String getAuthenticationToken(User user) throws Exception {
 		user = this.getUser(user.getUserEmail());
-		String secret = Configuration.getInstance().getSecret() + user.getUserId();
-		secret = Encryptor.getInstance().encrypt(secret);
-		return secret;
+		byte[] bytes = symmetricEncryption.encrypt(Configuration.getInstance().getSecret() + ":" + user.getUserId());
+		return DatatypeConverter.printBase64Binary(bytes);
 	}
+	
 
 }

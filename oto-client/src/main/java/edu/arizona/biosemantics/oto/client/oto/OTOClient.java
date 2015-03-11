@@ -110,16 +110,16 @@ public class OTOClient implements AutoCloseable {
 		this.getCategoriesInvoker().get(callback);
 	}
 	
-	public Future<String> postUser(User user) {
-		return this.getUserInvoker().post(Entity.entity(user, MediaType.APPLICATION_JSON), String.class);
+	public Future<CreateUserResult> postUser(User user) {
+		return this.getUserInvoker().post(Entity.entity(user, MediaType.APPLICATION_JSON), CreateUserResult.class);
 	}
 	
 	public void postUser(User user, InvocationCallback<CreateUserResult> callback) {
 		this.getUserInvoker().post(Entity.entity(user, MediaType.APPLICATION_JSON), callback);
 	}
 	
-	public Future<CreateUserResult> getUserAuthenticationToken(User user) {
-		return this.getUserAuthenticationTokenInvoker().post(Entity.entity(user, MediaType.APPLICATION_JSON), CreateUserResult.class);
+	public Future<String> getUserAuthenticationToken(User user) {
+		return this.getUserAuthenticationTokenInvoker().post(Entity.entity(user, MediaType.APPLICATION_JSON), String.class);
 	}
 	
 	public void getUserAuthenticationToken(User user, InvocationCallback<String> callback) {

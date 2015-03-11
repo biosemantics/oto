@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.arizona.biosemantics.oto.common.model.Category;
+import edu.arizona.biosemantics.oto.common.model.CreateUserResult;
 import edu.arizona.biosemantics.oto.common.model.User;
 import edu.arizona.biosemantics.oto.common.security.Encryptor;
 import edu.arizona.biosemantics.oto.oto.db.UserDataAccess;
@@ -45,16 +46,16 @@ public class UserResource {
 	
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public String createUser(User user) {
+	public CreateUserResult createUser(User user) {
 		try {
 			boolean result = uda.registerUser(user);
 			if(result)
-				return "Registration successful";
+				return new CreateUserResult(true);
 		} catch (Exception e) {
 			logger.error("Exception " + e.toString());
 			e.printStackTrace();
 		}
-		return  "Registration failed";
+		return new CreateUserResult(false);
 	}
 	
 	@POST

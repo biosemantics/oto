@@ -23,6 +23,7 @@ import com.google.inject.name.Named;
 
 import edu.arizona.biosemantics.oto.common.model.Category;
 import edu.arizona.biosemantics.oto.common.model.CreateDataset;
+import edu.arizona.biosemantics.oto.common.model.CreateUserResult;
 import edu.arizona.biosemantics.oto.common.model.GlossaryDictionaryEntry;
 import edu.arizona.biosemantics.oto.common.model.GlossaryDownload;
 import edu.arizona.biosemantics.oto.common.model.GroupTerms;
@@ -113,12 +114,12 @@ public class OTOClient implements AutoCloseable {
 		return this.getUserInvoker().post(Entity.entity(user, MediaType.APPLICATION_JSON), String.class);
 	}
 	
-	public void postUser(User user, InvocationCallback<String> callback) {
+	public void postUser(User user, InvocationCallback<CreateUserResult> callback) {
 		this.getUserInvoker().post(Entity.entity(user, MediaType.APPLICATION_JSON), callback);
 	}
 	
-	public Future<String> getUserAuthenticationToken(User user) {
-		return this.getUserAuthenticationTokenInvoker().post(Entity.entity(user, MediaType.APPLICATION_JSON), String.class);
+	public Future<CreateUserResult> getUserAuthenticationToken(User user) {
+		return this.getUserAuthenticationTokenInvoker().post(Entity.entity(user, MediaType.APPLICATION_JSON), CreateUserResult.class);
 	}
 	
 	public void getUserAuthenticationToken(User user, InvocationCallback<String> callback) {

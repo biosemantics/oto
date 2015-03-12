@@ -49,6 +49,9 @@ public class UserResource {
 	public CreateUserResult createUser(User user) {
 		try {
 			boolean result = uda.registerUser(user);
+			user = uda.getUser(user.getUserEmail());
+			user.setActive(true);
+			uda.updateUserStatus(user);
 			if(result)
 				return new CreateUserResult(true);
 		} catch (Exception e) {

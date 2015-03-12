@@ -289,11 +289,15 @@ public class UserDataAccess extends DatabaseAccess {
 			}
 
 			// generate user file
-			sql = "select userid, email from users into outfile \""
-					+ userFilePath + "\";";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.execute();
-
+			try {
+				sql = "select userid, email from users into outfile \""
+						+ userFilePath + "\";";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.execute();
+			} catch(java.sql.SQLException e) {
+				LOGGER.error("unable to write users to file. OS related due to failed rm command?", e);
+			}
+			
 			new NotifyEmail().sendNewRegistrationNotification(
 					user.getFirstName() + " " + user.getLastName(),
 					user.getUserEmail());

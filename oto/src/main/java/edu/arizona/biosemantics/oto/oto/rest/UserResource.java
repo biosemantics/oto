@@ -12,9 +12,11 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
@@ -48,12 +50,16 @@ public class UserResource {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public CreateUserResult createUser(User user) {
 		try {
-			boolean result = uda.registerUser(user);
-			user = uda.getUser(user.getUserEmail());
-			user.setActive(true);
-			uda.updateUserStatus(user);
-			if(result)
-				return new CreateUserResult(true);
+			if(uda.doesEmailIdExist(user)) {
+				return new CreateUserResult(false, "Email already exists.");
+			} else {
+				boolean result = uda.registerUser(user);
+				user = uda.getUser(user.getUserEmail());
+				user.setActive(true);
+				uda.updateUserStatus(user);
+				if(result)
+					return new CreateUserResult(true);
+			}
 		} catch (Exception e) {
 			logger.error("Exception " + e.toString());
 			e.printStackTrace();

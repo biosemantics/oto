@@ -87,7 +87,7 @@ public class UserLoginGoogleAction extends ParserAction {
 			
 			if(firstName != null && lastName != null && openIdProviderId != null) {
 				//create an account for this user if they do not have one yet.	
-				String dummyPassword = Configuration.getInstance().getSecret() + ":" + firstName + " " + lastName;
+				String dummyPassword = Configuration.getInstance().getSecret() + ":" + openIdProviderId;
 				
 				User user = new User();
 				user.setUserEmail(openIdProviderId);

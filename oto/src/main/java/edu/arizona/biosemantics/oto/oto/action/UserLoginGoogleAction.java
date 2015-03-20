@@ -73,11 +73,13 @@ public class UserLoginGoogleAction extends ParserAction {
 			}
 			//System.out.println("Got the result: \n" + response.toString());
 			
+			String id = null;
 			String firstName = null;
 			String lastName = null;
 			String openIdProviderId = null;
 			try {
 				JSONObject elements = new JSONObject(response.toString());
+				id = elements.getString("id");
 				firstName = elements.getString("given_name");
 				lastName = elements.getString("family_name");
 				openIdProviderId = elements.getString("email");
@@ -85,9 +87,9 @@ public class UserLoginGoogleAction extends ParserAction {
 				LOGGER.error("Couldn't parse JSON", e);
 			}
 			
-			if(firstName != null && lastName != null && openIdProviderId != null) {
+			if(id != null && firstName != null && lastName != null && openIdProviderId != null) {
 				//create an account for this user if they do not have one yet.	
-				String dummyPassword = Configuration.getInstance().getSecret() + ":" + openIdProviderId;
+				String dummyPassword = Configuration.getInstance().getSecret() + ":" + id;
 				
 				User user = new User();
 				user.setUserEmail(openIdProviderId);

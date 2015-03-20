@@ -52,18 +52,18 @@
 		<table style="margin-left: 80px">
 			<tr>
 				<td><font class="font-text-style" color="red"><b>First Name *</b></font></td>
-				<td> <input type="text" value="<%=user.getFirstName()%>" name="firstName"></input></td>
+				<td> <input type="text" value="<%=user.getFirstName()%>" name="firstName" <% if(user.getOpenIdProvider() != null) out.println("disabled"); %>></input></td>
 				<td>&nbsp;</td>
 				</tr>
 				<tr>
 					<td><font class="font-text-style" color="red"><b>Last Name *</b></font></td>
-					<td><input type="text" value="<%=user.getLastName()%>" name="lastName"></input></td>
+					<td><input type="text" value="<%=user.getLastName()%>" name="lastName" <% if(user.getOpenIdProvider() != null) out.println("disabled"); %>></input></td>
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
 					<td><font class="font-text-style" color="red"><b>Email Address *</b></font></td>
 					<td><input type="text" value="<%=user.getUserEmail()%>" name="emailId" id="emailId"
-					onchange="document.getElementById('emailCheck').innerHTML='', checkEmail(this.value)"></input></td>
+					onchange="document.getElementById('emailCheck').innerHTML='', checkEmail(this.value)" <% if(user.getOpenIdProvider() != null) out.println("disabled"); %>></input></td>
 					<td> <label id="emailCheck"></label></td>
 				</tr>
 				<tr>
@@ -87,19 +87,19 @@
 
 				<tr>
 					<td><font class="font-text-style" color="red"><b>Current Password *</b></font></td>
-					<td><input type="password" name="regPassword"></input></td>
+					<td><input type="password" name="regPassword" <% if(user.getOpenIdProvider() != null) out.println("disabled"); %>></input></td>
 					<td>&nbsp;</td>
 				</tr>
 
 				<tr>
 					<td><font class="font-text-style"><b>New Password</b></font></td>
-					<td><input type="password" name="newPassword"></input></td>
+					<td><input type="password" name="newPassword" <% if(user.getOpenIdProvider() != null) out.println("disabled"); %>></input></td>
 					<td>&nbsp;</td>
 				</tr>
 				
 				<tr>
 					<td><font class="font-text-style"><b>Re-type New Password</b></font></td>
-					<td><input type="password" name="confirmPassword"></input></td>
+					<td><input type="password" name="confirmPassword" <% if(user.getOpenIdProvider() != null) out.println("disabled"); %>></input></td>
 					<td>&nbsp;</td>
 				</tr>
 

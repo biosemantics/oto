@@ -257,6 +257,7 @@ public class UserDataAccess extends DatabaseAccess {
 	 * This function is for registering users
 	 * 
 	 * @param user
+	 * @param object 
 	 * @return
 	 * @throws Exception
 	 */
@@ -264,18 +265,19 @@ public class UserDataAccess extends DatabaseAccess {
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		String sql = "insert into users(email, password, firstname, lastname, affiliation) "
-				+ "values (?,?,?,?,?)";
+		String sql = "insert into users(email, openidprovider, password, firstname, lastname, affiliation) "
+				+ "values (?,?,?,?,?,?)";
 		boolean returnValue = false;
 		String password = Encryptor.getInstance().encrypt(user.getPassword());
 		try {
 			conn = getConnection();
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, user.getUserEmail());
-			pstmt.setString(2, password);
-			pstmt.setString(3, user.getFirstName());
-			pstmt.setString(4, user.getLastName());
-			pstmt.setString(5, user.getAffiliation());
+			pstmt.setString(2, user.getOpenIdProvider());
+			pstmt.setString(3, password);
+			pstmt.setString(4, user.getFirstName());
+			pstmt.setString(5, user.getLastName());
+			pstmt.setString(6, user.getAffiliation());
 			pstmt.execute();
 			returnValue = true;
 
@@ -329,11 +331,12 @@ public class UserDataAccess extends DatabaseAccess {
 		try {
 			conn = getConnection();
 			pstmt = conn
-					.prepareStatement("select userid, email, firstname, lastname, affiliation, status, role from users");
+					.prepareStatement("select userid, email, openidprovider, firstname, lastname, affiliation, status, role from users");
 			rset = pstmt.executeQuery();
 			while (rset.next()) {
 				User user = new User();
 				user.setUserId(rset.getInt("userid"));
+				user.setOpenIdProvider(rset.getString("openidprovider"));
 				user.setAffiliation(rset.getString("affiliation"));
 				user.setFirstName(rset.getString("firstname"));
 				user.setLastName(rset.getString("lastname"));
@@ -508,6 +511,7 @@ public class UserDataAccess extends DatabaseAccess {
 				user.setRole(rset.getString("role"));
 				user.setUserEmail(rset.getString("email"));
 				user.setUserId(rset.getInt("userid"));
+				user.setOpenIdProvider(rset.getString("openidprovider"));
 				return user;
 			}
 			throw new Exception("User does not exist");
@@ -544,6 +548,7 @@ public class UserDataAccess extends DatabaseAccess {
 				user.setRole(rset.getString("role"));
 				user.setUserEmail(rset.getString("email"));
 				user.setUserId(rset.getInt("userid"));
+				user.setOpenIdProvider(rset.getString("openidprovider"));
 				return user;
 			}
 			throw new Exception("User does not exist");

@@ -9,6 +9,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.arizona.biosemantics.oto.common.action.Forwardable;
+import edu.arizona.biosemantics.oto.common.model.User;
 import edu.arizona.biosemantics.oto.oto.db.UserDataAccess;
 import edu.arizona.biosemantics.oto.oto.form.GeneralForm;
 
@@ -26,12 +27,17 @@ public class UserResetPasswordAction  extends ParserAction {
 			String email = gform.getValue();
 			
 			UserDataAccess uds = new UserDataAccess();
-			boolean rv = uds.resetPassword(email);
-			
-			if (rv) {
-				responseText = "The system has reset your password. You should receive the new password in your email. ";
-			} else {
-				responseText = "The system encountered a problem when resetting your password. Please try again later. ";
+			User user = uds.getUser(email);
+			if(user.getOpenIdProvider() != null)
+				responseText = "The system cannot reset the password for a linked Google Account";
+			else {
+				boolean rv = uds.resetPassword(email);
+				
+				if (rv) {
+					responseText = "The system has reset your password. You should receive the new password in your email. ";
+				} else {
+					responseText = "The system encountered a problem when resetting your password. Please try again later. ";
+				}
 			}
 			
 			response.setContentType("text/xml");

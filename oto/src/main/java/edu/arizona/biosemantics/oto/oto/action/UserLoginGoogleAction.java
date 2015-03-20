@@ -94,6 +94,8 @@ public class UserLoginGoogleAction extends ParserAction {
 				user.setFirstName(firstName);
 				user.setLastName(lastName);
 				user.setPassword(dummyPassword);
+				user.setOpenIdProvider("google");
+				user.setAffiliation("");
 
 				UserDataAccess uda = new UserDataAccess();
 				
@@ -117,7 +119,6 @@ public class UserLoginGoogleAction extends ParserAction {
 						user = uda.getUser(user.getUserEmail());
 						user.setActive(true);
 						uda.updateUserStatus(user); //set active
-						request.setAttribute("message", user.getFirstName() + " " + user.getLastName());
 						
 						HttpSession session = request.getSession(true);
 		            	SessionDataManager sessionDataMgr = new SessionDataManager(user);

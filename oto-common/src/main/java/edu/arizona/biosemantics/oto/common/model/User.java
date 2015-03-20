@@ -14,6 +14,7 @@ public class User implements Serializable {
 	 */
 	private static final long serialVersionUID = -5686050371739280003L;
 	private String userEmail;
+	private String openIdProvider;
     private String password;
     private String affiliation;
     private String firstName;
@@ -201,5 +202,13 @@ public class User implements Serializable {
 	public void setBioportalApiKey(String bioportalApiKey) {
 		this.bioportalApiKey = bioportalApiKey;
 	}
+	public String getOpenIdProvider() {
+		return openIdProvider;
+	}
+	public void setOpenIdProvider(String openIdProvider) {
+		this.openIdProvider = openIdProvider;
+	}
+	
+	
 
 }

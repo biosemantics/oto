@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.io.StreamDocumentTarget;
+import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
@@ -20,6 +22,7 @@ import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.reasoner.ConsoleProgressMonitor;
 import org.semanticweb.owlapi.reasoner.Node;
@@ -142,13 +145,39 @@ public class OntologyServiceImpl implements OntologyService {
 		return null;
 	}
 	
+	public boolean markDeprecated(OWLClass cls, OWLOntology ont, OWLDataFactory factory, OWLOntologyManager man) throws Exception{
+		OWLAxiom dep = factory.getDeprecatedOWLAnnotationAssertionAxiom(cls.getIRI());
+		man.applyChange(new AddAxiom(ont, dep));
+		return true;
+	}
+	
 	public static void main (String[] argv){
 		OntologyServiceImpl ontologyService = new OntologyServiceImpl(); 
+		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+        IRI ontologyIRI = IRI.create("http://example.com/owlapi/families");
+        try {
+			OWLOntology ont = manager.createOntology(ontologyIRI);
+	        OWLDataFactory factory = manager.getOWLDataFactory();
+	        OWLClass man = factory.getOWLClass(IRI
+	                .create(ontologyIRI + "#man"));
+	        OWLClass boy = factory.getOWLClass(IRI
+	                .create(ontologyIRI + "#boy"));
+	        manager.addAxiom(ont, factory.getOWLSubClassOfAxiom(boy, man));
+	        ontologyService.markDeprecated(man, ont, factory, manager);
+	        System.out.println("RDF/XML: ");
+	        manager.saveOntology(ont, new StreamDocumentTarget(System.out));
+        } catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        
+        /*OntologyServiceImpl ontologyService = new OntologyServiceImpl(); 
 		try {
 			ontologyService.getMajorOrgans(null, null, null);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 }

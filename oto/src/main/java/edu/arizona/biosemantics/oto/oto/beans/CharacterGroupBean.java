@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import edu.arizona.biosemantics.oto.common.model.Term;
+
 /** This is a screenshot of one group
  * @author Partha Pratim Sanyal
  *  */

@@ -2,6 +2,8 @@ package edu.arizona.biosemantics.oto.oto.beans;
 
 import java.util.Comparator;
 
+import edu.arizona.biosemantics.oto.common.model.Term;
+
 public class TermComparator implements Comparator<Term>{
 
 	@Override

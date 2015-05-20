@@ -8,6 +8,8 @@ import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
+import edu.arizona.biosemantics.oto.common.model.CategoryBean;
+import edu.arizona.biosemantics.oto.common.model.Term;
 import edu.arizona.biosemantics.oto.common.model.User;
 import edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess;
 import edu.arizona.biosemantics.oto.oto.db.ReportingDBAccess;

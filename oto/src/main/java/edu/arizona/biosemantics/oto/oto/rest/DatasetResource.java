@@ -20,6 +20,7 @@ import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.arizona.biosemantics.oto.common.model.CategorizeTerms;
 import edu.arizona.biosemantics.oto.common.model.CreateDataset;
 import edu.arizona.biosemantics.oto.common.model.GroupTerms;
 import edu.arizona.biosemantics.oto.common.model.Order;
@@ -94,6 +95,20 @@ public class DatasetResource {
 			logger.error("Couldnt' import group terms", exe);
 		}
 		return new GroupTerms.Result(0);
+	}
+	
+	@Path("/{datasetName}/groupterms/categorization")
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON })
+	public void categorizeGroupTerms(@PathParam("datasetName") String datasetName, CategorizeTerms categorization) {
+		try { 
+			CharacterDBAccess characterDBAccess = new CharacterDBAccess();
+			UserDataAccess userDataAccess = new UserDataAccess();
+			User user = userDataAccess.getUserFromAuthenticationToken(categorization.getAuthenticationToken());
+			characterDBAccess.saveCategorizingDecisions(categorization.getDecisionHolder().getRegular_categories(), datasetName, user);
+		} catch (Exception e) {
+			logger.error("Could not categorize terms", e);
+		}
 	}
 	
 	@Path("/{datasetName}/structurehierarchy")

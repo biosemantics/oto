@@ -3,6 +3,7 @@ package edu.arizona.biosemantics.oto.oto.beans;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import edu.arizona.biosemantics.oto.common.model.Term;
 import edu.arizona.biosemantics.oto.common.model.User;
 import edu.arizona.biosemantics.oto.oto.db.ReportingDBAccess;
 

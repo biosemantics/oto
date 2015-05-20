@@ -17,10 +17,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import edu.arizona.biosemantics.oto.common.action.Forwardable;
-import edu.arizona.biosemantics.oto.oto.beans.CategoryBean;
-import edu.arizona.biosemantics.oto.oto.beans.DecisionHolder;
 import edu.arizona.biosemantics.oto.oto.beans.SessionDataManager;
-import edu.arizona.biosemantics.oto.oto.beans.Term;
+import edu.arizona.biosemantics.oto.common.model.CategoryBean;
+import edu.arizona.biosemantics.oto.common.model.DecisionHolder;
+import edu.arizona.biosemantics.oto.common.model.Term;
 import edu.arizona.biosemantics.oto.common.model.User;
 import edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess;
 import edu.arizona.biosemantics.oto.oto.form.GeneralForm;

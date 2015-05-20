@@ -2,6 +2,8 @@ package edu.arizona.biosemantics.oto.oto.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import edu.arizona.biosemantics.oto.common.model.Term;
 /**
  * This class represents an entity in the TermsGroup table
  * @author Partha

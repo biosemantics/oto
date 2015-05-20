@@ -21,6 +21,7 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
+import edu.arizona.biosemantics.oto.common.model.CategorizeTerms;
 import edu.arizona.biosemantics.oto.common.model.Category;
 import edu.arizona.biosemantics.oto.common.model.CreateDataset;
 import edu.arizona.biosemantics.oto.common.model.CreateUserResult;
@@ -134,6 +135,14 @@ public class OTOClient implements AutoCloseable {
 		return this.getDatasetInvoker(datasetName, "groupterms").post(Entity.entity(groupTerms, MediaType.APPLICATION_JSON), GroupTerms.Result.class);
 	}
 	
+	public Future<Void> postGroupTermsCategorization(String datasetName, CategorizeTerms categorizeTerms) {
+		return this.getDatasetInvoker(datasetName, "groupterms/categorization").post(Entity.entity(categorizeTerms, MediaType.APPLICATION_JSON), Void.class);
+	}
+	
+	public void postGroupTermsCategorization(String datasetName, CategorizeTerms categorizeTerms, InvocationCallback<Void> callback) {
+		this.getDatasetInvoker(datasetName, "groupterms/categorization").post(Entity.entity(categorizeTerms, MediaType.APPLICATION_JSON), callback);
+	}
+	
 	public Future<StructureHierarchy.Result> postStructureHierarchy(String datasetName, StructureHierarchy structureHierarchy) {
 		return this.getDatasetInvoker(datasetName, "structurehierarchy").post(Entity.entity(structureHierarchy, MediaType.APPLICATION_JSON), StructureHierarchy.Result.class);
 	}
@@ -186,7 +195,7 @@ public class OTOClient implements AutoCloseable {
 		return getDatasetInvoker(null, null);
 	}
 	
-	private AsyncInvoker getDatasetInvoker(String datasetName, String type){
+	private AsyncInvoker getDatasetInvoker(String datasetName, String type) {
 		if(datasetName != null && type != null)
 			return target.path("rest").path("dataset").path(datasetName).path(type).request(MediaType.APPLICATION_JSON).async();
 		return target.path("rest").path("dataset").request(MediaType.APPLICATION_JSON).async();

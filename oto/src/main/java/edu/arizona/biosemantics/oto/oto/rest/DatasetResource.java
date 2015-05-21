@@ -62,8 +62,8 @@ public class DatasetResource {
         	if(uaccess.validateAuthentication(createDataset.getAuthenticationToken())) {
         		User user = uaccess.getUserFromAuthenticationToken(createDataset.getAuthenticationToken());
         		
-				String username = (user.getFirstName() + "_"	+ user.getLastName()).toLowerCase().replaceAll("^(a-z_)", "_");
-				String datasetName = createDataset.getName() + "_" + username + "_" + dateFormat.format(new Date());;
+				String username = (/*user.getFirstName() + "_" +  */ user.getLastName()).toLowerCase().replaceAll("^(a-z_)", "_");
+				String datasetName = createDataset.getName() + "_" + username + "_" + dateFormat.format(new Date());
         		
         		CharacterDBAccess cdba = new CharacterDBAccess();
         		boolean success = cdba.createDatasetIfNotExist(datasetName,

@@ -4,13 +4,13 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.HashMap"%>
-<%@page import="edu.arizona.biosemantics.oto.oto.beans.CategoryBean"%>
+<%@page import="edu.arizona.biosemantics.oto.common.model.CategoryBean"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.TermsGroup"%>
 <%@ page
 	import="edu.arizona.biosemantics.oto.oto.beans.CharacterGroupBean"%>
 <%@ page
 	import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.Term"%>
+<%@ page import="edu.arizona.biosemantics.oto.common.model.Term"%>
 <%@ page import="edu.arizona.biosemantics.oto.common.model.User"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.DatasetBean"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.db.CharacterDBAccess"%>

@@ -5,7 +5,7 @@
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.SessionDataManager"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.SpecificReportBean"%>
 <%@ page import="edu.arizona.biosemantics.oto.common.model.User"%>
-<%@ page import="edu.arizona.biosemantics.oto.oto.beans.Term"%>
+<%@ page import="edu.arizona.biosemantics.oto.common.model.Term"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.DecisionBean"%>
 <%@ page import="edu.arizona.biosemantics.oto.oto.beans.CommentBean"%>
 <%@ page import="java.util.ArrayList"%>

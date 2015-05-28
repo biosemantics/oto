@@ -16,12 +16,12 @@ import com.google.inject.name.Named;
 
 import edu.arizona.biosemantics.oto.client.lite.OTOLiteClient;
 import edu.arizona.biosemantics.common.log.LogLevel;
-import edu.arizona.biosemantics.oto.common.model.lite.Decision;
-import edu.arizona.biosemantics.oto.common.model.lite.Download;
-import edu.arizona.biosemantics.oto.common.model.lite.Synonym;
-import edu.arizona.biosemantics.oto.common.model.lite.Term;
-import edu.arizona.biosemantics.oto.common.model.lite.Upload;
-import edu.arizona.biosemantics.oto.common.model.lite.UploadResult;
+import edu.arizona.biosemantics.oto.model.lite.Decision;
+import edu.arizona.biosemantics.oto.model.lite.Download;
+import edu.arizona.biosemantics.oto.model.lite.Synonym;
+import edu.arizona.biosemantics.oto.model.lite.Term;
+import edu.arizona.biosemantics.oto.model.lite.Upload;
+import edu.arizona.biosemantics.oto.model.lite.UploadResult;
 import edu.arizona.biosemantics.oto2.oto.shared.model.Bucket;
 import edu.arizona.biosemantics.oto2.oto.shared.model.Collection;
 import edu.arizona.biosemantics.oto2.oto.shared.model.Context;

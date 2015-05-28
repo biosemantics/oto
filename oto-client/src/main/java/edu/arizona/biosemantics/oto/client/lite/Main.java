@@ -3,8 +3,8 @@ package edu.arizona.biosemantics.oto.client.lite;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import edu.arizona.biosemantics.oto.common.model.lite.Download;
-import edu.arizona.biosemantics.oto.common.model.lite.UploadResult;
+import edu.arizona.biosemantics.oto.model.lite.Download;
+import edu.arizona.biosemantics.oto.model.lite.UploadResult;
 
 public class Main {
 

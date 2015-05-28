@@ -7,20 +7,20 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import edu.arizona.biosemantics.common.biology.TaxonGroup;
-import edu.arizona.biosemantics.oto.common.model.CategorizeTerms;
-import edu.arizona.biosemantics.oto.common.model.CategoryBean;
-import edu.arizona.biosemantics.oto.common.model.CreateDataset;
-import edu.arizona.biosemantics.oto.common.model.CreateUserResult;
-import edu.arizona.biosemantics.oto.common.model.DecisionHolder;
-import edu.arizona.biosemantics.oto.common.model.GlossaryDictionaryEntry;
-import edu.arizona.biosemantics.oto.common.model.GroupTerms;
-import edu.arizona.biosemantics.oto.common.model.Order;
-import edu.arizona.biosemantics.oto.common.model.StructureHierarchy;
-import edu.arizona.biosemantics.oto.common.model.Term;
-import edu.arizona.biosemantics.oto.common.model.TermContext;
-import edu.arizona.biosemantics.oto.common.model.TermOrder;
-import edu.arizona.biosemantics.oto.common.model.User;
-import edu.arizona.biosemantics.oto.common.model.TermContext;
+import edu.arizona.biosemantics.oto.model.CategorizeTerms;
+import edu.arizona.biosemantics.oto.model.CategoryBean;
+import edu.arizona.biosemantics.oto.model.CreateDataset;
+import edu.arizona.biosemantics.oto.model.CreateUserResult;
+import edu.arizona.biosemantics.oto.model.DecisionHolder;
+import edu.arizona.biosemantics.oto.model.GlossaryDictionaryEntry;
+import edu.arizona.biosemantics.oto.model.GroupTerms;
+import edu.arizona.biosemantics.oto.model.Order;
+import edu.arizona.biosemantics.oto.model.StructureHierarchy;
+import edu.arizona.biosemantics.oto.model.Term;
+import edu.arizona.biosemantics.oto.model.TermContext;
+import edu.arizona.biosemantics.oto.model.TermOrder;
+import edu.arizona.biosemantics.oto.model.User;
+import edu.arizona.biosemantics.oto.model.TermContext;
 
 public class Main {
 

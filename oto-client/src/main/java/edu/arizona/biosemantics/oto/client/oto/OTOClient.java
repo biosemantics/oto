@@ -21,20 +21,16 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
-import edu.arizona.biosemantics.oto.common.model.CategorizeTerms;
-import edu.arizona.biosemantics.oto.common.model.Category;
-import edu.arizona.biosemantics.oto.common.model.CreateDataset;
-import edu.arizona.biosemantics.oto.common.model.CreateUserResult;
-import edu.arizona.biosemantics.oto.common.model.GlossaryDictionaryEntry;
-import edu.arizona.biosemantics.oto.common.model.GlossaryDownload;
-import edu.arizona.biosemantics.oto.common.model.GroupTerms;
-import edu.arizona.biosemantics.oto.common.model.StructureHierarchy;
-import edu.arizona.biosemantics.oto.common.model.TermContext;
-import edu.arizona.biosemantics.oto.common.model.TermOrder;
-import edu.arizona.biosemantics.oto.common.model.User;
-import edu.arizona.biosemantics.oto.common.model.lite.Download;
-import edu.arizona.biosemantics.oto.common.model.lite.Upload;
-import edu.arizona.biosemantics.oto.common.model.lite.UploadResult;
+import edu.arizona.biosemantics.oto.model.CategorizeTerms;
+import edu.arizona.biosemantics.oto.model.Category;
+import edu.arizona.biosemantics.oto.model.CreateDataset;
+import edu.arizona.biosemantics.oto.model.CreateUserResult;
+import edu.arizona.biosemantics.oto.model.GlossaryDictionaryEntry;
+import edu.arizona.biosemantics.oto.model.GlossaryDownload;
+import edu.arizona.biosemantics.oto.model.GroupTerms;
+import edu.arizona.biosemantics.oto.model.StructureHierarchy;
+import edu.arizona.biosemantics.oto.model.TermOrder;
+import edu.arizona.biosemantics.oto.model.User;
 
 public class OTOClient implements AutoCloseable {
 

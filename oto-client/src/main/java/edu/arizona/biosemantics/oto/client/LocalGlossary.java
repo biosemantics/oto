@@ -3,8 +3,8 @@ package edu.arizona.biosemantics.oto.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.arizona.biosemantics.oto.common.model.TermCategory;
-import edu.arizona.biosemantics.oto.common.model.TermSynonym;
+import edu.arizona.biosemantics.oto.model.TermCategory;
+import edu.arizona.biosemantics.oto.model.TermSynonym;
 
 public class LocalGlossary {
 

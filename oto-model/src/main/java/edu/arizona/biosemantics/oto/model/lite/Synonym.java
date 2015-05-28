@@ -1,4 +1,4 @@
-package edu.arizona.biosemantics.oto.common.model.lite;
+package edu.arizona.biosemantics.oto.model.lite;
 
 import java.io.Serializable;
 

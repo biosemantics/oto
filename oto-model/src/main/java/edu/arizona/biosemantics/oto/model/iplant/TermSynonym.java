@@ -1,4 +1,4 @@
-package edu.arizona.biosemantics.oto.common.model.iplant;
+package edu.arizona.biosemantics.oto.model.iplant;
 
 public class TermSynonym {
 

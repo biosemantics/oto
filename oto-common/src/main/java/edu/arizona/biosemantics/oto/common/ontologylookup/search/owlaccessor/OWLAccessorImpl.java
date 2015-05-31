@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -23,6 +24,7 @@ import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 //import org.semanticweb.owlapi.io.*;
 import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.search.EntitySearcher;
 import org.semanticweb.owlapi.util.OWLClassExpressionVisitorAdapter;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
@@ -221,7 +223,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 	@Override
 	public Set<String> getKeywords(OWLClass c) {
 		WordFilter wf = new WordFilter();
-		Set<OWLAnnotation> ds = this.getAnnotationByIRI(c,
+		Collection<OWLAnnotation> ds = this.getAnnotationByIRI(c,
 				"http://purl.obolibrary.org/obo/IAO_0000115");
 
 		if (ds.isEmpty()) {
@@ -302,7 +304,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 			onts=rootOnt.getImportsClosure();
 			ArrayList<OWLAnnotation> annotations = new ArrayList<OWLAnnotation>();
 			for (OWLOntology ont:onts){
-			 annotations.addAll(c.getAnnotations(ont));
+			 annotations.addAll(EntitySearcher.getAnnotations(c,  ont));
 			}
 			for(OWLAnnotation anno : annotations){
 				//System.out.println(anno.toString());
@@ -653,7 +655,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 	public List<OWLClass> getParents(OWLClass c) {
 		List<OWLClass> parent = new ArrayList<OWLClass>();
 		for(OWLOntology ont:onts){
-			for (OWLClassExpression ce : c.getSuperClasses(ont)) {
+			for (OWLClassExpression ce : EntitySearcher.getSuperClasses(c, ont)) {
 				if (!ce.isAnonymous())
 					parent.add(ce.asOWLClass());
 			}
@@ -671,18 +673,18 @@ public class OWLAccessorImpl implements OWLAccessor {
 	 *            the iri of the annotation property
 	 * @return the annotation property by iri
 	 */
-	public Set<OWLAnnotation> getAnnotationByIRI(OWLClass c, String iri) {
+	public Collection<OWLAnnotation> getAnnotationByIRI(OWLClass c, String iri) {
 //		Set<OWLOntology> onts = ont.getImports(); 
 //		onts.addAll(ont.getDirectImports());
 //		onts.addAll(ont.getImportsClosure());
 		
-		Set<OWLAnnotation> allAnnotations = null;
+		Collection<OWLAnnotation> allAnnotations = null;
 		for(OWLOntology onto: onts){
-			if(allAnnotations == null){
-				allAnnotations = c.getAnnotations(onto,
+			if(allAnnotations == null) {
+				allAnnotations = EntitySearcher.getAnnotations(c, onto,
 					df.getOWLAnnotationProperty(IRI.create(iri)));
 			}else{
-				allAnnotations.addAll(c.getAnnotations(onto,
+				allAnnotations.addAll(EntitySearcher.getAnnotations(c, onto,
 						df.getOWLAnnotationProperty(IRI.create(iri))));
 			}
 				
@@ -704,7 +706,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 	public Set<OWLAnnotation> getAnnotationByIRI(OWLClass c, IRI iri) {
 		Set<OWLAnnotation> result = new HashSet<OWLAnnotation>();
 		for(OWLOntology ont:onts){
-				result.addAll(c.getAnnotations(ont, df.getOWLAnnotationProperty(iri)));
+				result.addAll(EntitySearcher.getAnnotations(c, ont, df.getOWLAnnotationProperty(iri)));
 		}
 		
 		return result;
@@ -853,7 +855,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 	 */
 	public  ArrayList<String> getExactSynonyms(OWLClass c) {
 
-		Set<OWLAnnotation> anns = this.getAnnotationByIRI(c,
+		Collection<OWLAnnotation> anns = this.getAnnotationByIRI(c,
 				"http://www.geneontology.org/formats/oboInOwl#hasExactSynonym");
 		ArrayList<String> labels = new ArrayList<String>();
 		Iterator<OWLAnnotation> it = anns.iterator();
@@ -872,7 +874,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 	 * @return the related synonyms
 	 */
 	public ArrayList<String> getRelatedSynonyms(OWLClass c) {
-		Set<OWLAnnotation> anns = this
+		Collection<OWLAnnotation> anns = this
 				.getAnnotationByIRI(c,
 						"http://www.geneontology.org/formats/oboInOwl#hasRelatedSynonym");
 		ArrayList<String> labels = new ArrayList<String>();
@@ -891,7 +893,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 	 * @return the narrow synonyms
 	 */
 	public  ArrayList<String> getNarrowSynonyms(OWLClass c) {
-		Set<OWLAnnotation> anns = this
+		Collection<OWLAnnotation> anns = this
 				.getAnnotationByIRI(c,
 						"http://www.geneontology.org/formats/oboInOwl#hasNarrowSynonym");
 		
@@ -1026,7 +1028,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 		Set<OWLClass> r = new HashSet<OWLClass>();
 		if(c!=null){
 			for(OWLOntology ont: onts){
-				Set<OWLClassExpression> subclasses = c.getSubClasses(ont);
+				Collection<OWLClassExpression> subclasses = EntitySearcher.getSubClasses(c, ont);
 				for (OWLClassExpression ch : subclasses) {
 					OWLClass o = ch.asOWLClass();
 					r.add(o);
@@ -1105,7 +1107,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 	
 	public String getDefinition(OWLClass c){
 		String definition = "";
-		Set<OWLAnnotation> anns = this.getAnnotationByIRI(c,
+		Collection<OWLAnnotation> anns = this.getAnnotationByIRI(c,
 				"http://purl.obolibrary.org/obo/IAO_0000115"); //definition
 		ArrayList<String> labels = new ArrayList<String>();
 		Iterator<OWLAnnotation> it = anns.iterator();
@@ -1125,7 +1127,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 	public String getParentLabel(OWLClass c){
 		String r = "";
 		if(c!=null){
-			Set<OWLClassExpression> supclasses = c.getSuperClasses(onts);
+			Collection<OWLClassExpression> supclasses = EntitySearcher.getSuperClasses(c, onts);
 			for (OWLClassExpression ch : supclasses) {
 				if(!ch.isAnonymous()){
 					OWLClass o = ch.asOWLClass();

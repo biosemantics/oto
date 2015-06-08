@@ -14,7 +14,9 @@ Relevant Publications
 2. Huang, F.Q.,Macklin, J, Morris, P., Sanyal, P.P., Morris, R.A. , Cole, H. & Cui, H (2012) OTO: Ontology Term Organizer. Annual Conference of American Society for Information Science and Technology. [poster]
 https://www.asis.org/asist2012/proceedings/Submissions/246.pdf
 
-If you use OTO in your research/work, please cite the above publications.
+3. Huang, F, Macklin, J.A., Cui, H.*, Cole, H.A., & Endara, L. (2015). OTO: Ontology Term Organizer. BMC Bioinformatics. 16:47  doi:10.1186/s12859-015-0488-1
+
+If you use OTO in your research/work, please cite publication 3.
 
 License
 -------

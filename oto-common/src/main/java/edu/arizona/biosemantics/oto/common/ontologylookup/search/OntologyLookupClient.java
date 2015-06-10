@@ -24,9 +24,9 @@ public class OntologyLookupClient {
 	public String bspo;
 	public String pato;
 	public String ro;
+	private String spd;
 	public static String dictdir;
 	public Hashtable<String, String> ontoURLs = new Hashtable<String, String>();
-	
 
 	public OntologyLookupClient(String ontologyName, String ontologyDir,
 			String dictDir) {
@@ -36,6 +36,7 @@ public class OntologyLookupClient {
 		bspo = ontologyDir + "/bspo.owl";
 		pato = ontologyDir + "/pato.owl";
 		ro = ontologyDir + "/ro.owl";
+		spd = ontologyDir + "/spd.owl";
 		dictdir = dictDir;
 
 		if (ontologyName.compareToIgnoreCase("po") == 0) {
@@ -54,6 +55,10 @@ public class OntologyLookupClient {
 			this.ontologyURL = "purl.obolibrary.org/obo/uberon/ext.owl";
 			ontoURLs.put(eonto,
 					"purl.obolibrary.org/obo/uberon/ext.owl");
+		} else if(ontologyName.compareToIgnoreCase("spd") == 0) {
+			this.ontologyURL = "http://purl.obolibrary.org/obo/spd.owl";
+			ontoURLs.put(spd,
+					"http://purl.obolibrary.org/obo/spd.owl");
 		}
 		ontoURLs.put(bspo,
 				"http://purl.obolibrary.org/obo/bspo.owl");

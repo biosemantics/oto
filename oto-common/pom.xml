@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.arizona.biosemantics.oto</groupId>
 	<artifactId>oto-common</artifactId>
-	<version>0.0.26-SNAPSHOT</version>
+	<version>0.0.13-SNAPSHOT</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,15 +26,10 @@
 			<artifactId>jwi</artifactId>
 			<version>2.2.3</version>
 		</dependency>
-		<!-- <dependency>
+		<dependency>
 			<groupId>org.semanticweb.elk</groupId>
 			<artifactId>elk-owlapi</artifactId>
 			<version>0.4.1</version>
-		</dependency> -->
-		<dependency>
-			<groupId>net.sourceforge.owlapi</groupId>
-			<artifactId>owlapi-distribution</artifactId>
-			<version>4.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.atteo</groupId>

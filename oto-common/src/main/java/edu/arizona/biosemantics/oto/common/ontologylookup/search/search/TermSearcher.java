@@ -98,7 +98,6 @@ public class TermSearcher {
 		else if (result != null && result.size()>0)
 			return result;
 
-		phrase = Pattern.quote(phrase);
 		String query = formatExpand(phrase); // expand with syn-ring
 		String querycopy = query;
 

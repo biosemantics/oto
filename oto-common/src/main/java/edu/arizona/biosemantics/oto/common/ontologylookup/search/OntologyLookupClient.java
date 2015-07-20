@@ -54,6 +54,10 @@ public class OntologyLookupClient {
 			this.ontologyURL = "purl.obolibrary.org/obo/uberon/ext.owl";
 			ontoURLs.put(eonto,
 					"purl.obolibrary.org/obo/uberon/ext.owl");
+		} else if(ontologyName.equals("spd")) {
+			this.ontologyURL = "purl.obolibrary.org/obo/spd/spd.owl";
+			ontoURLs.put(eonto,
+					"purl.obolibrary.org/obo/spd/spd.owl");
 		}
 		ontoURLs.put(bspo,
 				"http://purl.obolibrary.org/obo/bspo.owl");

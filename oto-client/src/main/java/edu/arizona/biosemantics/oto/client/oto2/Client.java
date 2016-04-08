@@ -15,7 +15,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import edu.arizona.biosemantics.oto.client.lite.OTOLiteClient;
-import edu.arizona.biosemantics.common.context.Context;
+import edu.arizona.biosemantics.common.context.shared.Context;
 import edu.arizona.biosemantics.common.log.LogLevel;
 import edu.arizona.biosemantics.oto.model.lite.Decision;
 import edu.arizona.biosemantics.oto.model.lite.Download;

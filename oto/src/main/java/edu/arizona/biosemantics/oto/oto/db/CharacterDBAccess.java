@@ -1106,8 +1106,9 @@ public class CharacterDBAccess extends DatabaseAccess {
 			 */
 			// get total number of terms
 			String sql = "select distinct count(term) from (select term from "
-					+ dataset + "_web_grouped_terms  union (select term from "
-					+ dataset + "_user_terms_decisions)) b where term <> ''";
+					+ dataset + "_web_grouped_terms  union select term from "
+					+ dataset + "_user_terms_decisions ) b where term <> ''";
+			//System.out.println(sql);
 			pstmt = conn.prepareStatement(sql);
 			rset = pstmt.executeQuery();
 			if (rset.next()) {

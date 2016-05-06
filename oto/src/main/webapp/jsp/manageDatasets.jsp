@@ -58,12 +58,12 @@
 							<p>Importing a dataset takes two steps. By filling out the
 								information below, you will create an empty dataset, which you
 								will then populate by using the functions provided on the right
-								side of the screen.</p>
+								side of the screen.<font color="red">The length of dataset name plus your last name should not be greater than 32.</font></p>
 							<table style="padding: 5px;">
 								<tr>
 									<td align="right"><label style="color: black;">Dataset
 											Name:</label></td>
-									<td><input id="datasetPrefix"></input></td>
+									<td><input id="datasetPrefix" maxlength="32"></input></td>
 								</tr>
 								<tr>
 									<td align="right"><label style="color: black;">Of

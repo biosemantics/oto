@@ -83,7 +83,7 @@ function create_dataset() {
 				success : function(msg) {
 					$("#creationNote").hide();
 					if (msg.indexOf("error") >= 0) {
-						alert("Failed to create dataset. Please try again later. ");
+						alert(msg+ "   Failed to create dataset. ");
 					} else {// success, return dataset name
 						alert("Dataset '"
 								+ msg

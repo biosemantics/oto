@@ -44,13 +44,17 @@ public class CreateDatasetForUserAction extends ParserAction {
 				// get user name
 				SessionDataManager sessionDataMgr = getSessionManager(request);
 				User user = sessionDataMgr.getUser();
-				String username = user.getFirstName() + "_"
+				/**
+				 * String username = user.getFirstName() + "_"
 						+ user.getLastName();
+				 */
+				String username = user.getLastName();
 				username = username.toLowerCase().replaceAll("^(a-z_)", "_");
 
 				// get timestamp
-				SimpleDateFormat sdfDate = new SimpleDateFormat(
-						"yyyyMMddHHmmss");
+				//32
+				//SimpleDateFormat sdfDate = new SimpleDateFormat("yyMMddHHmmss");
+				SimpleDateFormat sdfDate = new SimpleDateFormat("MMddHHmm");
 				Date now = new Date();
 				String strDate = sdfDate.format(now);
 
@@ -58,21 +62,25 @@ public class CreateDatasetForUserAction extends ParserAction {
 				String datasetName = prefix + "_" + username + "_" + strDate;
 
 				if (!datasetName.equals("")) {
-					CharacterDBAccess cdba = new CharacterDBAccess();
-					boolean success = cdba.createDatasetIfNotExist(datasetName,
-							"", user.getUserId(), glossaryID);
-					if (success)
-						responseText = datasetName;
-					else
-						responseText = "error";
-
-					// update user's role as owner
-					UserDataAccess uds = new UserDataAccess();
-					sessionDataMgr.setUser(uds.updateUserRole(user));
+					if((prefix + "_" + username).length()<=33){
+						CharacterDBAccess cdba = new CharacterDBAccess();
+						boolean success = cdba.createDatasetIfNotExist(datasetName,
+								"", user.getUserId(), glossaryID);
+						if (success)
+							responseText = datasetName;
+						else
+							responseText = "error";
+	
+						// update user's role as owner
+						UserDataAccess uds = new UserDataAccess();
+						sessionDataMgr.setUser(uds.updateUserRole(user));
+					}else{
+						responseText = "error: Dataset name is too long.";
+					}
 				} else {
 					responseText = "error: Dataset name is empty.";
 				}
-
+				System.out.println(responseText+":::>"+datasetName);
 				response.setContentType("text");
 				response.getWriter().write(responseText);
 

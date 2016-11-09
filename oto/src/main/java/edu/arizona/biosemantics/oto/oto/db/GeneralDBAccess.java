@@ -68,6 +68,7 @@ public class GeneralDBAccess extends DatabaseAccess {
 			}
 			rs_ds = stmt_ds.executeQuery(sql);
 			while (rs_ds.next()) {
+				try{
 				String datasetName = rs_ds.getString(1);
 				DatasetStatistics datasetStat = new DatasetStatistics();
 				datasetStat.setDatasetName(datasetName);
@@ -128,6 +129,12 @@ public class GeneralDBAccess extends DatabaseAccess {
 				}
 
 				datasetStats.add(datasetStat);
+				}catch(Exception exe){
+					LOGGER.error(
+							"Couldn't execute getDatasetsByUser in GeneralDBAccess: ",
+							exe);
+					continue;
+				}
 			}
 
 		} catch (Exception exe) {

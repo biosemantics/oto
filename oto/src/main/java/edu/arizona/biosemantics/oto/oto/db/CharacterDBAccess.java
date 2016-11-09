@@ -2820,7 +2820,9 @@ public class CharacterDBAccess extends DatabaseAccess {
 					+ "([^a-zA-Z].*)?$' "
 					+ "or sentence rlike '^(.*[^a-zA-Z])?" + term
 					+ "([^a-zA-Z].*)?$') limit 300) a "
-					+ "group by source limit 100";
+					;
+					// jin update 11-09-2016
+					//+ "group by source limit 100";
 
 			try {
 				conn = getConnection();

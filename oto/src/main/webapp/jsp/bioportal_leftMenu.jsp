@@ -80,7 +80,7 @@
 										<th bgcolor="#B0F1A0" align="left" height="17px" width="100%"><font
 											style="text-align: left; width: 60%" size="2"><%=j == 0 ? "Structures" : "Characters"%></font><font
 											style="text-align: left; width: 28%; font-weight: normal;"
-											color="green"> (<span id="SIZE_OF_LIST_<%=location%>"><%=termList.size()%></span>)
+											color="green"> (<span id="SIZE_OF_LIST_<%=location%>"><%=termList != null ? termList.size():0%></span>)
 										</font><img onclick="expandTerms(this)" border="0px"
 											style="width: 12%"
 											src="images/icon_<%=display ? "collapse" : "expand"%>.gif"

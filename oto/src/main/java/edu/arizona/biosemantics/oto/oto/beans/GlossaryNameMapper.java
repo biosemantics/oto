@@ -28,20 +28,23 @@ public class GlossaryNameMapper {
 		String glossaryName = "";
 		switch (glossaryID) {
 		case 1:
-			glossaryName = "Plant";
-			break;
+			return "Plant";
 		case 2:
-			glossaryName = "Hymenoptera";
-			break;
+			return "Hymenoptera";
 		case 3:
-			glossaryName = "Algea";
-			break;
+			return "Algea";
 		case 4:
-			glossaryName = "Porifera";
-			break;
+			return "Porifera";
 		case 5:
-			glossaryName = "Fossil";
-			break;
+			return "Fossil";
+		case 7:
+			return "Cnidaria";
+		case 8:
+			return "Coleoptera";
+		case 9:
+			return "Gastropods";
+		case 10:
+			return "Spider";
 		default:
 			break;
 		}
@@ -68,6 +71,22 @@ public class GlossaryNameMapper {
 
 		if (glossaryName.equals("Fossil")) {
 			return 5;
+		}
+		
+		if (glossaryName.equals("Cnidaria")) {
+			return 6;
+		}
+		
+		if (glossaryName.equals("Coleoptera")) {
+			return 7;
+		}
+		
+		if (glossaryName.equals("Gastropods")) {
+			return 8;
+		}
+		
+		if (glossaryName.equals("Spider")) {
+			return 9;
 		}
 		return 0;
 	}
@@ -97,6 +116,10 @@ public class GlossaryNameMapper {
 		glosses.add("Algea");
 		glosses.add("Porifera");
 		glosses.add("Fossil");
+		glosses.add("Cnidaria");
+		glosses.add("Coleoptera");
+		glosses.add("Gastropods");
+		glosses.add("Spider");
 		return glosses;
 	}
 
@@ -112,7 +135,11 @@ public class GlossaryNameMapper {
 				|| dataset.toLowerCase().equals("hymenoptera_glossary")
 				|| dataset.toLowerCase().equals("algea_glossary")
 				|| dataset.toLowerCase().equals("porifera_glossary")
-				|| dataset.toLowerCase().equals("fossil_glossary");
+				|| dataset.toLowerCase().equals("fossil_glossary")
+				|| dataset.toLowerCase().equals("cnidaria_glossary")
+				|| dataset.toLowerCase().equals("coleoptera_glossary")
+				|| dataset.toLowerCase().equals("gastropods_glossary")
+				|| dataset.toLowerCase().equals("spider_glossary");
 	}
 
 	/**
@@ -127,7 +154,12 @@ public class GlossaryNameMapper {
 				|| dataset.toLowerCase().equals("hymenoptera_glossary")
 				|| dataset.toLowerCase().equals("algea_glossary")
 				|| dataset.toLowerCase().equals("porifera_glossary")
-				|| dataset.toLowerCase().equals("fossil_glossary");
+				|| dataset.toLowerCase().equals("fossil_glossary")
+				|| dataset.toLowerCase().equals("cnidaria_glossary")
+				|| dataset.toLowerCase().equals("coleoptera_glossary")
+				|| dataset.toLowerCase().equals("gastropods_glossary")
+				|| dataset.toLowerCase().equals("spider_glossary")
+				;
 	}
 
 }

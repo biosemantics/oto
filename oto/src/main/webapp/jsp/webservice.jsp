@@ -78,7 +78,7 @@
 						class="font-text-style"><b>Example</b>: <br />GET <a
 							href="http://biosemantics.arizona.edu/OTO/rest/glossaryTypes">
 								http://biosemantics.arizona.edu/OTO/rest/glossaryTypes</a><br />Return:
-							<br /> ["Plant", "Hymenoptera", "Algea", "Porifera", "Fossil"]</font></li>
+							<br /> ["Plant", "Hymenoptera", "Algea", "Porifera", "Fossil", "Cnidaria", "Coleoptera", "Gastropods", "Spider"]</font></li>
 				</ul>
 			</td>
 		</tr>

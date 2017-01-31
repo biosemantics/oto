@@ -71,6 +71,7 @@
 									<td><select name="value" id="glossaryID">
 											<option value="" style="font-weight: bold;">- Select
 												-</option>
+												<option value="0">default</option>
 											<%
 												ArrayList<String> glosses = GlossaryNameMapper.getInstance()
 															.getGlossaryNames();

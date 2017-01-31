@@ -493,8 +493,8 @@
 						class="font-text-style"><b style="color: green">Create
 								Datasets </b><br />You can create your own dataset by giving a
 							dataset name prefix and selecting a glossary to which your
-							dataset belongs. Curently OTO only support 5 glossaries: Plant,
-							Hymenoptera, Porifera, Algea and Fossil. <br /> The name of
+							dataset belongs. Curently OTO only support 9 glossaries: Plant,
+							Hymenoptera, Porifera, Algea, Fossil, Cnidaria, Coleoptera, Gastropods and Spider. <br /> The name of
 							newly created dataset will be a combination of your given name
 							prefix, your first name, your last name and the timestamp when
 							this dataset is created, all parts connected by underscore (_). <br />The

@@ -479,7 +479,11 @@ insert into glossarytypes (glossTypeID, glossaryName) values
 (2, 'Hymenoptera'),
 (3, 'Algea'),
 (4, 'Porifera'),
-(5, 'Fossil');
+(5, 'Fossil'),
+(6, 'Cnidaria'),
+(7, 'Coleoptera'),
+(8, 'Gastropods'),
+(9, 'Spider');
 
 alter table datasetprefix add glossaryType int default 1;
 alter table datasetprefix modify glossaryType int default 1;

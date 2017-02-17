@@ -10,8 +10,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import edu.arizona.biosemantics.oto.common.model.GlossaryDownload;
 import edu.arizona.biosemantics.oto.oto.rest.git.GlossaryDownloadDAO;
@@ -24,16 +23,16 @@ public class GlossaryResource {
 	@Context
 	Request request;		
 	
-	private Logger logger;
+	private static final Logger logger = Logger.getLogger(GlossaryResource.class);
 	
 	public GlossaryResource() {
-		logger =  LoggerFactory.getLogger(this.getClass());
 	}	
 	
 	@Path("/{glossaryType}")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	public GlossaryDownload getGlossary(@PathParam("glossaryType") String glossaryType, @QueryParam("version") String version) {
+		logger.error("Request for  " + glossaryType + " " + version);
 		GlossaryDownload result = new GlossaryDownload();
 		if(version == null || version.isEmpty())
 			version = "latest";

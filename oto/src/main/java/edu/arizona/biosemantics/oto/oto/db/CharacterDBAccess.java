@@ -6309,10 +6309,13 @@ public class CharacterDBAccess extends DatabaseAccess {
 				}
 
 				// add default categories
-				sql = "insert into " + datasetName
-						+ "_categories select * from categories";
-				pstmt = conn.prepareStatement(sql);
-				pstmt.executeUpdate();
+				// jin updated on Jan 31, 2017
+				if(glossaryID>0){
+					sql = "insert into " + datasetName
+							+ "_categories select * from categories";
+					pstmt = conn.prepareStatement(sql);
+					pstmt.executeUpdate();
+				}
 
 				// add user log
 				pstmt = conn.prepareStatement(getUserLogSQL(datasetName,

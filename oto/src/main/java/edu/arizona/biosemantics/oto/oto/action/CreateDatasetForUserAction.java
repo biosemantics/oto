@@ -40,6 +40,8 @@ public class CreateDatasetForUserAction extends ParserAction {
 
 				// get glossary ID
 				int glossaryID = Integer.parseInt(dss[1]);// glossary ID
+				//jin add glossaryID=0 as a default glossary group
+				
 
 				// get user name
 				SessionDataManager sessionDataMgr = getSessionManager(request);

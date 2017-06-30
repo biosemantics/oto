@@ -3,12 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.arizona.biosemantics.oto</groupId>
 	<artifactId>oto-client</artifactId>
-	<version>0.0.54-SNAPSHOT</version>
+	<version>0.0.54-SNAPSHOT-debug</version>
 
 	<properties>
-		<java.version>1.7</java.version>
+		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<aspectj.version>1.8.10</aspectj.version>
 	</properties>
 
 	<repositories>
@@ -26,7 +27,7 @@
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
-			<version>3.0</version>
+			<version>4.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -46,7 +47,7 @@
 		<dependency>
 		  <groupId>edu.arizona.biosemantics.oto</groupId>
 		  <artifactId>oto-model</artifactId>
-		  <version>0.0.3-SNAPSHOT</version>
+		  <version>0.0.3-SNAPSHOT-debug</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -56,7 +57,8 @@
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
-			<version>1.7.4</version>
+			<version>${aspectj.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
@@ -69,25 +71,76 @@
 			<version>1.9.13</version>
 		</dependency>
 		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.13</version>
+			<classifier>sources</classifier>
+		</dependency>
+		<dependency>
 			<groupId>edu.arizona.biosemantics.common</groupId>
 			<artifactId>log</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.3-SNAPSHOT-debug</version>
 		</dependency>
 		<dependency>
 		  <groupId>edu.arizona.biosemantics.oto2</groupId>
 		  <artifactId>oto</artifactId>
-		  <version>0.0.113-SNAPSHOT</version>
+		  <version>0.0.134-SNAPSHOT-debug</version>
 		  <classifier>classes</classifier>
 		</dependency>
 		<dependency>
 		  <groupId>edu.arizona.biosemantics.common</groupId>
 		  <artifactId>context</artifactId>
-		  <version>0.0.4-SNAPSHOT</version>
+		  <version>0.0.4-SNAPSHOT-debug</version>
 		</dependency>
 	</dependencies>
 	
 	<build>
 		<plugins>
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-compiler-plugin</artifactId>
+			    <version>3.6.1</version>
+			    <configuration>
+			        <source>${java.version}</source>
+			        <target>${java.version}</target>
+			        <!-- IMPORTANT, without this, will report symbol log() not found error and cause build failure (as if there were an aspectj error)-->
+					<useIncrementalCompilation>false</useIncrementalCompilation>
+			    </configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>aspectj-maven-plugin</artifactId>
+				<version>1.10</version>
+				<configuration>
+					<showWeaveInfo>true</showWeaveInfo>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<Xlint>ignore</Xlint>
+					<complianceLevel>${java.version}</complianceLevel>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<!--<verbose>true</verbose> -->
+					<!--<warn>constructorName,packageDefaultMethod,deprecation,maskedCatchBlocks,unusedLocals,unusedArguments,unusedImport</warn> -->
+				</configuration>
+				<executions>
+					<execution>
+						<!-- IMPORTANT -->
+						<phase>process-sources</phase>
+						<goals>
+							<goal>compile</goal>
+							<goal>test-compile</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.aspectj</groupId>
+						<artifactId>aspectjtools</artifactId>
+						<version>${aspectj.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<!-- 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>aspectj-maven-plugin</artifactId>
@@ -107,9 +160,9 @@
 					</dependency>
 				</dependencies>
 				<executions>
-					<execution>
+					<execution> -->
 						<!-- Necessary, so aspectj compile is executed before java compile -->
-						<phase>process-sources</phase>
+						<!-- <phase>process-sources</phase>
 						<goals>
 							<goal>compile</goal>
 							<goal>test-compile</goal>
@@ -117,7 +170,7 @@
 					</execution>
 				</executions>
 			</plugin>
-
+            -->
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
+//import edu.arizona.biosemantics.common.ontology.search.model.Ontology;
 import edu.arizona.biosemantics.oto.common.ontologylookup.search.OntologyLookupClient;
 import edu.arizona.biosemantics.oto.common.ontologylookup.search.data.FormalConcept;
 import edu.arizona.biosemantics.oto.common.ontologylookup.search.data.Quality;
@@ -76,7 +77,7 @@ public class TermSearcher {
 	 * related synonyms. The result could also be null when no match is found.
 	 * 
 	 * Return all strong matches based on the original phrase. Other matches are
-	 * saved in candidate matches Strong match = a match to a class lable or an
+	 * saved in candidate matches Strong match = a match to a class label or an
 	 * exact synonym
 	 * 
 	 * @param query
@@ -618,23 +619,18 @@ public class TermSearcher {
 	 */
 	public static void main(String[] args) {
 
-		/*TermSearcher ts = new TermSearcher();
-		// FormalConcept result = ts.searchTerm("ornament", "quality");
-		// ArrayList<FormalConcept> result
-		// =TermSearcher.regexpSearchTerm("epichordal\\b.*", "entity");
-		// if(result!=null){
-		// System.out.println(result.toString());
-		// }else{
-		// ArrayList<FormalConcept> fcs = ts.getCandidateMatches();
-		// for(FormalConcept fc: fcs){
-		// System.out.println(fc.toString());
-		// }
-
-		ArrayList<FormalConcept> quality = ts.searchTerm("(?:metasternum)",
+		/* not working this way
+		 * OntologyLookupClient OLC = new OntologyLookupClient("PO", "C:/Users/hongcui/Documents/etcsite/resources/shared/ontologies",
+				"C:/Users/hongcui/Documents/etcsite/resources/shared/wordnet/wn31/dict");
+		TermSearcher ts = new TermSearcher(OLC);
+		
+		ArrayList<FormalConcept> entities = ts.searchTerm("leaf",
 				"entity");
-		if(quality!=null){
-			for (FormalConcept fc : quality)
-				System.out.println(fc.getLabel());
+		if(entities!=null){
+			for (FormalConcept fc : entities)
+				System.out.println("matching concept: "+fc.getLabel());
+		}else{
+			System.out.println("no matching concepts");
 		}*/
 	}
 

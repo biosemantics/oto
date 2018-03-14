@@ -18,14 +18,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 //import org.semanticweb.owlapi.io.*;
 import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.model.parameters.Imports;
 import org.semanticweb.owlapi.search.EntitySearcher;
-import org.semanticweb.owlapi.util.OWLClassExpressionVisitorAdapter;
+//import org.semanticweb.owlapi.util.OWLClassExpressionVisitorAdapter;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 
 import edu.arizona.biosemantics.oto.common.ontologylookup.search.knowledge.Dictionary;
@@ -156,11 +159,16 @@ public class OWLAccessorImpl implements OWLAccessor {
 	 * @param excludedclassIRIs 
 	 */
 	private void constructorHelper(OWLOntology rootOnt, ArrayList<String> excludedclassIRIs){
-		onts=rootOnt.getImportsClosure();
-		for (OWLOntology ont:onts){
-			allclasses.addAll(ont.getClassesInSignature(true));
+		onts=rootOnt.directImports().collect(Collectors.toSet());
+		onts.add(rootOnt);
+
+		for(OWLOntology ont: onts){
+			//Stream<OWLClass> stream = ont.classesInSignature();
+			Set<OWLClass> set = ont.classesInSignature().collect(Collectors.toSet());
+			//allclasses.addAll(ont.getClassesInSignature(true)); 
+			allclasses.addAll(set);
 		}
-		//"Process Quality" IRI value is added to be excluded
+		//TODO: move this to client code: "Process Quality" IRI value is added to be excluded
 		excludedclassIRIs.add("http://purl.obolibrary.org/obo/PATO_0001236");
 			//eliminate branches
 		allclasses.removeAll(this.classesToExclude(excludedclassIRIs));
@@ -299,12 +307,16 @@ public class OWLAccessorImpl implements OWLAccessor {
 				}
 			}			
 		}*/
-//Two caches one to hold organ => adjective pairs and the other to hold adjective => {organid,organlabel}
+		
+        /*Two caches: one to hold organ => adjective pairs and the other to hold adjective => {organid,organlabel}
+		*/
+		
 		private void collectAdjectiveOrgans(OWLClass c) {
-			onts=rootOnt.getImportsClosure();
+
 			ArrayList<OWLAnnotation> annotations = new ArrayList<OWLAnnotation>();
-			for (OWLOntology ont:onts){
-			 annotations.addAll(EntitySearcher.getAnnotations(c,  ont));
+
+			for(OWLOntology ont: onts){
+			    annotations.addAll(EntitySearcher.getAnnotations(c,  ont).collect(Collectors.toSet()));
 			}
 			for(OWLAnnotation anno : annotations){
 				//System.out.println(anno.toString());
@@ -430,6 +442,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 				Enumeration<String> en = this.ontologyHash.keys();
 				while(en.hasMoreElements()){
 					String term = en.nextElement(); //over type: original, exact, narrow, related
+					if(term.contains("blade"))System.out.println(term);
 					if(term.matches(con)){
 						Hashtable<String, ArrayList<OWLClass>> temp = ontologyHash.get(term);
 						merge(output, temp);
@@ -654,12 +667,13 @@ public class OWLAccessorImpl implements OWLAccessor {
 	 */
 	public List<OWLClass> getParents(OWLClass c) {
 		List<OWLClass> parent = new ArrayList<OWLClass>();
-		for(OWLOntology ont:onts){
-			for (OWLClassExpression ce : EntitySearcher.getSuperClasses(c, ont)) {
-				if (!ce.isAnonymous())
-					parent.add(ce.asOWLClass());
+		Stream<OWLClassExpression> superClaz = EntitySearcher.getSuperClasses(c, onts.stream());
+		Iterator<OWLClassExpression> it = superClaz.iterator();
+		while(it.hasNext()){
+			OWLClassExpression ce = it.next();
+			if (!ce.isAnonymous())
+				parent.add(ce.asOWLClass());
 			}
-		}
 		return parent;
 	}
 
@@ -674,24 +688,12 @@ public class OWLAccessorImpl implements OWLAccessor {
 	 * @return the annotation property by iri
 	 */
 	public Collection<OWLAnnotation> getAnnotationByIRI(OWLClass c, String iri) {
-//		Set<OWLOntology> onts = ont.getImports(); 
-//		onts.addAll(ont.getDirectImports());
-//		onts.addAll(ont.getImportsClosure());
 		
-		Collection<OWLAnnotation> allAnnotations = null;
-		for(OWLOntology onto: onts){
-			if(allAnnotations == null) {
-				allAnnotations = EntitySearcher.getAnnotations(c, onto,
-					df.getOWLAnnotationProperty(IRI.create(iri)));
-			}else{
-				allAnnotations.addAll(EntitySearcher.getAnnotations(c, onto,
-						df.getOWLAnnotationProperty(IRI.create(iri))));
-			}
-				
-		}
-		return allAnnotations;
-		/*return c.getAnnotations(ont,
-				df.getOWLAnnotationProperty(IRI.create(iri)));*/
+		//to learn what is "annotation assertion axioms" see https://github.com/owlcs/owlapi/issues/315
+		//we are getting annotations to a class, not annotations to annotations.
+		return EntitySearcher.getAnnotations(c, onts.stream(),
+				df.getOWLAnnotationProperty(IRI.create(iri))).collect(Collectors.toSet());
+
 	}
 
 	/**
@@ -704,12 +706,10 @@ public class OWLAccessorImpl implements OWLAccessor {
 	 * @return the annotation by iri
 	 */
 	public Set<OWLAnnotation> getAnnotationByIRI(OWLClass c, IRI iri) {
-		Set<OWLAnnotation> result = new HashSet<OWLAnnotation>();
-		for(OWLOntology ont:onts){
-				result.addAll(EntitySearcher.getAnnotations(c, ont, df.getOWLAnnotationProperty(iri)));
-		}
 		
-		return result;
+		return EntitySearcher.getAnnotations(c, onts.stream(),
+				df.getOWLAnnotationProperty(iri)).collect(Collectors.toSet());
+	
 	}
 
 	/**
@@ -719,7 +719,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 	 * @return true, if is obsolete
 	 */
 	public boolean isObsolete(OWLClass c, OWLOntology ontology){
-		
+		//test case: pollen tube tip in PO
 		for(OWLAnnotation a: getAnnotationByIRI(c, "http://www.w3.org/2002/07/owl#deprecated")){
 			if(a.getValue().toString().contains("\"true\""))
 				return true;
@@ -744,12 +744,11 @@ public class OWLAccessorImpl implements OWLAccessor {
 		OWLClass part= df.getOWLClass(IRI.create(partIRI)); 
 		HashSet<OWLClass> classeswithpart = new HashSet<OWLClass>();
 		RestrictionVisitor restrictionVisitor = new RestrictionVisitor(this.onts);
-		for(OWLOntology ont: onts){
-		for (OWLSubClassOfAxiom ax : ont
-				.getSubClassAxiomsForSubClass(part)) {
-			OWLClassExpression superCls = ax.getSuperClass();
-			superCls.accept(restrictionVisitor);
-		}
+		for (OWLOntology ont: onts){ 
+			for (OWLSubClassOfAxiom ax : ont.subClassAxiomsForSubClass(part).collect(Collectors.toSet())) {
+				OWLClassExpression superCls = ax.getSuperClass();
+				superCls.accept(restrictionVisitor);
+			}
 		}
 		//System.out.println("Classes In Restricted properties for " + part + ": "
 		//		+ restrictionVisitor.getClassInRestrictedProperties().size());
@@ -774,7 +773,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 	/**
      * Visits existential restrictions and collects the properties which are restricted
      */
-    private static class RestrictionVisitor extends OWLClassExpressionVisitorAdapter {
+    private static class RestrictionVisitor implements OWLClassExpressionVisitor {
 
         private boolean processInherited = false;
 
@@ -808,8 +807,9 @@ public class OWLAccessorImpl implements OWLAccessor {
                 // need to keep track of the classes that we have processed
                 // so that we don't get caught out by cycles in the taxonomy
                 processedClasses.add(desc);
-                for (OWLOntology ont : onts) {
-                    for (OWLSubClassOfAxiom ax : ont.getSubClassAxiomsForSubClass(desc)) {
+                for (OWLOntology ont: onts){
+                	Set <OWLSubClassOfAxiom> axs = ont.subClassAxiomsForSubClass(desc).collect(Collectors.toSet());
+                    for (OWLSubClassOfAxiom ax : axs) {
                         ax.getSuperClass().accept(this);
                     }
                 }
@@ -1027,15 +1027,13 @@ public class OWLAccessorImpl implements OWLAccessor {
 	public Set<OWLClass> getAllOffsprings(OWLClass c) {
 		Set<OWLClass> r = new HashSet<OWLClass>();
 		if(c!=null){
-			for(OWLOntology ont: onts){
-				Collection<OWLClassExpression> subclasses = EntitySearcher.getSubClasses(c, ont);
+				Collection<OWLClassExpression> subclasses = EntitySearcher.getSubClasses(c, onts.stream()).collect(Collectors.toSet());
 				for (OWLClassExpression ch : subclasses) {
 					OWLClass o = ch.asOWLClass();
 					r.add(o);
 					r.addAll(this.getAllOffsprings(o));
 				}
 			}
-		}
 		return r;
 	}
 
@@ -1127,7 +1125,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 	public String getParentLabel(OWLClass c){
 		String r = "";
 		if(c!=null){
-			Collection<OWLClassExpression> supclasses = EntitySearcher.getSuperClasses(c, onts);
+			Collection<OWLClassExpression> supclasses = EntitySearcher.getSuperClasses(c, onts.stream()).collect(Collectors.toSet());
 			for (OWLClassExpression ch : supclasses) {
 				if(!ch.isAnonymous()){
 					OWLClass o = ch.asOWLClass();

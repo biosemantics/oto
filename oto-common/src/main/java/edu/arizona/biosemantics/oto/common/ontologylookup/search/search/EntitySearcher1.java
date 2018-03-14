@@ -76,7 +76,7 @@ public class EntitySearcher1 extends EntitySearcher {
 		ArrayList<String> variations  = new ArrayList<String>(); 
 		//permutation on synrings that are results of subcomponents permutation
 		permutation(components, variations); 
-		LOGGER.debug("...created variations");
+		LOGGER.debug("...created permutation variations");
 		//LOGGER.debug("'"+entityphrase+" , "+elocatorphrase+"' generated "+variations.size()+" variations:");
 		for(String variation : variations)
 			LOGGER.debug("....."+variation);

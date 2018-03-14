@@ -1,6 +1,7 @@
 package edu.arizona.biosemantics.oto.common.ontologylookup.search;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Hashtable;
 
 import edu.arizona.biosemantics.oto.common.ontologylookup.search.data.Entity;
@@ -16,46 +17,70 @@ public class OntologyLookupClient {
 	private String rel = "part_of";
 
 	// the following variables are for search parent chain
+	@Deprecated
 	private String ontologyURL;
+	@Deprecated
 	private String ontologyLocalPath;
+	public String[] entityOntologyFilepaths = new String[]{};
+	public String[] qualityOntologyFilepaths = new String[]{};
+	public HashSet<String> entityOntologyNames = new HashSet<String>();
+	public HashSet<String> qualityOntologyNames = new HashSet<String>();
 	public TermOutputerUtilities ontoutil;
-	public String entityonto;
-	public String eonto;
-	public String bspo;
-	public String pato;
-	public String ro;
+	@Deprecated
+	private String entityonto;
+	@Deprecated
+	private String eonto;
+	@Deprecated
+	private String bspo;
+	@Deprecated
+	private String pato;
+	@Deprecated
+	private String ro;
+	@Deprecated
 	private String spd;
 	public static String dictdir;
 	public Hashtable<String, String> ontoURLs = new Hashtable<String, String>();
-
-	public OntologyLookupClient(String ontologyName, String ontologyDir,
+	
+    /**
+     * @deprecated use the other constructor instead.
+     * @param entityOntologyName
+     * @param ontologyDir
+     * @param dictDir
+     */
+	@Deprecated
+	public OntologyLookupClient(String entityOntologyName, String ontologyDir,
 			String dictDir) {
-		entityonto = ontologyName;
-		eonto = ontologyDir + "/" + ontologyName + ".owl";
-		this.ontologyLocalPath = ontologyDir + "/" + ontologyName + ".owl";
+		
+		entityonto = entityOntologyName;
+		entityOntologyNames.add(entityOntologyName);
+		entityOntologyNames.add("bspo");
+		qualityOntologyNames.add("ro");
+		qualityOntologyNames.add("pato");
+		eonto = ontologyDir + "/" + entityOntologyName + ".owl";
+		this.ontologyLocalPath = ontologyDir + "/" + entityOntologyName + ".owl";
 		bspo = ontologyDir + "/bspo.owl";
 		pato = ontologyDir + "/pato.owl";
 		ro = ontologyDir + "/ro.owl";
 		spd = ontologyDir + "/spd.owl";
 		dictdir = dictDir;
 
-		if (ontologyName.compareToIgnoreCase("po") == 0) {
+		if (entityOntologyName.compareToIgnoreCase("po") == 0) {
 			this.ontologyURL = "http://purl.obolibrary.org/obo/po.owl";
 			ontoURLs.put(eonto,
 					"http://purl.obolibrary.org/obo/po.owl");
-		} else if (ontologyName.compareToIgnoreCase("hao") == 0) {
+		} else if (entityOntologyName.compareToIgnoreCase("hao") == 0) {
 			this.ontologyURL = "http://purl.obolibrary.org/obo/hao.owl";
 			ontoURLs.put(eonto,
 					"http://purl.obolibrary.org/obo/hao.owl");
-		} else if (ontologyName.compareToIgnoreCase("poro") == 0) {
+		} else if (entityOntologyName.compareToIgnoreCase("poro") == 0) {
 			this.ontologyURL = "http://purl.obolibrary.org/obo/poro.owl";
 			ontoURLs.put(eonto,
 					"http://purl.obolibrary.org/obo/poro.owl");
-		} else if (ontologyName.compareToIgnoreCase("ext") == 0) {
+		} else if (entityOntologyName.compareToIgnoreCase("ext") == 0) {
 			this.ontologyURL = "purl.obolibrary.org/obo/uberon/ext.owl";
 			ontoURLs.put(eonto,
 					"purl.obolibrary.org/obo/uberon/ext.owl");
-		} else if(ontologyName.compareToIgnoreCase("spd") == 0) {
+		} else if(entityOntologyName.compareToIgnoreCase("spd") == 0) {
 			this.ontologyURL = "http://purl.obolibrary.org/obo/spd.owl";
 			ontoURLs.put(spd,
 					"http://purl.obolibrary.org/obo/spd.owl");
@@ -70,15 +95,59 @@ public class OntologyLookupClient {
 		// now load ontologies
 		ontoutil = new TermOutputerUtilities(eonto, bspo, pato, ro, ontoURLs);
 	}
+	
+	/**
+	 * 
+	 * @param entityOntologyNames ontology filename without ".owl". ontology files should be named with their obo acronym, plant ontology = po
+	 * @param qualityOntologyNames
+	 * @param ontologyDir
+	 * @param dictDir
+	 */
+	public OntologyLookupClient(HashSet<String> entityOntologyNames, HashSet<String> qualityOntologyNames, String ontologyDir,
+			String dictDir) {
+
+		dictdir = dictDir;
+		int en = entityOntologyNames.size();
+		int qn = qualityOntologyNames.size();
+		int i = 0;
+		//get local filepaths: all ontologies must be in the file systems
+		for(String entityonto: entityOntologyNames){		
+			this.entityOntologyFilepaths[i++] = ontologyDir + "/" + entityonto + ".owl";
+		}
+		i = 0;
+		for(String qualityonto: qualityOntologyNames){		
+			this.qualityOntologyFilepaths[i++] = ontologyDir + "/" + qualityonto + ".owl";
+		}
+		
+		//get URL, some URL may not work, and the system will use the local file
+		i = 0;
+		for(String entityonto: entityOntologyNames){		
+			ontoURLs.put(entityonto,
+					"http://purl.obolibrary.org/obo/"+entityonto+".owl");
+		}
+		i = 0;
+		for(String qualityonto: qualityOntologyNames){		
+			ontoURLs.put(qualityonto,
+					"http://purl.obolibrary.org/obo/"+qualityonto+".owl");
+		}
+		// now load ontologies
+		ontoutil = new TermOutputerUtilities(entityOntologyFilepaths, qualityOntologyFilepaths, ontoURLs);
+	}
+	
 
 	public ArrayList<FormalConcept> searchCharacter(String term) {
 		TermSearcher ts = new TermSearcher(this);
 		return ts.searchTerm(term, "quality");
 	}
 
-	public ArrayList<EntityProposals> searchStrucutre(String term) {
+	/*public ArrayList<EntityProposals> searchStructure(String term) {
 		EntitySearcherOriginal eso = new EntitySearcherOriginal(this);
 		return eso.searchEntity(term, "", term + "+" + "", rel);
+	}*/
+	
+	public ArrayList<EntityProposals> searchStructure(String term, String locator, String rel) {
+		EntitySearcherOriginal eso = new EntitySearcherOriginal(this);
+		return eso.searchEntity(term, locator, term + "+" + "", rel);
 	}
 
 	/**
@@ -128,7 +197,7 @@ public class OntologyLookupClient {
 		}
 
 		term = "condyle of femur";
-		ArrayList<EntityProposals> eps = client2.searchStrucutre(term);
+		ArrayList<EntityProposals> eps = client2.searchStructure(term, "", "");
 		if (eps != null) {
 			for (EntityProposals ep : eps) {
 				for (Entity e : ep.getProposals()) {

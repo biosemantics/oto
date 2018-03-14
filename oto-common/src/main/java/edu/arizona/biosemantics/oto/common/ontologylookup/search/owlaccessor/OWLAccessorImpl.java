@@ -442,7 +442,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 				Enumeration<String> en = this.ontologyHash.keys();
 				while(en.hasMoreElements()){
 					String term = en.nextElement(); //over type: original, exact, narrow, related
-					if(term.contains("blade"))System.out.println(term);
+					//if(term.contains("blade"))System.out.println(term);
 					if(term.matches(con)){
 						Hashtable<String, ArrayList<OWLClass>> temp = ontologyHash.get(term);
 						merge(output, temp);

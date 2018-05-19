@@ -57,7 +57,7 @@ public class EntitySearcher1 extends EntitySearcher {
 	public ArrayList<EntityProposals> searchEntity(
 			String entityphrase, String elocatorphrase,
 			String originalentityphrase, String prep) {
-		LOGGER.debug("EntitySearcher1: search '"+entityphrase+"[orig="+originalentityphrase+"]'");
+		//LOGGER.debug("EntitySearcher1: search '"+entityphrase+"[orig="+originalentityphrase+"]'");
 
 		//search cache
 		if(EntitySearcher1.nomatchcache.contains(entityphrase+"+"+elocatorphrase)) return null;
@@ -76,16 +76,16 @@ public class EntitySearcher1 extends EntitySearcher {
 		ArrayList<String> variations  = new ArrayList<String>(); 
 		//permutation on synrings that are results of subcomponents permutation
 		permutation(components, variations); 
-		LOGGER.debug("...created permutation variations");
-		//LOGGER.debug("'"+entityphrase+" , "+elocatorphrase+"' generated "+variations.size()+" variations:");
-		for(String variation : variations)
-			LOGGER.debug("....."+variation);
-
+		//LOGGER.debug("...created permutation variations");
+		////LOGGER.debug("'"+entityphrase+" , "+elocatorphrase+"' generated "+variations.size()+" variations:");
+		for(String variation : variations){
+			//LOGGER.debug("....."+variation);
+		}
 		//search variations for pre-composed terms one by one, return all the results
 		boolean found = false;
-		//LOGGER.debug("search variations one by one...");
+		////LOGGER.debug("search variations one by one...");
 		for(String variation: variations){
-			LOGGER.debug("...search variation '"+variation+"'");
+			//LOGGER.debug("...search variation '"+variation+"'");
 			//ArrayList<FormalConcept> entityfcs = new TermSearcher().regexpSearchTerm(variation, "entity"); //remove indexes from variation before search
 			ArrayList<FormalConcept> entityfcs = new TermSearcher(OLC).searchTerm(variation, "entity"); //remove indexes from variation before search
 			//check for the strength of the match: related synonyms: (?:(?:crista) (?:parotica)) entity=>tegmen tympani
@@ -98,7 +98,7 @@ public class EntitySearcher1 extends EntitySearcher {
 						ep.add((Entity)entity); //all variations are alternative entities (i.e. proposals) for the phrase
 					}
 				}
-				LOGGER.debug("...found match: "+ep.toString());
+				//LOGGER.debug("...found match: "+ep.toString());
 			}
 		}
 		if(found){
@@ -106,9 +106,9 @@ public class EntitySearcher1 extends EntitySearcher {
 			if(entities==null) entities = new ArrayList<EntityProposals>();
 			Utilities.addEntityProposals(entities, ep);
 			
-			//LOGGER.debug("EntitySearcher1 found matched variations, returns:");
+			////LOGGER.debug("EntitySearcher1 found matched variations, returns:");
 			//for(EntityProposals aep: entities){
-			//	LOGGER.debug("..:"+aep.toString());
+			//	//LOGGER.debug("..:"+aep.toString());
 			//}
 			
 			//caching
@@ -131,9 +131,9 @@ public class EntitySearcher1 extends EntitySearcher {
 		//if(elocatorphrase.trim().length()>0 && !hasspatial){//call EELS strategy when there is an entity locator to avoid infinite loop. 
 		if(!startwithspatial){//call EELS strategy when there is an entity locator to avoid infinite loop. 
 			//ep.setPhrase(entityphrase);
-			LOGGER.debug(System.getProperty("line.separator")+"EntitySearcher1 calls EntityEntityLocatorStrategy");
+			//LOGGER.debug(System.getProperty("line.separator")+"EntitySearcher1 calls EntityEntityLocatorStrategy");
 			if(components.size()==1){
-				//LOGGER.debug("find components size = 1");
+				////LOGGER.debug("find components size = 1");
 				//has one component only, split the component into entity and entitylocator
 				ArrayList<String> perms = components.get(0).getPermutations(); //perms are not reg exps
 				for(String perm : perms){
@@ -145,7 +145,7 @@ public class EntitySearcher1 extends EntitySearcher {
 							String aentityphrase = Utilities.join(parts, 0, l, " of ");	
 							String aelocatorphrase =  Utilities.join(parts, l+1, parts.length-1, " of ");
 							System.out.println("..EEL search: entity '"+aentityphrase+"' and locator '"+aelocatorphrase+"'");
-							LOGGER.debug("..EEL search: entity '"+aentityphrase+"' and locator '"+aelocatorphrase+"'");
+							//LOGGER.debug("..EEL search: entity '"+aentityphrase+"' and locator '"+aelocatorphrase+"'");
 							EntityEntityLocatorStrategy eels = new EntityEntityLocatorStrategy(aentityphrase, aelocatorphrase, originalentityphrase, prep, OLC);
 							eels.handle();
 							ArrayList<EntityProposals> entity = eels.getEntities(); //a list of different entities: both sexes => female and male
@@ -157,7 +157,7 @@ public class EntitySearcher1 extends EntitySearcher {
 								if(entities==null) entities = new ArrayList<EntityProposals>();
 								for(EntityProposals aep: entity){
 									Utilities.addEntityProposals(entities, aep);
-									//LOGGER.debug("..EEL adds proposals:"+aep);
+									////LOGGER.debug("..EEL adds proposals:"+aep);
 								}
 							}else{
 								
@@ -176,10 +176,10 @@ public class EntitySearcher1 extends EntitySearcher {
 									}
 								}
 								if(bestpartialresults!=null){
-									LOGGER.debug("..EEL return partial matches");
+									//LOGGER.debug("..EEL return partial matches");
 									System.out.println("..EEL return partial matches");
 									for(EntityProposals aep: bestpartialresults){
-										LOGGER.debug("..:"+aep.toString());
+										//LOGGER.debug("..:"+aep.toString());
 										System.out.println("..:"+aep.toString());
 									}
 								}
@@ -188,7 +188,7 @@ public class EntitySearcher1 extends EntitySearcher {
 					}
 				}
 			}else{
-				//LOGGER.debug("find components size > 1");
+				////LOGGER.debug("find components size > 1");
 				//has multiple components
 				//use the first n as entity, the remaining as entity locator
 				//form simple string, not reg exp for entity and locator
@@ -224,10 +224,10 @@ public class EntitySearcher1 extends EntitySearcher {
 					}
 					aelocatorphrase = aelocatorphrase.replaceFirst(" of $", "").trim();//similar to aentityphrase: (?:A of B| B A) of (?: C D | D of C)
 
-					//LOGGER.debug("..EEL search: entity '"+entityphrase+"' and locator '"+elocatorphrase+"'");
+					////LOGGER.debug("..EEL search: entity '"+entityphrase+"' and locator '"+elocatorphrase+"'");
 					//entityphrase = entityphrase.replaceFirst("(\\(\\?:|\\)|\\|)", "");
 					//elocatorphrase = elocatorphrase.replaceFirst("(\\(\\?:|\\)|\\|)", "");
-					LOGGER.debug("ES1->EEL...entity:'"+aentityphrase+"' entitylocator:'"+aelocatorphrase+"'");
+					//LOGGER.debug("ES1->EEL...entity:'"+aentityphrase+"' entitylocator:'"+aelocatorphrase+"'");
 					if(elocatorphrase.length()>0){
 						EntityEntityLocatorStrategy eels = new EntityEntityLocatorStrategy(aentityphrase, aelocatorphrase, originalentityphrase, prep, OLC);
 						eels.handle();
@@ -240,10 +240,10 @@ public class EntitySearcher1 extends EntitySearcher {
 							if(entities==null) entities = new ArrayList<EntityProposals>();
 							for(EntityProposals aep: entity){
 								Utilities.addEntityProposals(entities, aep);
-								//LOGGER.debug("..EEL adds proposals:"+aep);
+								////LOGGER.debug("..EEL adds proposals:"+aep);
 							}
 						}else{
-							//LOGGER.debug("..EEL didn't return composed entity");
+							////LOGGER.debug("..EEL didn't return composed entity");
 							ArrayList<EntityProposals> eresult = eels.getEntityResult();
 							ArrayList<EntityProposals> elresult = eels.getEntityLocatorResult();
 							ArrayList<EntityProposals> best = null;
@@ -260,9 +260,9 @@ public class EntitySearcher1 extends EntitySearcher {
 							}
 							if(bestpartialresults!=null){
 								System.out.println("..EEL return partial matches");
-								LOGGER.debug("..EEL return partial matches");
+								//LOGGER.debug("..EEL return partial matches");
 								for(EntityProposals aep: bestpartialresults){
-									LOGGER.debug("..:"+aep.toString());
+									//LOGGER.debug("..:"+aep.toString());
 									System.out.println("..:"+aep.toString());
 								}
 							}
@@ -275,7 +275,7 @@ public class EntitySearcher1 extends EntitySearcher {
 
 		//deal with spatial expressions
 		if(startwithspatial){
-			LOGGER.debug(System.getProperty("line.separator")+"EntitySearcher1 calls SpatialModifiedEntityStrategy");
+			//LOGGER.debug(System.getProperty("line.separator")+"EntitySearcher1 calls SpatialModifiedEntityStrategy");
 
 			//TODO: need more work: what's entityphrase and elocatorphrase?
 			SpatialModifiedEntityStrategy smes = new SpatialModifiedEntityStrategy(entityphrase, elocatorphrase, originalentityphrase, prep, OLC);
@@ -288,11 +288,11 @@ public class EntitySearcher1 extends EntitySearcher {
 				//entities.addAll(entity); //add a list of different entities: both sexes => female and male
 				if(entities==null) entities = new ArrayList<EntityProposals>();
 				for(EntityProposals aep: entity){
-					//LOGGER.debug("..SME adds proposals: "+aep.toString());
+					////LOGGER.debug("..SME adds proposals: "+aep.toString());
 					Utilities.addEntityProposals(entities, aep);
 				}
 			}else{
-				//LOGGER.debug("..SME didn't return composed entity");
+				////LOGGER.debug("..SME didn't return composed entity");
 				ArrayList<EntityProposals> eresult = smes.getEntityResult();
 				ArrayList<EntityProposals> elresult = smes.getEntityLocatorResult();
 				ArrayList<EntityProposals> best = null;
@@ -309,9 +309,9 @@ public class EntitySearcher1 extends EntitySearcher {
 				}
 				if(bestpartialresults!=null){
 					System.out.println("..SME return partial matches");
-					LOGGER.debug("..SME return partial matches");
+					//LOGGER.debug("..SME return partial matches");
 					for(EntityProposals aep: bestpartialresults){
-						LOGGER.debug("..:"+aep.toString());
+						//LOGGER.debug("..:"+aep.toString());
 						System.out.println("..:"+aep.toString());
 					}
 				}
@@ -319,7 +319,7 @@ public class EntitySearcher1 extends EntitySearcher {
 		}
 		//if(found) return entities;
 		
-		LOGGER.debug(System.getProperty("line.separator")+"EntitySearcher1 calls EntitySearcher4");
+		//LOGGER.debug(System.getProperty("line.separator")+"EntitySearcher1 calls EntitySearcher4");
 		ArrayList<EntityProposals> entity = new EntitySearcher4(OLC).searchEntity(entityphrase, elocatorphrase, originalentityphrase, prep);
 		//proximal tarsal element:
 		//SpaticalModifiedEntity: phrase=proximal region entity=proximal region score=1.0 and (part_of some phrase=tarsal\b.* entity=tarsal bone score=0.5) 
@@ -329,32 +329,32 @@ public class EntitySearcher1 extends EntitySearcher {
 			//entities.addAll(entity);
 			if(entities==null) entities = new ArrayList<EntityProposals>();
 			for(EntityProposals aep: entity){
-				//LOGGER.debug("..ES4 adds proposals: "+aep.toString());
+				////LOGGER.debug("..ES4 adds proposals: "+aep.toString());
 				Utilities.addEntityProposals(entities, aep);
 			}
 		}else{
-			LOGGER.debug("ES4.. found no match");
+			//LOGGER.debug("ES4.. found no match");
 		}
 
 		if(entities == null || isOriginatedFromPartialResults(entities)){	
 			if(bestpartialresults!=null){
-				LOGGER.debug("..no better match, use bestpartialresults:");	
+				//LOGGER.debug("..no better match, use bestpartialresults:");	
 				System.out.println("..no better match, use bestpartialresults:");
 				bestpartialresults = removeRedundancy(bestpartialresults);
 				bestpartialresults =lowerscore(bestpartialresults);
 				if(entities==null) entities = new ArrayList<EntityProposals>();
 				entities.addAll(bestpartialresults);
 				for(EntityProposals aep: entities){
-					LOGGER.debug("..:"+aep.toString());
+					//LOGGER.debug("..:"+aep.toString());
 					System.out.println("..:"+aep.toString());
 				}
 			}
 		}
 		//logging
 		if(entities!=null){
-			LOGGER.debug(System.getProperty("line.separator")+"EntitySearcher1 completed search for '"+entityphrase+"[orig="+originalentityphrase+"]' and returns:");
+			//LOGGER.debug(System.getProperty("line.separator")+"EntitySearcher1 completed search for '"+entityphrase+"[orig="+originalentityphrase+"]' and returns:");
 			for(EntityProposals aep: entities){
-				LOGGER.debug("..:"+aep.toString());
+				//LOGGER.debug("..:"+aep.toString());
 			}
 		}
 		

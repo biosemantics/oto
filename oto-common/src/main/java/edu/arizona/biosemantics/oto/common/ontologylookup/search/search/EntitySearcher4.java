@@ -39,7 +39,7 @@ public class EntitySearcher4 extends EntitySearcher {
 	public ArrayList<EntityProposals> searchEntity(String entityphrase, String elocatorphrase,
 			String originalentityphrase, String prep) {
 
-		LOGGER.debug("EntitySearcher4: search '"+entityphrase+"[orig="+originalentityphrase+"]'");
+		//LOGGER.debug("EntitySearcher4: search '"+entityphrase+"[orig="+originalentityphrase+"]'");
 		
 		//search cache
 		if(EntitySearcher4.nomatchcache.contains(entityphrase+"+"+elocatorphrase)) return null;
@@ -56,13 +56,13 @@ public class EntitySearcher4 extends EntitySearcher {
 			//TODO: is elocator a reg exp?
 			ArrayList<FormalConcept> result = new TermSearcher(OLC).searchTerm(elocatorphrase, "entity"); //TODO: should it call EntitySearcherOriginal? decided not to.
 			if(result!=null){
-				LOGGER.debug("search for locator '"+elocatorphrase+"' found match: ");
+				//LOGGER.debug("search for locator '"+elocatorphrase+"' found match: ");
 				for(FormalConcept fc: result){
 					entityls.add((SimpleEntity)fc);
-					LOGGER.debug(".."+fc.toString());
+					//LOGGER.debug(".."+fc.toString());
 				}
 			}else{ //entity locator not matched
-				LOGGER.debug("search for locator '"+elocatorphrase+"' found no match");
+				//LOGGER.debug("search for locator '"+elocatorphrase+"' found no match");
 			}
 		}
 
@@ -75,7 +75,7 @@ public class EntitySearcher4 extends EntitySearcher {
 		ArrayList<FormalConcept> sentities = new TermSearcher(OLC).searchTerm(aentityphrase, "entity"); //candidate matches for the same entity
 
 		if(sentities!=null){
-			LOGGER.debug("search for entity '"+aentityphrase+"' found match, forming proposals...");
+			//LOGGER.debug("search for entity '"+aentityphrase+"' found match, forming proposals...");
 			boolean found = false;
 			EntityProposals ep = new EntityProposals();
 			ep.setPhrase(originalentityphrase);
@@ -93,12 +93,12 @@ public class EntitySearcher4 extends EntitySearcher {
 							centity.addParentEntity(new REntity(Dictionary.partof, entityl));
 							centity.setString(originalentityphrase);
 							ep.add(centity); //add the other	
-							LOGGER.debug(".."+centity.toString());
+							//LOGGER.debug(".."+centity.toString());
 							found = true;
 						}
 					}else{
 						ep.add(sentity); //no locator
-						LOGGER.debug(".."+sentity.toString());
+						//LOGGER.debug(".."+sentity.toString());
 						found = true;
 					}
 				}
@@ -106,9 +106,9 @@ public class EntitySearcher4 extends EntitySearcher {
 			if(found==true){
 				ArrayList<EntityProposals> entities = new ArrayList<EntityProposals>();
 				Utilities.addEntityProposals(entities, ep);
-				LOGGER.debug("EntitySearcher4 returns:");
+				//LOGGER.debug("EntitySearcher4 returns:");
 				for(EntityProposals aep: entities){
-					LOGGER.debug("..EntityProposals: "+aep.toString());
+					//LOGGER.debug("..EntityProposals: "+aep.toString());
 				}
 				//caching
 				if(entities==null) EntitySearcher4.nomatchcache.add(entityphrase+"+"+elocatorphrase);
@@ -117,10 +117,10 @@ public class EntitySearcher4 extends EntitySearcher {
 				return entities;
 			}
 		}else{
-			LOGGER.debug("...search for entity '"+entityphrase+"' found no match");
+			//LOGGER.debug("...search for entity '"+entityphrase+"' found no match");
 			EntitySearcher4.nomatchcache.add(entityphrase+"+"+elocatorphrase);
 		}
-		LOGGER.debug("EntitySearcher4 calls EntitySearcher5");
+		//LOGGER.debug("EntitySearcher4 calls EntitySearcher5");
 		return  new EntitySearcher5(OLC).searchEntity(entityphrase, elocatorphrase, originalentityphrase, prep);
 	}
 

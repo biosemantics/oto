@@ -58,7 +58,7 @@ public class SpatialModifiedEntityStrategy implements SearchStrategy {
 		this.prep = prep;
 		this.originalentityphrase = originalentityphrase;
 		this.OLC = OLC;
-		LOGGER.debug("SpatialModifiedEntityStrategy: search '"+entityphrase+"[orig="+originalentityphrase+"]'");
+		//LOGGER.debug("SpatialModifiedEntityStrategy: search '"+entityphrase+"[orig="+originalentityphrase+"]'");
 	}
 
 	/* (non-Javadoc)
@@ -82,14 +82,14 @@ public class SpatialModifiedEntityStrategy implements SearchStrategy {
 			//ArrayList<FormalConcept> results = new TermSearcher().searchTerm(elocatorphrase, "entity"); //change this to EntitySearcherOriginal?
 			ArrayList<EntityProposals> results = new EntitySearcherOriginal(OLC).searchEntity(elocatorphrase, "",originalentityphrase, prep);
 			if(results!=null){
-				LOGGER.debug("SME...searched locator '"+elocatorphrase+"' found match: ");
+				//LOGGER.debug("SME...searched locator '"+elocatorphrase+"' found match: ");
 				for(EntityProposals result: results){
 					if(entityls==null) entityls = new ArrayList<EntityProposals>();
 					entityls.add(result);
-					LOGGER.debug(".." +result.toString());
+					//LOGGER.debug(".." +result.toString());
 				}
 			}else{
-				LOGGER.debug("SME...not match for locator '"+elocatorphrase+"'");
+				//LOGGER.debug("SME...not match for locator '"+elocatorphrase+"'");
 			}
 		}
 
@@ -101,7 +101,7 @@ public class SpatialModifiedEntityStrategy implements SearchStrategy {
 			if(spatialterm.indexOf(" ")<0) spatialterm += " region";
 			//take synonyms into account
 			spatialterm = synVariation(spatialterm);
-			LOGGER.debug("SME...formed spatial term '"+spatialterm+"'");
+			//LOGGER.debug("SME...formed spatial term '"+spatialterm+"'");
 			//entityphrase='ventral surface'
 			//if(entityphrasetokens[0].matches("("+Dictionary.spatialtermptn+")")){
 			//String newentity = Utilities.join(entityphrasetokens, 1, entityphrasetokens.length-1, " "); //anything after the spatial term
@@ -118,16 +118,18 @@ public class SpatialModifiedEntityStrategy implements SearchStrategy {
 					entityls = null;
 				}
 			}else{
-				LOGGER.debug("SME...calls EntitySearcherOriginal for newentity '"+newentity/*+","+elocatorphrase*/+"'");
+				//LOGGER.debug("SME...calls EntitySearcherOriginal for newentity '"+newentity/*+","+elocatorphrase*/+"'");
 				//sentityps = new EntitySearcherOriginal().searchEntity(root, structid,  newentity, elocatorphrase, originalentityphrase, prep); //advanced search
 				sentityps = new EntitySearcherOriginal(OLC).searchEntity(newentity, "", originalentityphrase, prep); //advanced search
 			}
 
-			LOGGER.debug("SME...now search for spatial term  '"+spatialterm+"'");
+			//LOGGER.debug("SME...now search for spatial term  '"+spatialterm+"'");
 			//SimpleEntity sentity1 = (SimpleEntity)new TermSearcher().searchTerm(spatialterm, "entity");
 			//ArrayList<FormalConcept> spatialentities = TermSearcher.regexpSearchTerm(spatialterm, "entity");//anterior + region: simple search
 			ArrayList<FormalConcept> spatialentities = new TermSearcher(OLC).searchTerm(spatialterm, "entity");//anterior + region: simple search
-			if(spatialentities!=null) LOGGER.debug("...found match");
+			if(spatialentities!=null) {
+				//LOGGER.debug("...found match");
+			}
 			else{
 				//create phrase-based spatialentities
 				SimpleEntity spatial = new SimpleEntity();
@@ -196,7 +198,7 @@ public class SpatialModifiedEntityStrategy implements SearchStrategy {
 										centity.setString(this.originalentityphrase);
 										centityp.add(centity);
 										found = true;
-										//LOGGER.debug("with entity locator, SME form a composite entity proposals: "+centity.toString());
+										////LOGGER.debug("with entity locator, SME form a composite entity proposals: "+centity.toString());
 										//entities.add(centityp);
 									}
 								}else{//anterior maxilla 
@@ -212,10 +214,10 @@ public class SpatialModifiedEntityStrategy implements SearchStrategy {
 									centity.setString(this.originalentityphrase);
 									centityp.add(centity);
 									found = true;
-									//LOGGER.debug("without entity locator, SME form a composite entity proposals: "+centityp.toString());
+									////LOGGER.debug("without entity locator, SME form a composite entity proposals: "+centityp.toString());
 								}	
 							}else{
-								LOGGER.debug("SME search for spatial term  '"+spatialterm+"' found no match");
+								//LOGGER.debug("SME search for spatial term  '"+spatialterm+"' found no match");
 							}
 						}
 					}
@@ -228,9 +230,9 @@ public class SpatialModifiedEntityStrategy implements SearchStrategy {
 			if(found){
 				if(entities==null) 	entities = new ArrayList<EntityProposals>();
 				Utilities.addEntityProposals(entities, centityp);
-				LOGGER.debug("SpatialModifiedEntityStrategy completed, returns");
+				//LOGGER.debug("SpatialModifiedEntityStrategy completed, returns");
 				for(EntityProposals ep: entities){
-					LOGGER.debug(".."+ep.toString());
+					//LOGGER.debug(".."+ep.toString());
 				}
 			}
 			

@@ -153,11 +153,11 @@ public class SynRingVariation {
 		// TODO Auto-generated method stub
 	//	getsynonym("anatomical section");
 	/*	SynRingVariation sv= new SynRingVariation("postaxial process");
-		System.out.println("sv.leadspatialtermvariation = "+sv.leadspatialtermvariation);
-		System.out.println("sv.headnounvariation ="+sv.headnounvariation);
+		//System.out.println("sv.leadspatialtermvariation = "+sv.leadspatialtermvariation);
+		//System.out.println("sv.headnounvariation ="+sv.headnounvariation);
 	*/
-	//System.out.println(SynRingVariation.getSynRing4Spatial("basal"));
-//	System.out.println(SynRingVariation.getSynRing4Structure("radial"));
+	////System.out.println(SynRingVariation.getSynRing4Spatial("basal"));
+//	//System.out.println(SynRingVariation.getSynRing4Structure("radial"));
 		
 	}
 

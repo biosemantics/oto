@@ -161,11 +161,11 @@ public class OntologyLookupClient {
 				this.ontologyLocalPath);
 		spoc.search(termIRI);
 		ArrayList<SimpleEntity> chain = spoc.getParentChain();
-		// System.out.println("parent organ in order: ");
+		// //System.out.println("parent organ in order: ");
 		// for (SimpleEntity e : chain) {
-		// System.out.println(e.getLabel());
-		// System.out.println(e.getClassIRI());
-		// System.out.println(e.getDef());
+		// //System.out.println(e.getLabel());
+		// //System.out.println(e.getClassIRI());
+		// //System.out.println(e.getDef());
 		// }
 
 		return chain;
@@ -184,14 +184,14 @@ public class OntologyLookupClient {
 		ArrayList<FormalConcept> fcs = client2.searchCharacter(term);
 		if (fcs != null) {
 			for (FormalConcept fc : fcs) {
-				System.out.println(term + ": ");
-				System.out.println("\tClassIRI: " + fc.getClassIRI());
-				System.out.println("\tId: " + fc.getId());
-				System.out.println("\tLabel: " + fc.getLabel());
-				System.out.println("\tSearchString: " + fc.getSearchString());
-				System.out.println("\tString: " + fc.getString());
-				System.out.println("\tDef: " + fc.getDef());
-				System.out.println("\tParent label: " + fc.getPLabel());
+				//System.out.println(term + ": ");
+				//System.out.println("\tClassIRI: " + fc.getClassIRI());
+				//System.out.println("\tId: " + fc.getId());
+				//System.out.println("\tLabel: " + fc.getLabel());
+				//System.out.println("\tSearchString: " + fc.getSearchString());
+				//System.out.println("\tString: " + fc.getString());
+				//System.out.println("\tDef: " + fc.getDef());
+				//System.out.println("\tParent label: " + fc.getPLabel());
 			}
 
 		}
@@ -201,15 +201,15 @@ public class OntologyLookupClient {
 		if (eps != null) {
 			for (EntityProposals ep : eps) {
 				for (Entity e : ep.getProposals()) {
-					System.out.println(term + ": ");
-					System.out.println("\tClassIRI: " + e.getClassIRI());
-					System.out.println("\tId: " + e.getId());
-					System.out.println("\tLabel: " + e.getLabel());
+					//System.out.println(term + ": ");
+					//System.out.println("\tClassIRI: " + e.getClassIRI());
+					//System.out.println("\tId: " + e.getId());
+					//System.out.println("\tLabel: " + e.getLabel());
 					System.out
 							.println("\tSearchString: " + e.getSearchString());
-					System.out.println("\tString: " + e.getString());
-					System.out.println("\tDef: " + e.getDef());
-					System.out.println("\tParent label: " + e.getPLabel());
+					//System.out.println("\tString: " + e.getString());
+					//System.out.println("\tDef: " + e.getDef());
+					//System.out.println("\tParent label: " + e.getPLabel());
 				}
 			}
 		}

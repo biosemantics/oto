@@ -628,9 +628,9 @@ public class TermSearcher {
 				"entity");
 		if(entities!=null){
 			for (FormalConcept fc : entities)
-				System.out.println("matching concept: "+fc.getLabel());
+				//System.out.println("matching concept: "+fc.getLabel());
 		}else{
-			System.out.println("no matching concepts");
+			//System.out.println("no matching concepts");
 		}*/
 	}
 

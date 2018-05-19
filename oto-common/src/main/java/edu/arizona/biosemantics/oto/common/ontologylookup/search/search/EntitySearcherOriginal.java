@@ -43,7 +43,7 @@ public class EntitySearcherOriginal extends EntitySearcher {
 	 */
 
 	public ArrayList<EntityProposals> searchEntity(String entityphrase, String elocatorphrase, String originalentityphrase, String prep){
-		//System.out.println("search entity: "+entityphrase);
+		////System.out.println("search entity: "+entityphrase);
 		//create and maintain a cache for entity search?: yes, created in EntityParser
 		//LOGGER.debug("EntitySearcherOriginal: search '"+entityphrase+"[orig="+originalentityphrase+"]'");
 

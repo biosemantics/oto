@@ -621,7 +621,7 @@ public class TermOutputerUtilities {
 
 			// any error???
 			int exitVal = proc.waitFor();
-			//System.out.println("ExitValue: " + exitVal);
+			////System.out.println("ExitValue: " + exitVal);
 
 			StringBuffer sb = new StringBuffer();
 			for(int i = 0; i<outputs.size(); i++){
@@ -713,7 +713,7 @@ public class TermOutputerUtilities {
 		}else if(wordcopy!=null){
 			Dictionary.singulars.put(word, wordcopy);
 			if(wordcopy.compareTo(word)!=0) Dictionary.plurals.put(wordcopy, word); //special cases where sing = pl should be saved in Dictionary
-			if(debug) System.out.println("["+word+"]'s singular is "+wordcopy);
+			//if(debug) //System.out.println("["+word+"]'s singular is "+wordcopy);
 			return wordcopy;
 		}else{//word not in wn
 
@@ -782,13 +782,13 @@ public class TermOutputerUtilities {
 			}
 
 			if(s != null){
-				if(debug) System.out.println("["+word+"]'s singular is "+s);
+				//if(debug) //System.out.println("["+word+"]'s singular is "+s);
 				Dictionary.singulars.put(word, s);
 				if(word.compareTo(s)!=0) Dictionary.plurals.put(s, word);
 				return s;
 			}
 		}
-		if(debug) System.out.println("["+word+"]'s singular is "+word);
+		//if(debug) //System.out.println("["+word+"]'s singular is "+word);
 		return word;
 	}
 
@@ -846,7 +846,7 @@ public class TermOutputerUtilities {
 	 */
 	public static void main(String[] args) {
 		//String[] results = retreiveParentInfoFromPATO("PATO:0000402");
-		//System.out.println(results[1]);
+		////System.out.println(results[1]);
 	}
 
 

@@ -144,7 +144,7 @@ public class EntitySearcher1 extends EntitySearcher {
 						for(int l = 0; l < parts.length-1; l++){ //length of entity
 							String aentityphrase = Utilities.join(parts, 0, l, " of ");	
 							String aelocatorphrase =  Utilities.join(parts, l+1, parts.length-1, " of ");
-							System.out.println("..EEL search: entity '"+aentityphrase+"' and locator '"+aelocatorphrase+"'");
+							//System.out.println("..EEL search: entity '"+aentityphrase+"' and locator '"+aelocatorphrase+"'");
 							//LOGGER.debug("..EEL search: entity '"+aentityphrase+"' and locator '"+aelocatorphrase+"'");
 							EntityEntityLocatorStrategy eels = new EntityEntityLocatorStrategy(aentityphrase, aelocatorphrase, originalentityphrase, prep, OLC);
 							eels.handle();
@@ -177,10 +177,10 @@ public class EntitySearcher1 extends EntitySearcher {
 								}
 								if(bestpartialresults!=null){
 									//LOGGER.debug("..EEL return partial matches");
-									System.out.println("..EEL return partial matches");
+									//System.out.println("..EEL return partial matches");
 									for(EntityProposals aep: bestpartialresults){
 										//LOGGER.debug("..:"+aep.toString());
-										System.out.println("..:"+aep.toString());
+										//System.out.println("..:"+aep.toString());
 									}
 								}
 							}
@@ -259,11 +259,11 @@ public class EntitySearcher1 extends EntitySearcher {
 								}
 							}
 							if(bestpartialresults!=null){
-								System.out.println("..EEL return partial matches");
+								//System.out.println("..EEL return partial matches");
 								//LOGGER.debug("..EEL return partial matches");
 								for(EntityProposals aep: bestpartialresults){
 									//LOGGER.debug("..:"+aep.toString());
-									System.out.println("..:"+aep.toString());
+									//System.out.println("..:"+aep.toString());
 								}
 							}
 						}
@@ -308,11 +308,11 @@ public class EntitySearcher1 extends EntitySearcher {
 					}
 				}
 				if(bestpartialresults!=null){
-					System.out.println("..SME return partial matches");
+					//System.out.println("..SME return partial matches");
 					//LOGGER.debug("..SME return partial matches");
 					for(EntityProposals aep: bestpartialresults){
 						//LOGGER.debug("..:"+aep.toString());
-						System.out.println("..:"+aep.toString());
+						//System.out.println("..:"+aep.toString());
 					}
 				}
 			}
@@ -339,14 +339,14 @@ public class EntitySearcher1 extends EntitySearcher {
 		if(entities == null || isOriginatedFromPartialResults(entities)){	
 			if(bestpartialresults!=null){
 				//LOGGER.debug("..no better match, use bestpartialresults:");	
-				System.out.println("..no better match, use bestpartialresults:");
+				//System.out.println("..no better match, use bestpartialresults:");
 				bestpartialresults = removeRedundancy(bestpartialresults);
 				bestpartialresults =lowerscore(bestpartialresults);
 				if(entities==null) entities = new ArrayList<EntityProposals>();
 				entities.addAll(bestpartialresults);
 				for(EntityProposals aep: entities){
 					//LOGGER.debug("..:"+aep.toString());
-					System.out.println("..:"+aep.toString());
+					//System.out.println("..:"+aep.toString());
 				}
 			}
 		}
@@ -490,7 +490,7 @@ public class EntitySearcher1 extends EntitySearcher {
 	 * @param variations
 	 */
 	public  static void permutation(ArrayList<EntityComponent> components, ArrayList<String> variations) { 
-		//System.out.println("round 0: i=-1 "+ "components size="+components.size()+" prefix=''");
+		////System.out.println("round 0: i=-1 "+ "components size="+components.size()+" prefix=''");
 		permutation("", components, variations, clone(components), -1); 
 		//remove indexes 
 		for(int i = 0; i < variations.size(); i++){

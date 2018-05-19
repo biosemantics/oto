@@ -112,7 +112,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 			// retrieves all synonyms of every class and store it in search cache - Hariharan Task2
 			this.retrieveAllConcept();
 		}catch(Exception e){
-			System.out.println("can't load ontology:"+ontoURL);
+			//System.out.println("can't load ontology:"+ontoURL);
 			e.printStackTrace();
 			System.exit(1);
 		}
@@ -140,7 +140,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 			// retrieves all synonyms of every class and store it in search cache - Hariharan Task2
 			this.retrieveAllConcept();
 		}catch(Exception e){
-			System.out.println("can't load ontology:"+file.getAbsolutePath());
+			//System.out.println("can't load ontology:"+file.getAbsolutePath());
 			LOGGER.error("can't load ontology:"+file.getAbsolutePath(), e);
 			System.exit(1);
 		}
@@ -293,7 +293,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 			 annotations.addAll(c.getAnnotations(ont));
 			}
 			for(OWLAnnotation anno : annotations){
-				//System.out.println(anno.toString());
+				////System.out.println(anno.toString());
 				//adjectiveorgans//adj => classID#label
 				if(anno.toString().contains("UBPROP_0000007") ){//has_relational_adjective
 					String adj = anno.getValue().toString();//"zeugopodial"^^xsd:string
@@ -319,7 +319,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 			    annotations.addAll(EntitySearcher.getAnnotations(c,  ont).collect(Collectors.toSet()));
 			}
 			for(OWLAnnotation anno : annotations){
-				//System.out.println(anno.toString());
+				////System.out.println(anno.toString());
 				//adjectiveorgans//adj => classID#label
 				if(anno.toString().contains("UBPROP_0000007") ){//has_relational_adjective
 					String adj = anno.getValue().toString();//"zeugopodial"^^xsd:string
@@ -376,7 +376,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 			if(type.compareTo("related") == 0) syns = this.getRelatedSynonyms(c);
 			
 			//if(syns.size()>0){
-			//	System.out.print("");
+			//	//System.out.print("");
 			//}
 			Iterator<String> i=syns.iterator();
 			while(i.hasNext())
@@ -396,7 +396,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 					
 				}			
 				//if(flag==1)
-				//System.out.println(flag--);
+				////System.out.println(flag--);
 			}
 			return result;
 		}
@@ -442,7 +442,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 				Enumeration<String> en = this.ontologyHash.keys();
 				while(en.hasMoreElements()){
 					String term = en.nextElement(); //over type: original, exact, narrow, related
-					//if(term.contains("blade"))System.out.println(term);
+					//if(term.contains("blade"))//System.out.println(term);
 					if(term.matches(con)){
 						Hashtable<String, ArrayList<OWLClass>> temp = ontologyHash.get(term);
 						merge(output, temp);
@@ -750,7 +750,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 				superCls.accept(restrictionVisitor);
 			}
 		}
-		//System.out.println("Classes In Restricted properties for " + part + ": "
+		////System.out.println("Classes In Restricted properties for " + part + ": "
 		//		+ restrictionVisitor.getClassInRestrictedProperties().size());
 		/*for (OWLObjectPropertyExpression prop : restrictionVisitor
 				.getRestrictedProperties()) {
@@ -758,7 +758,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 			if(((OWLObjectSomeValuesFrom)prop).getProperty().toString().contains("http://purl.obolibrary.org/obo/BFO_0000050")){
 				classeswithpart.add((OWLClass) ((OWLObjectSomeValuesFrom)prop).getFiller());
 			}else{
-				System.out.println(prop);
+				//System.out.println(prop);
 			}
 			}
 		}*/

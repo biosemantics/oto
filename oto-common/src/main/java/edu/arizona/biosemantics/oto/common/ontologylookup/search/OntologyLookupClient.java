@@ -137,7 +137,7 @@ public class OntologyLookupClient {
 
 	public ArrayList<FormalConcept> searchCharacter(String term) {
 		TermSearcher ts = new TermSearcher(this);
-		return ts.searchTerm(term, "quality");
+		return ts.searchTerm(term, "quality", 1.0f);
 	}
 
 	/*public ArrayList<EntityProposals> searchStructure(String term) {
@@ -147,7 +147,7 @@ public class OntologyLookupClient {
 	
 	public ArrayList<EntityProposals> searchStructure(String term, String locator, String rel) {
 		EntitySearcherOriginal eso = new EntitySearcherOriginal(this);
-		return eso.searchEntity(term, locator, term + "+" + "", rel);
+		return eso.searchEntity(term, locator, term + "+" + "", rel, 1.0f);
 	}
 
 	/**
@@ -172,6 +172,7 @@ public class OntologyLookupClient {
 	}
 
 	public static void main(String[] args) {
+		//try search: scattered broad-based lanceolate - lance-subulate prickle
 		OntologyLookupClient client = new OntologyLookupClient("po",
 				"/home/sbs0457/workspace/OTOLiteForETC/OntologyOwlFiles",
 				"/home/sbs0457/workspace/OTOLiteForETC/DictFiles");

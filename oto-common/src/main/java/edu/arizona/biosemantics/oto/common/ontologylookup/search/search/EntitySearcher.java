@@ -21,7 +21,8 @@ import edu.arizona.biosemantics.oto.common.ontologylookup.search.data.EntityProp
  */
 public abstract class EntitySearcher {
 	//protected static XPath textpath;
-	private static final Logger LOGGER = Logger.getLogger(EntitySearcher.class);   
+	private static final Logger LOGGER = Logger.getLogger(EntitySearcher.class); 
+
 	static{	
 		try{
 	//		textpath = XPath.newInstance(".//text");
@@ -50,7 +51,7 @@ public abstract class EntitySearcher {
 	 * @param prep
 	 * @return 
 	 */
-	public abstract ArrayList<EntityProposals> searchEntity(String entityphrase, String elocatorphrase, String originalentityphrase, String prep);
+	public abstract ArrayList<EntityProposals> searchEntity(String entityphrase, String elocatorphrase, String originalentityphrase, String prep, float scoreDiscountFactor);
 	
 	
 	/*otherwise, set another handler to handle the request*/

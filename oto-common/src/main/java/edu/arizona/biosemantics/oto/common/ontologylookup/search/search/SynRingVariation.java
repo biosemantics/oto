@@ -77,9 +77,11 @@ public class SynRingVariation {
 		
 		//find owlapi for UBERON
 		for(OWLAccessorImpl temp:OLC.ontoutil.OWLentityOntoAPIs){
-			if(temp.getSource().indexOf(OLC.entityonto)>1){
-				owlapi=temp;
-				break;
+			for(String entityOntoName: OLC.entityOntologyNames){
+				if(temp.getSource().indexOf(entityOntoName)>1){
+					owlapi=temp;
+					break;
+				}
 			}
 		}
 		
@@ -151,11 +153,11 @@ public class SynRingVariation {
 		// TODO Auto-generated method stub
 	//	getsynonym("anatomical section");
 	/*	SynRingVariation sv= new SynRingVariation("postaxial process");
-		System.out.println("sv.leadspatialtermvariation = "+sv.leadspatialtermvariation);
-		System.out.println("sv.headnounvariation ="+sv.headnounvariation);
+		//System.out.println("sv.leadspatialtermvariation = "+sv.leadspatialtermvariation);
+		//System.out.println("sv.headnounvariation ="+sv.headnounvariation);
 	*/
-	//System.out.println(SynRingVariation.getSynRing4Spatial("basal"));
-//	System.out.println(SynRingVariation.getSynRing4Structure("radial"));
+	////System.out.println(SynRingVariation.getSynRing4Spatial("basal"));
+//	//System.out.println(SynRingVariation.getSynRing4Structure("radial"));
 		
 	}
 

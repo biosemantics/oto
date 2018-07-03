@@ -48,12 +48,12 @@ public class SymmetricEncryption {
 			byte[] enc = symmetricEncryption.encrypt(orig);
 			
 			String hash = DatatypeConverter.printBase64Binary(enc);
-			System.out.println(hash);
+			//System.out.println(hash);
 			byte[] d = DatatypeConverter.parseBase64Binary(hash);
 			
 			String decr = symmetricEncryption.decrypt(d);
-			System.out.println(orig);
-			System.out.println(enc);
-			System.out.println(decr);
+			//System.out.println(orig);
+			//System.out.println(enc);
+			//System.out.println(decr);
 	}
 }

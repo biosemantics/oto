@@ -8,5 +8,5 @@ package edu.arizona.biosemantics.oto.common.ontologylookup.search.search;
  *
  */
 public interface SearchStrategy {
-	void handle();
+	void handle(float discount);
 }

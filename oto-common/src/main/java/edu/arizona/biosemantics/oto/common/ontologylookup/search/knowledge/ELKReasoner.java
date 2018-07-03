@@ -196,7 +196,7 @@
 //		Iterator<OWLClass> it = subClasses.getFlattened().iterator();
 //		while(it.hasNext()){
 //			OWLClass aclass = it.next();
-//			//System.out.println(aclass.getIRI().toString());
+//			////System.out.println(aclass.getIRI().toString());
 //			if(aclass.getIRI().toString().compareTo(subclassIRI)==0){
 //				subclasscache.put(subclassIRI+" "+superclassIRI, new Boolean("true"));
 //				return true;
@@ -292,7 +292,7 @@
 //			OWLClassExpression superCls = ax.getSuperClass();
 //			superCls.accept(restrictionVisitor);
 //		}
-//		System.out.println("Classes In Restricted properties for " + part + ": "
+//		//System.out.println("Classes In Restricted properties for " + part + ": "
 //				+ restrictionVisitor.getClassInRestrictedProperties().size());
 //		/*for (OWLObjectPropertyExpression prop : restrictionVisitor
 //				.getRestrictedProperties()) {
@@ -300,7 +300,7 @@
 //			if(((OWLObjectSomeValuesFrom)prop).getProperty().toString().contains("http://purl.obolibrary.org/obo/BFO_0000050")){
 //				classeswithpart.add((OWLClass) ((OWLObjectSomeValuesFrom)prop).getFiller());
 //			}else{
-//				System.out.println(prop);
+//				//System.out.println(prop);
 //			}
 //			}
 //		}*/
@@ -344,7 +344,7 @@
 //		Iterator<OWLClass> it = subClasses.getFlattened().iterator();
 //		while(it.hasNext()){
 //			OWLClass aclass = it.next();
-//			System.out.println(aclass.getIRI().toString());
+//			//System.out.println(aclass.getIRI().toString());
 //			if(aclass.getIRI().toString().compareTo(classIRI)==0){
 //				man.removeAxiom(ont, ax);
 //				return true;
@@ -485,7 +485,7 @@
 //		String IRI = getIRI(id);
 //		 
 //		org.semanticweb.owlapi.model.IRI url = org.semanticweb.owlapi.model.IRI.create(IRI);
-//		System.out.println(IRI);
+//		//System.out.println(IRI);
 //		return ont.containsEntityInSignature(url,true);
 //	}
 //	
@@ -502,7 +502,7 @@
 //			ELKReasoner elk = new ELKReasoner(new File("C:\\Users\\updates\\CharaParserTest\\Ontologies\\po.owl"), true);
 //			String whole ="http://purl.obolibrary.org/obo/PO_0025395";//floral organ
 //			String part = "http://purl.obolibrary.org/obo/PO_0009032"; //petal
-//			System.out.println(elk.isSubclassOfWithPart(whole, part)); 
+//			//System.out.println(elk.isSubclassOfWithPart(whole, part)); 
 //			//processInherited=true
 //			//whole:[<http://purl.obolibrary.org/obo/PO_0009059>, //corolla
 //			//<http://purl.obolibrary.org/obo/PO_0009006>,//shoot system
@@ -511,36 +511,36 @@
 //			//whole:[<http://purl.obolibrary.org/obo/PO_0009059>, //corolla
 //			
 //			//ELKReasoner elk = new ELKReasoner(new File(SearchMain.eonto), true);
-//			//System.out.println("..........class Exists......."+elk.CheckClassExistence("UBERON:4200047"));
-//			//System.out.println("..........class Exists......."+elk.CheckClassExistence("TEMP:4200047"));
-//			//System.out.println("..........class Exists......."+elk.CheckClassExistence("UBERON:0011584"));
+//			////System.out.println("..........class Exists......."+elk.CheckClassExistence("UBERON:4200047"));
+//			////System.out.println("..........class Exists......."+elk.CheckClassExistence("TEMP:4200047"));
+//			////System.out.println("..........class Exists......."+elk.CheckClassExistence("UBERON:0011584"));
 //
 //
 //			//elk.getClassesWithLateralSides();
-//			//System.out.println(elk.isSubClassOf("http://purl.obolibrary.org/obo/UBERON_0005621",  "http://purl.obolibrary.org/obo/UBERON_0000062"));//true
-//			//System.out.println(elk.isSubClassOf("http://purl.obolibrary.org/obo/UBERON_0003098",  "http://purl.obolibrary.org/obo/UBERON_0000062"));//false			
-//			//System.out.println(elk.isPartOf("http://purl.obolibrary.org/obo/UBERON_0001028","http://purl.obolibrary.org/obo/UBERON_0011584")); //true
+//			////System.out.println(elk.isSubClassOf("http://purl.obolibrary.org/obo/UBERON_0005621",  "http://purl.obolibrary.org/obo/UBERON_0000062"));//true
+//			////System.out.println(elk.isSubClassOf("http://purl.obolibrary.org/obo/UBERON_0003098",  "http://purl.obolibrary.org/obo/UBERON_0000062"));//false			
+//			////System.out.println(elk.isPartOf("http://purl.obolibrary.org/obo/UBERON_0001028","http://purl.obolibrary.org/obo/UBERON_0011584")); //true
 //			 
-//			//System.out.println(elk.isSubClassOf("http://purl.obolibrary.org/obo/UBERON_0002389", "http://purl.obolibrary.org/obo/UBERON_0002544"));
-//			//System.out.println(elk.isPartOf("http://purl.obolibrary.org/obo/UBERON_0000976","http://purl.obolibrary.org/obo/BSPO_0000384"));
+//			////System.out.println(elk.isSubClassOf("http://purl.obolibrary.org/obo/UBERON_0002389", "http://purl.obolibrary.org/obo/UBERON_0002544"));
+//			////System.out.println(elk.isPartOf("http://purl.obolibrary.org/obo/UBERON_0000976","http://purl.obolibrary.org/obo/BSPO_0000384"));
 //
 //			//String class1IRI = "http://purl.obolibrary.org/obo/UBERON:0003606"; //limb long bone
 //			//String class2IRI = "http://purl.obolibrary.org/obo/UBERON_0002495"; //long bone
 //			//String class2IRI = "http://purl.obolibrary.org/obo/UBERON_0002495"; //organ part, is neck part of organ part? false
 //			/*String subclass = "http://purl.obolibrary.org/obo/UBERON_4200054";
 //			String superclass = "http://purl.obolibrary.org/obo/UBERON_4000164";*/
-//			//System.out.println(elk.isSubClassOf("http://purl.obolibrary.org/obo/uberon_0010545","http://purl.obolibrary.org/obo/uberon_0010546"));	
-//			//System.out.println(elk.isSubClassOf("http://purl.obolibrary.org/obo/uberon_0010546","http://purl.obolibrary.org/obo/uberon_0010545"));
+//			////System.out.println(elk.isSubClassOf("http://purl.obolibrary.org/obo/uberon_0010545","http://purl.obolibrary.org/obo/uberon_0010546"));	
+//			////System.out.println(elk.isSubClassOf("http://purl.obolibrary.org/obo/uberon_0010546","http://purl.obolibrary.org/obo/uberon_0010545"));
 //
-//			//System.out.println(elk.isPartOf("http://purl.obolibrary.org/obo/uberon_4200047","http://purl.obolibrary.org/obo/uberon_0001274")); //attachment site, ischium
-//			//System.out.println(elk.isSubclassOfWithPart("http://purl.obolibrary.org/obo/uberon_0001274", "http://purl.obolibrary.org/obo/uberon_4200047")); //ischium, attachement site
-//			//System.out.println(elk.isSubClassOf("http://purl.obolibrary.org/obo/uberon_0001274", "http://purl.obolibrary.org/obo/uberon_0004765")); //ischium, skeletal element
+//			////System.out.println(elk.isPartOf("http://purl.obolibrary.org/obo/uberon_4200047","http://purl.obolibrary.org/obo/uberon_0001274")); //attachment site, ischium
+//			////System.out.println(elk.isSubclassOfWithPart("http://purl.obolibrary.org/obo/uberon_0001274", "http://purl.obolibrary.org/obo/uberon_4200047")); //ischium, attachement site
+//			////System.out.println(elk.isSubClassOf("http://purl.obolibrary.org/obo/uberon_0001274", "http://purl.obolibrary.org/obo/uberon_0004765")); //ischium, skeletal element
 //
 //			/*OWLClass joint = elk.dataFactory.getOWLClass(IRI.create("http://purl.obolibrary.org/obo/UBERON_0000982")); //skeletal joint
 //			OWLClass joint1 = elk.dataFactory.getOWLClass(IRI.create("http://purl.obolibrary.org/obo/UBERON_0002217")); //synovial joint
 //			OWLClass joint2 = elk.dataFactory.getOWLClass(IRI.create("http://purl.obolibrary.org/obo/UBERON_0011134")); //nonsynovial joint
 //			OWLClassExpression joint1or2 = elk.dataFactory.getOWLObjectUnionOf(joint1, joint2);
-//			System.out.println(elk.isEquivalentClass(joint, joint1or2));*/
+//			//System.out.println(elk.isEquivalentClass(joint, joint1or2));*/
 //			
 //		    //elk.isSubPropertyOf("http://purl.obolibrary.org/obo/in_left_side_of","http://purl.obolibrary.org/obo/in_lateral_side_of");
 //			

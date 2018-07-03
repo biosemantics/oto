@@ -43,7 +43,9 @@ public class Dictionary {
 	public static ArrayList<String> spatialterms = new ArrayList<String>();
 	
 	//synonym rings
-	public static String process="process|crest|ridge|ridges|tentacule|tentacules|shelf|shelves|flange|flanges|lamella|lamellae|lamina|laminae|projection|projections";
+	//applicable to UBERON only
+	//public static String process="process|crest|ridge|ridges|tentacule|tentacules|shelf|shelves|flange|flanges|lamella|lamellae|lamina|laminae|projection|projections";
+	public static String process="process";
 	public static String opening = "opening|foramina|foramen|foramens|perforation|orifice"; 
 	public static String joint ="joint|articulation";
 	public static String contact="connection|contact|interconnection";//Extendible

@@ -40,6 +40,7 @@ public class EntityEntityLocatorStrategy implements SearchStrategy {
 	private static Hashtable<String, ArrayList<EntityProposals>> cache = new Hashtable<String, ArrayList<EntityProposals>>();
 	private static ArrayList<String> nomatchcache = new ArrayList<String>();
 	public OntologyLookupClient OLC;
+	public static float discount = 1.0f;
 	/**
 	 * 
 	 */
@@ -50,14 +51,14 @@ public class EntityEntityLocatorStrategy implements SearchStrategy {
 		this.prep = prep;
 		this.originalentityphrase = originalentityphrase;
 		this.OLC = OLC;
-		LOGGER.debug("EntityEntityLocatorStrategy: search '"+entityphrase+"[orig="+originalentityphrase+"]'");
+		System.out.println("EntityEntityLocatorStrategy: search '"+entityphrase+"[orig="+originalentityphrase+"]'");
 
 	}
 
 	/* anterior margin of maxilla => anterior margin^part_of(maxilla)): entity = anterior margin, locator = maxilla
 	 */
 	@Override
-	public void handle() {
+	public void handle(float discount) {
 		//search cache
 		if(EntityEntityLocatorStrategy.nomatchcache.contains(entityphrase+"+"+elocatorphrase)){
 			entities = null;
@@ -80,26 +81,26 @@ public class EntityEntityLocatorStrategy implements SearchStrategy {
 		//entitylp.setPhrase(elocatorphrase);
 		if(entitylocators!=null) {
 			//SimpleEntity result = (SimpleEntity) new TermSearcher().searchTerm(elocatorphrase, "entity");
-			ArrayList<EntityProposals> result = new EntitySearcherOriginal(OLC).searchEntity(elocatorphrase, "", originalentityphrase, prep); //advanced search
+			ArrayList<EntityProposals> result = new EntitySearcherOriginal(OLC).searchEntity(elocatorphrase, "", originalentityphrase, prep, discount*EntitySearcherOriginal.discount); //advanced search
 			if(result!=null){
 				entitylps = result;
-				LOGGER.debug("EEL...searched locator '"+elocatorphrase+"[orig="+originalentityphrase+"]':");
+				System.out.println("EEL...searched locator '"+elocatorphrase+"[orig="+originalentityphrase+"]':");
 				for(EntityProposals ep: result){
-					LOGGER.debug("....."+ep.toString());
+					System.out.println("....."+ep.toString());
 				}
 			}else{ //entity locator not matched
-				LOGGER.debug("EEL...no results from searching '"+elocatorphrase+"[orig="+originalentityphrase+"]':");
+				System.out.println("EEL...no results from searching '"+elocatorphrase+"[orig="+originalentityphrase+"]':");
 				//TODO
 			}
 		}
 		//SimpleEntity sentity = (SimpleEntity)new TermSearcher().searchTerm(entityphrase, "entity");
 		
-		sentityps = new EntitySearcherOriginal(OLC).searchEntity(entityphrase, "", originalentityphrase, prep); //advanced search
+		sentityps = new EntitySearcherOriginal(OLC).searchEntity(entityphrase, "", originalentityphrase, prep, discount*EntitySearcherOriginal.discount); //advanced search
 		if(sentityps!=null && entitylps!=null){//if entity matches
 			//entity
 			for(EntityProposals entitylp: entitylps){
 				if(entitylp.getPhrase().length()>0){
-					//LOGGER.debug("entity locator phrase is not empty, constructing composite entity...");
+					//System.out.println("entity locator phrase is not empty, constructing composite entity...");
 					for(Entity entityl: entitylp.getProposals()){
 						//relation & entity locator
 						FormalRelation rel = Dictionary.partof;
@@ -108,9 +109,9 @@ public class EntityEntityLocatorStrategy implements SearchStrategy {
 						boolean confirmed = false;
 						EntityProposals confirmedcentityp = null;
 						EntityProposals centityp = null;
-						LOGGER.debug("EEL searched entity'"+entityphrase+"[orig="+originalentityphrase+"]':");
+						System.out.println("EEL searched entity'"+entityphrase+"[orig="+originalentityphrase+"]':");
 						for(EntityProposals sentityp: sentityps){
-							LOGGER.debug("....."+sentityp.toString());
+							System.out.println("....."+sentityp.toString());
 							for(Entity sentity: sentityp.getProposals()){
 								SimpleEntity bspo = null;
 								//sentityps could be a spatial entity, so the final E need to be composed using the spatial convention of SpatialModifiedEntity.
@@ -146,7 +147,7 @@ public class EntityEntityLocatorStrategy implements SearchStrategy {
 									confirmedcentityp.add(sentity);
 									sentity.setConfidenceScore(1f);
 									confirmed = false;
-									LOGGER.debug("...confirmed:"+confirmedcentityp);
+									System.out.println("...confirmed:"+confirmedcentityp);
 								}else{
 									if(centityp==null) centityp = new EntityProposals();
 									centityp.setPhrase(this.originalentityphrase);
@@ -158,12 +159,12 @@ public class EntityEntityLocatorStrategy implements SearchStrategy {
 						if(confirmedcentityp!=null){
 							entities = new ArrayList<EntityProposals>();
 							Utilities.addEntityProposals(entities, confirmedcentityp);
-							//LOGGER.debug("..composite entityproposals ="+confirmedcentityp.toString());
+							//System.out.println("..composite entityproposals ="+confirmedcentityp.toString());
 						}
 						else if(centityp!=null){
 							entities = new ArrayList<EntityProposals>();
 							Utilities.addEntityProposals(entities, centityp);
-							//LOGGER.debug("..composite entityproposals ="+centityp.toString());
+							//System.out.println("..composite entityproposals ="+centityp.toString());
 						}	
 					}
 
@@ -172,15 +173,15 @@ public class EntityEntityLocatorStrategy implements SearchStrategy {
 					else EntityEntityLocatorStrategy.cache.put(entityphrase+"+"+elocatorphrase, entities);
 					
 					if(entities!=null){
-						LOGGER.debug("EEL: results:");
+						System.out.println("EEL: results:");
 
 						for(EntityProposals ep: entities){
-							LOGGER.debug(".."+ep.toString());
+							System.out.println(".."+ep.toString());
 						}
 						return;
 					}
 				}else{
-					//LOGGER.debug("entity locator phrase is empty, saving simple entity as EntityProposals...");
+					//System.out.println("entity locator phrase is empty, saving simple entity as EntityProposals...");
 					//EntityProposals entities = new EntityProposals();
 					//entities = new EntityProposals();
 					//entities.setPhrase(sentityp.getPhrase());
@@ -189,7 +190,7 @@ public class EntityEntityLocatorStrategy implements SearchStrategy {
 						ep.setPhrase(this.originalentityphrase+"["+ep.getPhrase()+"]");
 						if(entities==null) entities = new ArrayList<EntityProposals>();
 						Utilities.addEntityProposals(entities, ep);
-						//LOGGER.debug("..entityproposals ="+ep.toString());
+						//System.out.println("..entityproposals ="+ep.toString());
 					}					
 
 					//caching
@@ -197,16 +198,16 @@ public class EntityEntityLocatorStrategy implements SearchStrategy {
 					else EntityEntityLocatorStrategy.cache.put(entityphrase+"+"+elocatorphrase, entities);
 					
 					if(entities!=null){
-						LOGGER.debug("EEL: results:");
+						System.out.println("EEL: results:");
 						for(EntityProposals ep: entities){
-							LOGGER.debug(".."+ep.toString());
+							System.out.println(".."+ep.toString());
 						}
 						return;
 					}
 				}
 			}
 		}else{
-			LOGGER.debug("EntityEntityLocatorStrategy: no results for '"+entityphrase+"[orig="+originalentityphrase+"]':");
+			System.out.println("EntityEntityLocatorStrategy: no results for '"+entityphrase+"[orig="+originalentityphrase+"]':");
 		}
 	}
 

@@ -31,8 +31,8 @@ public class TermOutputerUtilities {
 	public  ArrayList<OWLAccessorImpl> OWLqualityOntoAPIs = new ArrayList<OWLAccessorImpl>();
 	public  ArrayList<OWLAccessorImpl> OWLentityOntoAPIs  = new ArrayList<OWLAccessorImpl>();
 	public  ArrayList<String> excluded = new ArrayList<String>();
-	private  String[] entityontologies;
-	private String[] qualityontologies;
+	private  String[] entityontologyFilepaths;
+	private String[] qualityontologyFilepaths;
 
 
 	public static boolean debug = false;
@@ -45,11 +45,24 @@ public class TermOutputerUtilities {
 	/**
 	 * constructor may be needed if we need to exclude different parts of ontology.
 	 * @param ontologyfolder
+	 * @deprecated use the other constructor
 	 */
+	@Deprecated
 	public TermOutputerUtilities(String eonto, String bspo, String pato, String ro, Hashtable<String,String> ontoURLs){
 		//TODO:add GO:bioprocess
-		entityontologies = new String[]{eonto, bspo};
-		qualityontologies = new String[]{pato, ro};
+		entityontologyFilepaths = new String[]{eonto, bspo};
+		qualityontologyFilepaths = new String[]{pato, ro};
+		initTermOutputerUtilities(entityontologyFilepaths, qualityontologyFilepaths, ontoURLs);
+	}
+
+	public TermOutputerUtilities(String[] entityOntologyFilepaths, String[] qualityOntologyFilepaths, Hashtable<String,String> ontoURLs){
+		//TODO:add GO:bioprocess
+		entityontologyFilepaths = entityOntologyFilepaths;
+		qualityontologyFilepaths = qualityOntologyFilepaths;
+		initTermOutputerUtilities(entityontologyFilepaths, qualityontologyFilepaths,ontoURLs);
+	}
+	
+	private void initTermOutputerUtilities(String[] entityOntologyFilepaths, String[] qualityOntologyFilepaths, Hashtable<String, String> ontoURLs) {
 		//get organ adjectives from Dictionary
 		Enumeration<String> organs = Dictionary.organadjectives.keys();
 		while(organs.hasMoreElements()){
@@ -59,7 +72,7 @@ public class TermOutputerUtilities {
 			}
 		}
 		//for each entity ontology
-		for(String onto: entityontologies){
+		for(String onto: entityontologyFilepaths){
 			if(onto.endsWith(".owl")){
 				OWLAccessorImpl api;	
 				if(Utilities.ping(ontoURLs.get(onto), 200)){
@@ -91,7 +104,7 @@ public class TermOutputerUtilities {
 		adjectiveorganptn = adjectiveorganptn.replaceAll("(^\\||\\|$)", "");
 
 		//for each entity ontology
-		for(String onto: qualityontologies){
+		for(String onto: qualityontologyFilepaths){
 			if(onto.endsWith(".owl")){
 				OWLAccessorImpl api;
 				if(Utilities.ping(ontoURLs.get(onto), 200)){
@@ -608,7 +621,7 @@ public class TermOutputerUtilities {
 
 			// any error???
 			int exitVal = proc.waitFor();
-			//System.out.println("ExitValue: " + exitVal);
+			////System.out.println("ExitValue: " + exitVal);
 
 			StringBuffer sb = new StringBuffer();
 			for(int i = 0; i<outputs.size(); i++){
@@ -700,7 +713,7 @@ public class TermOutputerUtilities {
 		}else if(wordcopy!=null){
 			Dictionary.singulars.put(word, wordcopy);
 			if(wordcopy.compareTo(word)!=0) Dictionary.plurals.put(wordcopy, word); //special cases where sing = pl should be saved in Dictionary
-			if(debug) System.out.println("["+word+"]'s singular is "+wordcopy);
+			//if(debug) //System.out.println("["+word+"]'s singular is "+wordcopy);
 			return wordcopy;
 		}else{//word not in wn
 
@@ -769,13 +782,13 @@ public class TermOutputerUtilities {
 			}
 
 			if(s != null){
-				if(debug) System.out.println("["+word+"]'s singular is "+s);
+				//if(debug) //System.out.println("["+word+"]'s singular is "+s);
 				Dictionary.singulars.put(word, s);
 				if(word.compareTo(s)!=0) Dictionary.plurals.put(s, word);
 				return s;
 			}
 		}
-		if(debug) System.out.println("["+word+"]'s singular is "+word);
+		//if(debug) //System.out.println("["+word+"]'s singular is "+word);
 		return word;
 	}
 
@@ -833,7 +846,7 @@ public class TermOutputerUtilities {
 	 */
 	public static void main(String[] args) {
 		//String[] results = retreiveParentInfoFromPATO("PATO:0000402");
-		//System.out.println(results[1]);
+		////System.out.println(results[1]);
 	}
 
 

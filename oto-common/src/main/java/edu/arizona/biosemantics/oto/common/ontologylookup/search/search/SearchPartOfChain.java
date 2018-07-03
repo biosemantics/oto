@@ -68,11 +68,11 @@ public class SearchPartOfChain {
 		String partIRI = "http://purl.obolibrary.org/obo/PO_0009032"; //petal
 		spoc.search(partIRI);
 		ArrayList<SimpleEntity> chain = spoc.getParentChain();
-		System.out.println("parent organ in order: ");
+		//System.out.println("parent organ in order: ");
 		for(SimpleEntity e: chain){
-			System.out.println(e.getLabel());
-			System.out.println(e.getClassIRI());
-			System.out.println(e.getDef());
+			//System.out.println(e.getLabel());
+			//System.out.println(e.getClassIRI());
+			//System.out.println(e.getDef());
 		}
 		
 		/*parent organ in order: 

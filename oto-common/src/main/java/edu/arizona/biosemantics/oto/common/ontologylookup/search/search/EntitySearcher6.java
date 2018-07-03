@@ -28,6 +28,7 @@ public class EntitySearcher6 extends EntitySearcher {
 	boolean debug = true;
 	private static Hashtable<String, ArrayList<EntityProposals>> cache = new Hashtable<String, ArrayList<EntityProposals>>();
 	private static ArrayList<String> nomatchcache = new ArrayList<String>();
+	public static float discount=0.6f;
 	/**
 	 * 
 	 */
@@ -44,8 +45,8 @@ public class EntitySearcher6 extends EntitySearcher {
 	@Override
 	public ArrayList<EntityProposals> searchEntity(
 			String entityphrase, String elocatorphrase,
-			String originalentityphrase, String prep) {
-		LOGGER.debug("EntitySearcher6: search '"+entityphrase+"[orig="+originalentityphrase+"]'");
+			String originalentityphrase, String prep, float discount) {
+		System.out.println("EntitySearcher6: search '"+entityphrase+"[orig="+originalentityphrase+"]'");
 		
 		//search cache
 		if(EntitySearcher6.nomatchcache.contains(entityphrase+"+"+elocatorphrase)) return null;
@@ -65,16 +66,16 @@ public class EntitySearcher6 extends EntitySearcher {
 		ArrayList<SimpleEntity> entityls = new ArrayList<SimpleEntity>();
 		//entityl.setString(elocatorphrase);
 		if(entitylocators!=null) {
-			ArrayList<FormalConcept> result = new TermSearcher(OLC).searchTerm(elocatorphrase, "entity"); //should it call EntitySearcherOriginal? decided not to.
+			ArrayList<FormalConcept> result = new TermSearcher(OLC).searchTerm(elocatorphrase, "entity", discount); //should it call EntitySearcherOriginal? decided not to.
 			if(result!=null){
 				//entityl = result;
-				LOGGER.debug("search for locator '"+elocatorphrase+"' found match: ");
+				System.out.println("search for locator '"+elocatorphrase+"' found match: ");
 				for(FormalConcept fc: result){
 					entityls.add((SimpleEntity)fc);
-					LOGGER.debug(".."+fc.toString());
+					System.out.println(".."+fc.toString());
 				}
 			}else{ //entity locator not matched
-				LOGGER.debug("search for locator '"+elocatorphrase+"' found no match");
+				System.out.println("search for locator '"+elocatorphrase+"' found no match");
 			}
 		}
 
@@ -86,9 +87,9 @@ public class EntitySearcher6 extends EntitySearcher {
 			if(!shortened.matches(".*?\\b("+Dictionary.spatialtermptn+")$")){
 				//SimpleEntity sentity = (SimpleEntity) new TermSearcher().searchTerm(shortened, "entity");
 				//search shortened and other strings with the same starting words
-				ArrayList<FormalConcept> shortentities = new TermSearcher(OLC).searchTerm(shortened, "entity");
+				ArrayList<FormalConcept> shortentities = new TermSearcher(OLC).searchTerm(shortened, "entity", discount);
 				if(shortentities!=null){
-					LOGGER.debug("search for entity '"+shortened+"' found match, forming proposals...");
+					System.out.println("search for entity '"+shortened+"' found match, forming proposals...");
 					//construct anatomicalentity
 					SimpleEntity anatomicalentity = Dictionary.anatomicalentity;
 					anatomicalentity.setString(aentityphrase.substring(aentityphrase.lastIndexOf(" ")).trim());
@@ -106,7 +107,7 @@ public class EntitySearcher6 extends EntitySearcher {
 							for(FormalConcept fc: entityls){
 								SimpleEntity entityl = (SimpleEntity)fc;
 								if(SearchMain.elk!=null && SearchMain.elk.isSubclassOfWithPart(entityl.getClassIRI(), sentity.getClassIRI())){
-									LOGGER.debug("'"+entityl.getLabel() +"' and '"+sentity.getLabel() + "' are related, increase confidence score");
+									System.out.println("'"+entityl.getLabel() +"' and '"+sentity.getLabel() + "' are related, increase confidence score");
 									found = true;
 									sentity.setConfidenceScore(1f);
 									CompositeEntity centity = new CompositeEntity();
@@ -115,7 +116,7 @@ public class EntitySearcher6 extends EntitySearcher {
 									centity.addParentEntity(new REntity(rel, entityl)); //part of entityl
 									//ep.setPhrase(sentity.getString());
 									ep.add(centity);//add one proposal with anatomical entity
-									LOGGER.debug("add a proposal with anatomical entity:"+centity.toString());
+									System.out.println("add a proposal with anatomical entity:"+centity.toString());
 								}
 							}
 						}
@@ -124,9 +125,9 @@ public class EntitySearcher6 extends EntitySearcher {
 						ArrayList<EntityProposals> entities = new ArrayList<EntityProposals>();
 						//entities.add(ep);
 						Utilities.addEntityProposals(entities, ep);
-						LOGGER.debug("EntitySearcher6 returns:");
+						System.out.println("EntitySearcher6 returns:");
 						for(EntityProposals aep: entities){
-							LOGGER.debug("..EntityProposals: "+aep.toString());
+							System.out.println("..EntityProposals: "+aep.toString());
 						}
 						
 						//caching
@@ -136,7 +137,7 @@ public class EntitySearcher6 extends EntitySearcher {
 						return entities;
 					}
 					//else, record results that meet certain criteria
-					LOGGER.debug("entity and entity locator (if exists) are not related");
+					System.out.println("entity and entity locator (if exists) are not related");
 					ArrayList<EntityProposals> entities = null;
 					found = false;
 					for(FormalConcept sentityfc: shortentities){				
@@ -167,13 +168,13 @@ public class EntitySearcher6 extends EntitySearcher {
 								//ep.setPhrase(sentity.getString());
 								//ep.setPhrase(originalentityphrase);
 								ep.add(centity); //add one
-								LOGGER.debug("add a proposal with anatomical entity:"+centity.toString());
+								System.out.println("add a proposal with anatomical entity:"+centity.toString());
 								/*centity = new CompositeEntity();
 								centity.addEntity(sentity);								
 								centity.addParentEntity(new REntity(rel, entityl));
 								centity.setString(originalentityphrase);
 								ep.add(centity); //add the other	
-								LOGGER.debug("add a proposal without anatomical entity:"+centity.toString());*/
+								System.out.println("add a proposal without anatomical entity:"+centity.toString());*/
 								
 							}
 						}else{
@@ -186,9 +187,9 @@ public class EntitySearcher6 extends EntitySearcher {
 							//ep.setPhrase(sentity.getString());
 							ep.setPhrase(originalentityphrase);
 							ep.add(centity); //add one
-							LOGGER.debug("add a proposal with anatomical entity:"+centity.toString());
+							System.out.println("add a proposal with anatomical entity:"+centity.toString());
 							/*ep.add(sentity); //add the other
-							LOGGER.debug("add a proposal without anatomical entity:"+sentity.toString());*/
+							System.out.println("add a proposal without anatomical entity:"+sentity.toString());*/
 						
 						}
 
@@ -197,9 +198,9 @@ public class EntitySearcher6 extends EntitySearcher {
 					if(found){
 						if(entities==null) entities = new ArrayList<EntityProposals>();
 						Utilities.addEntityProposals(entities, ep);
-						LOGGER.debug("EntitySearcher6 returns:");
+						System.out.println("EntitySearcher6 returns:");
 						for(EntityProposals aep: entities){
-							LOGGER.debug("..EntityProposals: "+aep.toString());
+							System.out.println("..EntityProposals: "+aep.toString());
 						}
 						
 						//caching
@@ -214,9 +215,9 @@ public class EntitySearcher6 extends EntitySearcher {
 				//if failed, try wildcard 
 				
 				//ArrayList<FormalConcept> sentities = TermSearcher.regexpSearchTerm(shortened+"\\b.*", "entity"); //candidate matches for the same entity
-				ArrayList<FormalConcept> sentities = new TermSearcher(OLC).searchTerm(shortened+"\\b.*", "entity"); //candidate matches for the same entity
+				ArrayList<FormalConcept> sentities = new TermSearcher(OLC).searchTerm(shortened+"\\b.*", "entity", discount); //candidate matches for the same entity
 				if(sentities!=null){
-					LOGGER.debug("search for entity '"+shortened+"\\b.*' found match, forming proposals...");
+					System.out.println("search for entity '"+shortened+"\\b.*' found match, forming proposals...");
 					//construct anatomicalentity
 					/*SimpleEntity anatomicalentity = new SimpleEntity();
 					anatomicalentity.setClassIRI("http://purl.obolibrary.org/obo/UBERON_0001062");
@@ -239,7 +240,7 @@ public class EntitySearcher6 extends EntitySearcher {
 							for(FormalConcept fc: entityls){
 								SimpleEntity entityl = (SimpleEntity)fc;
 								if(SearchMain.elk!=null && SearchMain.elk.isSubclassOfWithPart(entityl.getClassIRI(), sentity.getClassIRI())){
-									LOGGER.debug("'"+entityl.getLabel() +"' and '"+sentity.getLabel() + "' are related, increase confidence score");
+									System.out.println("'"+entityl.getLabel() +"' and '"+sentity.getLabel() + "' are related, increase confidence score");
 									found = true;
 									sentity.setConfidenceScore(1f);
 									CompositeEntity centity = new CompositeEntity();
@@ -247,7 +248,7 @@ public class EntitySearcher6 extends EntitySearcher {
 									centity.addParentEntity(new REntity(rel, entityl)); //part of entityl
 									centity.setString(originalentityphrase);
 									ep.add(centity); //add the other proposal without anatomical entity	
-									LOGGER.debug("add the other proposal without anatomical entity:"+centity.toString());		
+									System.out.println("add the other proposal without anatomical entity:"+centity.toString());		
 								}
 							}
 						}
@@ -256,9 +257,9 @@ public class EntitySearcher6 extends EntitySearcher {
 						ArrayList<EntityProposals> entities = new ArrayList<EntityProposals>();
 						//entities.add(ep);
 						Utilities.addEntityProposals(entities, ep);
-						LOGGER.debug("EntitySearcher6 returns:");
+						System.out.println("EntitySearcher6 returns:");
 						for(EntityProposals aep: entities){
-							LOGGER.debug("..EntityProposals: "+aep.toString());
+							System.out.println("..EntityProposals: "+aep.toString());
 						}
 						
 						//caching
@@ -268,7 +269,7 @@ public class EntitySearcher6 extends EntitySearcher {
 						return entities;
 					}
 					//else, record results that meet certain criteria
-					LOGGER.debug("entity and entity locator (if exists) are not related");
+					System.out.println("entity and entity locator (if exists) are not related");
 					ArrayList<EntityProposals> entities = null;
 					found = false;
 					for(FormalConcept sentityfc: sentities){				
@@ -298,13 +299,13 @@ public class EntitySearcher6 extends EntitySearcher {
 								//ep.setPhrase(sentity.getString());
 								//ep.setPhrase(originalentityphrase);
 								ep.add(centity); //add one
-								LOGGER.debug("add a proposal with anatomical entity:"+centity.toString());*/
+								System.out.println("add a proposal with anatomical entity:"+centity.toString());*/
 								CompositeEntity centity = new CompositeEntity();
 								centity.addEntity(sentity);								
 								centity.addParentEntity(new REntity(rel, entityl));
 								centity.setString(originalentityphrase);
 								ep.add(centity); //add the other	
-								LOGGER.debug("add a proposal without anatomical entity:"+centity.toString());
+								System.out.println("add a proposal without anatomical entity:"+centity.toString());
 								found = true;
 							}
 						}else{
@@ -316,9 +317,9 @@ public class EntitySearcher6 extends EntitySearcher {
 							//ep.setPhrase(sentity.getString());
 							ep.setPhrase(originalentityphrase);
 							ep.add(centity); //add one
-							LOGGER.debug("add a proposal with anatomical entity:"+centity.toString());*/
+							System.out.println("add a proposal with anatomical entity:"+centity.toString());*/
 							ep.add(sentity); //add the other
-							LOGGER.debug("add a proposal without anatomical entity:"+sentity.toString());
+							System.out.println("add a proposal without anatomical entity:"+sentity.toString());
 							found = true;
 						}
 
@@ -327,9 +328,9 @@ public class EntitySearcher6 extends EntitySearcher {
 					if(found){
 						if(entities==null) entities = new ArrayList<EntityProposals>();
 						Utilities.addEntityProposals(entities, ep);
-						LOGGER.debug("EntitySearcher6 returns:");
+						System.out.println("EntitySearcher6 returns:");
 						for(EntityProposals aep: entities){
-							LOGGER.debug("..EntityProposals: "+aep.toString());
+							System.out.println("..EntityProposals: "+aep.toString());
 						}
 						
 						//caching
@@ -341,7 +342,7 @@ public class EntitySearcher6 extends EntitySearcher {
 			}			
 		}
 		EntitySearcher6.nomatchcache.add(entityphrase+"+"+elocatorphrase);
-		LOGGER.debug("EntitySearch6 found no match");
+		System.out.println("EntitySearch6 found no match");
 		return null;
 	}
 

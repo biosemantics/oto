@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
+//import edu.arizona.biosemantics.common.ontology.search.model.Ontology;
 import edu.arizona.biosemantics.oto.common.ontologylookup.search.OntologyLookupClient;
 import edu.arizona.biosemantics.oto.common.ontologylookup.search.data.FormalConcept;
 import edu.arizona.biosemantics.oto.common.ontologylookup.search.data.Quality;
@@ -76,7 +77,7 @@ public class TermSearcher {
 	 * related synonyms. The result could also be null when no match is found.
 	 * 
 	 * Return all strong matches based on the original phrase. Other matches are
-	 * saved in candidate matches Strong match = a match to a class lable or an
+	 * saved in candidate matches Strong match = a match to a class label or an
 	 * exact synonym
 	 * 
 	 * @param query
@@ -86,7 +87,7 @@ public class TermSearcher {
 	 * @return null when no match, otherwise, an arrayList of matched
 	 *         FormalConcepts
 	 */
-	public ArrayList<FormalConcept> searchTerm(String phrase, String phrasetype) {
+	public ArrayList<FormalConcept> searchTerm(String phrase, String phrasetype, float discount) {
 		phrase = phrase.trim();
 		String cleanphrase = phrase.replaceAll("[()?:]", "");
 		if (phrase.length() == 0)
@@ -122,9 +123,17 @@ public class TermSearcher {
 		// 1. search the original phrase/reg exp
 		ArrayList<Hashtable<String, String>> results = new ArrayList<Hashtable<String, String>>();
 		ArrayList<FormalConcept> strongmatch = getStrongMatch(cleanphrase, query,
-				phrasetype, results, 1f);
-		if (strongmatch != null && strongmatch.size()>0)
+				phrasetype, results, discount*1.0f);
+		System.out.println("Attempting StrongMatch for "+cleanphrase);
+		if (strongmatch != null && strongmatch.size()>0){
+			System.out.println("StrongMatch found for "+cleanphrase);
+			for(FormalConcept c: strongmatch){
+				System.out.println(c.getLabel());
+			}
 			return strongmatch;
+		}else{
+			System.out.println("StrongMatch not found for "+cleanphrase);
+		}
 		// /if landed here, all matches based on the original phrase are weak
 		// matches.
 		candidatematches.addAll(results);
@@ -160,7 +169,7 @@ public class TermSearcher {
 				}
 			}
 			// phrase = phrase.replaceAll("-", " ");
-			strongmatch = getStrongMatch(cleanphrase, query, phrasetype, results, 1f);
+			strongmatch = getStrongMatch(cleanphrase, query, phrasetype, results, discount*1.0f);
 			if (strongmatch != null && strongmatch.size()>0)
 				return strongmatch;
 
@@ -182,7 +191,7 @@ public class TermSearcher {
 					query = query.replaceAll("\\b" + tcopy + "\\b", token);
 				}
 			}
-			strongmatch = getStrongMatch(cleanphrase, query, phrasetype, results, 1f);
+			strongmatch = getStrongMatch(cleanphrase, query, phrasetype, results, discount*1.0f);
 			if (strongmatch != null && strongmatch.size()>0)
 				return strongmatch;
 
@@ -239,7 +248,7 @@ public class TermSearcher {
 				query = query.replaceAll("\\b" + token + "\\b", regexp);
 			}
 
-			strongmatch = getStrongMatch(cleanphrase, query, phrasetype, results, 0.8f);
+			strongmatch = getStrongMatch(cleanphrase, query, phrasetype, results, discount*0.8f);
 			if (strongmatch != null && strongmatch.size()>0)
 				return strongmatch;
 			candidatematches.addAll(results);
@@ -618,23 +627,18 @@ public class TermSearcher {
 	 */
 	public static void main(String[] args) {
 
-		/*TermSearcher ts = new TermSearcher();
-		// FormalConcept result = ts.searchTerm("ornament", "quality");
-		// ArrayList<FormalConcept> result
-		// =TermSearcher.regexpSearchTerm("epichordal\\b.*", "entity");
-		// if(result!=null){
-		// System.out.println(result.toString());
-		// }else{
-		// ArrayList<FormalConcept> fcs = ts.getCandidateMatches();
-		// for(FormalConcept fc: fcs){
-		// System.out.println(fc.toString());
-		// }
-
-		ArrayList<FormalConcept> quality = ts.searchTerm("(?:metasternum)",
+		/* not working this way
+		 * OntologyLookupClient OLC = new OntologyLookupClient("PO", "C:/Users/hongcui/Documents/etcsite/resources/shared/ontologies",
+				"C:/Users/hongcui/Documents/etcsite/resources/shared/wordnet/wn31/dict");
+		TermSearcher ts = new TermSearcher(OLC);
+		
+		ArrayList<FormalConcept> entities = ts.searchTerm("leaf",
 				"entity");
-		if(quality!=null){
-			for (FormalConcept fc : quality)
-				System.out.println(fc.getLabel());
+		if(entities!=null){
+			for (FormalConcept fc : entities)
+				//System.out.println("matching concept: "+fc.getLabel());
+		}else{
+			//System.out.println("no matching concepts");
 		}*/
 	}
 

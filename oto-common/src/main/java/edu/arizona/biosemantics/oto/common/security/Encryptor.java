@@ -30,12 +30,12 @@ public final class Encryptor {
 		try {
 			md = MessageDigest.getInstance("SHA");
 		} catch (NoSuchAlgorithmException e) {
-			System.out.println(e.getStackTrace());
+			//System.out.println(e.getStackTrace());
 		}
 		try {
 			md.update(plaintext.getBytes("UTF-8"));
 		} catch (UnsupportedEncodingException e) {
-			System.out.println(e.getStackTrace());
+			//System.out.println(e.getStackTrace());
 		}
 
 		byte raw[] = md.digest();

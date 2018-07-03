@@ -29,6 +29,7 @@ public class EntitySearcherOriginal extends EntitySearcher {
 	private static final Logger LOGGER = Logger.getLogger(EntitySearcherOriginal.class);  
 	private static Hashtable<String, ArrayList<EntityProposals>> cache = new Hashtable<String, ArrayList<EntityProposals>>();
 	private static ArrayList<String> nomatchcache = new ArrayList<String>();
+	public static float discount = 1.0f;
 
 	public EntitySearcherOriginal(OntologyLookupClient OLC){
 		super(OLC);
@@ -41,11 +42,11 @@ public class EntitySearcherOriginal extends EntitySearcher {
 	 * @return null or ArrayList of (often one) entityproposals 
 	 * @throws Exception the exception
 	 */
-
-	public ArrayList<EntityProposals> searchEntity(String entityphrase, String elocatorphrase, String originalentityphrase, String prep){
-		//System.out.println("search entity: "+entityphrase);
+	@Override
+	public ArrayList<EntityProposals> searchEntity(String entityphrase, String elocatorphrase, String originalentityphrase, String prep, float discount){
+		////System.out.println("search entity: "+entityphrase);
 		//create and maintain a cache for entity search?: yes, created in EntityParser
-		LOGGER.debug("EntitySearcherOriginal: search '"+entityphrase+"[orig="+originalentityphrase+"]'");
+		System.out.println("EntitySearcherOriginal: search '"+entityphrase+"[orig="+originalentityphrase+"]'");
 
 		//general cases
 		if(nomatchcache.contains(entityphrase+"+"+elocatorphrase)) return null;
@@ -73,8 +74,8 @@ public class EntitySearcherOriginal extends EntitySearcher {
 				//aentityphrase = aentityphrase.replaceAll("body scale", "dermal scale");
 				//aelocatorphrase = aelocatorphrase.replaceAll("body scale", "dermal scale");
 
-				LOGGER.debug("EntitySearcherOriginal calls EntitySearcher1");
-				ArrayList<EntityProposals> results =  new EntitySearcher1(OLC).searchEntity(aentityphrase, aelocatorphrase, originalentityphrase, prep);
+				System.out.println("EntitySearcherOriginal calls EntitySearcher1");
+				ArrayList<EntityProposals> results =  new EntitySearcher1(OLC).searchEntity(aentityphrase, aelocatorphrase, originalentityphrase, prep, discount*EntitySearcher1.discount);
 
 				if(results!=null && entities==null) entities = new ArrayList<EntityProposals>();
 				if(results!=null){	
@@ -86,9 +87,9 @@ public class EntitySearcherOriginal extends EntitySearcher {
 
 		//logging
 		if(entities!=null){	
-			LOGGER.debug("EntitySearcherOriginal completed search for '"+entityphrase+"[orig="+originalentityphrase+"]' and returns:");
+			System.out.println("EntitySearcherOriginal completed search for '"+entityphrase+"[orig="+originalentityphrase+"]' and returns:");
 			for(EntityProposals aep: entities){
-				LOGGER.debug(".."+aep.toString());
+				System.out.println(".."+aep.toString());
 			}
 		}
 
@@ -104,7 +105,7 @@ public class EntitySearcherOriginal extends EntitySearcher {
 	//If not found in Ontology, then return the phrase as simpleentity string
 	//TODO return "some anatomical entity" or other high level concepts. 
 	//don't forget the entityl
-	LOGGER.debug("EntitySearcherOriginal: no match in ontology is found for '"+entityphrase+"','"+elocatorphrase+"', form string-based proposals...");
+	System.out.println("EntitySearcherOriginal: no match in ontology is found for '"+entityphrase+"','"+elocatorphrase+"', form string-based proposals...");
 	EntityProposals ep = new EntityProposals();
 	entities = new ArrayList<EntityProposals>();
 	SimpleEntity sentity = new SimpleEntity();
@@ -126,7 +127,7 @@ public class EntitySearcherOriginal extends EntitySearcher {
 		centity.setString(originalentityphrase);
 		ep.setPhrase(originalentityphrase);
 		ep.add(centity);
-		LOGGER.debug("add a proposal:"+centity.toString());
+		System.out.println("add a proposal:"+centity.toString());
 		//entities.add(ep);
 		Utilities.addEntityProposals(entities, ep);
 	}else{
@@ -134,7 +135,7 @@ public class EntitySearcherOriginal extends EntitySearcher {
 		//ep.setPhrase(sentity.getString());
 		ep.setPhrase(originalentityphrase);
 		ep.add(sentity);
-		LOGGER.debug("add a proposal:"+sentity.toString());
+		System.out.println("add a proposal:"+sentity.toString());
 		//entities.add(ep);
 		Utilities.addEntityProposals(entities, ep);
 	}

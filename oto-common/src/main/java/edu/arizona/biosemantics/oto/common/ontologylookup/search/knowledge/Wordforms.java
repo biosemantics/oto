@@ -56,11 +56,11 @@ static Hashtable<String,LinkedHashSet<String>> adjectivecache =new Hashtable<Str
 	public static void main(String[] args) {
 		HashSet<String> forms =  toAdjective("rhomboid");
 		
-		for(String form:forms)
-			{
-			if(form.equals("rhombic"))
-			System.out.println(form);
-			}
+//		for(String form:forms)
+//			{
+//			if(form.equals("rhombic"))
+//			//System.out.println(form);
+//			}
 	}
 
 }

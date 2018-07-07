@@ -111,10 +111,12 @@ public class OntologyLookupClient {
 		int qn = qualityOntologyNames.size();
 		int i = 0;
 		//get local filepaths: all ontologies must be in the file systems
+		this.entityOntologyFilepaths = new String[entityOntologyNames.size()];
 		for(String entityonto: entityOntologyNames){		
 			this.entityOntologyFilepaths[i++] = ontologyDir + "/" + entityonto + ".owl";
 		}
 		i = 0;
+		this.qualityOntologyFilepaths = new String[qualityOntologyNames.size()];
 		for(String qualityonto: qualityOntologyNames){		
 			this.qualityOntologyFilepaths[i++] = ontologyDir + "/" + qualityonto + ".owl";
 		}

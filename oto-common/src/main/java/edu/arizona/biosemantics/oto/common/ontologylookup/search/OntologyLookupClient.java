@@ -124,12 +124,12 @@ public class OntologyLookupClient {
 		//get URL, some URL may not work, and the system will use the local file
 		i = 0;
 		for(String entityonto: entityOntologyNames){		
-			ontoURLs.put(entityonto,
+			ontoURLs.put(ontologyDir + "/" + entityonto + ".owl",
 					"http://purl.obolibrary.org/obo/"+entityonto+".owl");
 		}
 		i = 0;
 		for(String qualityonto: qualityOntologyNames){		
-			ontoURLs.put(qualityonto,
+			ontoURLs.put(ontologyDir + "/" + qualityonto + ".owl",
 					"http://purl.obolibrary.org/obo/"+qualityonto+".owl");
 		}
 		// now load ontologies

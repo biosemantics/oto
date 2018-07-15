@@ -111,10 +111,12 @@ public class OntologyLookupClient {
 		int qn = qualityOntologyNames.size();
 		int i = 0;
 		//get local filepaths: all ontologies must be in the file systems
+		this.entityOntologyFilepaths = new String[entityOntologyNames.size()];
 		for(String entityonto: entityOntologyNames){		
 			this.entityOntologyFilepaths[i++] = ontologyDir + "/" + entityonto + ".owl";
 		}
 		i = 0;
+		this.qualityOntologyFilepaths = new String[qualityOntologyNames.size()];
 		for(String qualityonto: qualityOntologyNames){		
 			this.qualityOntologyFilepaths[i++] = ontologyDir + "/" + qualityonto + ".owl";
 		}
@@ -122,12 +124,12 @@ public class OntologyLookupClient {
 		//get URL, some URL may not work, and the system will use the local file
 		i = 0;
 		for(String entityonto: entityOntologyNames){		
-			ontoURLs.put(entityonto,
+			ontoURLs.put(ontologyDir + "/" + entityonto + ".owl",
 					"http://purl.obolibrary.org/obo/"+entityonto+".owl");
 		}
 		i = 0;
 		for(String qualityonto: qualityOntologyNames){		
-			ontoURLs.put(qualityonto,
+			ontoURLs.put(ontologyDir + "/" + qualityonto + ".owl",
 					"http://purl.obolibrary.org/obo/"+qualityonto+".owl");
 		}
 		// now load ontologies

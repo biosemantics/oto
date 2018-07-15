@@ -172,7 +172,17 @@ public class OntologyLookupClient {
 	}
 
 	public static void main(String[] args) {
-		//try search: scattered broad-based lanceolate - lance-subulate prickle
+		
+
+			HashSet<String> entityOntologies = new HashSet<String>();
+			entityOntologies.add("PO");
+			HashSet<String> qualityOntologies = new HashSet<String>();
+			OntologyLookupClient client = new OntologyLookupClient(entityOntologies, qualityOntologies, "ontologies", "wordnet/wn31/dict");
+			client.searchStructure("leaf", "", "");
+		}
+		
+		
+		/*//try search: scattered broad-based lanceolate - lance-subulate prickle
 		OntologyLookupClient client = new OntologyLookupClient("po",
 				"/home/sbs0457/workspace/OTOLiteForETC/OntologyOwlFiles",
 				"/home/sbs0457/workspace/OTOLiteForETC/DictFiles");
@@ -213,6 +223,6 @@ public class OntologyLookupClient {
 					//System.out.println("\tParent label: " + e.getPLabel());
 				}
 			}
-		}
-	}
+		}*/
+	
 }

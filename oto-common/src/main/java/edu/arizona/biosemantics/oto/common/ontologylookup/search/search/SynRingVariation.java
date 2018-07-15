@@ -75,7 +75,7 @@ public class SynRingVariation {
 				synring = Dictionary.synrings.get(syn);
 		}
 		
-		//find owlapi for UBERON
+		//find owlapi
 		for(OWLAccessorImpl temp:OLC.ontoutil.OWLentityOntoAPIs){
 			for(String entityOntoName: OLC.entityOntologyNames){
 				if(temp.getSource().indexOf(entityOntoName)>1){

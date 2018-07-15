@@ -106,6 +106,8 @@ public class OntologyLookupClient {
 	public OntologyLookupClient(HashSet<String> entityOntologyNames, HashSet<String> qualityOntologyNames, String ontologyDir,
 			String dictDir) {
 
+		this.entityOntologyNames = entityOntologyNames;
+		this.qualityOntologyNames = qualityOntologyNames;
 		dictdir = dictDir;
 		int en = entityOntologyNames.size();
 		int qn = qualityOntologyNames.size();

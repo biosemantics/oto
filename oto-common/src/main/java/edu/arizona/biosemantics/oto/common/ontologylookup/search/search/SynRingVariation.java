@@ -51,16 +51,17 @@ public class SynRingVariation {
 	
 	/**
 	 * 
+	 * @param searchtype 
 	 * @param structure: one word representing a structure
 	 * @return
 	 */
 	//TODO check duplicates: (?:(?:opening|foramina|foramen|foramens|perforation|orifice|opening|foramina|bone foramen|foramen|foramens|bone foramen|perforation|orifice|orifice))
-	public static String getSynRing4Structure(String structure, OntologyLookupClient OLC) {
-		if(structure.length()==0) return "";
-		String synring = cache.get(structure);
+	public static String getSynRing4Word(String word, OntologyLookupClient OLC, String searchtype) {
+		if(word.length()==0) return "";
+		String synring = cache.get(word);
 		if(synring!=null) return synring;
 		
-		synring = structure;
+		synring = word;
 		OWLAccessorImpl owlapi=null;
 		ArrayList<String> ontosynonyms;
 		//grab a synring from Dictionary
@@ -71,19 +72,38 @@ public class SynRingVariation {
 			//if(structure.matches("\\b("+Dictionary.opening+")\\b"))
 			//	synring = Dictionary.opening;
 			String syn = ptn.nextElement();
-			if(structure.matches("\\b("+syn+")\\b"))
+			if(word.matches("\\b("+syn+")\\b"))
 				synring = Dictionary.synrings.get(syn);
 		}
 		
 		//find owlapi
-		for(OWLAccessorImpl temp:OLC.ontoutil.OWLentityOntoAPIs){
-			for(String entityOntoName: OLC.entityOntologyNames){
-				if(temp.getSource().indexOf(entityOntoName)>1){
-					owlapi=temp;
-					break;
+		if(searchtype.equals("entity")){
+			for(OWLAccessorImpl temp:OLC.ontoutil.OWLentityOntoAPIs){
+				for(String entityOntoName: OLC.entityOntologyNames){
+					if(temp.getSource().indexOf(entityOntoName)>1){
+						owlapi=temp;
+						break;
+					}
 				}
 			}
 		}
+		
+		if(searchtype.equals("quality")){
+			for(OWLAccessorImpl temp:OLC.ontoutil.OWLqualityOntoAPIs){
+				for(String entityOntoName: OLC.qualityOntologyNames){
+					if(temp.getSource().indexOf(entityOntoName)>1){
+						owlapi=temp;
+						break;
+					}
+				}
+			}
+		}
+		
+		/* this should not happen
+		 * if(owlapi==null){
+			cache.put(word, synring);
+			return synring;
+		}*/
 		
 		//expanding the synring with synonyms
 		for(String form:synring.split("\\|"))
@@ -96,16 +116,16 @@ public class SynRingVariation {
 		
 		//fetch adjective organs
 		ArrayList<String> adjectives = new ArrayList<String> ();
-		if(OWLAccessorImpl.organadjectives.get(structure)!=null) adjectives.addAll(OWLAccessorImpl.organadjectives.get(structure));
-		if(OWLAccessorImpl.adjectiveorgans.get(structure)!=null) adjectives.addAll(OWLAccessorImpl.adjectiveorgans.get(structure).values());
-		if(Dictionary.organadjectives.get(structure)!=null) adjectives.addAll(Dictionary.organadjectives.get(structure)); //those not covered in ontologies
-		if(Dictionary.adjectiveorgans.get(structure)!=null) adjectives.addAll(Dictionary.adjectiveorgans.get(structure));
+		if(OWLAccessorImpl.organadjectives.get(word)!=null) adjectives.addAll(OWLAccessorImpl.organadjectives.get(word));
+		if(OWLAccessorImpl.adjectiveorgans.get(word)!=null) adjectives.addAll(OWLAccessorImpl.adjectiveorgans.get(word).values());
+		if(Dictionary.organadjectives.get(word)!=null) adjectives.addAll(Dictionary.organadjectives.get(word)); //those not covered in ontologies
+		if(Dictionary.adjectiveorgans.get(word)!=null) adjectives.addAll(Dictionary.adjectiveorgans.get(word));
 		
 		for(String adjectiveform: adjectives){
 			if(!adjectiveform.matches("\\b("+synring+")\\b")) synring+="|"+adjectiveform;
 		}
 		
-		cache.put(structure, synring);
+		cache.put(word, synring);
 		return synring;
 	}
 

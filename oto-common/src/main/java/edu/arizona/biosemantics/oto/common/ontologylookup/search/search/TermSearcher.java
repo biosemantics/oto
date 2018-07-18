@@ -99,7 +99,7 @@ public class TermSearcher {
 		else if (result != null && result.size()>0)
 			return result;
 
-		String query = formatExpand(phrase); // expand with syn-ring
+		String query = formatExpand(phrase, phrasetype); // expand with syn-ring
 		String querycopy = query;
 
 		result = null;
@@ -331,10 +331,11 @@ public class TermSearcher {
 
 	/**
 	 * 
+	 * @param type 
 	 * @param query: ordinary string or regular expressions like (?:a b|c)
 	 * @return
 	 */
-	private String formatExpand(String query) {
+	private String formatExpand(String query, String querytype) {
 		// format
 		query = query.replaceAll("_", " "); // abc_1
 		query = query.replaceAll("(?<=\\w)- (?=\\w)", "-"); // dorsal- fin
@@ -357,7 +358,7 @@ public class TermSearcher {
 			if(token.length()>0){
 				token = token.replaceAll("\\\\b", "");
 				String tcopy = token;
-				token = Utilities.getSynRing4Phrase(token, OLC);
+				token = Utilities.getSynRing4Phrase(token, OLC, querytype);
 				query = query.replaceAll("\\b" + tcopy + "\\b", token);
 			}
 		}

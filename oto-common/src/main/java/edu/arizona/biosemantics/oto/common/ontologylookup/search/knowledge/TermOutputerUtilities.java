@@ -103,7 +103,7 @@ public class TermOutputerUtilities {
 		}
 		adjectiveorganptn = adjectiveorganptn.replaceAll("(^\\||\\|$)", "");
 
-		//for each entity ontology
+		//for each quality ontology
 		for(String onto: qualityontologyFilepaths){
 			if(onto.endsWith(".owl")){
 				OWLAccessorImpl api;

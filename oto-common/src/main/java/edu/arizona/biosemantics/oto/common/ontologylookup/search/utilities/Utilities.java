@@ -396,7 +396,7 @@ public class Utilities {
 
 
 
-	public static String getSynRing4Phrase(String phrase, OntologyLookupClient OLC){
+	public static String getSynRing4Phrase(String phrase, OntologyLookupClient OLC, String phrasetype){
 		String synring = "";
 		if(phrase.length()==0) return synring;
 		phrase = phrase.replaceAll("(\\(\\?:|\\))", ""); //(?:(?:shoulder) (?:girdle)) =>shoulder girdle
@@ -404,7 +404,7 @@ public class Utilities {
 		//may use a more sophisticated approach to construct ngrams: A B C => A B C;A (B C); (A B) C;
 		for(int i = 0; i < tokens.length; i++){
 			if(tokens[i].matches(Dictionary.spatialtermptn)) synring += "(?:"+SynRingVariation.getSynRing4Spatial(tokens[i], OLC)+")"+" ";
-			else synring += "(?:"+SynRingVariation.getSynRing4Structure(tokens[i], OLC)+")"+" ";
+			else synring += "(?:"+SynRingVariation.getSynRing4Word(tokens[i], OLC, phrasetype)+")"+" ";
 		}
 		return synring.trim();
 	}

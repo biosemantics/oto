@@ -61,9 +61,9 @@ public class EntitySearcher5 extends EntitySearcher {
 				System.out.println("...search entity '"+aentityphrase+" .*' found match");
 				for(FormalConcept regexpresult: regexpresults){
 					//regexpresult.setSearchString(originalentityphrase+"["+regexpresult.getSearchString()+"]"); //record originalentityphrase for grouping entity proposals later
-					headnouns.put(regexpresult.getLabel().replace(aentityphrase, ""), regexpresult.getId()+"#"
-					+regexpresult.getClassIRI()+"#"
-							+regexpresult.getPLabel()+"#"
+					headnouns.put(regexpresult.getLabel().replace(aentityphrase, ""), regexpresult.getId()+"###"
+					+regexpresult.getClassIRI()+"###"
+							+regexpresult.getPLabel()+"###"
 							+regexpresult.getDef()); //don't trim headnoun
 				}	
 				
@@ -86,7 +86,7 @@ public class EntitySearcher5 extends EntitySearcher {
 				float score = discount*(1.0f/regexpresults.size());
 				boolean found = false;
 				for(String noun: choices){
-					String[] idiri = headnouns.get(noun).split("#");
+					String[] idiri = headnouns.get(noun).split("###");
 					SimpleEntity sentity = new SimpleEntity();
 					sentity.setSearchString(aentityphrase+" .*");
 					sentity.setString(aentityphrase);
@@ -95,7 +95,7 @@ public class EntitySearcher5 extends EntitySearcher {
 					sentity.setConfidenceScore(score);
 					sentity.setClassIRI(idiri[1]);
 					sentity.setPLabel(idiri[2]);
-					sentity.setDef(idiri[3]);
+					sentity.setDef(idiri.length>3? idiri[3]: "");
 					ep.add(sentity);
 					System.out.println(".....add a proposal:"+sentity);
 					found = true;

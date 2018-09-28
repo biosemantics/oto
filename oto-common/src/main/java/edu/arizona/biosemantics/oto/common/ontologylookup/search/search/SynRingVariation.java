@@ -149,6 +149,7 @@ public class SynRingVariation {
 			
 		}
 		
+		if(owlapi == null) return spatial;
 	
 		synring = spatial;
 		ArrayList<String> ontosynonyms = owlapi.getSynonymLabelsbyPhrase(spatial,"spatial");

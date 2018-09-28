@@ -99,19 +99,15 @@ public class SynRingVariation {
 			}
 		}
 		
-		/* this should not happen
-		 * if(owlapi==null){
-			cache.put(word, synring);
-			return synring;
-		}*/
-		
 		//expanding the synring with synonyms
 		for(String form:synring.split("\\|"))
 		{
 			if(!form.matches("\\b("+synring+")\\b")) synring+="|"+form; //don't add duplicates
-			ontosynonyms = owlapi.getSynonymLabelsbyPhrase(form,"entity");
-			for(String syn:ontosynonyms)
-				if(!form.matches("\\b("+synring+")\\b")) synring+="|"+syn;
+			if(owlapi!=null){
+				ontosynonyms = owlapi.getSynonymLabelsbyPhrase(form,"entity");
+				for(String syn:ontosynonyms)
+					if(!form.matches("\\b("+synring+")\\b")) synring+="|"+syn;
+			}
 		}
 		
 		//fetch adjective organs
@@ -149,7 +145,10 @@ public class SynRingVariation {
 			
 		}
 		
-		if(owlapi == null) return spatial;
+		if(owlapi == null){
+			cache.put(spatial, spatial);
+			return spatial;
+		}
 	
 		synring = spatial;
 		ArrayList<String> ontosynonyms = owlapi.getSynonymLabelsbyPhrase(spatial,"spatial");

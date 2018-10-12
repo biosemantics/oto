@@ -102,6 +102,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 	 * @throws Exception the exception
 	 */
 	public OWLAccessorImpl(String ontoURL, ArrayList<String> excludedclasses) {
+		//manager = OWLManager.createConcurrentOWLOntologyManager();
 		manager = OWLManager.createOWLOntologyManager();
 		df = manager.getOWLDataFactory();
 		IRI iri = IRI.create(ontoURL);
@@ -131,6 +132,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 	 */
 
 	public OWLAccessorImpl(File file, ArrayList<String> eliminate) {
+		//manager = OWLManager.createConcurrentOWLOntologyManager();
 		manager = OWLManager.createOWLOntologyManager();
 		df = manager.getOWLDataFactory();
 		source = file.getAbsolutePath();
@@ -158,7 +160,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 	 * @param rootOnt the root ont
 	 * @param excludedclassIRIs 
 	 */
-	private void constructorHelper(OWLOntology rootOnt, ArrayList<String> excludedclassIRIs){
+	public void constructorHelper(OWLOntology rootOnt, ArrayList<String> excludedclassIRIs){
 		onts=rootOnt.directImports().collect(Collectors.toSet());
 		onts.add(rootOnt);
 

@@ -29,11 +29,13 @@ public class EntitySearcher6 extends EntitySearcher {
 	private static Hashtable<String, ArrayList<EntityProposals>> cache = new Hashtable<String, ArrayList<EntityProposals>>();
 	private static ArrayList<String> nomatchcache = new ArrayList<String>();
 	public static float discount=0.6f;
+	private boolean useCache;
 	/**
 	 * 
 	 */
-	public EntitySearcher6(OntologyLookupClient OLC){
-		super(OLC);
+	public EntitySearcher6(OntologyLookupClient OLC, boolean useCache){
+		super(OLC, useCache);
+
 	}
 
 	/* (non-Javadoc)
@@ -49,9 +51,10 @@ public class EntitySearcher6 extends EntitySearcher {
 		System.out.println("EntitySearcher6: search '"+entityphrase+"[orig="+originalentityphrase+"]'");
 		
 		//search cache
+		if(useCache){
 		if(EntitySearcher6.nomatchcache.contains(entityphrase+"+"+elocatorphrase)) return null;
 		if(EntitySearcher6.cache.get(entityphrase+"+"+elocatorphrase)!=null) return EntitySearcher6.cache.get(entityphrase+"+"+elocatorphrase);
-		
+		}
 		//still not find a match, remove the last term in the entityphrase, when what is then left is not just a spatial term 
 		//"humeral deltopectoral crest apex" => "humeral deltopectoral crest"	
 		//TODO "some part" of humerus; "some quality"
@@ -66,7 +69,7 @@ public class EntitySearcher6 extends EntitySearcher {
 		ArrayList<SimpleEntity> entityls = new ArrayList<SimpleEntity>();
 		//entityl.setString(elocatorphrase);
 		if(entitylocators!=null) {
-			ArrayList<FormalConcept> result = new TermSearcher(OLC).searchTerm(elocatorphrase, "entity", discount); //should it call EntitySearcherOriginal? decided not to.
+			ArrayList<FormalConcept> result = new TermSearcher(OLC, useCache).searchTerm(elocatorphrase, "entity", discount); //should it call EntitySearcherOriginal? decided not to.
 			if(result!=null){
 				//entityl = result;
 				System.out.println("search for locator '"+elocatorphrase+"' found match: ");
@@ -87,7 +90,7 @@ public class EntitySearcher6 extends EntitySearcher {
 			if(!shortened.matches(".*?\\b("+Dictionary.spatialtermptn+")$")){
 				//SimpleEntity sentity = (SimpleEntity) new TermSearcher().searchTerm(shortened, "entity");
 				//search shortened and other strings with the same starting words
-				ArrayList<FormalConcept> shortentities = new TermSearcher(OLC).searchTerm(shortened, "entity", discount);
+				ArrayList<FormalConcept> shortentities = new TermSearcher(OLC, useCache).searchTerm(shortened, "entity", discount);
 				if(shortentities!=null){
 					System.out.println("search for entity '"+shortened+"' found match, forming proposals...");
 					//construct anatomicalentity
@@ -131,9 +134,10 @@ public class EntitySearcher6 extends EntitySearcher {
 						}
 						
 						//caching
+						if(useCache){
 						if(entities==null) EntitySearcher6.nomatchcache.add(entityphrase+"+"+elocatorphrase);
 						else EntitySearcher6.cache.put(entityphrase+"+"+elocatorphrase, entities);
-						
+						}
 						return entities;
 					}
 					//else, record results that meet certain criteria
@@ -204,8 +208,10 @@ public class EntitySearcher6 extends EntitySearcher {
 						}
 						
 						//caching
+						if(useCache){
 						if(entities==null) EntitySearcher6.nomatchcache.add(entityphrase+"+"+elocatorphrase);
 						else EntitySearcher6.cache.put(entityphrase+"+"+elocatorphrase, entities);
+						}
 						return entities;
 					}
 				}				
@@ -215,7 +221,7 @@ public class EntitySearcher6 extends EntitySearcher {
 				//if failed, try wildcard 
 				
 				//ArrayList<FormalConcept> sentities = TermSearcher.regexpSearchTerm(shortened+"\\b.*", "entity"); //candidate matches for the same entity
-				ArrayList<FormalConcept> sentities = new TermSearcher(OLC).searchTerm(shortened+"\\b.*", "entity", discount); //candidate matches for the same entity
+				ArrayList<FormalConcept> sentities = new TermSearcher(OLC, useCache).searchTerm(shortened+"\\b.*", "entity", discount); //candidate matches for the same entity
 				if(sentities!=null){
 					System.out.println("search for entity '"+shortened+"\\b.*' found match, forming proposals...");
 					//construct anatomicalentity
@@ -263,9 +269,10 @@ public class EntitySearcher6 extends EntitySearcher {
 						}
 						
 						//caching
+						if(useCache){
 						if(entities==null) EntitySearcher6.nomatchcache.add(entityphrase+"+"+elocatorphrase);
 						else EntitySearcher6.cache.put(entityphrase+"+"+elocatorphrase, entities);
-						
+						}
 						return entities;
 					}
 					//else, record results that meet certain criteria
@@ -334,14 +341,18 @@ public class EntitySearcher6 extends EntitySearcher {
 						}
 						
 						//caching
+						if(useCache){
 						if(entities==null) EntitySearcher6.nomatchcache.add(entityphrase+"+"+elocatorphrase);
 						else EntitySearcher6.cache.put(entityphrase+"+"+elocatorphrase, entities);
+						}
 						return entities;
 					}
 				}				
 			}			
 		}
-		EntitySearcher6.nomatchcache.add(entityphrase+"+"+elocatorphrase);
+		if(useCache)
+			EntitySearcher6.nomatchcache.add(entityphrase+"+"+elocatorphrase);
+		
 		System.out.println("EntitySearch6 found no match");
 		return null;
 	}

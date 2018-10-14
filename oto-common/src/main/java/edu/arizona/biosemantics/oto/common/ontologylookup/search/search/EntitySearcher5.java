@@ -26,9 +26,11 @@ public class EntitySearcher5 extends EntitySearcher {
 	private static Hashtable<String, ArrayList<EntityProposals>> cache = new Hashtable<String, ArrayList<EntityProposals>>();
 	private static ArrayList<String> nomatchcache = new ArrayList<String>();
 	public static float discount = 0.7f;
+	private boolean useCache = true;
 	
-	public EntitySearcher5(OntologyLookupClient OLC){
-		super(OLC);
+	public EntitySearcher5(OntologyLookupClient OLC, boolean useCache){
+		super(OLC, useCache);
+		
 	}
 
 	@Override
@@ -38,8 +40,10 @@ public class EntitySearcher5 extends EntitySearcher {
 		System.out.println("EntitySearcher5: search '"+entityphrase+"[orig="+originalentityphrase+"]'");
 		
 		//search cache
+		if(useCache){
 		if(EntitySearcher5.nomatchcache.contains(entityphrase+"+"+elocatorphrase)) return null;
 		if(EntitySearcher5.cache.get(entityphrase+"+"+elocatorphrase)!=null) return EntitySearcher5.cache.get(entityphrase+"+"+elocatorphrase);
+		}
 		//TODO take care of elocatorphrase
 		
 		//bone, cartilage,  element
@@ -55,7 +59,7 @@ public class EntitySearcher5 extends EntitySearcher {
 		if(aentityphrase.indexOf(" ")<0){
 			Hashtable<String, String> headnouns = new Hashtable<String, String>();
 			//ArrayList<FormalConcept> regexpresults = TermSearcher.regexpSearchTerm(entityphrase+" .*", "entity");
-			ArrayList<FormalConcept> regexpresults = new TermSearcher(OLC).searchTerm(aentityphrase+" .*", "entity", discount);
+			ArrayList<FormalConcept> regexpresults = new TermSearcher(OLC, useCache).searchTerm(aentityphrase+" .*", "entity", discount);
 			String nouns = null;
 			if(regexpresults!=null){
 				System.out.println("...search entity '"+aentityphrase+" .*' found match");
@@ -111,9 +115,10 @@ public class EntitySearcher5 extends EntitySearcher {
 						System.out.println("..: "+aep.toString());
 					}	
 					
+					if(useCache){
 					if(entities==null) EntitySearcher5.nomatchcache.add(entityphrase+"+"+elocatorphrase);
 					else EntitySearcher5.cache.put(entityphrase+"+"+elocatorphrase, entities);
-					
+					}
 					return entities;
 				}
 			}else{
@@ -136,10 +141,12 @@ public class EntitySearcher5 extends EntitySearcher {
 			}*/
 			//caching
 		}
-		EntitySearcher5.nomatchcache.add(entityphrase+"+"+elocatorphrase);
+		if(useCache)
+			EntitySearcher5.nomatchcache.add(entityphrase+"+"+elocatorphrase);
+		
 		System.out.println("...search for entity '"+entityphrase+"' found no match");
 		System.out.println("EntitySearcher5 calls EntitySearcher6");
-		return new EntitySearcher6(OLC).searchEntity(entityphrase, elocatorphrase, originalentityphrase, prep, discount*EntitySearcher6.discount);
+		return new EntitySearcher6(OLC, useCache).searchEntity(entityphrase, elocatorphrase, originalentityphrase, prep, discount*EntitySearcher6.discount);
 			
 	}
 

@@ -41,16 +41,18 @@ public class EntityEntityLocatorStrategy implements SearchStrategy {
 	private static ArrayList<String> nomatchcache = new ArrayList<String>();
 	public OntologyLookupClient OLC;
 	public static float discount = 1.0f;
+	private boolean useCache = true;
 	/**
 	 * 
 	 */
 	public EntityEntityLocatorStrategy(String entityphrase, String elocatorphrase,
-			String originalentityphrase, String prep, OntologyLookupClient OLC) {
+			String originalentityphrase, String prep, OntologyLookupClient OLC, boolean useCache) {
 		this.elocatorphrase = elocatorphrase;
 		this.entityphrase = entityphrase;
 		this.prep = prep;
 		this.originalentityphrase = originalentityphrase;
 		this.OLC = OLC;
+		this.useCache = useCache;
 		System.out.println("EntityEntityLocatorStrategy: search '"+entityphrase+"[orig="+originalentityphrase+"]'");
 
 	}
@@ -60,13 +62,15 @@ public class EntityEntityLocatorStrategy implements SearchStrategy {
 	@Override
 	public void handle(float discount) {
 		//search cache
-		if(EntityEntityLocatorStrategy.nomatchcache.contains(entityphrase+"+"+elocatorphrase)){
-			entities = null;
-			return;
-		}
-		if(EntityEntityLocatorStrategy.cache.get(entityphrase+"+"+elocatorphrase)!=null){
-			entities = EntityEntityLocatorStrategy.cache.get(entityphrase+"+"+elocatorphrase);
-			return;
+		if(useCache){
+			if(EntityEntityLocatorStrategy.nomatchcache.contains(entityphrase+"+"+elocatorphrase)){
+				entities = null;
+				return;
+			}
+			if(EntityEntityLocatorStrategy.cache.get(entityphrase+"+"+elocatorphrase)!=null){
+				entities = EntityEntityLocatorStrategy.cache.get(entityphrase+"+"+elocatorphrase);
+				return;
+			}
 		}
 		
 		
@@ -81,7 +85,7 @@ public class EntityEntityLocatorStrategy implements SearchStrategy {
 		//entitylp.setPhrase(elocatorphrase);
 		if(entitylocators!=null) {
 			//SimpleEntity result = (SimpleEntity) new TermSearcher().searchTerm(elocatorphrase, "entity");
-			ArrayList<EntityProposals> result = new EntitySearcherOriginal(OLC).searchEntity(elocatorphrase, "", originalentityphrase, prep, discount*EntitySearcherOriginal.discount); //advanced search
+			ArrayList<EntityProposals> result = new EntitySearcherOriginal(OLC, useCache).searchEntity(elocatorphrase, "", originalentityphrase, prep, discount*EntitySearcherOriginal.discount); //advanced search
 			if(result!=null){
 				entitylps = result;
 				System.out.println("EEL...searched locator '"+elocatorphrase+"[orig="+originalentityphrase+"]':");
@@ -95,7 +99,7 @@ public class EntityEntityLocatorStrategy implements SearchStrategy {
 		}
 		//SimpleEntity sentity = (SimpleEntity)new TermSearcher().searchTerm(entityphrase, "entity");
 		
-		sentityps = new EntitySearcherOriginal(OLC).searchEntity(entityphrase, "", originalentityphrase, prep, discount*EntitySearcherOriginal.discount); //advanced search
+		sentityps = new EntitySearcherOriginal(OLC, useCache).searchEntity(entityphrase, "", originalentityphrase, prep, discount*EntitySearcherOriginal.discount); //advanced search
 		if(sentityps!=null && entitylps!=null){//if entity matches
 			//entity
 			for(EntityProposals entitylp: entitylps){
@@ -169,9 +173,10 @@ public class EntityEntityLocatorStrategy implements SearchStrategy {
 					}
 
 					//caching
+					if(useCache){
 					if(entities==null) EntityEntityLocatorStrategy.nomatchcache.add(entityphrase+"+"+elocatorphrase);
 					else EntityEntityLocatorStrategy.cache.put(entityphrase+"+"+elocatorphrase, entities);
-					
+					}
 					if(entities!=null){
 						System.out.println("EEL: results:");
 
@@ -194,9 +199,10 @@ public class EntityEntityLocatorStrategy implements SearchStrategy {
 					}					
 
 					//caching
+					if(useCache){
 					if(entities==null) EntityEntityLocatorStrategy.nomatchcache.add(entityphrase+"+"+elocatorphrase);
 					else EntityEntityLocatorStrategy.cache.put(entityphrase+"+"+elocatorphrase, entities);
-					
+					}
 					if(entities!=null){
 						System.out.println("EEL: results:");
 						for(EntityProposals ep: entities){

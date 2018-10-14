@@ -35,6 +35,7 @@ public class SynRingVariation {
 	//private String headnounvariation="";
 	private static final Logger LOGGER = Logger.getLogger(SynRingVariation.class);   
 	private static Hashtable<String, String> cache = new Hashtable<String, String>();
+	private static boolean useCache = true;
 	/**
 	 * 
 	 * @param phrase
@@ -47,6 +48,9 @@ public class SynRingVariation {
 		this.headnounvariation = this.headnounvariation!=""?this.headnounvariation.substring(1):"";
 		
 	}*/
+	public SynRingVariation(boolean useCache) {
+		this.useCache = useCache;
+	}
 	
 	
 	/**
@@ -58,9 +62,11 @@ public class SynRingVariation {
 	//TODO check duplicates: (?:(?:opening|foramina|foramen|foramens|perforation|orifice|opening|foramina|bone foramen|foramen|foramens|bone foramen|perforation|orifice|orifice))
 	public static String getSynRing4Word(String word, OntologyLookupClient OLC, String searchtype) {
 		if(word.length()==0) return "";
-		String synring = cache.get(word);
-		if(synring!=null) return synring;
-		
+		String synring = null;
+		if(useCache){
+			synring = cache.get(word);
+			if(synring!=null) return synring;
+		}
 		synring = word;
 		OWLAccessorImpl owlapi=null;
 		ArrayList<String> ontosynonyms;
@@ -120,8 +126,8 @@ public class SynRingVariation {
 		for(String adjectiveform: adjectives){
 			if(!adjectiveform.matches("\\b("+synring+")\\b")) synring+="|"+adjectiveform;
 		}
-		
-		cache.put(word, synring);
+		if(useCache)
+			cache.put(word, synring);
 		return synring;
 	}
 
@@ -132,8 +138,11 @@ public class SynRingVariation {
 	 */
 	public static String getSynRing4Spatial(String spatial, OntologyLookupClient OLC) {
 		if(spatial.length()==0) return "";
-		String synring = cache.get(spatial);
-		if(synring!=null) return synring;
+		String synring;
+		if(useCache){
+			synring = cache.get(spatial);
+			if(synring!=null) return synring;
+		}
 		//String forms = prefixSpatial(spatial);
 		OWLAccessorImpl owlapi=null;
 
@@ -146,7 +155,7 @@ public class SynRingVariation {
 		}
 		
 		if(owlapi == null){
-			cache.put(spatial, spatial);
+			if(useCache) cache.put(spatial, spatial);
 			return spatial;
 		}
 	
@@ -157,7 +166,7 @@ public class SynRingVariation {
 				synring +="|"+syn;
 		}
 		
-		cache.put(spatial, synring);
+		if(useCache) cache.put(spatial, synring);
 		return synring;
 		
 	}

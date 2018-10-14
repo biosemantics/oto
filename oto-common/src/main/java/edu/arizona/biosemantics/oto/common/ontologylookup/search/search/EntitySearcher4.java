@@ -30,11 +30,13 @@ public class EntitySearcher4 extends EntitySearcher {
 	private static Hashtable<String, ArrayList<EntityProposals>> cache = new Hashtable<String, ArrayList<EntityProposals>>();
 	private static ArrayList<String> nomatchcache = new ArrayList<String>();
 	public static float discount = 0.9f;
+	private boolean useCache = true;
 	/**
 	 * 
 	 */
-	public EntitySearcher4(OntologyLookupClient OLC){
-		super(OLC);
+	public EntitySearcher4(OntologyLookupClient OLC, boolean useCache){
+		super(OLC, useCache);
+		
 	}
 
 
@@ -45,9 +47,10 @@ public class EntitySearcher4 extends EntitySearcher {
 		System.out.println("EntitySearcher4: search '"+entityphrase+"[orig="+originalentityphrase+"]'");
 		
 		//search cache
+		if(useCache){
 		if(EntitySearcher4.nomatchcache.contains(entityphrase+"+"+elocatorphrase)) return null;
 		if(EntitySearcher4.cache.get(entityphrase+"+"+elocatorphrase)!=null) return EntitySearcher4.cache.get(entityphrase+"+"+elocatorphrase);
-		
+		}
 		//still not find a match, if entityphrase is at least two words long, add wildcard * in spaces
 
 		//search for locator first
@@ -57,7 +60,7 @@ public class EntitySearcher4 extends EntitySearcher {
 
 		if(entitylocators!=null) {
 			//TODO: is elocator a reg exp?
-			ArrayList<FormalConcept> result = new TermSearcher(OLC).searchTerm(elocatorphrase, "entity", discount); //TODO: should it call EntitySearcherOriginal? decided not to.
+			ArrayList<FormalConcept> result = new TermSearcher(OLC, useCache).searchTerm(elocatorphrase, "entity", discount); //TODO: should it call EntitySearcherOriginal? decided not to.
 			if(result!=null){
 				System.out.println("search for locator '"+elocatorphrase+"' found match: ");
 				for(FormalConcept fc: result){
@@ -78,7 +81,7 @@ public class EntitySearcher4 extends EntitySearcher {
 		//turn 'otic canal' to 'otic .* canal'
 		if(entityphrase.contains(" ")) aentityphrase = ".*?\\b"+ entityphrase.replaceAll("\\s+", "\\\\b.*?\\\\b");//"\\\\" is needed to form the proper reqexp
 		//ArrayList<FormalConcept> sentities = TermSearcher.regexpSearchTerm(entityphrase, "entity"); //candidate matches for the same entity
-		ArrayList<FormalConcept> sentities = new TermSearcher(OLC).searchTerm(aentityphrase, "entity", discount); //candidate matches for the same entity
+		ArrayList<FormalConcept> sentities = new TermSearcher(OLC, useCache).searchTerm(aentityphrase, "entity", discount); //candidate matches for the same entity
 		
 		if(sentities!=null){
 			System.out.println("search for entity '"+aentityphrase+"' found match, forming proposals...");
@@ -117,17 +120,20 @@ public class EntitySearcher4 extends EntitySearcher {
 					System.out.println("..EntityProposals: "+aep.toString());
 				}
 				//caching
+				if(useCache){
 				if(entities==null) EntitySearcher4.nomatchcache.add(entityphrase+"+"+elocatorphrase);
 				else EntitySearcher4.cache.put(entityphrase+"+"+elocatorphrase, entities);
-				
+				}
 				return entities;
 			}
 		}else{
 			System.out.println("...search for entity '"+entityphrase+"' found no match");
+			if(useCache){
 			EntitySearcher4.nomatchcache.add(entityphrase+"+"+elocatorphrase);
+			}
 		}
 		System.out.println("EntitySearcher4 calls EntitySearcher5");
-		return  new EntitySearcher5(OLC).searchEntity(entityphrase, elocatorphrase, originalentityphrase, prep, discount*EntitySearcher5.discount);
+		return  new EntitySearcher5(OLC, useCache).searchEntity(entityphrase, elocatorphrase, originalentityphrase, prep, discount*EntitySearcher5.discount);
 	}
 
 	/**

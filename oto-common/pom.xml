@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.arizona.biosemantics.oto</groupId>
 	<artifactId>oto-common</artifactId>
-	<version>0.0.32-SNAPSHOT</version>
+	<version>0.0.32-cache-SNAPSHOT</version>
 	
 	  <!-- disable java doc generation, because source code are not annotated to java 8 doc standards -->
 	<profiles>

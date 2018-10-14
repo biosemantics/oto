@@ -48,18 +48,20 @@ public class SpatialModifiedEntityStrategy implements SearchStrategy {
 	public OntologyLookupClient OLC;
 	
 	public static float discount = 1.0f;
+	private boolean useCache;
 	/**
 	 * [the expression is a query expanded with syn rings, 
 	 * for example, '(?:anterior|front) (?:maxilla|maxillary)'] --not yet
 	 */
 	public SpatialModifiedEntityStrategy(
 			String entityphrase, String elocatorphrase,
-			String originalentityphrase, String prep, OntologyLookupClient OLC) {
+			String originalentityphrase, String prep, OntologyLookupClient OLC, boolean useCache) {
 		this.entityphrase = entityphrase;
 		this.elocatorphrase = elocatorphrase;
 		this.prep = prep;
 		this.originalentityphrase = originalentityphrase;
 		this.OLC = OLC;
+		this.useCache = useCache;
 		System.out.println("SpatialModifiedEntityStrategy: search '"+entityphrase+"[orig="+originalentityphrase+"]'");
 	}
 
@@ -69,6 +71,7 @@ public class SpatialModifiedEntityStrategy implements SearchStrategy {
 	@Override
 	public void handle(float discount) {
 		//search cache
+		if(useCache){
 		if(SpatialModifiedEntityStrategy.nomatchcache.contains(entityphrase+"+"+elocatorphrase)){
 			entities = null;
 			return;
@@ -77,12 +80,13 @@ public class SpatialModifiedEntityStrategy implements SearchStrategy {
 			entities = SpatialModifiedEntityStrategy.cache.get(entityphrase+"+"+elocatorphrase);
 			return;
 		}
+		}
 		
 		//ArrayList<EntityProposals> entityls = new ArrayList<EntityProposals>();
 		//entityl.setString(elocatorphrase);
 		if(elocatorphrase.length()>0) {
 			//ArrayList<FormalConcept> results = new TermSearcher().searchTerm(elocatorphrase, "entity"); //change this to EntitySearcherOriginal?
-			ArrayList<EntityProposals> results = new EntitySearcherOriginal(OLC).searchEntity(elocatorphrase, "",originalentityphrase, prep, discount*EntitySearcherOriginal.discount);
+			ArrayList<EntityProposals> results = new EntitySearcherOriginal(OLC, useCache).searchEntity(elocatorphrase, "",originalentityphrase, prep, discount*EntitySearcherOriginal.discount);
 			if(results!=null){
 				System.out.println("SME...searched locator '"+elocatorphrase+"' found match: ");
 				for(EntityProposals result: results){
@@ -122,13 +126,13 @@ public class SpatialModifiedEntityStrategy implements SearchStrategy {
 			}else{
 				System.out.println("SME...calls EntitySearcherOriginal for newentity '"+newentity/*+","+elocatorphrase*/+"'");
 				//sentityps = new EntitySearcherOriginal().searchEntity(root, structid,  newentity, elocatorphrase, originalentityphrase, prep); //advanced search
-				sentityps = new EntitySearcherOriginal(OLC).searchEntity(newentity, "", originalentityphrase, prep, discount*EntitySearcherOriginal.discount); //advanced search
+				sentityps = new EntitySearcherOriginal(OLC, useCache).searchEntity(newentity, "", originalentityphrase, prep, discount*EntitySearcherOriginal.discount); //advanced search
 			}
 
 			System.out.println("SME...now search for spatial term  '"+spatialterm+"'");
 			//SimpleEntity sentity1 = (SimpleEntity)new TermSearcher().searchTerm(spatialterm, "entity");
 			//ArrayList<FormalConcept> spatialentities = TermSearcher.regexpSearchTerm(spatialterm, "entity");//anterior + region: simple search
-			ArrayList<FormalConcept> spatialentities = new TermSearcher(OLC).searchTerm(spatialterm, "entity", discount);//anterior + region: simple search
+			ArrayList<FormalConcept> spatialentities = new TermSearcher(OLC, useCache).searchTerm(spatialterm, "entity", discount);//anterior + region: simple search
 			if(spatialentities!=null) {
 				System.out.println("...found match");
 			}
@@ -239,8 +243,10 @@ public class SpatialModifiedEntityStrategy implements SearchStrategy {
 			}
 			
 			//caching
+			if(useCache){
 			if(entities==null) SpatialModifiedEntityStrategy.nomatchcache.add(entityphrase+"+"+elocatorphrase);
 			else SpatialModifiedEntityStrategy.cache.put(entityphrase+"+"+elocatorphrase, entities);
+			}
 		}
 
 

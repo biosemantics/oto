@@ -67,9 +67,11 @@ public class TermSearcher {
 	//To add terms to this list: "short|term2";
 	public static String looseTerms = "short"; 
 	public OntologyLookupClient OLC;
-
-	public TermSearcher(OntologyLookupClient OLC){
+	private boolean useCache = true;
+	
+	public TermSearcher(OntologyLookupClient OLC, boolean useCache){
 		this.OLC = OLC;
+		this.useCache = useCache;
 	}
 	/**
 	 * Search term in the whole ontology (of a particular type) Result from each
@@ -93,12 +95,15 @@ public class TermSearcher {
 		if (phrase.length() == 0)
 			return null;
 		// search cache
-		ArrayList<FormalConcept> result = this.searchCache(phrase, phrasetype);
+		ArrayList<FormalConcept> result;
+		if(useCache){
+		result = this.searchCache(phrase, phrasetype);
 		if (result == null && this.nomatchCache.contains(phrase))
 			return null;
 		else if (result != null && result.size()>0)
 			return result;
-
+		}
+		
 		String query = formatExpand(phrase, phrasetype); // expand with syn-ring
 		String querycopy = query;
 
@@ -115,7 +120,7 @@ public class TermSearcher {
 				if (result == null)
 					result = new ArrayList<FormalConcept>();
 				result.add(se);
-				TermSearcher.cacheIt(query, result, "entity");
+				if(useCache) TermSearcher.cacheIt(query, result, "entity");
 				return result;
 			}
 		}
@@ -326,7 +331,7 @@ public class TermSearcher {
 			}
 		}
 		if (concepts != null)
-			cacheCandidates(query, concepts, type);
+			if(useCache) cacheCandidates(query, concepts, type);
 	}
 
 	/**
@@ -438,7 +443,7 @@ public class TermSearcher {
 					}
 				}
 			}
-			cacheIt(query, concepts, type);
+			if(useCache) cacheIt(query, concepts, type);
 		}
 		return concepts;
 	}

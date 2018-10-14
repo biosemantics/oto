@@ -139,8 +139,8 @@ public class OntologyLookupClient {
 	}
 	
 
-	public ArrayList<FormalConcept> searchCharacter(String term) {
-		TermSearcher ts = new TermSearcher(this);
+	public ArrayList<FormalConcept> searchCharacter(String term, boolean useCache) {
+		TermSearcher ts = new TermSearcher(this, useCache);
 		return ts.searchTerm(term, "quality", 1.0f);
 	}
 
@@ -149,8 +149,8 @@ public class OntologyLookupClient {
 		return eso.searchEntity(term, "", term + "+" + "", rel);
 	}*/
 	
-	public ArrayList<EntityProposals> searchStructure(String term, String locator, String rel) {
-		EntitySearcherOriginal eso = new EntitySearcherOriginal(this);
+	public ArrayList<EntityProposals> searchStructure(String term, String locator, String rel, boolean useCache) {
+		EntitySearcherOriginal eso = new EntitySearcherOriginal(this, useCache);
 		return eso.searchEntity(term, locator, term + "+" + "", rel, 1.0f);
 	}
 
@@ -183,7 +183,7 @@ public class OntologyLookupClient {
 				qualityOntologies, 
 				"ontologies",
 				"wordNet/wn31/dict");
-		TermSearcher ts = new TermSearcher(olc);
+		TermSearcher ts = new TermSearcher(olc, true);
 		ts.searchTerm("coloration"/*"test"*/, "quality", 1.0f);
 	
 		

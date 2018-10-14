@@ -33,8 +33,10 @@ public abstract class EntitySearcher {
 
 	public OntologyLookupClient OLC;
 
-	public EntitySearcher(OntologyLookupClient OLC){
+
+	public EntitySearcher(OntologyLookupClient OLC, boolean useCache){
 		this.OLC = OLC;
+
 	}
 	
 	/*whether the request can be handled by this searcher */

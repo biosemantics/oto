@@ -42,12 +42,13 @@ public class EntitySearcher1 extends EntitySearcher {
 	private static final float partial = 0.8f;
 	public static float discount = 1.0f;
 	//boolean debug = true;
+	private boolean useCache=true;
 
 	/**
 	 * 
 	 */
-	public EntitySearcher1(OntologyLookupClient OLC){
-		super(OLC);
+	public EntitySearcher1(OntologyLookupClient OLC, boolean useCache){
+		super(OLC, useCache);
 	}
 	//TODO patterns s0fd16381: maxillae, anterior end of 
 	//entityphrase could be reg exp such as (?:A of B| B A) of (?: C D | D of C) or a simple string
@@ -58,12 +59,14 @@ public class EntitySearcher1 extends EntitySearcher {
 	public ArrayList<EntityProposals> searchEntity(
 			String entityphrase, String elocatorphrase,
 			String originalentityphrase, String prep, float discount) {
+		
 		System.out.println("EntitySearcher1: search '"+entityphrase+"[orig="+originalentityphrase+"]'");
 
 		//search cache
-		if(EntitySearcher1.nomatchcache.contains(entityphrase+"+"+elocatorphrase)) return null;
-		if(EntitySearcher1.cache.get(entityphrase+"+"+elocatorphrase)!=null) return EntitySearcher1.cache.get(entityphrase+"+"+elocatorphrase);
-		
+		if(useCache){
+			if(EntitySearcher1.nomatchcache.contains(entityphrase+"+"+elocatorphrase)) return null;
+			if(EntitySearcher1.cache.get(entityphrase+"+"+elocatorphrase)!=null) return EntitySearcher1.cache.get(entityphrase+"+"+elocatorphrase);
+		}
 		ArrayList<EntityProposals> entities = null;
 		EntityProposals ep = new EntityProposals(); //search results
 		//entityphrase =  "posterior radials";
@@ -88,7 +91,7 @@ public class EntitySearcher1 extends EntitySearcher {
 		for(String variation: variations){
 			System.out.println("...search variation '"+variation+"'");
 			//ArrayList<FormalConcept> entityfcs = new TermSearcher().regexpSearchTerm(variation, "entity"); //remove indexes from variation before search
-			ArrayList<FormalConcept> entityfcs = new TermSearcher(OLC).searchTerm(variation, "entity", discount); //remove indexes from variation before search
+			ArrayList<FormalConcept> entityfcs = new TermSearcher(OLC, useCache).searchTerm(variation, "entity", discount); //remove indexes from variation before search
 			//check for the strength of the match: related synonyms: (?:(?:crista) (?:parotica)) entity=>tegmen tympani
 			if(entityfcs!=null){
 				for(FormalConcept entity:entityfcs){
@@ -113,8 +116,10 @@ public class EntitySearcher1 extends EntitySearcher {
 			//}
 			
 			//caching
-			if(entities==null) EntitySearcher1.nomatchcache.add(entityphrase+"+"+elocatorphrase);
-			else EntitySearcher1.cache.put(entityphrase+"+"+elocatorphrase, entities);
+			if(useCache){
+				if(entities==null) EntitySearcher1.nomatchcache.add(entityphrase+"+"+elocatorphrase);
+				else EntitySearcher1.cache.put(entityphrase+"+"+elocatorphrase, entities);
+			}
 			return entities;
 		}
 
@@ -146,7 +151,7 @@ public class EntitySearcher1 extends EntitySearcher {
 							String aentityphrase = Utilities.join(parts, 0, l, " of ");	
 							String aelocatorphrase =  Utilities.join(parts, l+1, parts.length-1, " of ");
 							System.out.println("..EEL search: entity '"+aentityphrase+"' and locator '"+aelocatorphrase+"'");
-							EntityEntityLocatorStrategy eels = new EntityEntityLocatorStrategy(aentityphrase, aelocatorphrase, originalentityphrase, prep, OLC);
+							EntityEntityLocatorStrategy eels = new EntityEntityLocatorStrategy(aentityphrase, aelocatorphrase, originalentityphrase, prep, OLC, useCache);
 							eels.handle(discount);
 							ArrayList<EntityProposals> entity = eels.getEntities(); //a list of different entities: both sexes => female and male
 							if(entity != null){
@@ -227,7 +232,7 @@ public class EntitySearcher1 extends EntitySearcher {
 					//elocatorphrase = elocatorphrase.replaceFirst("(\\(\\?:|\\)|\\|)", "");
 					System.out.println("ES1->EEL...entity:'"+aentityphrase+"' entitylocator:'"+aelocatorphrase+"'");
 					if(elocatorphrase.length()>0){
-						EntityEntityLocatorStrategy eels = new EntityEntityLocatorStrategy(aentityphrase, aelocatorphrase, originalentityphrase, prep, OLC);
+						EntityEntityLocatorStrategy eels = new EntityEntityLocatorStrategy(aentityphrase, aelocatorphrase, originalentityphrase, prep, OLC, useCache);
 						eels.handle(discount);
 						ArrayList<EntityProposals> entity = eels.getEntities(); //a list of different entities: both sexes => female and male
 						if(entity != null){
@@ -274,7 +279,7 @@ public class EntitySearcher1 extends EntitySearcher {
 			System.out.println(System.getProperty("line.separator")+"EntitySearcher1 calls SpatialModifiedEntityStrategy");
 
 			//TODO: need more work: what's entityphrase and elocatorphrase?
-			SpatialModifiedEntityStrategy smes = new SpatialModifiedEntityStrategy(entityphrase, elocatorphrase, originalentityphrase, prep, OLC);
+			SpatialModifiedEntityStrategy smes = new SpatialModifiedEntityStrategy(entityphrase, elocatorphrase, originalentityphrase, prep, OLC, useCache);
 			smes.handle(discount);
 			ArrayList<EntityProposals> entity = smes.getEntities();
 			if(entity != null){
@@ -314,7 +319,7 @@ public class EntitySearcher1 extends EntitySearcher {
 		//if(found) return entities;
 		
 		System.out.println(System.getProperty("line.separator")+"EntitySearcher1 calls EntitySearcher4");
-		ArrayList<EntityProposals> entity = new EntitySearcher4(OLC).searchEntity(entityphrase, elocatorphrase, originalentityphrase, prep, discount*EntitySearcher4.discount);
+		ArrayList<EntityProposals> entity = new EntitySearcher4(OLC, useCache).searchEntity(entityphrase, elocatorphrase, originalentityphrase, prep, discount*EntitySearcher4.discount);
 		//proximal tarsal element:
 		//SpaticalModifiedEntity: phrase=proximal region entity=proximal region score=1.0 and (part_of some phrase=tarsal\b.* entity=tarsal bone score=0.5) 
 		//EntitySearcher5: phrase=proximal tarsal\b.* entity=proximal tarsal bone score=0.5
@@ -353,8 +358,10 @@ public class EntitySearcher1 extends EntitySearcher {
 		}
 		
 		//caching
-		if(entities==null) EntitySearcher1.nomatchcache.add(entityphrase+"+"+elocatorphrase);
-		else EntitySearcher1.cache.put(entityphrase+"+"+elocatorphrase, entities);
+		if(useCache){
+			if(entities==null) EntitySearcher1.nomatchcache.add(entityphrase+"+"+elocatorphrase);
+			else EntitySearcher1.cache.put(entityphrase+"+"+elocatorphrase, entities);
+		}
 		
 		return entities;
 		//return new EntitySearcher5().searchEntity(root, structid, entityphrase, elocatorphrase, originalentityphrase, prep);
@@ -628,7 +635,7 @@ public class EntitySearcher1 extends EntitySearcher {
 				temp =  temp.replaceAll("\\s+",  " ").replaceAll("(^#+|#+$)", "");
 				String[] temps =temp.split("\\s*#+\\s*");
 				if(temps.length==1){ //if the split didn't split, force split on spaces
-					ArrayList<FormalConcept> test = new TermSearcher(OLC).searchTerm(phrasecp, "entity", discount); 
+					ArrayList<FormalConcept> test = new TermSearcher(OLC, useCache).searchTerm(phrasecp, "entity", discount); 
 					if(test==null) temps = temp.split("\\s+"); 
 				}
 				ArrayList<EntityComponent> thiscomponents = new ArrayList<EntityComponent>();

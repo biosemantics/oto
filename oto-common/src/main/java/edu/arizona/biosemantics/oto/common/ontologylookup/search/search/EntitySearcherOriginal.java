@@ -30,9 +30,10 @@ public class EntitySearcherOriginal extends EntitySearcher {
 	private static Hashtable<String, ArrayList<EntityProposals>> cache = new Hashtable<String, ArrayList<EntityProposals>>();
 	private static ArrayList<String> nomatchcache = new ArrayList<String>();
 	public static float discount = 1.0f;
+	private boolean useCache = true;
 
-	public EntitySearcherOriginal(OntologyLookupClient OLC){
-		super(OLC);
+	public EntitySearcherOriginal(OntologyLookupClient OLC, boolean useCache){
+		super(OLC, useCache);
 	}
 	/**
 	 * @param entityphrase: the entityphrase, which could be original entityphrase or regular expression such as (?:A of B| B A) of (?: C D | D of C) passed in by other EntitySearchers
@@ -49,8 +50,10 @@ public class EntitySearcherOriginal extends EntitySearcher {
 		System.out.println("EntitySearcherOriginal: search '"+entityphrase+"[orig="+originalentityphrase+"]'");
 
 		//general cases
-		if(nomatchcache.contains(entityphrase+"+"+elocatorphrase)) return null;
-		if(cache.get(entityphrase+"+"+elocatorphrase)!=null) return cache.get(entityphrase+"+"+elocatorphrase);
+		if(useCache){
+			if(nomatchcache.contains(entityphrase+"+"+elocatorphrase)) return null;
+			if(cache.get(entityphrase+"+"+elocatorphrase)!=null) return cache.get(entityphrase+"+"+elocatorphrase);
+		}
 
 		//generate queries
 		String transformede = entityphrase;
@@ -75,7 +78,7 @@ public class EntitySearcherOriginal extends EntitySearcher {
 				//aelocatorphrase = aelocatorphrase.replaceAll("body scale", "dermal scale");
 
 				System.out.println("EntitySearcherOriginal calls EntitySearcher1");
-				ArrayList<EntityProposals> results =  new EntitySearcher1(OLC).searchEntity(aentityphrase, aelocatorphrase, originalentityphrase, prep, discount*EntitySearcher1.discount);
+				ArrayList<EntityProposals> results =  new EntitySearcher1(OLC, useCache).searchEntity(aentityphrase, aelocatorphrase, originalentityphrase, prep, discount*EntitySearcher1.discount);
 
 				if(results!=null && entities==null) entities = new ArrayList<EntityProposals>();
 				if(results!=null){	
@@ -94,8 +97,10 @@ public class EntitySearcherOriginal extends EntitySearcher {
 		}
 
 		//caching
-		if(entities==null) nomatchcache.add(entityphrase+"+"+elocatorphrase);
-		else cache.put(entityphrase+"+"+elocatorphrase, entities);
+		if(useCache){
+			if(entities==null) nomatchcache.add(entityphrase+"+"+elocatorphrase);
+			else cache.put(entityphrase+"+"+elocatorphrase, entities);
+		}
 
 		return entities;
 	}

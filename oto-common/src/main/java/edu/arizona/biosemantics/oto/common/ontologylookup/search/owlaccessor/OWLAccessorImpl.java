@@ -1157,7 +1157,9 @@ public class OWLAccessorImpl implements OWLAccessor {
 			return manager;
 		}
 
-		
+		public void resetSearchCache(){
+			this.searchCache = new Hashtable<String, Hashtable<String, ArrayList<OWLClass>>>(); //con => {syn type => classes}
+		}
 
 		
 }

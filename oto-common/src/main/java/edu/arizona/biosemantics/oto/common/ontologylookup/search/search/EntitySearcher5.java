@@ -26,7 +26,7 @@ public class EntitySearcher5 extends EntitySearcher {
 	private static Hashtable<String, ArrayList<EntityProposals>> cache = new Hashtable<String, ArrayList<EntityProposals>>();
 	private static ArrayList<String> nomatchcache = new ArrayList<String>();
 	public static float discount = 0.7f;
-	private boolean useCache = true;
+	//private boolean useCache = true;
 	
 	public EntitySearcher5(OntologyLookupClient OLC, boolean useCache){
 		super(OLC, useCache);

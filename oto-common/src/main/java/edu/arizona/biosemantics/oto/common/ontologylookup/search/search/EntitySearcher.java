@@ -22,7 +22,7 @@ import edu.arizona.biosemantics.oto.common.ontologylookup.search.data.EntityProp
 public abstract class EntitySearcher {
 	//protected static XPath textpath;
 	private static final Logger LOGGER = Logger.getLogger(EntitySearcher.class); 
-
+	protected boolean useCache;
 	static{	
 		try{
 	//		textpath = XPath.newInstance(".//text");
@@ -36,6 +36,7 @@ public abstract class EntitySearcher {
 
 	public EntitySearcher(OntologyLookupClient OLC, boolean useCache){
 		this.OLC = OLC;
+		this.useCache = useCache;
 
 	}
 	

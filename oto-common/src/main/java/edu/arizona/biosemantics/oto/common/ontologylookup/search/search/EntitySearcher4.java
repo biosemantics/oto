@@ -30,7 +30,7 @@ public class EntitySearcher4 extends EntitySearcher {
 	private static Hashtable<String, ArrayList<EntityProposals>> cache = new Hashtable<String, ArrayList<EntityProposals>>();
 	private static ArrayList<String> nomatchcache = new ArrayList<String>();
 	public static float discount = 0.9f;
-	private boolean useCache = true;
+	//private boolean useCache = true;
 	/**
 	 * 
 	 */

@@ -42,7 +42,7 @@ public class EntitySearcher1 extends EntitySearcher {
 	private static final float partial = 0.8f;
 	public static float discount = 1.0f;
 	//boolean debug = true;
-	private boolean useCache=true;
+	//private boolean useCache=true;
 
 	/**
 	 * 

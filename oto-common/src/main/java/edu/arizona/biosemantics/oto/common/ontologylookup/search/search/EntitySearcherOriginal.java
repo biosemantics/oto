@@ -30,7 +30,7 @@ public class EntitySearcherOriginal extends EntitySearcher {
 	private static Hashtable<String, ArrayList<EntityProposals>> cache = new Hashtable<String, ArrayList<EntityProposals>>();
 	private static ArrayList<String> nomatchcache = new ArrayList<String>();
 	public static float discount = 1.0f;
-	private boolean useCache = true;
+	//private boolean useCache = true;
 
 	public EntitySearcherOriginal(OntologyLookupClient OLC, boolean useCache){
 		super(OLC, useCache);

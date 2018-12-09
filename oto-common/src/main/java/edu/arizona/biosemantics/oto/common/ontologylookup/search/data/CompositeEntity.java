@@ -449,5 +449,17 @@ public class CompositeEntity extends Entity {
 		return null;
 	}
 
+	@Override
+	public void setMatchType(String type) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getMatchType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

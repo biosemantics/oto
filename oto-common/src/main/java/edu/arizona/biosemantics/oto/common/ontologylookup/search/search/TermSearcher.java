@@ -406,7 +406,9 @@ public class TermSearcher {
 			// return original or exact match
 			for (Hashtable<String, String> aresult : results) {
 				if (aresult.get("matchtype").contains("original")
-						|| aresult.get("matchtype").contains("exact")) {
+						|| aresult.get("matchtype").contains("exact") //later two are new
+						|| aresult.get("matchtype").contains("broad") 
+						|| aresult.get("matchtype").contains("notrecommended")) {
 					ArrayList<Hashtable<String, String>> resultlist = split(aresult);
 					for (Hashtable<String, String> result : resultlist) {
 						if (type.compareTo("entity") == 0) {
@@ -418,6 +420,7 @@ public class TermSearcher {
 							entity.setClassIRI(result.get("iri"));
 							entity.setPLabel(result.get("parentlabel"));
 							entity.setDef(result.get("def"));
+							entity.setMatchType(aresult.get("matchtype"));
 							entity.setConfidenceScore(confscore);
 							// cacheIt(term, entity, type);
 							if (concepts == null)
@@ -433,6 +436,7 @@ public class TermSearcher {
 							quality.setClassIRI(result.get("iri"));
 							quality.setPLabel(result.get("parentlabel"));
 							quality.setDef(result.get("def"));
+							quality.setMatchType(aresult.get("matchtype"));
 							quality.setConfidenceScore(confscore);
 							// cacheIt(term, quality, type);
 							if (concepts == null)
@@ -463,8 +467,8 @@ public class TermSearcher {
 		String[] labels = multiplevalues.get("label").split(";");
 		String[] ids = multiplevalues.get("id").split(";");
 		String[] iris = multiplevalues.get("iri").split(";");
-		String[] defs = multiplevalues.get("def").split(";");
-		String[] plabels = multiplevalues.get("parentlabel").split(";");
+		String[] defs = multiplevalues.get("def").split(";"); //only one def
+		String[] plabels = multiplevalues.get("parentlabel").split(";"); //only one plables
 
 		if (labels.length == 1) {
 			splited.add(multiplevalues);
@@ -472,11 +476,11 @@ public class TermSearcher {
 			for (int i = 0; i < labels.length; i++) {
 				Hashtable<String, String> one = new Hashtable<String, String>();
 				one.put("term", terms[0]);
-				one.put("label", labels[i]);
-				one.put("id", ids[i]);
-				one.put("iri", iris[i]);
-				one.put("def", defs[i]);
-				one.put("parentlabel", plabels[i]);
+				one.put("label", i>= labels.length? labels[0]: labels[i]);
+				one.put("id", i>= ids.length? ids[0]: ids[i]);
+				one.put("iri", i>= iris.length? iris[0]: iris[i]);
+				one.put("def", i>= defs.length? defs[0]: defs[i]);
+				one.put("parentlabel", i>=plabels.length? plabels[0]: plabels[i]);
 				splited.add(one);
 			}
 		}

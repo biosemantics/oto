@@ -529,7 +529,7 @@ public class TermOutputerUtilities {
 			result.put("label", result.get("label")+ label+";");
 			result.put("iri", result.get("iri")+ iri+";");
 			result.put("parentlabel", result.get("parentlabel")+ parentlabel+";");
-			result.put("def", result.get("def")+ def+";");
+			result.put("def", result.get("def")+ (def.isEmpty()? "Definition to be added": def)+";");
 			haveresult = true;
 		}
 		if(haveresult){

@@ -8,6 +8,7 @@ public class Quality implements FormalConcept {
 	protected String id; //id of the class representing the phrase in an ontology
 	protected String classIRI; //class iri of the class representing the phrase in an ontology
 	protected String type; //quality or negated quality
+	protected String matchType; //original or synonym types
 	protected float confidenceScore; //the confidence the system has in the id and classIRI represent the semantics of the string.
 	private String definition;
 	private String parentLabel;
@@ -212,6 +213,17 @@ public class Quality implements FormalConcept {
 
 	public String getDef() {
 		return this.definition;
+	}
+
+	@Override
+	public void setMatchType(String type) {
+		this.matchType = type;
+		
+	}
+
+	@Override
+	public String getMatchType() {
+		return this.matchType;
 	}
     
 }

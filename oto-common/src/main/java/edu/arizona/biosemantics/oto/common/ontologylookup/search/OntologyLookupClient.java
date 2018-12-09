@@ -177,23 +177,22 @@ public class OntologyLookupClient {
 
 	public static void main(String[] args) {
 		HashSet<String> qualityOntologies = new HashSet<String>();
-		qualityOntologies.add("CAREX");
+		qualityOntologies.add("carex_jinlong");
 		OntologyLookupClient olc = new OntologyLookupClient(
 				new HashSet<String>(), 
 				qualityOntologies, 
 				"ontologies",
 				"wordNet/wn31/dict");
 		TermSearcher ts = new TermSearcher(olc, true);
-		ts.searchTerm("coloration"/*"test"*/, "quality", 1.0f);
-	
-		
-		
+		ts.searchTerm("growth_form", "quality", 1.0f);
 
 			/*HashSet<String> entityOntologies = new HashSet<String>();
-			entityOntologies.add("PO");
+			entityOntologies.add("carex_jinlong");
 			HashSet<String> qualityOntologies = new HashSet<String>();
 			OntologyLookupClient client = new OntologyLookupClient(entityOntologies, qualityOntologies, "ontologies", "wordnet/wn31/dict");
-			client.searchStructure("leaf", "", "");*/
+			
+			TermSearcher ts = new TermSearcher(client, true);
+			ts.searchTerm("leaf", "entity", 1.0f);*/
 		}
 		
 		

@@ -16,6 +16,7 @@ public interface FormalConcept {
 	void setClassIRI(String IRI);
 	void setPLabel(String parentlabel);
 	void setDef(String definition);
+	void setMatchType(String type); //original, extact, broad, notrecommended
 	void setConfidenceScore(float score);//may also record difficulty level
 	String getSearchString();
 	String getString();
@@ -25,6 +26,7 @@ public interface FormalConcept {
 	String getClassIRI();
 	String getPLabel();
 	String getDef();
+	String getMatchType();
 	float getConfidenceScore();
 	String toString(); //for display
 	String content(); //for comparison, including identifying info such as classIRI

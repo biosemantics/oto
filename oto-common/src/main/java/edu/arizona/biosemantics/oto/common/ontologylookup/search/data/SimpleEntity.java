@@ -16,6 +16,7 @@ public class SimpleEntity extends Entity implements FormalConcept{
 	String label; //lable of the class representing the phrase in an ontology
 	String id; //id of the class representing the phrase in an ontology
 	String classIRI; //class iri of the class representing the phrase in an ontology
+	String matchType;
 	float confidenceScore; //the confidence the system has in the id and classIRI represent the semantics of the string.
 	private String parentLabel;
 	private String definition;
@@ -201,6 +202,18 @@ public class SimpleEntity extends Entity implements FormalConcept{
 
 	public String getDef() {
 		return this.definition;
+	}
+
+	@Override
+	public void setMatchType(String type) {
+		this.matchType = type;
+		
+	}
+
+	@Override
+	public String getMatchType() {
+		// TODO Auto-generated method stub
+		return this.matchType;
 	}
     
 }

@@ -284,6 +284,9 @@ public class OWLAccessorImpl implements OWLAccessor {
 				 hashTypedSyns(c, "exact");
 				 hashTypedSyns(c, "narrow");
 				 hashTypedSyns(c, "related");
+				 //new
+				 hashTypedSyns(c, "broad");
+				 hashTypedSyns(c, "notrecommended");
 			}
 		}
 
@@ -350,6 +353,9 @@ public class OWLAccessorImpl implements OWLAccessor {
 			typedclasses.put("exact", (ArrayList<OWLClass>) classes.clone());
 			typedclasses.put("related", (ArrayList<OWLClass>) classes.clone());
 			typedclasses.put("narrow", (ArrayList<OWLClass>) classes.clone());
+			//new ones
+			typedclasses.put("notrecommended", (ArrayList<OWLClass>) classes.clone());
+			typedclasses.put("broad", (ArrayList<OWLClass>) classes.clone());
 			return typedclasses;
 		}
 		private void hashTypedSyns(OWLClass c, String type) {
@@ -376,6 +382,9 @@ public class OWLAccessorImpl implements OWLAccessor {
 			if(type.compareTo("exact") == 0) syns = this.getExactSynonyms(c);
 			if(type.compareTo("narrow") == 0) syns = this.getNarrowSynonyms(c);
 			if(type.compareTo("related") == 0) syns = this.getRelatedSynonyms(c);
+			//new
+			if(type.compareTo("broad") == 0) syns = this.getBroadSynonyms(c);
+			if(type.compareTo("notrecommended") == 0) syns = this.getNotRecommendedSynonyms(c);
 			
 			//if(syns.size()>0){
 			//	//System.out.print("");
@@ -443,7 +452,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 				Hashtable<String, ArrayList<OWLClass>> output =new Hashtable<String, ArrayList<OWLClass>> ();
 				Enumeration<String> en = this.ontologyHash.keys();
 				while(en.hasMoreElements()){
-					String term = en.nextElement(); //over type: original, exact, narrow, related
+					String term = en.nextElement(); //over type: original, exact, narrow, related, broad, notrecommended
 					//if(term.contains("blade"))//System.out.println(term);
 					if(term.matches(con)){
 						Hashtable<String, ArrayList<OWLClass>> temp = ontologyHash.get(term);
@@ -487,7 +496,22 @@ public class OWLAccessorImpl implements OWLAccessor {
 			anotherset = part.get("related");
 			if(oneset!=null) temp.addAll(oneset);
 			if(anotherset!=null) temp.addAll(anotherset);
-			whole.put("related", new ArrayList<OWLClass>(temp));			
+			whole.put("related", new ArrayList<OWLClass>(temp));	
+			
+			//new
+			temp = new TreeSet<OWLClass>();
+			oneset = whole.get("broad");
+			anotherset = part.get("broad");
+			if(oneset!=null) temp.addAll(oneset);
+			if(anotherset!=null) temp.addAll(anotherset);
+			whole.put("broad", new ArrayList<OWLClass>(temp));	
+			
+			temp = new TreeSet<OWLClass>();
+			oneset = whole.get("notrecommended");
+			anotherset = part.get("notrecommended");
+			if(oneset!=null) temp.addAll(oneset);
+			if(anotherset!=null) temp.addAll(anotherset);
+			whole.put("notrecommended", new ArrayList<OWLClass>(temp));	
 		}
 //
 //	public Hashtable<String, List<OWLClass>> retrieveConcept(String con) throws Exception {
@@ -908,6 +932,45 @@ public class OWLAccessorImpl implements OWLAccessor {
 		return labels;
 	}
 	
+	/**
+	 * Gets the broad synonyms.
+	 *
+	 * @param c the c
+	 * @return the broad synonyms
+	 */
+	public  ArrayList<String> getBroadSynonyms(OWLClass c) {
+		Collection<OWLAnnotation> anns = this
+				.getAnnotationByIRI(c,
+						"http://www.geneontology.org/formats/oboInOwl#hasBroadSynonym");
+		
+		ArrayList<String> labels = new ArrayList<String>();
+		Iterator<OWLAnnotation> it = anns.iterator();
+		while (it.hasNext()) {
+			String label = this.getRefinedOutput(it.next().toString());
+			labels.add(label);
+		}
+		return labels;
+	}
+	
+	/**
+	 * Gets the notRecommenedSynonyms.
+	 *
+	 * @param c the c
+	 * @return the not recommended synonyms synonyms
+	 */
+	public  ArrayList<String> getNotRecommendedSynonyms(OWLClass c) {
+		Collection<OWLAnnotation> anns = this
+				.getAnnotationByIRI(c,
+						"http://biosemantics.arizona.edu/ontologies/carex#has_not_recommended_synonym");
+		
+		ArrayList<String> labels = new ArrayList<String>();
+		Iterator<OWLAnnotation> it = anns.iterator();
+		while (it.hasNext()) {
+			String label = this.getRefinedOutput(it.next().toString());
+			labels.add(label);
+		}
+		return labels;
+	}
 	public Set<OWLClass> getRelationalSlim() {
 		return relationalSlim;
 	}
@@ -980,6 +1043,9 @@ public class OWLAccessorImpl implements OWLAccessor {
 		labels.addAll(this.getExactSynonyms(c));
 		labels.addAll(this.getRelatedSynonyms(c));
 		labels.addAll(this.getNarrowSynonyms(c));
+		//new
+		labels.addAll(this.getBroadSynonyms(c));
+		labels.addAll(this.getNotRecommendedSynonyms(c));
 		return labels;
 	}
 

@@ -5,6 +5,7 @@ public class FormalRelation implements FormalConcept {
 	String label; //lable of the class representing the phrase in an ontology
 	String id; //id of the class representing the phrase in an ontology
 	String classIRI; //class iri of the class representing the phrase in an ontology
+	String matchType;
 	float confidenceScore; //the confidence the system has in the id and classIRI represent the semantics of the string.
 	String string;
 	
@@ -168,6 +169,17 @@ public class FormalRelation implements FormalConcept {
 	public String getDef() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void setMatchType(String type) {
+		this.matchType = type;
+		
+	}
+
+	@Override
+	public String getMatchType() {
+		return this.matchType;
 	}
 
 

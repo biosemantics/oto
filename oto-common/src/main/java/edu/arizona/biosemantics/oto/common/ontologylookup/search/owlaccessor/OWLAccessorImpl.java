@@ -379,12 +379,16 @@ public class OWLAccessorImpl implements OWLAccessor {
 			Hashtable<String, List<OWLClass>> result = new Hashtable<String, List<OWLClass>>();
 			List<OWLClass> ec = new ArrayList<OWLClass>();
 			List<String> syns = new ArrayList<String>();
-			if(type.compareTo("exact") == 0) syns = this.getExactSynonyms(c);
-			if(type.compareTo("narrow") == 0) syns = this.getNarrowSynonyms(c);
-			if(type.compareTo("related") == 0) syns = this.getRelatedSynonyms(c);
+			if(type.compareTo("exact") == 0) 
+				syns = this.getExactSynonyms(c);
+			if(type.compareTo("narrow") == 0) 
+				syns = this.getNarrowSynonyms(c);
+			if(type.compareTo("related") == 0) 
+				syns = this.getRelatedSynonyms(c);
 			//new
 			if(type.compareTo("broad") == 0) syns = this.getBroadSynonyms(c);
-			if(type.compareTo("notrecommended") == 0) syns = this.getNotRecommendedSynonyms(c);
+			if(type.compareTo("notrecommended") == 0)
+				syns = this.getNotRecommendedSynonyms(c);
 			
 			//if(syns.size()>0){
 			//	//System.out.print("");

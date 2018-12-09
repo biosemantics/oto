@@ -420,7 +420,7 @@ public class TermSearcher {
 							entity.setClassIRI(result.get("iri"));
 							entity.setPLabel(result.get("parentlabel"));
 							entity.setDef(result.get("def"));
-							entity.setMatchType(aresult.get("matchtype"));
+							entity.setMatchType(result.get("matchtype"));
 							entity.setConfidenceScore(confscore);
 							// cacheIt(term, entity, type);
 							if (concepts == null)
@@ -436,7 +436,7 @@ public class TermSearcher {
 							quality.setClassIRI(result.get("iri"));
 							quality.setPLabel(result.get("parentlabel"));
 							quality.setDef(result.get("def"));
-							quality.setMatchType(aresult.get("matchtype"));
+							quality.setMatchType(result.get("matchtype"));
 							quality.setConfidenceScore(confscore);
 							// cacheIt(term, quality, type);
 							if (concepts == null)
@@ -469,6 +469,7 @@ public class TermSearcher {
 		String[] iris = multiplevalues.get("iri").split(";");
 		String[] defs = multiplevalues.get("def").split(";"); //only one def
 		String[] plabels = multiplevalues.get("parentlabel").split(";"); //only one plables
+		String[] matchtypes = multiplevalues.get("matchtype").split(";");
 
 		if (labels.length == 1) {
 			splited.add(multiplevalues);
@@ -481,6 +482,7 @@ public class TermSearcher {
 				one.put("iri", i>= iris.length? iris[0]: iris[i]);
 				one.put("def", i>= defs.length? defs[0]: defs[i]);
 				one.put("parentlabel", i>=plabels.length? plabels[0]: plabels[i]);
+				one.put("matchtype", i>=matchtypes.length? matchtypes[0]: matchtypes[i]);
 				splited.add(one);
 			}
 		}

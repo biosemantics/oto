@@ -333,6 +333,9 @@ public class TermOutputerUtilities {
 		Hashtable<String, String> eresult = null; //exact
 		Hashtable<String, String> nresult = null; //narrow
 		Hashtable<String, String> rresult = null; //related
+		//new
+		Hashtable<String, String> bresult = null; //broad
+		Hashtable<String, String> nrresult = null; //notrecommended
 		//List<OWLClass> matches = (ArrayList<OWLClass>)owlapi.retrieveConcept(term);
 		//should be
 
@@ -366,8 +369,20 @@ public class TermOutputerUtilities {
 				rresult = collectResult(term, matchclass, type, "related", owlapi);
 				//return rresult;
 			}
+			
+			matchclass = matches.get("broad");
+			if(matchclass!=null && matchclass.size()!=0){
+				bresult = collectResult(term, matchclass, type, "broad", owlapi);
+				//return rresult;
+			}
+			
+			matchclass = matches.get("notrecommended");
+			if(matchclass!=null && matchclass.size()!=0){
+				nrresult = collectResult(term, matchclass, type, "notrecommended", owlapi);
+				//return rresult;
+			}
 		}
-		//if(Boolean.valueOf(ApplicationUtilities.getProperty("search.exact"))){
+		/*if(Boolean.valueOf(ApplicationUtilities.getProperty("search.exact"))){
 		oresult = merge(oresult, eresult);
 		if(oresult==null){
 			oresult = merge(oresult, nresult);
@@ -376,12 +391,14 @@ public class TermOutputerUtilities {
 			}
 		}
 		return oresult;
-		/*}else{
+		}else{*/
 			oresult = merge(oresult, eresult);
 			oresult = merge(oresult, nresult);
 			oresult = merge(oresult, rresult);
+			oresult = merge(oresult, bresult);
+			oresult = merge(oresult, nrresult);
 			return oresult;
-		}*/
+		//}
 		//return null;
 	}
 	/*private Hashtable<String, String> searchOWLOntology(String term, OWLAccessorImpl owlapi, String type) {
@@ -443,19 +460,20 @@ public class TermOutputerUtilities {
 		}
 		result.put("term",  result.get("term"));
 		result.put("querytype",  result.get("querytype"));
-		result.put("matchtype", result.get("matchtype")); //original+exact
-
+		
 		ArrayList<String> rids = new ArrayList<String>(Arrays.asList(result.get("id").split(";")));
 		ArrayList<String> rlabels = new ArrayList<String>(Arrays.asList(result.get("label").split(";")));
 		ArrayList<String> riris = new ArrayList<String>(Arrays.asList(result.get("iri").split(";")));
 		ArrayList<String> rplabels = new ArrayList<String>(Arrays.asList(result.get("parentlabel").split(";")));
 		ArrayList<String> rdefs = new ArrayList<String>(Arrays.asList(result.get("def").split(";")));
+		ArrayList<String> rmatchtypes = new ArrayList<String>(Arrays.asList(result.get("matchtype").split(";")));
 
 		ArrayList<String> tids = new ArrayList<String>(Arrays.asList(temp.get("id").split(";")));
 		ArrayList<String> tlabels = new ArrayList<String>(Arrays.asList(temp.get("label").split(";")));
 		ArrayList<String> tiris = new ArrayList<String>( Arrays.asList(temp.get("iri").split(";")));
 		ArrayList<String> tplabels = new ArrayList<String>(Arrays.asList(temp.get("parentlabel").split(";")));
 		ArrayList<String> tdefs = new ArrayList<String>(Arrays.asList(temp.get("def").split(";")));
+		ArrayList<String> tmatchtypes = new ArrayList<String>(Arrays.asList(temp.get("matchtype").split(";")));
 
 		for(int i = 0; i<rids.size(); i++){
 			if(tids.contains(rids.get(i))){//deduplicate
@@ -464,6 +482,7 @@ public class TermOutputerUtilities {
 				tiris.remove(riris.get(i));
 				tplabels.remove(rplabels.get(i));
 				tdefs.remove(rdefs.get(i));
+				tmatchtypes.remove(rmatchtypes.get(i));
 			}
 		}
 
@@ -472,12 +491,14 @@ public class TermOutputerUtilities {
 		String iris = "";
 		String plabels = "";
 		String defs = "";
+		String matchtypes = "";
 		for(int i = 0; i<rids.size(); i++){
 			ids +=rids.get(i)+";";
 			labels +=rlabels.get(i)+";";
 			iris +=riris.get(i)+";";
 			plabels +=rplabels.get(i)+";";
 			defs += rdefs.get(i)+";";
+			matchtypes +=rmatchtypes.get(i)+";";
 		}
 		for(int i = 0; i<tids.size(); i++){
 			ids +=tids.get(i)+";";
@@ -485,8 +506,10 @@ public class TermOutputerUtilities {
 			iris +=tiris.get(i)+";";
 			plabels +=tplabels.get(i)+";";
 			defs += tdefs.get(i)+";";
+			matchtypes += tmatchtypes.get(i)+";";
 		}
 
+		result.put("matchtype", matchtypes.replaceAll("(^;|;$)", "")); //original+exact
 		result.put("id", ids.replaceAll("(^;|;$)", ""));
 		result.put("label",labels.replaceAll("(^;|;$)", ""));
 		result.put("iri", iris.replaceAll("(^;|;$)", ""));	

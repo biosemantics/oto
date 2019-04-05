@@ -38,7 +38,7 @@ public class OTOLiteClient {
 	}
 	
 	public void open() {
-		log(LogLevel.INFO, "Open connection to oto lite");
+		//log(LogLevel.INFO, "Open connection to oto lite");
 		client = ClientBuilder.newBuilder().withConfig(new ClientConfig()).register(JacksonFeature.class).build();
 		client.register(new LoggingFilter(Logger.getAnonymousLogger(), true)); //turn this off for production mode
 		
@@ -48,7 +48,7 @@ public class OTOLiteClient {
 	}
 	
 	public void close() {
-		log(LogLevel.INFO, "Close connection to oto lite");
+		//log(LogLevel.INFO, "Close connection to oto lite");
 		client.close();
 	}
 		

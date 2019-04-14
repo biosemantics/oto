@@ -3,7 +3,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.arizona.biosemantics.oto</groupId>
 	<artifactId>oto-common</artifactId>
-	<version>0.0.32-author-SNAPSHOT</version>
+	<version>0.0.35-SNAPSHOT</version>
+	<!-- updated from 0.0.32-author. merge author branch to master branch -->
 	
 	  <!-- disable java doc generation, because source code are not annotated to java 8 doc standards -->
 	<profiles>

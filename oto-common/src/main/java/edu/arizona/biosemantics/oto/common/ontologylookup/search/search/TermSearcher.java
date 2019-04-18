@@ -68,6 +68,7 @@ public class TermSearcher {
 	public static String looseTerms = "short"; 
 	public OntologyLookupClient OLC;
 	private boolean useCache = true;
+	private boolean printMatchingDetails = false;
 	
 	public TermSearcher(OntologyLookupClient OLC, boolean useCache){
 		this.OLC = OLC;
@@ -129,15 +130,15 @@ public class TermSearcher {
 		ArrayList<Hashtable<String, String>> results = new ArrayList<Hashtable<String, String>>();
 		ArrayList<FormalConcept> strongmatch = getStrongMatch(cleanphrase, query,
 				phrasetype, results, discount*1.0f);
-		System.out.println("Attempting StrongMatch for "+cleanphrase);
+		if(printMatchingDetails) System.out.println("Attempting StrongMatch for "+cleanphrase);
 		if (strongmatch != null && strongmatch.size()>0){
-			System.out.println("StrongMatch found for "+cleanphrase);
+			if(printMatchingDetails) System.out.println("StrongMatch found for "+cleanphrase);
 			for(FormalConcept c: strongmatch){
-				System.out.println(c.getLabel());
+				if(printMatchingDetails) System.out.println(c.getLabel());
 			}
 			return strongmatch;
 		}else{
-			System.out.println("StrongMatch not found for "+cleanphrase);
+			if(printMatchingDetails) System.out.println("StrongMatch not found for "+cleanphrase);
 		}
 		// /if landed here, all matches based on the original phrase are weak
 		// matches.
@@ -315,11 +316,14 @@ public class TermSearcher {
 						Quality quality = new Quality();
 						quality.setSearchString(result.get("term"));
 						quality.setString(term);
+						// after split() on ###, shouldn't need split again. Not sure why split on ";". 
 						quality.setLabel(result.get("label").split(";")[0]);
 						quality.setId(result.get("id").split(";")[0]);
 						quality.setClassIRI(result.get("iri").split(";")[0]);
 						quality.setPLabel(result.get("parentlabel").split(";")[0]);
 						quality.setDef(result.get("def").split(";")[0]);
+						
+						
 						quality.setConfidenceScore(confscore);
 						// cacheIt(aresult.get("term"), quality, type);
 						// return quality;
@@ -462,14 +466,24 @@ public class TermSearcher {
 			Hashtable<String, String> multiplevalues) {
 		// multiplevalues: keys: term, label, id, iri
 		ArrayList<Hashtable<String, String>> splited = new ArrayList<Hashtable<String, String>>();
-		String[] terms = multiplevalues.get("term").split(";");
+		/*String[] terms = multiplevalues.get("term").split(";");
 		//String term = multiplevalues.get("term");
 		String[] labels = multiplevalues.get("label").split(";");
 		String[] ids = multiplevalues.get("id").split(";");
 		String[] iris = multiplevalues.get("iri").split(";");
 		String[] defs = multiplevalues.get("def").split(";"); //only one def
 		String[] plabels = multiplevalues.get("parentlabel").split(";"); //only one plables
-		String[] matchtypes = multiplevalues.get("matchtype").split(";");
+		String[] matchtypes = multiplevalues.get("matchtype").split(";");*/
+		
+		//match ### used in TermOutputUtilities, collectResult() and merge()
+		String[] terms = multiplevalues.get("term").split("###");
+		//String term = multiplevalues.get("term");
+		String[] labels = multiplevalues.get("label").split("###");
+		String[] ids = multiplevalues.get("id").split("###");
+		String[] iris = multiplevalues.get("iri").split("###");
+		String[] defs = multiplevalues.get("def").split("###"); //only one def
+		String[] plabels = multiplevalues.get("parentlabel").split("###"); //only one plables
+		String[] matchtypes = multiplevalues.get("matchtype").split("###");
 
 		if (labels.length == 1) {
 			splited.add(multiplevalues);
@@ -648,9 +662,9 @@ public class TermSearcher {
 				"entity");
 		if(entities!=null){
 			for (FormalConcept fc : entities)
-				//System.out.println("matching concept: "+fc.getLabel());
+				//if(printMatchingDetails) System.out.println("matching concept: "+fc.getLabel());
 		}else{
-			//System.out.println("no matching concepts");
+			//if(printMatchingDetails) System.out.println("no matching concepts");
 		}*/
 	}
 

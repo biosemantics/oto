@@ -120,7 +120,7 @@ public class EntityEntityLocatorStrategy implements SearchStrategy {
 							for(Entity sentity: sentityp.getProposals()){
 								SimpleEntity bspo = null;
 								//sentityps could be a spatial entity, so the final E need to be composed using the spatial convention of SpatialModifiedEntity.
-								if(sentity instanceof CompositeEntity && sentity.getPrimaryEntityID().contains("BSPO:")){
+								if(sentity instanceof CompositeEntity && sentity.getPrimaryEntityID()!=null && sentity.getPrimaryEntityID().contains("BSPO:")){
 									bspo = ((CompositeEntity)sentity).getTheSimpleEntity();
 									sentity = ((CompositeEntity)sentity).getEntityLocator().getEntity();
 								}

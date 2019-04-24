@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.arizona.biosemantics.oto</groupId>
 	<artifactId>oto-client</artifactId>
-	<version>0.0.55-SNAPSHOT</version>
+	<version>0.0.57-SNAPSHOT</version>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -84,7 +84,7 @@
 		 <dependency>
 		  <groupId>edu.arizona.biosemantics.oto2</groupId>
 		  <artifactId>oto</artifactId>
-		  <version>0.0.136-SNAPSHOT</version>
+		  <version>0.0.139-SNAPSHOT</version>
 		  <classifier>classes</classifier>
 		  <exclusions> <!-- hong added exclusion -->
 		  	<exclusion>

@@ -23,7 +23,7 @@ import edu.arizona.biosemantics.oto.common.ontologylookup.search.utilities.Utili
 public class SearchPartOfChain {
 	private ArrayList<SimpleEntity> chain = new ArrayList<SimpleEntity>();
 	private static Hashtable<OWLClass, OWLClass> partofcache = new Hashtable<OWLClass, OWLClass>();
-	private OWLAccessorImpl api;
+	private OWLAccessorImpl api=null;
 
 	
 	/**
@@ -31,9 +31,17 @@ public class SearchPartOfChain {
 	 */
 	public SearchPartOfChain(String ontologyIRI, String ontoFilePath) {		
 		if(Utilities.ping(ontologyIRI, 200)){
+			try{
 			api = new OWLAccessorImpl(ontologyIRI, new ArrayList<String>());
+			}catch(Exception e){
+				//ignore this ontology
+			}
 		}else{
+			try{
 			api = new OWLAccessorImpl(new File(ontoFilePath), new ArrayList<String>());
+			}catch(Exception e){
+				//ignore this ontology
+			}
 		}
 	}
 

@@ -74,7 +74,7 @@ public class TermOutputerUtilities {
 		//for each entity ontology
 		for(String onto: entityontologyFilepaths){
 			if(onto.endsWith(".owl")){
-				OWLAccessorImpl api;	
+				OWLAccessorImpl api = null;	
 				if(Utilities.ping(ontoURLs.get(onto), 200)){
 					try{
 						api = new OWLAccessorImpl(ontoURLs.get(onto), new ArrayList<String>());
@@ -115,7 +115,7 @@ public class TermOutputerUtilities {
 		//for each quality ontology
 		for(String onto: qualityontologyFilepaths){
 			if(onto.endsWith(".owl")){
-				OWLAccessorImpl api;
+				OWLAccessorImpl api = null;
 				if(Utilities.ping(ontoURLs.get(onto), 200)){
 					try{
 					api = new OWLAccessorImpl(ontoURLs.get(onto), new ArrayList<String>());

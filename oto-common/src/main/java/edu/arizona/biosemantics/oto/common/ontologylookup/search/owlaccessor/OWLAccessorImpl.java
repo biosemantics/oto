@@ -101,7 +101,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 	 * @param excludedclasses: arraylist of class IRI string
 	 * @throws Exception the exception
 	 */
-	public OWLAccessorImpl(String ontoURL, ArrayList<String> excludedclasses) {
+	public OWLAccessorImpl(String ontoURL, ArrayList<String> excludedclasses) throws Exception {
 		//manager = OWLManager.createConcurrentOWLOntologyManager();
 		manager = OWLManager.createOWLOntologyManager();
 		df = manager.getOWLDataFactory();
@@ -113,9 +113,10 @@ public class OWLAccessorImpl implements OWLAccessor {
 			// retrieves all synonyms of every class and store it in search cache - Hariharan Task2
 			this.retrieveAllConcept();
 		}catch(Exception e){
-			//System.out.println("can't load ontology:"+ontoURL);
+			LOGGER.error("can't load ontology:"+ontoURL, e);
 			e.printStackTrace();
-			System.exit(1);
+			throw(e);
+			//System.exit(1);
 		}
 	}
 
@@ -131,7 +132,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 	 * @throws Exception the exception
 	 */
 
-	public OWLAccessorImpl(File file, ArrayList<String> eliminate) {
+	public OWLAccessorImpl(File file, ArrayList<String> eliminate) throws Exception {
 		//manager = OWLManager.createConcurrentOWLOntologyManager();
 		manager = OWLManager.createOWLOntologyManager();
 		df = manager.getOWLDataFactory();
@@ -144,7 +145,8 @@ public class OWLAccessorImpl implements OWLAccessor {
 		}catch(Exception e){
 			System.out.println("can't load ontology:"+file.getAbsolutePath());
 			LOGGER.error("can't load ontology:"+file.getAbsolutePath(), e);
-			System.exit(1);
+			//System.exit(1);
+			throw(e);
 		}
 	}
 	

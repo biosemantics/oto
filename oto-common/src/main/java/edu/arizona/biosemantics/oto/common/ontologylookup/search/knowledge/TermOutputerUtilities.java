@@ -76,9 +76,18 @@ public class TermOutputerUtilities {
 			if(onto.endsWith(".owl")){
 				OWLAccessorImpl api;	
 				if(Utilities.ping(ontoURLs.get(onto), 200)){
-					api = new OWLAccessorImpl(ontoURLs.get(onto), new ArrayList<String>());
+					try{
+						api = new OWLAccessorImpl(ontoURLs.get(onto), new ArrayList<String>());
+					}catch(Exception e){
+						//ignore this onology  
+					}
+
 				}else{
-					api = new OWLAccessorImpl(new File(onto), new ArrayList<String>());
+					try{
+						api = new OWLAccessorImpl(new File(onto), new ArrayList<String>());
+					}catch(Exception e){
+						//ignore this onology  
+					}
 				}
 				OWLentityOntoAPIs.add(api);
 				//if(onto.endsWith(ApplicationUtilities.getProperty("ontology.uberon")+".owl")){
@@ -108,9 +117,17 @@ public class TermOutputerUtilities {
 			if(onto.endsWith(".owl")){
 				OWLAccessorImpl api;
 				if(Utilities.ping(ontoURLs.get(onto), 200)){
+					try{
 					api = new OWLAccessorImpl(ontoURLs.get(onto), new ArrayList<String>());
+					}catch(Exception e){
+						//ignore this onology  
+					}
 				}else{
+					try{
 					api= new OWLAccessorImpl(new File(onto), excluded);
+					}catch(Exception e){
+						//ignore this onology  
+					}
 				}
 				attributes += "|"+api.getLowerCaseAttributeSlimStringPattern();
 				attributes = attributes.replaceAll("(^\\||\\|$)", "");

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.arizona.biosemantics.oto</groupId>
 	<artifactId>oto-common</artifactId>
-	<version>0.0.35-SNAPSHOT</version>
+	<version>0.0.36-SNAPSHOT</version>
 	<!-- updated from 0.0.32-author. merge author branch to master branch -->
 	
 	  <!-- disable java doc generation, because source code are not annotated to java 8 doc standards -->
@@ -117,9 +117,12 @@
 
 	<distributionManagement>
 		<repository>
-			<id>playground</id>
+			<!--  <id>playground</id>
 			<name>playground@SBS</name>
-			<url>http://128.196.105.149:8081/nexus/content/repositories/snapshots/</url>
+			<url>http://128.196.105.149:8081/nexus/content/repositories/snapshots/</url> -->
+			<!-- temp solution before nexus is up -->
+			<id>maven-repository</id>
+  			<url>file:///C:/Users/hongcui/git/temp-repo/</url>
 		</repository>
 	</distributionManagement>
 </project>

@@ -450,7 +450,7 @@ public class OWLAccessorImpl implements OWLAccessor {
 		 */
 		public Hashtable<String, ArrayList<OWLClass>> retrieveConcept(String con){
 			Hashtable<String, ArrayList<OWLClass>> result = this.searchCache.get(con);
-			if(result != null) return result;
+			if(result != null && ! result.isEmpty()) return result;
 			
 			if(con.indexOf("*")<0 && con.indexOf("(")<0 &&con.indexOf("|")<0  ){//exact match
 					return this.ontologyHash.get(con);

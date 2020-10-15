@@ -177,16 +177,20 @@ public class OntologyLookupClient {
 
 	public static void main(String[] args) {
 		HashSet<String> qualityOntologies = new HashSet<String>();
-		qualityOntologies.add("ro");
+		qualityOntologies.add("carex");
+		HashSet<String> entityOntologies = new HashSet<String>();
+		entityOntologies.add("carex");
 		OntologyLookupClient olc = new OntologyLookupClient(
-				new HashSet<String>(), 
+				entityOntologies, 
 				qualityOntologies, 
 				"ontologies",
 				"wordNet/wn31/dict");
 		TermSearcher ts = new TermSearcher(olc, true);
-		ts.searchTerm("growth_form", "quality", 1.0f);
-		System.out.println("nothing found");
-
+		//ArrayList<FormalConcept> results = ts.searchTerm("weak", "quality", 0.9f);
+		ArrayList<FormalConcept> results = ts.searchTerm("weak", "entity", 0.9f);
+		for(FormalConcept c: results){
+			System.out.println(c.toString());
+		}
 			/*HashSet<String> entityOntologies = new HashSet<String>();
 			entityOntologies.add("carex_jinlong");
 			HashSet<String> qualityOntologies = new HashSet<String>();

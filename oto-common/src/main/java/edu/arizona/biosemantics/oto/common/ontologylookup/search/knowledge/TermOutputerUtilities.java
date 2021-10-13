@@ -75,20 +75,21 @@ public class TermOutputerUtilities {
 		for(String onto: entityontologyFilepaths){
 			if(onto.endsWith(".owl")){
 				OWLAccessorImpl api = null;	
-				if(Utilities.ping(ontoURLs.get(onto), 200)){
+				/* always use local copy
+				 * if(Utilities.ping(ontoURLs.get(onto), 200)){
 					try{
 						api = new OWLAccessorImpl(ontoURLs.get(onto), new ArrayList<String>());
 					}catch(Exception e){
 						//ignore this onology  
 					}
 
-				}else{
+				}else{*/
 					try{
 						api = new OWLAccessorImpl(new File(onto), new ArrayList<String>());
 					}catch(Exception e){
 						//ignore this onology  
 					}
-				}
+				//}
 				OWLentityOntoAPIs.add(api);
 				//if(onto.endsWith(ApplicationUtilities.getProperty("ontology.uberon")+".owl")){
 				uberon = api.getOntology();
@@ -116,19 +117,19 @@ public class TermOutputerUtilities {
 		for(String onto: qualityontologyFilepaths){
 			if(onto.endsWith(".owl")){
 				OWLAccessorImpl api = null;
-				if(Utilities.ping(ontoURLs.get(onto), 200)){
+				/*if(Utilities.ping(ontoURLs.get(onto), 200)){
 					try{
 					api = new OWLAccessorImpl(ontoURLs.get(onto), new ArrayList<String>());
 					}catch(Exception e){
 						//ignore this onology  
 					}
-				}else{
+				}else{*/
 					try{
 					api= new OWLAccessorImpl(new File(onto), excluded);
 					}catch(Exception e){
 						//ignore this onology  
 					}
-				}
+				//}
 				attributes += "|"+api.getLowerCaseAttributeSlimStringPattern();
 				attributes = attributes.replaceAll("(^\\||\\|$)", "");
 				OWLqualityOntoAPIs.add(api);

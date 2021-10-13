@@ -117,12 +117,12 @@
 
 	<distributionManagement>
 		<repository>
-			<!--  <id>playground</id>
+			<id>playground</id>
 			<name>playground@SBS</name>
-			<url>http://128.196.105.149:8081/nexus/content/repositories/snapshots/</url> -->
+			<url>http://128.196.105.149:8081/nexus/content/repositories/snapshots/</url> 
 			<!-- temp solution before nexus is up -->
-			<id>maven-repository</id>
-  			<url>file:///C:/Users/hongcui/git/temp-repo/</url>
+			<!--  <id>maven-repository</id>
+  			<url>file:///C:/Users/hongcui/git/temp-repo/</url>-->
 		</repository>
 	</distributionManagement>
 </project>

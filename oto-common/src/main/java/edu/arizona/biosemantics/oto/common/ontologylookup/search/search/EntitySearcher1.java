@@ -122,9 +122,11 @@ public class EntitySearcher1 extends EntitySearcher {
 				else EntitySearcher1.cache.put(entityphrase+"+"+elocatorphrase, entities);
 			}
 			return entities;
+		}else{
+			return entities;
 		}
-
-		ArrayList<EntityProposals> bestpartialresults = null;
+		/* disable post-composition 01/19/22
+		ArrayList<EntityProposals> bestpartialresults = null; 
 		//failed to find pre-composed terms, try to post-compose using part_of
 		//call on EntityEntityLocatorStrategy on expressions without spatial terms:
 		//(the attachment of spatial terms to parent entity is different from attachement of a child entity to parent entity)
@@ -202,14 +204,14 @@ public class EntitySearcher1 extends EntitySearcher {
 						String var = components.get(i).getPhrase().split("\\|")[0];
 						var = var.replaceAll("[(:?)]", "");
 						aentityphrase += var+" of ";
-						/*ArrayList<String> perms = components.get(i).getPermutations();
-						String vars = "";
-						for(String perm : perms){
-							vars += perm+"|"; //include all perms in search
-						}
-						vars = vars.replaceFirst("\\|$", "");
-						aentityphrase +="(?:"+vars+") of ";
-						*/
+						//ArrayList<String> perms = components.get(i).getPermutations();
+						//String vars = "";
+						//for(String perm : perms){
+						//	vars += perm+"|"; //include all perms in search
+						//}
+						//vars = vars.replaceFirst("\\|$", "");
+						//aentityphrase +="(?:"+vars+") of ";
+						
 					}
 					aentityphrase = aentityphrase.replaceFirst(" of $", ""); // (?:A of B| B A) of (?: C D | D of C)
 					//use the rest as entity locators
@@ -224,7 +226,7 @@ public class EntitySearcher1 extends EntitySearcher {
 							vars += perm+"|";
 						}
 						vars = vars.replaceFirst("\\|$", "");
-						aelocatorphrase +="(?:"+vars+") of ";*/
+						aelocatorphrase +="(?:"+vars+") of ";
 					}
 					aelocatorphrase = aelocatorphrase.replaceFirst(" of $", "").trim();//similar to aentityphrase: (?:A of B| B A) of (?: C D | D of C)
 
@@ -366,6 +368,7 @@ public class EntitySearcher1 extends EntitySearcher {
 		
 		return entities;
 		//return new EntitySearcher5().searchEntity(root, structid, entityphrase, elocatorphrase, originalentityphrase, prep);
+		 disable post-composition 01/19/22 */
 	}
 
 	/**
